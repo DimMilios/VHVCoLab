@@ -1,0 +1,18 @@
+{
+  "name": "vite-scaffold",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.6.4"
+  },
+  "dependencies": {
+    "lib0": "^0.2.42",
+    "y-webrtc": "^10.2.0",
+    "y-websocket": "^1.3.17",
+    "yjs": "^13.5.18"
+  }
+}
