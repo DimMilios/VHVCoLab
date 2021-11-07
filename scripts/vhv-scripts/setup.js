@@ -1,5 +1,10 @@
-import { initializeVerovioToolkit } from './misc.js'
-import { displayNotation } from './misc.js'
+import { initializeVerovioToolkit, displayNotation } from './misc.js';
+
+import Ace from 'ace-builds/src/ace';
+import 'ace-builds/src/mode-xml';
+// const Range = Ace.require('ace/range').Range;
+
+console.log('Ace and Range', {Ace, Range})
 
 //////////////////////////////
 //
@@ -37,10 +42,10 @@ function downloadVerovioToolkit(use_worker) {
 import { setEditorModeAndKeyboard } from './utility-ace.js';
 
 export function setupAceEditor(idtag) {
-	window.EDITOR = ace.edit(idtag);
-	ace.config.set('modePath', "/scripts/ace");
-	ace.config.set('workerPath', "/scripts/ace");
-	ace.config.set('themePath', "/scripts/ace");
+	window.EDITOR = Ace.edit(idtag);
+	Ace.config.set('modePath', "/scripts/ace");
+	Ace.config.set('workerPath', "/scripts/ace");
+	Ace.config.set('themePath', "/scripts/ace");
 	window.EDITOR.getSession().setUseWorker(true);
 	window.EDITOR.$blockScrolling = Infinity;
 	window.EDITOR.setAutoScrollEditorIntoView(true);
@@ -77,7 +82,9 @@ export function setupAceEditor(idtag) {
 	// Don't show line at 80 columns:
 	window.EDITOR.setShowPrintMargin(false);
 
-	Range = window.require("ace/range").Range;
+	// Range = window.require("ace/range").Range;
+	window.Range = Ace.require('ace/range').Range;
+
 
 	//window.EDITOR.getSession().selection.on("changeCursor", function(event)
 	// 	{ highlightNoteInScore(event)});

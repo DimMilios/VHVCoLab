@@ -8,7 +8,7 @@ import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
 
 window.addEventListener('load', () => {
-  console.log(Y)
+  // console.log(Y)
   const ydoc = new Y.Doc();
   
   // const provider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc) // local
