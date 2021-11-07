@@ -850,8 +850,8 @@ vrvInterface.prototype.createWorkerInterface = function (onReady) {
 
 
 	console.log("LOADING /scripts/verovio-worker.js");
-	var workerUrl = "/scripts/verovio-worker.js";
-
+	// var workerUrl = "/scripts/verovio-worker.js";
+	var workerUrl = "/scripts-static/verovio-worker.js";
 
 	this.worker = null;
 	var that = this;

@@ -2,9 +2,14 @@ import { initializeVerovioToolkit, displayNotation } from './misc.js';
 
 import Ace from 'ace-builds/src/ace';
 import 'ace-builds/src/mode-xml';
-// const Range = Ace.require('ace/range').Range;
+import 'ace-builds/src/ext-searchbox';
+// import '../ace/mode-humdrum.js';
 
-console.log('Ace and Range', {Ace, Range})
+// import 'ace-builds/src/mode-humdrum';
+// import 'ace-builds/src/theme-humdrum_light';
+// import 'ace-builds/src/worker-humdrum';
+
+// const Range = Ace.require('ace/range').Range;
 
 //////////////////////////////
 //
@@ -43,9 +48,15 @@ import { setEditorModeAndKeyboard } from './utility-ace.js';
 
 export function setupAceEditor(idtag) {
 	window.EDITOR = Ace.edit(idtag);
-	Ace.config.set('modePath', "/scripts/ace");
-	Ace.config.set('workerPath', "/scripts/ace");
-	Ace.config.set('themePath', "/scripts/ace");
+	Ace.config.set("basePath", "/scripts-static/ace");
+	// Ace.config.set('modePath', "/scripts-static/ace");
+	// Ace.config.set('workerPath', "/scripts-static/ace");
+	// Ace.config.set('themePath', "/scripts-static/ace");
+	
+	// Ace.config.set('modePath', "/scripts/ace");
+	// Ace.config.set('workerPath', "/scripts/ace");
+	// Ace.config.set('themePath', "/scripts/ace");
+	
 	window.EDITOR.getSession().setUseWorker(true);
 	window.EDITOR.$blockScrolling = Infinity;
 	window.EDITOR.setAutoScrollEditorIntoView(true);
