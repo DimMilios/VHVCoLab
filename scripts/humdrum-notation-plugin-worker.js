@@ -66,10 +66,12 @@ document.addEventListener("DOMContentLoaded", function() {
 //
 // downloadVerovioToolkit --
 //
+let vrvWorker;
 
 function downloadVerovioToolkit(use_worker) {
 	console.log('Downloading vrv toolkit from humdrum-notation-plugin-worker.js');
-  window.vrvWorker = new vrvInterface(use_worker, callbackAfterInitialized);
+  vrvWorker = new vrvInterface(use_worker, callbackAfterInitialized);
+	window.vrvWorker = vrvWorker;
 };
 
 function callbackAfterInitialized() {
