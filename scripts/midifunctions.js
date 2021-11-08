@@ -13,6 +13,13 @@ var LASTLINE = -1;
 
 var DELAY = 600;
 
+import { getVrvWorker } from './humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
+
 export function play_midi(starttime) {
 	starttime = starttime ? starttime : 0;
 	if (starttime == 0) {
@@ -21,7 +28,8 @@ export function play_midi(starttime) {
 		DELAY = 600;
 	}
 
-	window.vrvWorker.renderToMidi()
+	// window.vrvWorker.renderToMidi()
+	vrvWorker.renderToMidi()
 	.then(function (base64midi) {
 		var song = 'data:audio/midi;base64,' + base64midi;
 		console.log('Midi song', song);
@@ -51,12 +59,13 @@ var ids = [];
 var midiUpdate = function (time) {
 
 	var vrvTime = Math.max(0, time - DELAY);
-	window.vrvWorker.getElementsAtTime(vrvTime)
+	// window.vrvWorker.getElementsAtTime(vrvTime)
+	vrvWorker.getElementsAtTime(vrvTime)
 	.then(function (elementsattime) {
 		var matches;
 		if (elementsattime.page > 0) {
-			if (elementsattime.page != window.vrvWorker.page) {
-				window.vrvWorker.page = elementsattime.page;
+			if (elementsattime.page !=vrvWorker.page) {
+				vrvWorker.page = elementsattime.page;
 				loadPage();
 			}
 			if ((elementsattime.notes.length > 0) && (ids != elementsattime.notes)) {

@@ -87,8 +87,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	setupAceEditor("input");
 	setupDropArea();
 
-	let vrvCopy = Object.assign({}, window.vrvWorker);
-	console.log('Calling displayNotation with: ', vrvCopy)
+	// let vrvCopy = Object.assign({}, window.vrvWorker);
+	// console.log('Calling displayNotation with: ', vrvCopy)
 
 	displayNotation();
 

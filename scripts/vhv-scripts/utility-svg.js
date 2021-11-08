@@ -494,6 +494,12 @@ function getOnClassElements(onclass) {
 //
 // goToPreviousNoteOrRest --
 //
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
 
 export function goToPreviousNoteOrRest(currentid) {
 	var current = document.querySelector("#" + currentid);
@@ -524,18 +530,18 @@ export function goToPreviousNoteOrRest(currentid) {
 		highlightIdInEditor(alist[0].id, "goToPreviousNoteOrRest");
 	} else if (alist.length == 0) {
 		// gotoNextPage();
-		if (window.vrvWorker.page == 1) {
+		if (vrvWorker.page == 1) {
 			// at first page, so don't do anything.
 			console.log("AT FIRST PAGE, so not continuing further");
 			return;
 		}
-		window.vrfWorker.gotoPage(window.vrvWorker.page - 1)
+		vrvWorker.gotoPage(vrvWorker.page - 1)
 		.then(function(obj) {
-			// loadPage(window.vrvWorker.page);
-			var page = obj.page || window.vrvWorker.page;
+			// loadPage(vrvWorker.page);
+			var page = obj.page || vrvWorker.page;
 			$("#overlay").hide().css("cursor", "auto");
 			$("#jump_text").val(page);
-			window.vrvWorker.renderPage(page)
+			vrvWorker.renderPage(page)
 			.then(function(svg) {
 				$("#output").html(svg);
 				// adjustPageHeight();
@@ -597,18 +603,18 @@ export function goToNextNoteOrRest(currentid) {
 	} else if (alist.length == 0) {
 		// console.log("NO ELEMENT FOUND (ON NEXT PAGE?)");
 		// gotoNextPage();
-		if ((window.vrvWorker.pageCount > 0) && (window.vrvWorker.pageCount == window.vrvWorker.page)) {
+		if ((vrvWorker.pageCount > 0) && (vrvWorker.pageCount == vrvWorker.page)) {
 			// at last page, so don't do anything.
 			// console.log("AT LAST PAGE, so not continuing further");
 			return;
 		}
-		window.vrvWorker.gotoPage(window.vrvWorker.page + 1)
+		vrvWorker.gotoPage(vrvWorker.page + 1)
 		.then(function(obj) {
-			// loadPage(window.vrvWorker.page);
-			var page = obj.page || window.vrvWorker.page;
+			// loadPage(vrvWorker.page);
+			var page = obj.page || vrvWorker.page;
 			$("#overlay").hide().css("cursor", "auto");
 			$("#jump_text").val(page);
-			window.vrvWorker.renderPage(page)
+			vrvWorker.renderPage(page)
 			.then(function(svg) {
 				$("#output").html(svg);
 				// adjustPageHeight();

@@ -616,6 +616,12 @@ MenuInterface.prototype.useGootvilleFont = function () {
 // MenuInterface::applyFilter --
 //
 import { humdrumToSvgOptions } from './vhv-scripts/verovio-options.js';
+import { getVrvWorker } from './humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
 
 MenuInterface.prototype.applyFilter = function (filter, data, callback) {
 	var contents = "";
@@ -628,7 +634,8 @@ MenuInterface.prototype.applyFilter = function (filter, data, callback) {
 	}
 	var options = humdrumToSvgOptions();
 	var data = contents + "\n!!!filter: " + filter + "\n";
-	window.vrvWorker.filterData(options, data, "humdrum")
+	// window.vrvWorker.filterData(options, data, "humdrum")
+	vrvWorker.filterData(options, data, "humdrum")
 	.then(function (newdata) {
 		newdata = newdata.replace(/\s+$/m, "");
 		var lines = newdata.match(/[^\r\n]+/g);

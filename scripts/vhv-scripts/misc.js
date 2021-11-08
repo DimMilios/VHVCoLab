@@ -11,12 +11,18 @@ import { humdrumToSvgOptions, musicxmlToHumdrumOptions, musedataToHumdrumOptions
 import { verovioCallback } from './listeners.js';
 import { convertDataToCsv, convertDataToTsv } from './utility.js';
 import { loadIndexFile } from './loading.js';
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
 
 export function displayNotation(page, force, restoreid) {
-  // window.vrvWorker.checkInitialized();
-  if (!window.vrvWorker.initialized || (window.FreezeRendering && !force)) {
+  // vrvWorker.checkInitialized();
+  if (!vrvWorker.initialized || (window.FreezeRendering && !force)) {
     // console.log("Ignoring displayNotation request: not initialized or frozen");
-    console.log("Ignoring displayNotation", {vrvWorker: window.vrvWorker, FreezeRendering: window.FreezeRendering, force})
+    console.log("Ignoring displayNotation", {vrvWorker: vrvWorker, FreezeRendering: window.FreezeRendering, force})
     return;
   }
 
@@ -44,8 +50,8 @@ export function displayNotation(page, force, restoreid) {
   }
  
   window.OPTIONS = options;
-  // console.log('Calling window.vrvWorker.renderData with args:', {options, OPTIONS: window.OPTIONS, editorValue:window.EDITOR.getValue(), data, page, force, vrvWorker: window.vrvWorker})
-  window.vrvWorker
+  // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: window.OPTIONS, editorValue:window.EDITOR.getValue(), data, page, force, vrvWorker: vrvWorker})
+  vrvWorker
     .renderData(options, data, page, force)
     .then(function (svg) {
       let ishumdrum = true;
@@ -103,7 +109,7 @@ export function displayNotation(page, force, restoreid) {
       //   // extract the filtered Humdrum data from verovio, and
       //   // pull out the match count from the data and report
       //   // search toolbar
-      //   window.vrvWorker.getHumdrum().then(function (humdrumdata) {
+      //   vrvWorker.getHumdrum().then(function (humdrumdata) {
       //     let data = humdrumdata.match(/[^\r\n]+/g);
       //     let count = 0;
       //     let matches;
@@ -520,7 +526,7 @@ export function displayWork(file) {
     return;
   }
   moveToTopOfNotation();
-  window.vrvWorker.page = 1;
+  vrvWorker.page = 1;
   $('html').css('cursor', 'wait');
   // window.stop();
   loadKernScoresFile({
@@ -561,8 +567,8 @@ export function replaceEditorContentWithHumdrumFile(text, page) {
     return;
   }
 
-  window.vrvWorker.page = 1;
-  page = page || window.vrvWorker.page;
+  vrvWorker.page = 1;
+  page = page || vrvWorker.page;
   let options = null;
   let meiQ = false;
 
@@ -592,14 +598,14 @@ export function replaceEditorContentWithHumdrumFile(text, page) {
       options.inputFrom == 'musedata' ||
       options.inputFrom == 'musedata-hum'
     ) {
-      window.vrvWorker.filterData(options, text, 'humdrum').then(showMei);
+      vrvWorker.filterData(options, text, 'humdrum').then(showMei);
     } else if (
       options.inputFrom == 'musicxml' ||
       options.inputFrom == 'musicxml-hum'
     ) {
-      window.vrvWorker.filterData(options, text, 'humdrum').then(showMei);
+      vrvWorker.filterData(options, text, 'humdrum').then(showMei);
     } else {
-      window.vrvWorker.filterData(options, text, 'humdrum').then(function (newtext) {
+      vrvWorker.filterData(options, text, 'humdrum').then(function (newtext) {
         let freezeBackup = window.FreezeRendering;
         if (window.FreezeRendering == false) {
           window.FreezeRendering = true;
@@ -617,7 +623,7 @@ export function replaceEditorContentWithHumdrumFile(text, page) {
 // applyZoom --
 //
 
-function applyZoom() {
+export function applyZoom() {
   // let measure = 0;
 
   let testing = document.querySelector('#output svg');
@@ -626,18 +632,18 @@ function applyZoom() {
     return;
   }
 
-  // if (window.vrvWorker.page !== 1) {
+  // if (vrvWorker.page !== 1) {
   // 	measure = $("#output .measure").attr("id");
   // }
 
   let options = humdrumToSvgOptions();
   window.OPTIONS = options;
   stop();
-  window.vrvWorker.HEIGHT = options.pageHeight;
-  window.vrvWorker.WIDTH = options.pageWidth;
+  vrvWorker.HEIGHT = options.pageHeight;
+  vrvWorker.WIDTH = options.pageWidth;
 
-  window.vrvWorker.redoLayout(options, 1, window.vrvWorker.page).then(function () {
-    loadPage(window.vrvWorker.page);
+  vrvWorker.redoLayout(options, 1, vrvWorker.page).then(function () {
+    loadPage(vrvWorker.page);
   });
 }
 
@@ -647,10 +653,10 @@ function applyZoom() {
 //
 
 export function loadPage(page) {
-  page = page || window.vrvWorker.page;
+  page = page || vrvWorker.page;
   $('#overlay').hide().css('cursor', 'auto');
   $('#jump_text').val(page);
-  window.vrvWorker.renderPage(page).then(function (svg) {
+  vrvWorker.renderPage(page).then(function (svg) {
     $('#output').html(svg);
     verovioCallback(svg);
     // adjustPageHeight();
@@ -698,8 +704,8 @@ return;
 //
 
 export function gotoPreviousPage() {
-  window.vrvWorker.gotoPage(window.vrvWorker.page - 1).then(function () {
-    loadPage(window.vrvWorker.page);
+  vrvWorker.gotoPage(vrvWorker.page - 1).then(function () {
+    loadPage(vrvWorker.page);
   });
 }
 
@@ -709,8 +715,8 @@ export function gotoPreviousPage() {
 //
 
 export function gotoNextPage() {
-  window.vrvWorker.gotoPage(window.vrvWorker.page + 1).then(function () {
-    loadPage(window.vrvWorker.page);
+  vrvWorker.gotoPage(vrvWorker.page + 1).then(function () {
+    loadPage(vrvWorker.page);
   });
 }
 
@@ -720,8 +726,8 @@ export function gotoNextPage() {
 //
 
 export function gotoLastPage() {
-  window.vrvWorker.gotoPage(0).then(function () {
-    loadPage(window.vrvWorker.page);
+  vrvWorker.gotoPage(0).then(function () {
+    loadPage(vrvWorker.page);
   });
 }
 
@@ -731,8 +737,8 @@ export function gotoLastPage() {
 //
 
 export function gotoFirstPage() {
-  window.vrvWorker.gotoPage(1).then(function () {
-    loadPage(window.vrvWorker.page);
+  vrvWorker.gotoPage(1).then(function () {
+    loadPage(vrvWorker.page);
   });
 }
 
@@ -755,8 +761,8 @@ export function showBufferedHumdrumData() {
     setEditorMode('humdrum');
     setEditorModeAndKeyboard();
     if (!window.BufferedHumdrumFile.match(/^\s*$/)) {
-      let page = window.vrvWorker.page;
-      displayScoreTextInEditor(window.BufferedHumdrumFile, window.vrvWorker.page);
+      let page = vrvWorker.page;
+      displayScoreTextInEditor(window.BufferedHumdrumFile, vrvWorker.page);
       window.BufferedHumdrumFile = '';
     }
   }
@@ -769,7 +775,7 @@ export function showBufferedHumdrumData() {
 
 function displayHumdrum() {
   let options = humdrumToSvgOptions();
-  window.vrvWorker
+  vrvWorker
     .filterData(options, getTextFromEditor(), 'humdrum')
     .then(showHumdrum);
 }
@@ -948,7 +954,7 @@ function showMei(meidata) {
   if (window.BufferedHumdrumFile.match(/^\s*$/)) {
     window.BufferedHumdrumFile = getTextFromEditor();
   }
-  displayScoreTextInEditor(meidata, window.vrvWorker.page);
+  displayScoreTextInEditor(meidata, vrvWorker.page);
 }
 
 //////////////////////////////
@@ -960,7 +966,7 @@ export function displayMeiNoType() {
   let options = humdrumToSvgOptions();
   options.humType = 0;
   let text = getTextFromEditor();
-  window.vrvWorker.filterData(options, text, 'mei').then(function (meidata) {
+  vrvWorker.filterData(options, text, 'mei').then(function (meidata) {
     showMei(meidata);
   });
 }
@@ -971,7 +977,7 @@ export function displayMeiNoType() {
 //
 
 export function displayMei() {
-  window.vrvWorker.getMEI().then(function (meidata) {
+  vrvWorker.getMEI().then(function (meidata) {
     showMei(meidata);
   });
 }
@@ -985,7 +991,7 @@ function displaySvg() {
   if (window.ShowingIndex) {
     return;
   }
-  window.vrvWorker.renderPage(window.vrvWorker.page).then(function (data) {
+  vrvWorker.renderPage(vrvWorker.page).then(function (data) {
     let prefix =
       "<textarea style='spellcheck=false; width:100%; height:100%;'>";
     let postfix = '</textarea>';
@@ -1376,7 +1382,7 @@ export function initializeVerovioToolkit() {
 // monitorNotationUpdating --
 //
 
-function monitorNotationUpdating() {
+export function monitorNotationUpdating() {
   updateEditorMode();
   displayNotation();
 }
@@ -1662,7 +1668,7 @@ import { play_midi } from '../midifunctions.js';
 export function playCurrentMidi() {
   if (window.CursorNote && window.CursorNote.id) {
     let id = window.CursorNote.id;
-    window.vrvWorker.getTimeForElement(id).then(function (time) {
+    vrvWorker.getTimeForElement(id).then(function (time) {
       play_midi(time);
     });
   } else {

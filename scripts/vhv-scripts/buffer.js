@@ -232,6 +232,12 @@ export function saveEditorContentsLocally() {
 //
 import { getTextFromEditor } from './misc.js';
 import { dataIsHumdrum } from './utility.js';
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
 
 export function saveSvgData() {
 	if (window.ShowingIndex) {
@@ -247,13 +253,13 @@ export function saveSvgData() {
 
 	var humdrum = dataIsHumdrum(data);
 
-	var page = window.vrvWorker.page;
+	var page = vrvWorker.page;
 	var force = true;
 
 	// window.vrvWorker.renderPage(window.vrvWorker.page)
-	window.vrvWorker.renderData(options, data, page, force)
+	vrvWorker.renderData(options, data, page, force)
 	.then(function(data) {
-		console.log('buffer window.vrvWorker.renderData', data)
+		console.log('buffer vrvWorker.renderData', data)
 		var filename = window.SAVEFILENAME;
 		var size = window.EDITOR.session.getLength();
 		var matches;
@@ -275,6 +281,6 @@ export function saveSvgData() {
 
 		// Redraw without adjustPageWidth on.
 		options.adjustPageWidth = 0;
-		window.vrvWorker.renderData(options, data, page, force)
+		vrvWorker.renderData(options, data, page, force)
 	});
 }

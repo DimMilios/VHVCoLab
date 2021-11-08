@@ -2,6 +2,12 @@
 
 import { redrawInputArea, displayScoreTextInEditor, replaceEditorContentWithHumdrumFile } from "./misc.js";
 import { HMDIndex } from "./hmdindex.js";
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
 
 //////////////////////////////
 //
@@ -142,7 +148,7 @@ export function loadKernScoresFile(obj, force) {
 				data += "/eof\n";
 			}
 			data += "//\n"; // end-of-transmission marker for MuseData stage2 multipart file.
-			displayScoreTextInEditor(data, window.vrvWorker.page);
+			displayScoreTextInEditor(data, vrvWorker.page);
 
 			if (infos.length > 1) {
 				// console.log("GOING TO ADD MULTIPLE FILES TO EDITOR", infos);
@@ -162,9 +168,9 @@ export function loadKernScoresFile(obj, force) {
 								textdata = "!!!ONB: No data content\n";
 							}
 							try {
-								displayScoreTextInEditor(atob(jinfo.content), window.vrvWorker.page);
+								displayScoreTextInEditor(atob(jinfo.content), vrvWorker.page);
 							} catch (err) {
-								displayScoreTextInEditor(jinfo.content, window.vrvWorker.page);
+								displayScoreTextInEditor(jinfo.content, vrvWorker.page);
 							}
 						}
 						if (getnext) {
@@ -172,7 +178,7 @@ export function loadKernScoresFile(obj, force) {
 						}
 					} catch(err) {
 						console.log("Error downloading", key, "Error:", err);
-						displayScoreTextInEditor(info.data, window.vrvWorker.page);
+						displayScoreTextInEditor(info.data, vrvWorker.page);
 					}
 				} else {
 					console.log("Error retrieving", key);
@@ -205,14 +211,14 @@ export function loadKernScoresFile(obj, force) {
 							if (textdata.match(/^\s*$/)) {
 								textdata = "!!!ONB: No data content\n";
 							}
-							displayScoreTextInEditor(atob(jinfo.content), window.vrvWorker.page);
+							displayScoreTextInEditor(atob(jinfo.content), vrvWorker.page);
 						}
 						if (getnext) {
 							processInfo(jinfo, obj, false, false);
 						}
 					} catch(err) {
 						console.log("Error downloading", key, "Error:", err);
-						displayScoreTextInEditor(info.data, window.vrvWorker.page);
+						displayScoreTextInEditor(info.data, vrvWorker.page);
 					}
 				}
 			} else {
@@ -229,7 +235,7 @@ export function loadKernScoresFile(obj, force) {
 				processInfo(jinfo, obj, false, false);
 			}
 		} catch(err) {
-			displayScoreTextInEditor(info.data, window.vrvWorker.page);
+			displayScoreTextInEditor(info.data, vrvWorker.page);
 			redrawInputArea();
 		}
 	}
@@ -861,7 +867,7 @@ function processInfo(info, obj, nextwork, prevwork) {
 
 	// var inputarea = document.querySelector("#input");
 	// inputarea.value = score;
-	displayScoreTextInEditor(score, window.vrvWorker.page);
+	displayScoreTextInEditor(score, vrvWorker.page);
 
 	obj.next = false;
 	obj.previous = false;

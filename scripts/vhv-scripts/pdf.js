@@ -25,6 +25,13 @@
 import { getFilenameBase } from './utility.js';
 import { getStaffCount } from './utility-humdrum.js';
 
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
+
 //////////////////////////////
 //
 // loadPdfFonts -- load all default fonts used by Verovio
@@ -207,7 +214,7 @@ export function generatePdfSnapshot(format, orientation) {
 //
 
 export function generatePdfFull(format, orientation) {
-	var oldOptions = window.vrvWorker.options;
+	var oldOptions = vrvWorker.options;
 	// need to explicitly disable mmOutput = 1 set by the printing process.
 	oldOptions.mmOutput = 0;
 
@@ -309,7 +316,7 @@ export function generatePdfFull(format, orientation) {
 
 	RSVP.hash({
 		fonts: loadPdfFonts(pdf),
-		svglist: window.vrvWorker.renderAllPages(scoredata, vrvOptions)
+		svglist: vrvWorker.renderAllPages(scoredata, vrvOptions)
 	})
 	.then(function(data) {
 		for (var i=0; i < data.svglist.length; i++) {
@@ -324,10 +331,10 @@ export function generatePdfFull(format, orientation) {
 	.finally(function() {
 		// restore the old layout for the VHV  webpage:
 		var force = false;
-		var page = window.vrvWorker.page;
+		var page = vrvWorker.page;
 		var cleanoldoptions = cleanOptions2(scoredata, oldOptions);
-		window.vrvWorker.redoLayout(oldOptions, true);
-		window.vrvWorker.options = oldOptions;
+		vrvWorker.redoLayout(oldOptions, true);
+		vrvWorker.options = oldOptions;
 	});
 }
 

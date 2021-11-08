@@ -15,10 +15,17 @@ import 'ace-builds/src/ext-searchbox';
 //
 // downloadVerovioToolkit --
 //
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+
+let vrvWorker = getVrvWorker();
+if (!vrvWorker) {
+	throw new Error('Verovio worker is undefined');
+}
 
 function downloadVerovioToolkit(use_worker) {
 	console.log('Downloading vrv toolkit from setup.js');
-	window.vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
+	// window.vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
+	vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
 };
 
 
