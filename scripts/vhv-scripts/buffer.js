@@ -233,10 +233,16 @@ export function saveEditorContentsLocally() {
 import { getTextFromEditor } from './misc.js';
 import { dataIsHumdrum } from './utility.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { getAceEditor } from './setup.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
 	throw new Error('Verovio worker is undefined');
+}
+
+let editor = getAceEditor();
+if (!editor) {
+	throw new Error('Ace Editor is undefined');
 }
 
 export function saveSvgData() {
@@ -261,11 +267,11 @@ export function saveSvgData() {
 	.then(function(data) {
 		console.log('buffer vrvWorker.renderData', data)
 		var filename = window.SAVEFILENAME;
-		var size = window.EDITOR.session.getLength();
+		var size = editor.session.getLength();
 		var matches;
 		var line;
 		for (var i=0; i<size; i++) {
-			line = window.EDITOR.session.getLine(i);
+			line = editor.session.getLine(i);
 			if (matches = line.match(/^!!!!SEGMENT:\s*([^\s].*)\s*$/)) {
 				filename = matches[1];
 			}

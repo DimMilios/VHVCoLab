@@ -26,6 +26,7 @@ import { getFilenameBase } from './utility.js';
 import { getStaffCount } from './utility-humdrum.js';
 
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { getAceEditor } from './setup.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
@@ -300,7 +301,7 @@ export function generatePdfFull(format, orientation) {
 	}
 
 
-	var scoredata =window.EDITOR.getValue().replace(/^\s+/, "");
+	var scoredata = getAceEditor().getValue().replace(/^\s+/, "");
 
 	var staffcount = getStaffCount(scoredata);
 	if (staffcount == 2) {

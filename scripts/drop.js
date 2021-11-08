@@ -87,6 +87,7 @@ function allowDrag(event) {
 // handleDrop --
 //
 import { replaceEditorContentWithHumdrumFile } from './vhv-scripts/misc.js'
+import { getAceEditor } from './vhv-scripts/setup.js';
 
 function handleDrop(event) {
 	event.preventDefault();
@@ -116,7 +117,7 @@ function handleDrop(event) {
 			if (myevent.shiftKey) {
 				replaceEditorContentWithHumdrumFile(contents);
 			} else {
-				window.EDITOR.setValue(contents, -1);
+				getAceEditor().setValue(contents, -1);
 			}
 
 			$('html').css('cursor', 'auto');

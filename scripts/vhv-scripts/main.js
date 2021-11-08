@@ -98,7 +98,7 @@
 export * from './global-variables.js'
 
 // // Initialization functions:
-export * from './setup.js'
+export * as setup from './setup.js'
 
 // Functions related to graphical editing:
 export * from './editor.js'

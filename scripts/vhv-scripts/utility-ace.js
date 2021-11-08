@@ -1,5 +1,11 @@
+import { editorMode } from './global-variables.js';
+import { getFieldAndSubtoken } from './utility-humdrum.js';
+import { getAceEditor } from './setup.js';
 
-
+let editor = getAceEditor();
+if (!editor) {
+	throw new Error('Ace Editor is undefined');
+}
 
 //////////////////////////////
 //
@@ -9,14 +15,14 @@
 export function centerCursorHorizontallyInEditor() {
 	// Center the cursort horizontally:
 	// Get distance between cursor and left side of textarea in pixels:
-	let cursorLeft = window.EDITOR.renderer.$cursorLayer.getPixelPosition(0).left;
+	let cursorLeft = getAceEditor().renderer.$cursorLayer.getPixelPosition(0).left;
 
 	// Get width of visible text area
-	let scrollerWidth = window.EDITOR.renderer.$size.scrollerWidth;
+	let scrollerWidth = editor.renderer.$size.scrollerWidth;
 
 	// Move scroller so that left side at same point as cursor minus half width of visible area:
 	if (cursorLeft > scrollerWidth / 2) {
-		window.EDITOR.renderer.scrollToX(cursorLeft - scrollerWidth/2);
+		editor.renderer.scrollToX(cursorLeft - scrollerWidth/2);
 	}
 }
 
@@ -26,16 +32,15 @@ export function centerCursorHorizontallyInEditor() {
 //
 // setEditorModeAndKeyboard --
 //
-import { editorMode } from './global-variables.js'
 
 export function setEditorModeAndKeyboard() {
-	if (window.EDITOR) {
-		window.EDITOR.setTheme(window.EditorModes[editorMode()][window.KeyboardMode].theme);
-		window.EDITOR.getSession().setMode("ace/mode/" + editorMode());
-		// window.EDITOR.setTheme(window.EditorModes[EditorMode][window.KeyboardMode].theme);
-		// window.EDITOR.getSession().setMode("ace/mode/" + EditorMode);
+	if (editor) {
+		editor.setTheme(window.EditorModes[editorMode()][window.KeyboardMode].theme);
+		editor.getSession().setMode("ace/mode/" + editorMode());
+		// editor.setTheme(window.EditorModes[EditorMode][window.KeyboardMode].theme);
+		// editor.getSession().setMode("ace/mode/" + EditorMode);
 		// null to reset to default (ace) mode
-		window.EDITOR.setKeyboardHandler(window.KeyboardMode === "ace" ? null : "ace/keyboard/" + window.KeyboardMode);
+		editor.setKeyboardHandler(window.KeyboardMode === "ace" ? null : "ace/keyboard/" + window.KeyboardMode);
 	}
 };
 
@@ -78,8 +83,8 @@ export function showIdInEditor(id) {
 		return;
 	}
 	var row = parseInt(matches[1]);
-	window.EDITOR.gotoLine(row, 0);
-	window.EDITOR.centerSelection();
+	editor.gotoLine(row, 0);
+	editor.centerSelection();
 	// console.log("PLAYING ROW", row);
 }
 
@@ -135,14 +140,14 @@ function highlightNoteInScore(event) {
 import { markItem } from './utility-svg.js';
 
 function xmlDataNoteIntoView(event) {
-	var location = window.EDITOR.selection.getCursor();
+	var location = editor.selection.getCursor();
 	var line = location.row;
 	if (window.EditorLine == line) {
 		// already highlighted (or close enough)
 		return;
 	}
 	// var column = location.column;
-	var text = window.EDITOR.session.getLine(line);
+	var text = editor.session.getLine(line);
 	var matches = text.match(/xml:id="([^"]+)"/);
 	if (!matches) {
 		markItem(null, line);
@@ -164,16 +169,15 @@ function xmlDataNoteIntoView(event) {
 //
 // humdrumDataNoteIntoView --
 //
-import { getFieldAndSubtoken } from './utility-humdrum.js';
 
 export function humdrumDataNoteIntoView(row, column) {
 	if (!row || !column) {
-		var location = window.EDITOR.selection.getCursor();
+		var location = editor.selection.getCursor();
 		var line = location.row;
 		column = location.column;
 	}
 	var line = row;
-	var text = window.EDITOR.session.getLine(line);
+	var text = editor.session.getLine(line);
 	var fys = getFieldAndSubtoken(text, column);
 	var field = fys.field;
 	var subspine = fys.subspine;

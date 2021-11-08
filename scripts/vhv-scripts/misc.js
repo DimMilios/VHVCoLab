@@ -50,7 +50,7 @@ export function displayNotation(page, force, restoreid) {
   }
  
   window.OPTIONS = options;
-  // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: window.OPTIONS, editorValue:window.EDITOR.getValue(), data, page, force, vrvWorker: vrvWorker})
+  // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: window.OPTIONS, editorValue:editor.getValue(), data, page, force, vrvWorker: vrvWorker})
   vrvWorker
     .renderData(options, data, page, force)
     .then(function (svg) {
@@ -173,6 +173,10 @@ export function toggleFreeze() {
 //
 // toggleTextVisibility --
 //
+const editor = getAceEditor();
+if (!editor) {
+  throw new Error('Ace Editor is undefined');
+}
 
 export function toggleTextVisibility(suppressZoom) {
   window.InputVisible = !window.InputVisible;
@@ -190,7 +194,7 @@ export function toggleTextVisibility(suppressZoom) {
     displayNotation();
     // applyZoom();
   }
-  window.EDITOR.resize();
+  editor.resize();
   // matchToolbarVisibilityIconToState();
 }
 
@@ -213,7 +217,7 @@ export function redrawInputArea(suppressZoom) {
   if (!suppressZoom) {
     applyZoom();
   }
- window.EDITOR.resize();
+ editor.resize();
 }
 
 //////////////////////////////
@@ -242,7 +246,7 @@ function showInputArea(suppressZoom) {
   if (!suppressZoom) {
     applyZoom();
   }
- window.EDITOR.resize();
+ editor.resize();
 }
 
 //////////////////////////////
@@ -806,7 +810,7 @@ function showHumdrum(humdrumdata) {
 //
 
 export function getTextFromEditor() {
-  let text =window.EDITOR.getValue();
+  let text =editor.getValue();
   if (!text) {
     return '';
   }
@@ -838,7 +842,7 @@ export function getTextFromEditor() {
 //
 
 export function getTextFromEditorRaw() {
-  return window.EDITOR.getValue();
+  return editor.getValue();
 }
 
 //////////////////////////////
@@ -847,7 +851,7 @@ export function getTextFromEditorRaw() {
 //
 
 export function getTextFromEditorNoCsvProcessing() {
-  let text =window.EDITOR.getValue();
+  let text =editor.getValue();
   if (!text) {
     return '';
   }
@@ -913,14 +917,14 @@ function ensureTsv(text) {
 
 export function setTextInEditor(text) {
   if (!text) {
-   window.EDITOR.setValue('');
+   editor.setValue('');
   } else if (text.charAt(text.length - 1) === '\n') {
     // Get rid of #@%! empty line at end of text editor:
-   window.EDITOR.setValue(text.slice(0, -1), -1);
+   editor.setValue(text.slice(0, -1), -1);
   } else {
-   window.EDITOR.setValue(text, -1);
+   editor.setValue(text, -1);
   }
- window.EDITOR.getSession().selection.clearSelection();
+  editor.getSession().selection.clearSelection();
 }
 
 //////////////////////////////
@@ -1342,8 +1346,8 @@ export function initializeVerovioToolkit() {
   // inputarea.addEventListener("keyup", function() {
   //		displayNotation();
   //});
-  if (window.EDITOR) {
-   window.EDITOR.session.on('change', function (e) {
+  if (editor) {
+   editor.session.on('change', function (e) {
       // console.log("EDITOR content changed", e);
       monitorNotationUpdating();
     });
@@ -1488,7 +1492,7 @@ export function xmlDataIntoView(event) {
       // find non-humdrum ID.
       searchstring = 'xml:id="' + target.id + '"';
       regex = new RegExp(searchstring);
-      range =window.EDITOR.find(regex, {
+      range =editor.find(regex, {
         wrap: true,
         caseSensitive: true,
         wholeWord: true,
@@ -1498,7 +1502,7 @@ export function xmlDataIntoView(event) {
     // still need to verify if inside of svg element in the first place.
     searchstring = 'xml:id="' + target.id + '"';
     regex = new RegExp(searchstring);
-    range =window.EDITOR.find(regex, {
+    range =editor.find(regex, {
       wrap: true,
       caseSensitive: true,
       wholeWord: true,
@@ -1605,7 +1609,7 @@ export function decreaseTab() {
   if (window.TABSIZE < 1) {
     window.TABSIZE = 1;
   }
- window.EDITOR.getSession().setTabSize(window.TABSIZE);
+ editor.getSession().setTabSize(window.TABSIZE);
 }
 
 //////////////////////////////
@@ -1618,7 +1622,7 @@ export function increaseTab() {
   if (window.TABSIZE > 100) {
     window.TABSIZE = 100;
   }
- window.EDITOR.getSession().setTabSize(window.TABSIZE);
+ editor.getSession().setTabSize(window.TABSIZE);
 }
 
 //////////////////////////////
@@ -1650,7 +1654,7 @@ export function clearContent() {
     displayFileTitle('');
     removeWorkNavigator();
   }
- window.EDITOR.focus();
+ editor.focus();
 }
 
 //////////////////////////////
@@ -1712,9 +1716,10 @@ export function hideRepertoryIndex() {
 // updateEditorMode -- Automatically detect the type of data and change edit mode:
 //
 import { getMode } from './utility-ace.js';
+import { getAceEditor } from './setup.js';
 
 export function updateEditorMode() {
-  if (!window.EDITOR) {
+  if (!editor) {
     return;
   }
   let text = getTextFromEditorRaw();

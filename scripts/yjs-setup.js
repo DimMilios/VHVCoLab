@@ -6,6 +6,7 @@ import { simpleDiffString } from 'lib0/diff';
 import { updateSingleSelect, updateMultiSelect, removeUnusedElements, userListDisplay } from './vhv-scripts/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
+import { getAceEditor } from './vhv-scripts/setup.js';
 
 window.addEventListener('load', () => {
   // console.log(Y)
@@ -22,8 +23,13 @@ window.addEventListener('load', () => {
   
   const type = ydoc.getText('ace');
   const yUndoManager = new Y.UndoManager(type);
+
+  const editor = getAceEditor();
+  if (!editor) {
+    throw new Error('Ace Editor is undefined');
+  }
   
-  const binding = new AceBinding(type, window.EDITOR, provider.awareness, { yUndoManager });
+  const binding = new AceBinding(type, editor, provider.awareness, { yUndoManager });
   
   let userData = {
     name: Math.random().toString(36).substring(7),
@@ -34,12 +40,12 @@ window.addEventListener('load', () => {
   // Define user name and user name
   provider.awareness.setLocalStateField('user', userData);
 
-  // window.EDITOR.session.getDocument().on('change', (e) => {
-  //   console.log('window.EDITOR CHANGE', e);
+  // editor.session.getDocument().on('change', (e) => {
+  //   console.log('editor CHANGE', e);
   // })
 
-  window.EDITOR.getSession().selection.on("changeCursor", function(event) {
-    const { row, column} = window.EDITOR.selection.getCursor();
+  editor.getSession().selection.on("changeCursor", function(event) {
+    const { row, column} = editor.selection.getCursor();
     const item = humdrumDataNoteIntoView(row, column);
     if (item) {
       markItem(item);

@@ -161,7 +161,7 @@ window.MuseDataBuffer = "";
 
 //window.EDITOR: main interface to the ace editor.  This variable is configured in the
 // setup.js file.
-window.EDITOR = undefined;
+// window.EDITOR = undefined;
 // window.dummyEDITOR;
 
 // EditorModes: list the various setup for colorizing and editing for each of the

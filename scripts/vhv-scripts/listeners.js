@@ -12,8 +12,8 @@
 // Description:   Event listeners and related code for index.html.
 //
 
-import { setupAceEditor, setupSplitter} from './setup.js'
-import { displayNotation, cleanFont, updateEditorMode } from './misc.js';
+import { getAceEditor, setupAceEditor, setupSplitter} from './setup.js'
+import { displayNotation, cleanFont, updateEditorMode, setTextInEditor } from './misc.js';
 import { observeSvgContent } from './utility-svg.js';
 import { HnpMarkup } from './highlight.js';
 
@@ -67,7 +67,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// EditorMode = "humdrum";
 	setEditorMode("humdrum");
-	setEditorModeAndKeyboard();
+	// setEditorModeAndKeyboard();
+
+	// The block of code below loads the edits to the Ace editor from the AUTOSAVE local buffer,
+	// but it breaks Ace Editor
 
 	var ctime = (new Date).getTime();
 	var otime = localStorage.getItem("AUTOSAVE_DATE");
@@ -80,11 +83,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	if ((!autosave.match(/^\s*$/)) && (dur < 60000)) {
 		var input = document.querySelector("#input");
 		if (input) {
-			input.textContent = autosave;
+			// input.textContent = autosave;
+			setTextInEditor(autosave);
 		}
 	}
 
-	setupAceEditor("input");
+	// setupAceEditor("input");
+	getAceEditor()._dispatchEvent('ready');
 	setupDropArea();
 
 	// let vrvCopy = Object.assign({}, window.vrvWorker);
@@ -145,7 +150,11 @@ function processNotationKeyCommand(event) {
 
 	//undo doesn't need CursorNote
 	if (event.code === ZKey && (event.ctrlKey || event.metaKey)) {
-	window.EDITOR.undo();
+		const editor = getAceEditor();
+		if (!editor) {
+			throw new Error('Ace Editor is undefined');
+		}
+		editor.undo();
 		return;
 	};
 

@@ -751,6 +751,7 @@ export function restoreSelectedSvgElement(id) {
 // markItem -- Used by highlightNoteInScore.
 //
 import { setCursorNote } from './misc.js';
+import { getAceEditor } from './setup.js';
 
 export function markItem(item, line) {
 	if (!item) {
@@ -861,7 +862,11 @@ export function highlightIdInEditor(id, source) {
 		subtoken = matches[1];
 	}
 
-	var linecontent = window.EDITOR.session.getLine(row-1);
+	const editor = getAceEditor();
+	if (!editor) {
+		throw new Error('Ace Editor is undefined');
+	}
+	var linecontent = editor.session.getLine(row-1);
 
 	var col = 0;
 	if (field > 1) {
@@ -908,10 +913,10 @@ export function highlightIdInEditor(id, source) {
 
 	window.CursorNote = document.querySelector("#" + id);
 	window.MENU.showCursorNoteMenu(window.CursorNote);
-	window.EDITOR.gotoLine(row, col);
+	editor.gotoLine(row, col);
 
 	// 0.5 = center the cursor vertically:
-	window.EDITOR.renderer.scrollCursorIntoView({row: row-1, column: col}, 0.5);
+	editor.renderer.scrollCursorIntoView({row: row-1, column: col}, 0.5);
 	centerCursorHorizontallyInEditor();
 
 }

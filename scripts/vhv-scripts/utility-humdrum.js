@@ -5,6 +5,8 @@
 // getReferenceRecords --
 //
 
+import { getAceEditor } from "./setup";
+
 export function getReferenceRecords(contents) {
 	var lines = contents.split(/\r?\n/);
 	var output = {};
@@ -273,18 +275,23 @@ export function getFieldAndSubtoken(text, column) {
 //     RDF marker in data; otherwise returns what chatacters should represent
 //     a marked note.
 //
+const editor = getAceEditor();
+console.log('Editor instance from utility-humdrum.js', Object.assign({}, editor))
+if (!editor) {
+	throw new Error('Ace Editor is undefined');
+}
 
 export function insertMarkedNoteRdf() {
 	var limit = 20; // search only first and last 20 lines of data for RDF entries.
 	var editchar = "";
 	var matches;
 	var i;
-	var size = window.EDITOR.session.getLength();
+	var size = getAceEditor().session.getLength();
 	for (i=size-1; i>=0; i--) {
 		if (size - i > limit) {
 			break;
 		}
-		var line = window.EDITOR.session.getLine(i);
+		var line = editor.session.getLine(i);
 		if (matches = line.match(/^!!!RDF\*\*kern:\s+([^\s])\s*=.*mark.*\s+note/)) {
 			editchar = matches[1];
 		}
@@ -298,7 +305,7 @@ export function insertMarkedNoteRdf() {
 			if (i > limit) {
 				break;
 			}
-			var line = window.EDITOR.session.getLine(i);
+			var line = editor.session.getLine(i);
 			if (matches = line.match(/^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*mark.*\s+note/)) {
 				editchar = matches[1];
 			}
@@ -326,8 +333,8 @@ export function insertMarkedNoteRdf() {
 	if (window.FreezeRendering == false) {
 		window.FreezeRendering = true;
 	}
-	window.EDITOR.session.insert({
-			row: window.EDITOR.session.getLength(),
+	editor.session.insert({
+			row: editor.session.getLength(),
 			column: 0
 		},
 		"\n" + text);
@@ -353,12 +360,12 @@ export function insertDirectionRdfs() {
 	var belowchar = "";
 	var matches;
 	var i;
-	var size = window.EDITOR.session.getLength();
+	var size = editor.session.getLength();
 	for (i=size-1; i>=0; i--) {
 		if (size - i > limit) {
 			break;
 		}
-		var line = window.EDITOR.session.getLine(i);
+		var line = editor.session.getLine(i);
 		if (matches = line.match(/^!!!RDF\*\*kern:\s+([^\s])\s*=.*above/)) {
 			abovechar = matches[1];
 		} else if (matches = line.match(/^!!!RDF\*\*kern:\s+([^\s])\s*=.*below/)) {
@@ -374,7 +381,7 @@ export function insertDirectionRdfs() {
 			if (i > limit) {
 				break;
 			}
-			var line = window.EDITOR.session.getLine(i);
+			var line = editor.session.getLine(i);
 			if (matches = line.match(/^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*above/)) {
 				abovechar = matches[1];
 			} else if (matches = line.match(/^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*below/)) {
@@ -411,8 +418,8 @@ export function insertDirectionRdfs() {
 	if (window.FreezeRendering == false) {
 		window.FreezeRendering = true;
 	}
-	window.EDITOR.session.insert({
-			row: window.EDITOR.session.getLength(),
+	editor.session.insert({
+			row: editor.session.getLength(),
 			column: 0
 		},
 		"\n" + text);
@@ -435,12 +442,12 @@ export function insertEditorialAccidentalRdf() {
 	var editchar = "";
 	var matches;
 	var i;
-	var size = window.EDITOR.session.getLength();
+	var size = editor.session.getLength();
 	for (i=size-1; i>=0; i--) {
 		if (size - i > limit) {
 			break;
 		}
-		var line = window.EDITOR.session.getLine(i);
+		var line = editor.session.getLine(i);
 		if (matches = line.match(/^!!!RDF\*\*kern:\s+([^\s])\s*=.*edit.*\s+acc/)) {
 			editchar = matches[1];
 		}
@@ -454,7 +461,7 @@ export function insertEditorialAccidentalRdf() {
 			if (i > limit) {
 				break;
 			}
-			var line = window.EDITOR.session.getLine(i);
+			var line = editor.session.getLine(i);
 			if (matches = line.match(/^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*edit.*\s+acc/)) {
 				editchar = matches[1];
 			}
@@ -482,8 +489,8 @@ export function insertEditorialAccidentalRdf() {
 	if (window.FreezeRendering == false) {
 		window.FreezeRendering = true;
 	}
-	window.EDITOR.session.insert({
-			row: window.EDITOR.session.getLength(),
+	editor.session.insert({
+			row: editor.session.getLength(),
 			column: 0
 		},
 		"\n" + text);

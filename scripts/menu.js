@@ -617,17 +617,23 @@ MenuInterface.prototype.useGootvilleFont = function () {
 //
 import { humdrumToSvgOptions } from './vhv-scripts/verovio-options.js';
 import { getVrvWorker } from './humdrum-notation-plugin-worker.js';
+import { getAceEditor } from './vhv-scripts/setup.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
 	throw new Error('Verovio worker is undefined');
 }
 
+let editor = getAceEditor();
+if (!editor) {
+	throw new Error('Ace Editor is undefined');
+}
+
 MenuInterface.prototype.applyFilter = function (filter, data, callback) {
 	var contents = "";
 	var editor = 0;
 	if (!data) {
-		contents = window.EDITOR.getValue().replace(/^\s+|\s+$/g, "");
+		contents = editor.getValue().replace(/^\s+|\s+$/g, "");
 		editor = 1;
 	} else {
 		contents = data.replace(/^\s+|\s+$/g, "");;
@@ -653,7 +659,7 @@ MenuInterface.prototype.applyFilter = function (filter, data, callback) {
 			newdata += lines[i] + "\n";
 		}
 		if (editor) {
-			window.EDITOR.setValue(newdata, -1);
+			editor.setValue(newdata, -1);
 		}
 		if (callback) {
 			callback(newdata);
@@ -811,7 +817,7 @@ MenuInterface.prototype.decreaseTabSize = function () {
 //
 
 MenuInterface.prototype.fitTabSizeToData = function () {
-	var lines = window.EDITOR.getValue().match(/[^\r\n]+/g);
+	var lines = editor.getValue().match(/[^\r\n]+/g);
 	var max = 4;
 	for (var i=0; i<lines.length; i++) {
 		if (lines[i].match(/^\s*$/)) {
@@ -838,7 +844,7 @@ MenuInterface.prototype.fitTabSizeToData = function () {
 		max = 25;
 	}
 	window.TABSIZE = max;
-	window.EDITOR.getSession().setTabSize(window.TABSIZE);
+	editor.getSession().setTabSize(window.TABSIZE);
 }
 
 
@@ -2108,8 +2114,8 @@ MenuInterface.prototype.startSplit = function (count) {
 		count = 32;
 	}
 	MenuInterface.prototype.removeSplits();
-	var lines = window.EDITOR.getValue().match(/[^\r\n]+/g);
-	var position = window.EDITOR.getCursorPosition();
+	var lines = editor.getValue().match(/[^\r\n]+/g);
+	var position = editor.getCursorPosition();
 	var output;
 	var counter = 0;
 	var adjust = 0;
@@ -2135,9 +2141,9 @@ MenuInterface.prototype.startSplit = function (count) {
 	for (i=0; i<lines.length; i++) {
 		output += lines[i] + "\n";
 	}
-	window.EDITOR.setValue(output, -1);
+	editor.setValue(output, -1);
 	position.row += adjust;
-	window.EDITOR.moveCursorToPosition(position);
+	editor.moveCursorToPosition(position);
 }
 
 
@@ -2151,8 +2157,8 @@ MenuInterface.prototype.nextSplit = function (count) {
 	if (!count) {
 		count = 32;
 	}
-	var lines = window.EDITOR.getValue().match(/[^\r\n]+/g);
-	var position = window.EDITOR.getCursorPosition();
+	var lines = editor.getValue().match(/[^\r\n]+/g);
+	var position = editor.getCursorPosition();
 	if (lines.length == 0) {
 		return;
 	}
@@ -2202,9 +2208,9 @@ MenuInterface.prototype.nextSplit = function (count) {
 		}
 		output += lines[i] + "\n";
 	}
-	window.EDITOR.setValue(output, -1);
+	editor.setValue(output, -1);
 	position.row += adjust;
-	window.EDITOR.moveCursorToPosition(position);
+	editor.moveCursorToPosition(position);
 }
 
 
@@ -2218,8 +2224,8 @@ MenuInterface.prototype.previousSplit = function (count) {
 	if (!count) {
 		count = 32;
 	}
-	var lines = window.EDITOR.getValue().match(/[^\r\n]+/g);
-	var position = window.EDITOR.getCursorPosition();
+	var lines = editor.getValue().match(/[^\r\n]+/g);
+	var position = editor.getCursorPosition();
 	if (lines.length == 0) {
 		return;
 	}
@@ -2267,9 +2273,9 @@ MenuInterface.prototype.previousSplit = function (count) {
 		}
 		output += lines[i] + "\n";
 	}
-	window.EDITOR.setValue(output, -1);
+	editor.setValue(output, -1);
 	position.row += adjust;
-	window.EDITOR.moveCursorToPosition(position);
+	editor.moveCursorToPosition(position);
 }
 
 
@@ -2280,9 +2286,9 @@ MenuInterface.prototype.previousSplit = function (count) {
 //
 
 MenuInterface.prototype.removeSplits = function () {
-	var lines = window.EDITOR.getValue().match(/[^\r\n]+/g);
+	var lines = editor.getValue().match(/[^\r\n]+/g);
 	var output = "";
-	var position = window.EDITOR.getCursorPosition();
+	var position = editor.getCursorPosition();
 	var row = position.row;
 	var col = position.column;
 	var change = 0;
@@ -2304,9 +2310,9 @@ MenuInterface.prototype.removeSplits = function () {
 		output += lines[i] + "\n";
 	}
 	if (change) {
-		window.EDITOR.setValue(output, -1);
+		editor.setValue(output, -1);
 		position.row = row;
-		window.EDITOR.moveCursorToPosition(position);
+		editor.moveCursorToPosition(position);
 	}
 }
 
@@ -2319,7 +2325,7 @@ MenuInterface.prototype.removeSplits = function () {
 //
 
 MenuInterface.prototype.undo = function () {
-	window.EDITOR.undo();
+	editor.undo();
 }
 
 
@@ -2375,7 +2381,7 @@ MenuInterface.prototype.mimeEncode = function () {
 			output += lines[i].replace(/=/g, "") + "\n";
 		}
 	}
-	window.EDITOR.setValue(output, -1);
+	editor.setValue(output, -1);
 }
 
 
@@ -2388,7 +2394,7 @@ MenuInterface.prototype.mimeEncode = function () {
 MenuInterface.prototype.mimeDecode = function () {
 	var text = getTextFromEditorNoCsvProcessing();
 	// text is already decoded by getTextFromEditor().
-	window.EDITOR.setValue(text, -1);
+	editor.setValue(text, -1);
 }
 
 

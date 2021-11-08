@@ -89,12 +89,14 @@ function callbackAfterInitialized() {
 }
 
 import { monitorNotationUpdating, displayNotation, applyZoom } from './vhv-scripts/misc.js';
+import { getAceEditor } from './vhv-scripts/setup.js';
 
 function initializeVerovioToolkit() {
   // console.log("Verovio toolkit being initialized.");
 
-  if (window.EDITOR) {
-   window.EDITOR.session.on('change', function (e) {
+	let editor = getAceEditor();
+  if (editor) {
+   editor.session.on('change', function (e) {
       // console.log("EDITOR content changed", e);
       monitorNotationUpdating();
     });

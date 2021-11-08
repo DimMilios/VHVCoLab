@@ -40,7 +40,7 @@ function downloadVerovioToolkit(use_worker) {
 // Folding:
 //   https://cloud9-sdk.readme.io/docs/code-folding
 //
-// console.log("NUMBER OF LINES IN FILE",window.EDITOR.session.getLength());
+// console.log("NUMBER OF LINES IN FILE",editor.session.getLength());
 //
 // Keyboard Shortcuts:
 //   https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts
@@ -52,65 +52,87 @@ function downloadVerovioToolkit(use_worker) {
 /* global ace, require */
 
 import { setEditorModeAndKeyboard } from './utility-ace.js';
+let editor;
+let configureAce = true;
+
+export function getAceEditor() {
+	if (typeof editor === 'undefined') {
+		console.log('Ace wasn\'t initialized, setting Ace up now', new Error().stack);
+		setupAceEditor('input');
+	}
+	return editor;
+}
 
 export function setupAceEditor(idtag) {
-	window.EDITOR = Ace.edit(idtag);
-	Ace.config.set("basePath", "/scripts-static/ace");
-	// Ace.config.set('modePath', "/scripts-static/ace");
-	// Ace.config.set('workerPath', "/scripts-static/ace");
-	// Ace.config.set('themePath', "/scripts-static/ace");
+	// window.EDITOR = Ace.edit(idtag);
+	editor = Ace.edit(idtag);
+
+	editor.on('ready', () => {
+		if (!configureAce) {
+			console.log('Ace ready event handler called');
+			setEditorModeAndKeyboard();
+			insertSplashMusic();
+		}
+	})
+
+	// Ace.config.set("basePath", "/scripts-static/ace");
+	Ace.config.set('modePath', "/scripts-static/ace");
+	Ace.config.set('workerPath', "/scripts-static/ace");
+	Ace.config.set('themePath', "/scripts-static/ace");
 	
 	// Ace.config.set('modePath', "/scripts/ace");
 	// Ace.config.set('workerPath', "/scripts/ace");
 	// Ace.config.set('themePath', "/scripts/ace");
-	
-	window.EDITOR.getSession().setUseWorker(true);
-	window.EDITOR.$blockScrolling = Infinity;
-	window.EDITOR.setAutoScrollEditorIntoView(true);
-	window.EDITOR.setBehavioursEnabled(false); // no auto-close of parentheses, quotes, etc.
+	if (configureAce) {
+		configureAceEditor();
+		configureAce = false;
+	}
+}
 
-	//window.EDITOR.cursorStyle: 'ace', // "ace"|"slim"|"smooth"|"wide"
+export function configureAceEditor() {
+	editor.getSession().setUseWorker(true);
+	editor.$blockScrolling = Infinity;
+	editor.setAutoScrollEditorIntoView(true);
+	editor.setBehavioursEnabled(false); // no auto-close of parentheses, quotes, etc.
+	//editor.cursorStyle: 'ace', // "ace"|"slim"|"smooth"|"wide"
 
 	// See this webpage to turn of certain ace editor shortcuts:
 	// https:github.com//ajaxorg/ace/blob/master/lib/ace/commands/default_commands.js
 
 	// These eat alt-l and alt-shift-l keyboard shortcuts on linux:
-	window.EDITOR.commands.removeCommand("fold", true);
-	window.EDITOR.commands.removeCommand("unfold", true);
-
+	editor.commands.removeCommand("fold", true);
+	editor.commands.removeCommand("unfold", true);
 	// best themes:
 	// kr_theme == black background, gray highlight, muted colorizing
 	// solarized_dark == blue background, light blue hilight, relaxing colorizing
 	// vibrant_ink == black background, gray highlight, nice colorizing
 	// solarized_light == yellowish background, gray highlight, nice colorizing
 
-	//window.EDITOR.setKeyboardHandler("ace/keyboard/vim");
+	//editor.setKeyboardHandler("ace/keyboard/vim");
 
 	// keybinding = ace | vim | emacs | custom
 	// fontsize   = 10px, etc
 	// theme = "ace/theme/solarize_light"
 
-	//window.EDITOR.getSession().setMode("ace/mode/javascript");
+	//editor.getSession().setMode("ace/mode/javascript");
 
-	setEditorModeAndKeyboard();
-
-	window.EDITOR.getSession().setTabSize(window.TABSIZE);
-	window.EDITOR.getSession().setUseSoftTabs(false);
+	editor.getSession().setTabSize(window.TABSIZE);
+	editor.getSession().setUseSoftTabs(false);
 
 	// Don't show line at 80 columns:
-	window.EDITOR.setShowPrintMargin(false);
+	editor.setShowPrintMargin(false);
 
 	// Range = window.require("ace/range").Range;
 	window.Range = Ace.require('ace/range').Range;
 
 
-	//window.EDITOR.getSession().selection.on("changeCursor", function(event)
+	//editor.getSession().selection.on("changeCursor", function(event)
 	// 	{ highlightNoteInScore(event)});
 
 	// Force the cursor to blink when blurred (unfocused):
-	//window.EDITOR.renderer.$cursorLayer.showCursor();
-	window.EDITOR.renderer.$cursorLayer.smoothBlinking = true;
-	window.EDITOR.renderer.$cursorLayer.setBlinking(true);
+	//editor.renderer.$cursorLayer.showCursor();
+	editor.renderer.$cursorLayer.smoothBlinking = true;
+	editor.renderer.$cursorLayer.setBlinking(true);
 
 	//EDITOR.commands.addCommand({
 	//	name: 'saveFile',
@@ -130,10 +152,18 @@ export function setupAceEditor(idtag) {
 		CURSOR_OBSERVER.observe(cursor, {attributes: true});
 	}
 
-	insertSplashMusic();
+	// editor.setTheme('ace/theme/humdrum_light');
+	// editor.session.setMode('ace/mode/humdrum');
 
+	// setEditorModeAndKeyboard();
+	// insertSplashMusic();
+	// editor._dispatchEvent('ready');
 }
 
+(function () {
+	// setupAceEditor('input');
+	// editor._dispatchEvent('ready');
+})()
 
 
 //////////////////////////////
@@ -147,7 +177,7 @@ function insertSplashMusic() {
 	if (!splashElement) {
 		return;
 	}
-	let text =window.EDITOR.getValue();
+	let text = editor.getValue();
 	if (!text.match(/^\s*$/)) {
 		return;
 	}
@@ -168,7 +198,7 @@ var CURSOR_DISPLAY;
 function customCursor() {
 	// Change scope
 	let activeElement = document.activeElement.nodeName;
-	let cursor =window.EDITOR.renderer.$cursorLayer.cursor;
+	let cursor = editor.renderer.$cursorLayer.cursor;
 	let cursorstate = null;
 
 	for (let i=0; i<cursor.classList.length; i++) {
@@ -189,16 +219,16 @@ function customCursor() {
 			// console.log("FOCUSING CURSOR");
 			cursor.classList.add("focused");
 			cursor.classList.remove("blurred");
-			window.EDITOR.renderer.$cursorLayer.setBlinking(true);
-			window.EDITOR.renderer.$cursorLayer.showCursor();
+			editor.renderer.$cursorLayer.setBlinking(true);
+			editor.renderer.$cursorLayer.showCursor();
 		}
 	} else if (CURSOR_DISPLAY) {
 		if (cursorstate != "blurred") {
 			// console.log("BLURRING CURSOR");
 			cursor.classList.add("blurred");
 			cursor.classList.remove("focused");
-			window.EDITOR.renderer.$cursorLayer.showCursor();
-			window.EDITOR.renderer.$cursorLayer.setBlinking(true);
+			editor.renderer.$cursorLayer.showCursor();
+			editor.renderer.$cursorLayer.setBlinking(true);
 		}
 
 	}
@@ -244,7 +274,7 @@ export function setupSplitter() {
 	window.addEventListener('mouseup', function(event) {
 		if (window.Splitter.mouseState != 0) {
 			window.Splitter.mouseState = 0;
-			window.EDITOR.resize();
+			editor.resize();
 			displayNotation();
 		}
 	});

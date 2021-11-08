@@ -500,6 +500,12 @@ function setBelowMarker(id, line, field, number, category) {
 //
 import { displayNotation } from './misc.js'
 import { highlightIdInEditor, turnOffAllHighlights } from './utility-svg.js'
+import { getAceEditor } from './setup.js';
+
+const editor = getAceEditor();
+if (!editor) {
+	throw new Error('Ace Editor is undefined');
+}
 
 function deleteDirectionMarker(id, line, field, number, category) {
 	line = parseInt(line);
@@ -523,12 +529,12 @@ function deleteDirectionMarker(id, line, field, number, category) {
 
 	setEditorContents(line-1, field, token, id, true);
 
-	var text =window.EDITOR.session.getLine(line-2);
+	var text = editor.session.getLine(line-2);
 	if (text.match(/^[!\t]+$/)) {
 		// remove line
 		var range = new Range(line-2, 0, line-1, 0);
 
-	window.EDITOR.session.remove(range);
+		editor.session.remove(range);
 
 		window.RestoreCursorNote = id.replace("L" + (line), "L" + (line - 1));
 		displayNotation();
@@ -550,7 +556,7 @@ function createEmptyLine(line) {
 		window.FreezeRendering = true;
 	}
 
-	var text =window.EDITOR.session.getLine(line - 1);
+	var text =editor.session.getLine(line - 1);
 	var output = "";
 	if (text[0] == '\t') {
 		output += '\t';
@@ -568,7 +574,7 @@ function createEmptyLine(line) {
 	output += "\n" + text;
 
 	var range = new Range(line-1, 0, line-1, text.length);
-window.EDITOR.session.replace(range, output);
+editor.session.replace(range, output);
 
 	// don't redraw the data
 	window.FreezeRendering = freezeBackup;
@@ -753,7 +759,7 @@ function leftEndMoveBack(id, line, field, number, line2, field2, number2) {
 	}
 
 	while (i > 0) {
-		var text =window.EDITOR.session.getLine(i);
+		var text =editor.session.getLine(i);
 		if (text.match(/^\*/) || text.match(/^=/) || text.match(/^!/) || (text === "")) {
 			i--;
 			continue;
@@ -807,7 +813,7 @@ function addSlur(id, line, field) {
 
 	var i = parseInt(line); // -1 for 0-index and +1 for line after
 	var counter = 0;
-	var size =window.EDITOR.session.getLength();
+	var size =editor.session.getLength();
 
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
@@ -815,7 +821,7 @@ function addSlur(id, line, field) {
 	}
 
 	while (i < size) {
-		var text =window.EDITOR.session.getLine(i);
+		var text =editor.session.getLine(i);
 		if (text.match(/^\*/) || text.match(/^=/) || text.match(/^!/) || (text === "")) {
 			i++;
 			continue;
@@ -1063,14 +1069,14 @@ function leftEndMoveForward(id, line, field, number, line2, field2, number2) {
 
 	var i = parseInt(line); // -1 for 0-index and +1 for line after
 	var counter = 0;
-	var size =window.EDITOR.session.getLength();
+	var size =editor.session.getLength();
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
 
 	while (i < size) {
-		var text =window.EDITOR.session.getLine(i);
+		var text =editor.session.getLine(i);
 		if (text.match(/^\*/) || text.match(/^=/) || text.match(/^!/) || (text === "")) {
 			i++;
 			continue;
@@ -1126,7 +1132,7 @@ function rightEndMoveForward(id, line, field, number, line2, field2, number2) {
 	}
 	var i = parseInt(line2); // -1 for 0-index and +1 for line after
 	var counter = 0;
-	var size =window.EDITOR.session.getLength();
+	var size =editor.session.getLength();
 
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
@@ -1134,7 +1140,7 @@ function rightEndMoveForward(id, line, field, number, line2, field2, number2) {
 	}
 
 	while (i < size) {
-		var text =window.EDITOR.session.getLine(i);
+		var text =editor.session.getLine(i);
 		if (text.match(/^\*/) || text.match(/^=/) || text.match(/^!/) || (text === "")) {
 			i++;
 			continue;
@@ -1201,7 +1207,7 @@ function rightEndMoveBack(id, line, field, number, line2, field2, number2) {
 	}
 
 	while (i >= 0) {
-		var text =window.EDITOR.session.getLine(i);
+		var text =editor.session.getLine(i);
 		if (text.match(/^\*/) || text.match(/^=/) || text.match(/^!/) || (text === "")) {
 			i--;
 			continue;
@@ -1964,7 +1970,7 @@ function toggleExplicitAccidental(id, line, field, subfield) {
 
 function toggleStaccato(id, line, field) {
 	var counter = 0;
-	var maxline =window.EDITOR.session.getLength();
+	var maxline =editor.session.getLength();
 	var i = line;
 	var freezeBackup = window.FreezeRendering;
 	window.FreezeRendering = true;
@@ -2020,7 +2026,7 @@ function toggleStaccato(id, line, field) {
 
 function toggleAccent(id, line, field) {
 	var counter = 0;
-	var maxline =window.EDITOR.session.getLength();
+	var maxline =editor.session.getLength();
 	var i = line;
 	var freezeBackup = window.FreezeRendering;
 	window.FreezeRendering = true;
@@ -2078,7 +2084,7 @@ function toggleAccent(id, line, field) {
 
 function toggleMarcato(id, line, field) {
 	var counter = 0;
-	var maxline =window.EDITOR.session.getLength();
+	var maxline =editor.session.getLength();
 	var i = line;
 	var freezeBackup = window.FreezeRendering;
 	window.FreezeRendering = true;
@@ -2136,7 +2142,7 @@ function toggleMarcato(id, line, field) {
 
 function toggleTenuto(id, line, field) {
 	var counter = 0;
-	var maxline =window.EDITOR.session.getLength();
+	var maxline =editor.session.getLength();
 	var i = line;
 	var freezeBackup = window.FreezeRendering;
 	window.FreezeRendering = true;
@@ -2194,7 +2200,7 @@ function toggleTenuto(id, line, field) {
 
 function toggleStaccatissimo(id, line, field) {
 	var counter = 0;
-	var maxline =window.EDITOR.session.getLength();
+	var maxline =editor.session.getLength();
 	var i = line;
 	var freezeBackup = window.FreezeRendering;
 	window.FreezeRendering = true;
@@ -2380,7 +2386,7 @@ function toggleMordent(mtype, id, line, field, subfield) {
 
 function toggleLigatureStart(id, line, field) {
 	var addline = true;
-	var ptext =window.EDITOR.session.getLine(line);
+	var ptext =editor.session.getLine(line);
 	if (ptext.match(/^\*/) && ptext.match(/\*lig/)) {
 			// if there is an lig line don't add one
 			addline = false;
@@ -2388,7 +2394,7 @@ function toggleLigatureStart(id, line, field) {
 	if (!addline) {
 		// Already a line with one or more *lig exists.  Toggle *lig on/off
 		// for given field and delete line if only contains * tokens.
-		let oldline =window.EDITOR.session.getLine(line);
+		let oldline =editor.session.getLine(line);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		if (fields[field-1] === "*") {
@@ -2400,7 +2406,7 @@ function toggleLigatureStart(id, line, field) {
 		if (newline.match(/^[*\t]+$/)) {
 			// blank line so delete it
 			console.log("DELETING BLANK LINE");
-		window.EDITOR.session.replace(new Range(line-2, 0, line-1, 0), "");
+		editor.session.replace(new Range(line-2, 0, line-1, 0), "");
 			newid = id.replace(/L\d+/, "L" + (line-1));
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
@@ -2408,14 +2414,14 @@ function toggleLigatureStart(id, line, field) {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
-		window.EDITOR.session.replace(new Range(line, 0, line+1, 0), newline);
+		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *lig on a line after the selected line at the given field.
-		let oldline =window.EDITOR.session.getLine(line-1);
+		let oldline =editor.session.getLine(line-1);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		let fieldcount = fields.length;
@@ -2430,7 +2436,7 @@ function toggleLigatureStart(id, line, field) {
 			}
 		}
 		newline += "\n";
-	window.EDITOR.session.insert({row:line-1, column:0}, newline);
+	editor.session.insert({row:line-1, column:0}, newline);
 		newid = id.replace(/L\d+/, "L" + (line+1));
 		window.RestoreCursorNote = newid;
 	window.HIGHLIGHTQUERY = newid;
@@ -2446,7 +2452,7 @@ function toggleLigatureStart(id, line, field) {
 
 function toggleColorationStart(id, line, field) {
 	var addline = true;
-	var ptext =window.EDITOR.session.getLine(line);
+	var ptext =editor.session.getLine(line);
 	if (ptext.match(/^\*/) && ptext.match(/\*col/)) {
 			// if there is an col line don't add one
 			addline = false;
@@ -2454,7 +2460,7 @@ function toggleColorationStart(id, line, field) {
 	if (!addline) {
 		// Already a line with one or more *col exists.  Toggle *col on/off
 		// for given field and delete line if only contains * tokens.
-		let oldline =window.EDITOR.session.getLine(line);
+		let oldline =editor.session.getLine(line);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		if (fields[field-1] === "*") {
@@ -2466,7 +2472,7 @@ function toggleColorationStart(id, line, field) {
 		if (newline.match(/^[*\t]+$/)) {
 			// blank line so delete it
 			console.log("DELETING BLANK LINE");
-		window.EDITOR.session.replace(new Range(line-2, 0, line-1, 0), "");
+		editor.session.replace(new Range(line-2, 0, line-1, 0), "");
 			newid = id.replace(/L\d+/, "L" + (line-1));
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
@@ -2474,14 +2480,14 @@ function toggleColorationStart(id, line, field) {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
-		window.EDITOR.session.replace(new Range(line, 0, line+1, 0), newline);
+		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *col on a line after the selected line at the given field.
-		let oldline =window.EDITOR.session.getLine(line-1);
+		let oldline =editor.session.getLine(line-1);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		let fieldcount = fields.length;
@@ -2496,7 +2502,7 @@ function toggleColorationStart(id, line, field) {
 			}
 		}
 		newline += "\n";
-	window.EDITOR.session.insert({row:line-1, column:0}, newline);
+	editor.session.insert({row:line-1, column:0}, newline);
 		newid = id.replace(/L\d+/, "L" + (line+1));
 		window.RestoreCursorNote = newid;
 	window.HIGHLIGHTQUERY = newid;
@@ -2524,7 +2530,7 @@ function togglePedalStart(id, line, field) {
 		return;
 	}
 
-	var text =window.EDITOR.session.getLine(line-1);
+	var text =editor.session.getLine(line-1);
 	if (text.match(/^!/)) {
 		return;
 	}
@@ -2532,7 +2538,7 @@ function togglePedalStart(id, line, field) {
 		return;
 	}
 	var addline = true;
-	var ptext =window.EDITOR.session.getLine(line-2);
+	var ptext =editor.session.getLine(line-2);
 	if (ptext.match(/^\*/) && ptext.match(/\*ped/)) {
 			addline = false;
 	}
@@ -2540,7 +2546,7 @@ function togglePedalStart(id, line, field) {
 	if (!addline) {
 		// delete existing pedal line
 		console.log("DELETING PEDAL START");
-	window.EDITOR.session.replace(new Range(line-2, 0, line-1, 0), "");
+	editor.session.replace(new Range(line-2, 0, line-1, 0), "");
 		newid = id.replace(/L\d+/, "L" + (line-1));
 		window.RestoreCursorNote = newid;
 	window.HIGHLIGHTQUERY = newid;
@@ -2551,7 +2557,7 @@ function togglePedalStart(id, line, field) {
 	// correctly be the first **kern dataspine...
 	var newline = createNullLine("*", text);
 	newline = newline.replace(/^(\t*)\*(\t*)/, "$1*ped$2");
-window.EDITOR.session.insert({row:line-1, column:0}, newline);
+editor.session.insert({row:line-1, column:0}, newline);
 	newid = id.replace(/L\d+/, "L" + (line+1));
 	window.RestoreCursorNote = newid;
 window.HIGHLIGHTQUERY = newid;
@@ -2565,7 +2571,7 @@ window.HIGHLIGHTQUERY = newid;
 
 function toggleColorationEnd(id, line, field) {
 	var addline = true;
-	var ptext =window.EDITOR.session.getLine(line);
+	var ptext =editor.session.getLine(line);
 	if (ptext.match(/^\*/) && ptext.match(/\*Xcol/)) {
 			// if there is an Xcol line don't add one
 			addline = false;
@@ -2573,7 +2579,7 @@ function toggleColorationEnd(id, line, field) {
 	if (!addline) {
 		// Already a line with one or more *Xcol exists.  Toggle *Xcol on/off
 		// for given field and delete line if only contains * tokens.
-		let oldline =window.EDITOR.session.getLine(line);
+		let oldline =editor.session.getLine(line);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		if (fields[field-1] === "*") {
@@ -2585,7 +2591,7 @@ function toggleColorationEnd(id, line, field) {
 		if (newline.match(/^[*\t]+$/)) {
 			// blank line so delete it
 			console.log("DELETING BLANK LINE");
-		window.EDITOR.session.replace(new Range(line, 0, line+1, 0), "");
+		editor.session.replace(new Range(line, 0, line+1, 0), "");
 			var newid = id;
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
@@ -2593,14 +2599,14 @@ function toggleColorationEnd(id, line, field) {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
-		window.EDITOR.session.replace(new Range(line, 0, line+1, 0), newline);
+		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *Xcol on a line after the selected line at the given field.
-		let oldline =window.EDITOR.session.getLine(line-1);
+		let oldline =editor.session.getLine(line-1);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		let fieldcount = fields.length;
@@ -2615,7 +2621,7 @@ function toggleColorationEnd(id, line, field) {
 			}
 		}
 		newline += "\n";
-	window.EDITOR.session.replace(new Range(line, 0, line, 0), newline);
+	editor.session.replace(new Range(line, 0, line, 0), newline);
 		var newid = id;
 		window.RestoreCursorNote = newid;
 	window.HIGHLIGHTQUERY = newid;
@@ -2631,7 +2637,7 @@ function toggleColorationEnd(id, line, field) {
 
 function toggleLigatureEnd(id, line, field) {
 	var addline = true;
-	var ptext =window.EDITOR.session.getLine(line);
+	var ptext =editor.session.getLine(line);
 	if (ptext.match(/^\*/) && ptext.match(/\*Xlig/)) {
 			// if there is an Xlig line don't add one
 			addline = false;
@@ -2639,7 +2645,7 @@ function toggleLigatureEnd(id, line, field) {
 	if (!addline) {
 		// Already a line with one or more *Xlig exists.  Toggle *Xlig on/off
 		// for given field and delete line if only contains * tokens.
-		let oldline =window.EDITOR.session.getLine(line);
+		let oldline =editor.session.getLine(line);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		if (fields[field-1] === "*") {
@@ -2651,7 +2657,7 @@ function toggleLigatureEnd(id, line, field) {
 		if (newline.match(/^[*\t]+$/)) {
 			// blank line so delete it
 			console.log("DELETING BLANK LINE");
-		window.EDITOR.session.replace(new Range(line, 0, line+1, 0), "");
+		editor.session.replace(new Range(line, 0, line+1, 0), "");
 			var newid = id;
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
@@ -2659,14 +2665,14 @@ function toggleLigatureEnd(id, line, field) {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
-		window.EDITOR.session.replace(new Range(line, 0, line+1, 0), newline);
+		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
 			window.RestoreCursorNote = newid;
 		window.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *Xlig on a line after the selected line at the given field.
-		let oldline =window.EDITOR.session.getLine(line-1);
+		let oldline =editor.session.getLine(line-1);
 		oldline = oldline.replace(/\t+$/, "").replace(/^\t+/, "");
 		let fields = oldline.split(/\t+/)
 		let fieldcount = fields.length;
@@ -2681,7 +2687,7 @@ function toggleLigatureEnd(id, line, field) {
 			}
 		}
 		newline += "\n";
-	window.EDITOR.session.replace(new Range(line, 0, line, 0), newline);
+	editor.session.replace(new Range(line, 0, line, 0), newline);
 		var newid = id;
 		window.RestoreCursorNote = newid;
 	window.HIGHLIGHTQUERY = newid;
@@ -2709,7 +2715,7 @@ function togglePedalEnd(id, line, field) {
 		return;
 	}
 
-	var text =window.EDITOR.session.getLine(line-1);
+	var text =editor.session.getLine(line-1);
 	if (text.match(/^!/)) {
 		return;
 	}
@@ -2717,7 +2723,7 @@ function togglePedalEnd(id, line, field) {
 		return;
 	}
 	var addline = true;
-	var ptext =window.EDITOR.session.getLine(line);
+	var ptext =editor.session.getLine(line);
 	if (ptext.match(/^\*/) && ptext.match(/\*Xped/)) {
 			addline = false;
 	}
@@ -2725,7 +2731,7 @@ function togglePedalEnd(id, line, field) {
 	if (!addline) {
 		// delete existing pedal line
 		// console.log("DELETING PEDAL END");
-	window.EDITOR.session.replace(new Range(line, 0, line+1, 0), "");
+	editor.session.replace(new Range(line, 0, line+1, 0), "");
 		newid = id;
 		window.RestoreCursorNote = newid;
 	window.HIGHLIGHTQUERY = newid;
@@ -2736,7 +2742,7 @@ function togglePedalEnd(id, line, field) {
 	window.FreezeRendering = true;
 	var newline = createNullLine("*", text);
 	newline = newline.replace(/^(\t*)\*(\t*)/, "$1*Xped$2");
-window.EDITOR.session.replace(new Range(line, 0, line, 0), newline);
+editor.session.replace(new Range(line, 0, line, 0), newline);
 	newid = id;
   	console.log("OLDID", id, "NEWID", newid);
 	window.RestoreCursorNote = newid;
@@ -2889,7 +2895,7 @@ function setEditorContents(line, field, token, id, dontredraw) {
 	console.log('setEditorContents args:', {line, field, token, id, dontredraw})
 
 	var i;
-	var linecontent =window.EDITOR.session.getLine(line-1);
+	var linecontent =editor.session.getLine(line-1);
 	var range = new Range(line-1, 0, line-1, linecontent.length);
 
 	var components = linecontent.split(/\t+/);
@@ -2929,8 +2935,8 @@ function setEditorContents(line, field, token, id, dontredraw) {
 	}
 	window.EDITINGID = id;
 
-	window.EDITOR.session.replace(range, newlinecontent);
-	window.EDITOR.gotoLine(line, column+1);
+	editor.session.replace(range, newlinecontent);
+	editor.gotoLine(line, column+1);
 
 	window.RestoreCursorNote = id;
 	window.FreezeRendering = freezeBackup;
@@ -2949,7 +2955,7 @@ function setEditorContents(line, field, token, id, dontredraw) {
 function getEditorContents(line, field) {
 	var token = "";
 
-	var linecontent =window.EDITOR.session.getLine(line-1);
+	var linecontent =editor.session.getLine(line-1);
 
 	var col = 0;
 	if (field > 1) {
@@ -3123,10 +3129,10 @@ function addNullLine(token, exinterp, row) {
 		exinterp = "**blank";
 	}
 	if (!row) {
-		var location =window.EDITOR.getCursorPosition();
+		var location =editor.getCursorPosition();
 		row = location.row;
 	}
-	var currentline =window.EDITOR.session.getLine(row);
+	var currentline =editor.session.getLine(row);
 	if (currentline.match(/^!!/)) {
 		// don't know how many spines to add
 		return;
@@ -3144,7 +3150,7 @@ function addNullLine(token, exinterp, row) {
 	}
 
 	var newline = createNullLine(token, currentline);
-window.EDITOR.session.insert({row:row, column:0}, newline);
+editor.session.insert({row:row, column:0}, newline);
 }
 
 
