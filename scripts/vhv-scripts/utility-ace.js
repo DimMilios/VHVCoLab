@@ -128,27 +128,6 @@ function highlightNoteInScore(event) {
 	// }
 }
 
-
-//////////////////////////////
-//
-// dataIntoView -- When clicking on a note (or other itmes in SVG images later),
-//      go to the corresponding line in the editor.
-//
-import { xmlDataIntoView, humdrumDataIntoView } from './misc.js';
-
-export function	dataIntoView(event) {
-	if (editorMode() == "xml") {
-		xmlDataIntoView(event);
-	} else {
-		humdrumDataIntoView(event);
-	}
-	// if (EditorMode == "xml") {
-	// 	xmlDataIntoView(event);
-	// } else {
-	// 	humdrumDataIntoView(event);
-	// }
-}
-
 //////////////////////////////
 //
 // xmlDataNoteIntoView --
