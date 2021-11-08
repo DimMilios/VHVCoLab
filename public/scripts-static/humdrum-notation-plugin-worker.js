@@ -72,12 +72,10 @@ function downloadVerovioToolkit(use_worker) {
 	console.log('Downloading vrv toolkit from humdrum-notation-plugin-worker.js');
   vrvWorker = new vrvInterface(use_worker, callbackAfterInitialized);
 	window.vrvWorker = vrvWorker;
-};
+}
 
 function callbackAfterInitialized() {
 	console.log("Initialized verovio worker");
-	// HNP.ready = 1;
-	// HNP.displayWaiting();
 	initializeVerovioToolkit();
 }
 
@@ -142,247 +140,32 @@ function initializeWildWebMidi() {
   });
 }
 
-
-//////////////////////////////
-//
-// setErrorScore --
-//
-
-function setErrorScore(baseid) {
-	document.addEventListener("DOMContentLoaded", function() {
-		HNP.setErrorScore(baseid);
-	});
-}
-
-
-
-//////////////////////////////
-//
-// setHumdrumOption --
-//
-
-function setHumdrumOption(baseid, key, value) {
-	if (typeof baseid  !== "string" && !(baseid instanceof String)) {
-		console.log("Error: ID must be a string, but is", baseid, "which is a", typeof baseid);
-		return;
-	}
-	if (typeof key  !== "string" && !(key instanceof String)) {
-		console.log("Error: property must be a string, but is", key, "which is a", typeof baseid);
-		return;
-	}
-	var entry = HNP.entries[baseid];
-	if (!entry) {
-		console.log("Error: ID does not reference a Humdrum notation script:", baseid);
-		return;
-	}
-	if (!entry.options) {
-		console.log("Error: entry", baseid, "does not have any options to change.");
-		return;
-	}
-	entry.options[key] = value;
-}
-
-
-
-//////////////////////////////
-//
-// getHumdrumOption --
-//
-
-function getHumdrumOption(baseid, key) {
-	if (typeof baseid  !== "string" && !(baseid instanceof String)) {
-		console.log("Error: ID must be a string, but is", baseid, "which is a", typeof baseid);
-		return;
-	}
-	if (typeof key  !== "string" && !(key instanceof String)) {
-		console.log("Error: property must be a string, but is", key, "which is a", typeof baseid);
-		return;
-	}
-	var entry = HNP.entries[baseid];
-	if (!entry) {
-		console.log("Error: ID does not reference a Humdrum notation script:", baseid);
-		return;
-	}
-	if (!entry.options) {
-		console.log("Error: entry", baseid, "does not have any options to change.");
-		return;
-	}
-	return entry.options[key];
-}
-
-
-
-//////////////////////////////
-//
-// displayHumdrum -- Main externally usable function which sets up
-//   a Humdrum notation display on a webpage (if it does not exist), and then
-//   creates an SVG image for the notation.
-//
-
-function displayHumdrum(opts) {
-	
-	if (HNP.ready) {
-	
-     	HNP.displayHumdrumNow(opts);
-	} else {
-		// Wait until the page has finished loading resources.
-		HNP.waiting.push(opts);
-		// document.addEventListener("DOMContentLoaded", function() {
-		// 	HNP.displayHumdrumNow(opts);
-		// });
-	}
-}
-
-
-
-
-
-///////////////////////////////
-//
-// downloadHumdrumUrlData -- Download Humdrum data from a URL and then convert
-//     the data into an SVG.
-//
-
-function downloadHumdrumUrlData(source, opts) {
-	if (!source) {
-		return;
-	}
-	if (!opts.processedUrl) {
-		return;
-	}
-	if (opts.processedUrl.match(/^\s*$/)) {
-		return;
-	}
-	var url = opts.processedUrl;
-	var fallback = opts.urlFallback;
-	var request = new XMLHttpRequest();
-
-	request.addEventListener("load", function() {
-		source.textContent = this.responseText;
-		HNP.displayHumdrumNow(opts);
-	});
-	request.addEventListener("error", function() {
-		downloadFallback(source, opts, fallback);
-	});
-	request.addEventListener("loadstart", function() {
-		// display a busy cursor
-		document.body.style.cursor = "wait !important";
-	});
-	request.addEventListener("loadend", function() {
-		// display a normal cursor
-		document.body.style.cursor = "auto";
-	});
-	request.open("GET", url);
-	request.send();
-
-}
-
-
-
-//////////////////////////////
-//
-// downloadFallback -- Load alternate URL for data. Use embedded data if there is a problem.
-//
-
-function downloadFallback(source, opts, url) {
-	if (!url) {
-		HNP.displayHumdrumNow(opts);
-	}
-
-	var request = new XMLHttpRequest();
-	request.onload = function() {
-		if (this.status == 200) {
-			source.textContent = this.responseText;
-			HNP.displayHumdrumNow(opts);
-		} else {
-			HNP.displayHumdrumNow(opts);
-		}
-	};
-	request.onerror = function() {
-		HNP.displayHumdrumNow(opts);
-	};
-	request.open("GET", url);
-	request.send();
-}
-
-
-
-//////////////////////////////
-//
-// checkParentResize --
-//    Note that Safari does not allow shrinking of original element sizes, only 
-//    expanding: https://css-tricks.com/almanac/properties/r/resize
-//
-
-function checkParentResize(baseid) {
-	var entry = HNP.entries[baseid];
-	if (!entry) {
-		console.log("Error: cannot find data for ID", baseid);
-		return;
-	}
-	var container = entry.container;
-	if (!container) {
-		console.log("Error: cannot find container for ID", baseid);
-		return;
-	}
-	var pluginOptions = entry.options;
-	if (!pluginOptions) {
-		console.log("Error: cannot find options for ID", baseid);
-		return;
-	}
-	var scale = pluginOptions.scale;
-	var previousWidth = parseInt(pluginOptions._currentPageWidth * scale / 100.0);
-	var style = window.getComputedStyle(container, null);
-	var currentWidth = parseInt(style.getPropertyValue("width"));
-	if (currentWidth == previousWidth) {
-		// nothing to do
-		return;
-	}
-	if (Math.abs(currentWidth - previousWidth) < 3)  {
-		// Safari required hysteresis
-		return;
-	}
-	// console.log("UPDATING NOTATION DUE TO PARENT RESIZE FOR", baseid);
-	// console.log("OLDWIDTH", previousWidth, "NEWWIDTH", currentWidth);
-	if (!HNP.MUTEX) {
-		// This code is used to stagger redrawing of the updated examples
-		// so that they do not all draw at the same time (given a little
-		// more responsiveness to the UI).
-		HNP.MUTEX = 1;
-		displayHumdrum(baseid);
-		HNP.MUTEX = 0;
-	}
-}
-
-
-
 //////////////////////////////
 //
 // convertMusicXmlToHumdrum --
 //
 
+// function convertMusicXmlToHumdrum(targetElement, sourcetext, vrvOptions, pluginOptions) {
+// 	// var toolkit = pluginOptions.renderer;
+// 	if (typeof vrvWorker !== "undefined") {
+// 		toolkit = vrvWorker;
+// 	}
 
-function convertMusicXmlToHumdrum(targetElement, sourcetext, vrvOptions, pluginOptions) {
-	// var toolkit = pluginOptions.renderer;
-	if (typeof vrvWorker !== "undefined") {
-		toolkit = vrvWorker;
-	}
-
-	if (!toolkit) {
-		console.log("Error: Cannot find verovio toolkit!");
-		return;
-	}
-	// inputFrom = input data type
-	vrvOptions.inputFrom = "musicxml-hum";
+// 	if (!toolkit) {
+// 		console.log("Error: Cannot find verovio toolkit!");
+// 		return;
+// 	}
+// 	// inputFrom = input data type
+// 	vrvOptions.inputFrom = "musicxml-hum";
 
 
-	vrvWorker.filterData(vrvOptions, sourcetext, "humdrum")
-	.then(function(content) {
-		targetElement.textContent = content;
-		targetElement.style.display = "block";
-	});
+// 	vrvWorker.filterData(vrvOptions, sourcetext, "humdrum")
+// 	.then(function(content) {
+// 		targetElement.textContent = content;
+// 		targetElement.style.display = "block";
+// 	});
 
-}
+// }
 
 
 
@@ -514,9 +297,6 @@ function functionName(fun) {
 }
 
 
-
-
-
 //////////////////////////////
 //
 // saveHumdrumSvg -- Save the specified Hudrum SVG images to the hard disk.  The input
@@ -539,7 +319,7 @@ function saveHumdrumSvg(tags, savename) {
 		if (!filename) {
 			filename = sid.replace(/-svg$/, "") + ".svg";
 		}
-		var text = tags.outerHTML.replace(/&nbsp;/g, " ").replace(/&#160;/g, " ");;
+		var text = tags.outerHTML.replace(/&nbsp;/g, " ").replace(/&#160;/g, " ");
 		blob = new Blob([text], { type: 'image/svg+xml' }),
 		anchor = document.createElement('a');
 		anchor.download = filename;
@@ -642,7 +422,7 @@ function saveHumdrumText(tags, savename, savetext) {
 			setTimeout(function() {
 				anch.click();
 				window.URL.revokeObjectURL(anch.href);
-      		blobby = null;
+					blobby = null;
 			}, 0)
 		})(anchor, blob);
 		return;
@@ -795,7 +575,7 @@ function vrvInterface(use_worker, onReady) {
 		this.createWorkerInterface(onReady);
 	} else {
 		this.createDefaultInterface(onReady);
-	};
+	}
 }
 
 
@@ -822,19 +602,19 @@ vrvInterface.prototype.createWorkerInterface = function (onReady) {
 							vrv.promises[vrv.resolvedIdx].deferred.resolve(oEvent.data.result);
 						} else {
 						vrv.promises[vrv.resolvedIdx].deferred.reject(oEvent.data.result);
-						};
+						}
 					} else {
 						vrv.promises[vrv.resolvedIdx].deferred.reject();
-					};
+					}
 					if (vrv.promises[vrv.resolvedIdx].method === "renderData") {
 						vrv.renderDataPending--;
 						if (vrv.renderDataPending === 0) vrv.handleWaitingRenderData();
-					};
+					}
 					delete vrv.promises[vrv.resolvedIdx];
 					vrv.resolvedIdx++;
-				};
-		};
-	};
+				}
+		}
+	}
 
 	console.log("creating verovio worker interface");
 	this.promises = {};
@@ -1118,7 +898,7 @@ vrvInterface.prototype.execute = function (method, args) {
 			default:
 				vrv.handleWaitingRenderData();
 				return vrv.post(method, arr);
-		};
+		}
 	} else {
 		return new RSVP.Promise(function (resolve, reject) {
 			try {
@@ -1126,9 +906,9 @@ vrvInterface.prototype.execute = function (method, args) {
 				resolve(vrv.verovio[method].apply(vrv.verovio, args));
 			} catch(err) {
 				reject(err);
-			};
+			}
 		});
-	};
+	}
 };
 
 
@@ -1145,7 +925,7 @@ vrvInterface.prototype.handleWaitingRenderData = function () {
 				this.renderDataWaiting.deferred);
 		this.renderDataWaiting = null;
 		this.renderDataPending++;
-	};
+	}
 };
 
 
@@ -1162,14 +942,14 @@ vrvInterface.prototype.postRenderData = function (method, args) {
 			this.renderDataWaiting = {
 				deferred: new RSVP.defer(),
 			};
-		};
+		}
 		this.renderDataWaiting.args = args;
 		return this.renderDataWaiting.deferred.promise;
 	} else {
 		this.renderDataPending++;
 		this.renderDataWaiting = null;
 		return this.post(method, args);
-	};
+	}
 };
 
 
