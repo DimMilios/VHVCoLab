@@ -26,10 +26,6 @@ function sendToServer(msg) {
   socket.send(msgJSON);
 }
 
-window.addEventListener('beforeunload', e => {
-  socket?.close();
-});
-
 const colors = [
   { value: '#e6194b', used: false },
   { value: '#3cb44b', used: false },

@@ -243,7 +243,7 @@ window.SAVEFILENAME = "data.txt";
 window.SPACINGADJUSTMENT = 0.0;
 
 // no timeout for slow delivery of verovio
-// window.basketSession.timeout = 1000000000;
+window.basketSession.timeout = 1000000000;
 
 window.COUNTER = 0;
 
