@@ -75,10 +75,10 @@ export function setupAceEditor(idtag) {
 		}
 	})
 
-	// Ace.config.set("basePath", "/scripts-static/ace");
-	Ace.config.set('modePath', "/scripts-static/ace");
-	Ace.config.set('workerPath', "/scripts-static/ace");
-	Ace.config.set('themePath', "/scripts-static/ace");
+	// Ace.config.set("basePath", "/scripts/ace");
+	Ace.config.set('modePath', "/scripts/ace");
+	Ace.config.set('workerPath', "/scripts/ace");
+	Ace.config.set('themePath', "/scripts/ace");
 	
 	// Ace.config.set('modePath', "/scripts/ace");
 	// Ace.config.set('workerPath', "/scripts/ace");
