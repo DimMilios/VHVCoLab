@@ -105,3 +105,11 @@ We still expose many global variables to make the app functional. This creates a
 
 ## Dependencies
 The wasm verovio toolkit script `scripts/local/verovio-toolkit-wasm.js` has to be downloaded locally since it is in `.gitignore` cause it's a big file (8.6MB)
+
+### Issues with pdfkit
+`pdfkit` has a dependency `fontkit` which uses decorators in its codebase. `Vite` and more specifically `esbuild` doesn't know how to handle decorators when trying to prebundle the npm dependencies so it breaks. A workaround suggested [here](https://github.com/vitejs/vite/issues/2349) recommends renaming the files using decorators from `.js` to `.ts`. Files to rename:
+- `src/TTFFont.js`
+- `src/CmapProcessor.js`
+- `src/glyph/Glyph.js`
+- `src/aat/AATMorxProcessor.js`
+- `src/aat/AATLookupTable.js`

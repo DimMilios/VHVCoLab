@@ -84,44 +84,7 @@ window.ERASED_WORK_NAVIGATOR = "";
 // work from a repertory.
 window.ERASED_FILEINFO = {};
 
-///////////////////////////////////////////////////////////
-//
-// Toolbar variables
-//
-
 window.PAGED = false;
-
-//////////////////////////////
-//
-// filter toolbar variables
-//
-
-// window.SEARCHFILTEROBJ = {};
-// window.SEARCHFILTER    = "";
-// window.GLOBALFILTER    = "";
-
-// window.FILTERS = filter/filters.json;
-
-
-//////////////////////////////
-//
-// Music searching toolbar variables
-//
-
-// window.SEARCHCHORDDIRECTION = "chord -d";  // search top note
-// window.BRIEFSEARCHVIEW      = "";  // Do not show only measures with search matches.
-
-//////////////////////////////
-//
-// Spreadsheet toolbar variables -- These variables are used to interact
-//    with Google spreadsheets from the spreadsheet toolbar:
-//       https://doc.verovio.humdrum.org/interface/toolbar/spreadsheet
-//    Two variables can be stored in the text box on the spreadsheet toolbar:
-//       SPREADSHEETID       == The ID for the spreadsheet from its URL.
-//       SPREADSHEETSCRIPTID == The ID for the macro that interfaces with the spreadsheet.
-//    These two variables are persistent, and loaded from localStorage when
-//    a session is started.
-//
 
 window.SPREADSHEETSCRIPTID = "";
 window.SPREADSHEETID = "";
