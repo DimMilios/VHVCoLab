@@ -771,3 +771,22 @@ export function userListDisplay(users) {
     userList.style.transform = `translate(${menuBox.right - userList.getBoundingClientRect().width * 1.1}px, ${menuBox.top * 3}px)`
   }
 }
+
+// Alternatively, we can use an SVG 'use' element to copy the element we want:
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use
+function copySVGElement(elem) {
+  let clone = elem.cloneNode(true);
+  
+  let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
+  // Copy its attributes
+  for (const { nodeName, value } of clone.attributes) {
+    copy.setAttribute(nodeName, value);
+  }
+
+  // Copy its children
+  while (clone.hasChildNodes()) {
+    copy.appendChild(clone.removeChild(clone.firstChild));
+  }
+
+  return copy;
+}

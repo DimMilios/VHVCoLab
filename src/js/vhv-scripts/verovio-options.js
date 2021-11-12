@@ -1422,6 +1422,7 @@ export function humdrumToSvgOptions() {
 	output.spacingSystem        = window.SPACING_SYSTEM;
 	output.staffLineWidth       = 0.12;
 	output.outputIndent         = 1;
+	// output.svgRemoveXlink       = true; // enable to remove xlink: from href use element property
 	
 	if (window.PAGED) {
 		var tw = $("#input").outerWidth();
