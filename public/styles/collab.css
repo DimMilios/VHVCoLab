@@ -63,8 +63,17 @@
   z-index: 1000000;
 }
 
+.dropdown-item:hover {
+  filter: brightness(90%);
+}
+
+.dropdown-item > a:hover {
+  text-decoration: none;
+  background-color: initial;
+}
+
 /* Bootstrap nested Dropdown menu */
-.dropdown-menu li a {
+.dropdown-menu li {
   position: relative;
 }
 
@@ -80,6 +89,6 @@
   left: auto;
 }
 
-.dropdown-menu> a:hover >.dropdown-submenu {
+.dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
 }

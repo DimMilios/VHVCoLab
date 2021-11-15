@@ -132,7 +132,7 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; line
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 14px; line-height: 1.5; color: #24292e; background-color: #fff; }
 
 a { color: #0366d6; text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* a:hover { text-decoration: underline; } */
 
 b, strong { font-weight: 600; }
 
@@ -2380,7 +2380,7 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 .text-uppercase { text-transform: uppercase !important; }
 
 /* Underline text */
-.text-underline { text-decoration: underline !important; }
+/* .text-underline { text-decoration: underline !important; } */
 
 /* Don't underline text */
 .no-underline { text-decoration: none !important; }

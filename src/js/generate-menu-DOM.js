@@ -1,5 +1,4 @@
 import * as menuJSON from '/src/menu.json';
-console.log(menuJSON)
 
 window.addEventListener('DOMContentLoaded', () => {
   const menuBar = document.querySelector('#menubar');
@@ -45,7 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   
   function createSubmenu(submenuJSON, nested = false) {
-    const submenuItem = document.createElement('div');
+    const submenuItem = document.createElement('ul');
     submenuItem.setAttribute('class', `dropdown-menu p-0 ${nested && 'dropdown-submenu'}`);
   
     if (isIterable(submenuJSON)) {
@@ -54,8 +53,12 @@ window.addEventListener('DOMContentLoaded', () => {
         const action = entry?.TEXT?.ACTION;
         const rightText = entry?.RIGHT_TEXT;
         
+        const li = document.createElement('li');
+        li.setAttribute('class', 'dropdown-item d-flex justify-content-between bg-dark text-white');
+
         const item = document.createElement('a');
-        item.setAttribute('class', 'dropdown-item d-flex justify-content-between bg-dark text-light');
+        // item.setAttribute('class', 'dropdown-item');
+        item.setAttribute('class', 'text-decoration-none');
         item.href = '#';
   
         if (action) {
@@ -64,20 +67,24 @@ window.addEventListener('DOMContentLoaded', () => {
   
         item.textContent = `${defaultText} ${entry?.SUBMENU ? '»' : ''}`;
     
+        li.appendChild(item);
         if (rightText?.DEFAULT?.length > 0) {
-          item.innerHTML += `<small class="ml-3"><strong>${rightText.DEFAULT}</strong></small>`;
+          li.innerHTML += `<small class="ml-3 text-nowrap"><strong>${rightText.DEFAULT}</strong></small>`;
         }
-    
+
+        
         if (entry?.SUBMENU?.ENTRY) {
           // console.log('Recursively creating SUBMENU', entry.SUBMENU.ENTRY);
           // const submenuList = document.createElement('ul');
           // submenuList.setAttribute('class', 'dropdown-menu dropdown-submenu');
-          item.appendChild(createSubmenu(entry.SUBMENU.ENTRY, true));
+          li.appendChild(createSubmenu(entry.SUBMENU.ENTRY, true));
         }
-    
-        submenuItem.appendChild(item);
+
+        submenuItem.appendChild(li);
       }
     
+    } else {
+      console.log('Not iterable, value:', submenuJSON);
     }
     return submenuItem;
   }
