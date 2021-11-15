@@ -61,8 +61,12 @@ window.addEventListener('DOMContentLoaded', () => {
         item.setAttribute('class', 'text-decoration-none');
         item.href = '#';
   
+        const functionExistsOn = (func, obj) => typeof obj[func] === 'function';
         if (action) {
-          item.onclick = () => new Function(action)();
+          let funcName = action;
+          funcName = funcName.slice(action.indexOf(".") + 1).replace(/\(|\)/g, '');
+          // FIX: function calls with parameters don't work properly, e.g MENU.pitchUpOctave(1)
+          li.onclick = functionExistsOn(funcName, window.MENU) ? () => new Function(action)() : null;
         }
   
         item.textContent = `${defaultText} ${entry?.SUBMENU ? '»' : ''}`;
