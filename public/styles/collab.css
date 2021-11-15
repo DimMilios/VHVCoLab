@@ -62,3 +62,24 @@
 
   z-index: 1000000;
 }
+
+/* Bootstrap nested Dropdown menu */
+.dropdown-menu li a {
+  position: relative;
+}
+
+.dropdown-menu .dropdown-submenu {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: -7px;
+}
+
+.dropdown-menu .dropdown-submenu-left {
+  right: 100%;
+  left: auto;
+}
+
+.dropdown-menu> a:hover >.dropdown-submenu {
+  display: block;
+}

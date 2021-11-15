@@ -1,0 +1,2831 @@
+{
+  "ENTRY": [
+    {
+      "TEXT": { "DEFAULT": "File" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Save editor contents",
+              "ACTION": "MENU.saveTextEditorContents()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-s"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Save as PDF",
+              "ACTION": "MENU.createPdf()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-t"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Save view as PDF",
+              "ACTION": "MENU.createPdfPage()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-T"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Save view as SVG",
+              "ACTION": "MENU.saveSvgData()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-g"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Save as HTML",
+              "ACTION": "MENU.saveHtmlContents()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Save as MusicXML",
+              "ACTION": "MENU.convertToMusicXmlAndSave()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Display MEI data",
+              "ACTION": "MENU.displayMeiData()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-m"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Display Humdrum data",
+              "ACTION": "MENU.displayHumdrumData()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-h"
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Save to local buffer" },
+            "RIGHT_TEXT": {
+              "TYPE": "link",
+              "DEFAULT": "info"
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 1",
+                    "ACTION": "MENU.saveToBuffer(1)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "1 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 2",
+                    "ACTION": "MENU.saveToBuffer(2)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "2 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 3",
+                    "ACTION": "MENU.saveToBuffer(3)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "3 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 4",
+                    "ACTION": "MENU.saveToBuffer(4)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "4 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 5",
+                    "ACTION": "MENU.saveToBuffer(5)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "5 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 6",
+                    "ACTION": "MENU.saveToBuffer(6)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "6 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 7",
+                    "ACTION": "MENU.saveToBuffer(7)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "7 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 8",
+                    "ACTION": "MENU.saveToBuffer(8)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "8 alt-S"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Save to buffer 9",
+                    "ACTION": "MENU.saveToBuffer(9)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "9 alt-S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Load local buffer" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 1",
+                    "ACTION": "MENU.loadFromBuffer(1)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "1 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 2",
+                    "ACTION": "MENU.loadFromBuffer(2)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "2 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 3",
+                    "ACTION": "MENU.loadFromBuffer(3)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "3 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 4",
+                    "ACTION": "MENU.loadFromBuffer(4)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "4 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 5",
+                    "ACTION": "MENU.loadFromBuffer(5)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "5 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 6",
+                    "ACTION": "MENU.loadFromBuffer(6)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "6 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 7",
+                    "ACTION": "MENU.loadFromBuffer(7)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "7 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 8",
+                    "ACTION": "MENU.loadFromBuffer(8)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "8 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from buffer 9",
+                    "ACTION": "MENU.loadFromBuffer(9)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "9 alt-R"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Load from autosave buffer",
+                    "ACTION": "MENU.loadFromBuffer(0)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Reload data from source",
+              "ACTION": "MENU.reloadFromSource()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-r"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Convert to Humdrum",
+              "ACTION": "MENU.convertToHumdrum()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "link",
+              "DEFAULT": "info"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle CSV/TSV",
+              "ACTION": "MENU.toggleCsvTsv()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-u"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TEXT": { "DEFAULT": "View" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Play/pause MIDI performance",
+              "ACTION": "MENU.toggleMidiPlayback()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "space"
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Notation" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Make notation larger",
+                    "ACTION": "MENU.adjustNotationScale(event, 1.05)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Make notation smaller",
+                    "ACTION": "MENU.adjustNotationScale(event, 0.95)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Increase horizontal notation spacing",
+                    "ACTION": "MENU.increaseNotationSpacing()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-w"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Decrease horizontal notation spacing",
+                    "ACTION": "MENU.decreaseNotationSpacing()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-W"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Increase vertical staff spacing",
+                    "ACTION": "MENU.increaseStaffSpacing()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Decrease vertical staff spacing",
+                    "ACTION": "MENU.decreaseStaffSpacing()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Increase vertical system spacing",
+                    "ACTION": "MENU.increaseSystemSpacing()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Decrease vertical system spacing",
+                    "ACTION": "MENU.decreaseSystemSpacing()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Ignore encoded line breaks",
+                    "ACTION": "MENU.lineBreaksOff()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Display with encoded line breaks",
+                    "ACTION": "MENU.lineBreaksOn()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Increase text size",
+                    "ACTION": "MENU.increaseLyricSize()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Decrease text size",
+                    "ACTION": "MENU.decreaseLyricSize()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Tabs" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Auto tab width",
+                    "ACTION": "MENU.fitTabSizeToData()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Increase tab width",
+                    "ACTION": "MENU.increaseTabSize()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-&gt;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Decrease tab width",
+                    "ACTION": "MENU.decreaseTabSize()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-&lt;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add spacing tabs",
+                    "ACTION": "MENU.applyFilter('tabber')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "tabber"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove spacing tabs",
+                    "ACTION": "MENU.applyFilter('tabber -r')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "tabber -r"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Splits" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Start splitting (32 measure splits)",
+                    "ACTION": "MENU.startSplit(32)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Next split",
+                    "ACTION": "MENU.nextSplit(32)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Previous split",
+                    "ACTION": "MENU.previousSplit(32)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove splits",
+                    "ACTION": "MENU.removeSplits()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Music Font" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Bravura",
+                    "ACTION": "MENU.useBravuraFont()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Gootville",
+                    "ACTION": "MENU.useGootvilleFont()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Leipzig",
+                    "ACTION": "MENU.useLeipzigFont()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Leland",
+                    "ACTION": "MENU.useLelandFont()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Petaluma",
+                    "ACTION": "MENU.usePetalumaFont()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Text editor" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle text display",
+                    "ACTION": "MENU.toggleDataDisplay()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-y"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Increase font size",
+                    "ACTION": "MENU.increaseTextFontSize()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Decrease font size",
+                    "ACTION": "MENU.decreaseTextFontSize()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle CSV/TSV Humdrum display",
+                    "ACTION": "MENU.toggleCsvTsv()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "",
+                    "DEFAULT": ""
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle layer highlighting",
+              "ACTION": "MENU.toggleLayerHighlighting()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-l"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Freeze/unfreeze notation rendering",
+              "ACTION": "MENU.toggleNotationFreezing()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-f"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle original clefs",
+              "ACTION": "MENU.toggleOriginalClefs()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-o"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TEXT": { "DEFAULT": "Edit" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Clear text editor",
+              "ACTION": "MENU.clearEditorContents()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-e"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Undo last change",
+              "ACTION": "MENU.undo()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "ctrl-z"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Compile embedded filters",
+              "ACTION": "MENU.compileEmbeddedFilters()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "alt-c"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Remove trailing tabs",
+              "ACTION": "MENU.trimTabsInEditor()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Beams" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Beam by meter",
+                    "ACTION": "MENU.applyFilter('autobeam')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "autobeam"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Split beams by lyrics",
+                    "ACTION": "MENU.applyFilter('autobeam -l')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "autobeam -l"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove beams",
+                    "ACTION": "MENU.applyFilter('autobeam -r')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "autobeam -r"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Chords" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Sort chords highest note first",
+                    "ACTION": "MENU.applyFilter('chord -d')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -d"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Sort chords lowest note first",
+                    "ACTION": "MENU.applyFilter('chord -u')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -u"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Extract first note in chord",
+                    "ACTION": "MENU.applyFilter('chord -f')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -f"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Extract last note in chord",
+                    "ACTION": "MENU.applyFilter('chord -l')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -l"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Highest note in chord",
+                    "ACTION": "MENU.applyFilter('chord -d | chord -f')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -d | chord -f"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Lowest note in chord",
+                    "ACTION": "MENU.applyFilter('chord -u | chord -f')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -u | chord -f"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Compress chords",
+                    "ACTION": "MENU.applyFilter('chord -m')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -m"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Expand chords",
+                    "ACTION": "MENU.applyFilter('chord -M')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -M"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Bass/melody chord notes (for grand staff scores)",
+                    "ACTION": "MENU.applyFilter('chord -u | chord -fs1 | chord -ls2')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "chord -u | chord -fs1 | chord -ls2"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Data" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Insert local comment line (above cursor)",
+                    "ACTION": "MENU.insertLocalCommentLine()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-L"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Insert interpretation line (above cursor)",
+                    "ACTION": "MENU.insertInterpretationCommentLine()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-I"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Insert null data line (above cursor)",
+                    "ACTION": "MENU.insertNullDataLine()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-D"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Insert barline (above cursor)",
+                    "ACTION": "MENU.insertBarline()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "alt-B"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove null lines",
+                    "ACTION": "MENU.applyFilter('rid -glid')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "rid -glid"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove null data lines",
+                    "ACTION": "MENU.applyFilter('rid -d')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "rid -d"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove null interpretation lines",
+                    "ACTION": "MENU.applyFilter('rid -i')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "rid -i"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove null local comment lines",
+                    "ACTION": "MENU.applyFilter('rid -l')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "rid -l"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Ornaments" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {},
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove accidentals from trills and ornaments",
+                    "ACTION": "MENU.applyFilter('trillspell')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "trillspell"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "System" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove non-kern spines",
+                    "ACTION": "MENU.applyFilter('extract -i kern')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -ikern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add staff above system",
+                    "ACTION": "MENU.applyFilter('extract -s 1-$,0 | restfill -i blank')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -s 1-$,0 | restfill -i blank"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add staff above system with hidden rests",
+                    "ACTION": "MENU.applyFilter('extract -s 1-$,0 | restfill -yi blank')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -s 1-$,0 | restfill -yi blank"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add staff below system",
+                    "ACTION": "MENU.applyFilter('extract -s 0,1-$ | restfill -i blank')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -s 0,1-$ | restfill -i blank"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add staff below system with hidden rests",
+                    "ACTION": "MENU.applyFilter('extract -s 0,1-$ | restfill -yi blank')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -s 0,1-$ | restfill -yi blank"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Stems" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add note stem directions",
+                    "ACTION": "MENU.applyFilter('autostem')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "autostem"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove note stem directions",
+                    "ACTION": "MENU.applyFilter('autostem -r')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "autostem -r"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Text" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Add lyric verse to top staff",
+                    "ACTION": "MENU.applyFilter('extract -s 1-$,0 -n text')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -s 1-$,0 -n text"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Remove lyric text",
+                    "ACTION": "MENU.applyFilter('extract -I text')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "extract -Itext"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Split beams by lyrics",
+                    "ACTION": "MENU.applyFilter('autobeam -l')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "autobeam -l"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Transpose by key (if data contains key)" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to C",
+                    "ACTION": "MENU.applyFilter('transpose -k c')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k c"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to C&sharp;",
+                    "ACTION": "MENU.applyFilter('transpose -k c#')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k c#"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to D&flat;",
+                    "ACTION": "MENU.applyFilter('transpose -k d-')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k d-"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to D",
+                    "ACTION": "MENU.applyFilter('transpose -k d')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k d"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to E&flat;",
+                    "ACTION": "MENU.applyFilter('transpose -k e-')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k e-"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to E",
+                    "ACTION": "MENU.applyFilter('transpose -k e')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k e"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to F",
+                    "ACTION": "MENU.applyFilter('transpose -k f')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k f"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to F&sharp;",
+                    "ACTION": "MENU.applyFilter('transpose -k f#')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k f#"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to G",
+                    "ACTION": "MENU.applyFilter('transpose -k g')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k g"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to A&flat;",
+                    "ACTION": "MENU.applyFilter('transpose -k a-')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k a-"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to A",
+                    "ACTION": "MENU.applyFilter('transpose -k a')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k a"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to B&flat;",
+                    "ACTION": "MENU.applyFilter('transpose -k b-')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k b-"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Tonic to B",
+                    "ACTION": "MENU.applyFilter('transpose -k b')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -k b"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Transpose by up interval" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a minor second",
+                    "ACTION": "MENU.applyFilter('transpose -t m2')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t m2"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a major second",
+                    "ACTION": "MENU.applyFilter('transpose -t M2')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t M2"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a minor third",
+                    "ACTION": "MENU.applyFilter('transpose -t m3')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t m3"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a major third",
+                    "ACTION": "MENU.applyFilter('transpose -t M3')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t M3"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a perfect fourth",
+                    "ACTION": "MENU.applyFilter('transpose -t P4')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t P4"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up an augmented fourth",
+                    "ACTION": "MENU.applyFilter('transpose -t A4')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t A4"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a diminished fifth",
+                    "ACTION": "MENU.applyFilter('transpose -t d5')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t d5"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a perfect fifth",
+                    "ACTION": "MENU.applyFilter('transpose -t P5')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t P5"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a minor sixth",
+                    "ACTION": "MENU.applyFilter('transpose -t m6')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t m6"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a major sixth",
+                    "ACTION": "MENU.applyFilter('transpose -t M6')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t M6"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a minor seventh",
+                    "ACTION": "MENU.applyFilter('transpose -t m7')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t m7"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a major seventh",
+                    "ACTION": "MENU.applyFilter('transpose -t M7')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t M7"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a perfect octave",
+                    "ACTION": "MENU.applyFilter('transpose -t P8')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t P8"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Transpose down by interval" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a minor second",
+                    "ACTION": "MENU.applyFilter('transpose -t -m2')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -m2"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a major second",
+                    "ACTION": "MENU.applyFilter('transpose -t -M2')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -M2"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a minor third",
+                    "ACTION": "MENU.applyFilter('transpose -t -m3')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -m3"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a major third",
+                    "ACTION": "MENU.applyFilter('transpose -t -M3')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -M3"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a perfect fourth",
+                    "ACTION": "MENU.applyFilter('transpose -t -P4')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -P4"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down an augmented fourth",
+                    "ACTION": "MENU.applyFilter('transpose -t -A4')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -A4"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down an diminished fifth",
+                    "ACTION": "MENU.applyFilter('transpose -t -d5')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -d5"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a perfect fifth",
+                    "ACTION": "MENU.applyFilter('transpose -t -P5')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -P5"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a minor sixth",
+                    "ACTION": "MENU.applyFilter('transpose -t -m6')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -m6"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a major sixth",
+                    "ACTION": "MENU.applyFilter('transpose -t -M6')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -M6"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a minor seventh",
+                    "ACTION": "MENU.applyFilter('transpose -t -m7')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -m7"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a major seventh",
+                    "ACTION": "MENU.applyFilter('transpose -t -M7')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -M7"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a perfect octave",
+                    "ACTION": "MENU.applyFilter('transpose -t -P8')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "filter",
+                    "DEFAULT": "transpose -t -P8"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Import Formatting" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": {
+                "TEXT": {
+                  "DEFAULT": "Tassoize",
+                  "ACTION": "MENU.applyFilter('tassoize')"
+                },
+                "RIGHT_TEXT": {
+                  "TYPE": "filter",
+                  "DEFAULT": "tassoize"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TYPE": "contextual",
+      "TEXT": { "DEFAULT": "Beam" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Unfocus beam",
+              "ACTION": "MENU.unfocusElement()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "esc"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Force beam above",
+              "ACTION": "MENU.forceBeamAbove()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "a"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Force beam below",
+              "ACTION": "MENU.forceBeamBelow()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "b"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Clear beam direction",
+              "ACTION": "MENU.removeBeamOrientation()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "c"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TYPE": "contextual",
+      "TEXT": { "DEFAULT": "Note" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Unfocus note",
+              "ACTION": "MENU.unfocusElement()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "esc"
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Navigation" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Next melodic note",
+                    "ACTION": "MENU.nextMelodicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&rarr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Previous melodic note",
+                    "ACTION": "MENU.previousMelodicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&larr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Next harmonic note",
+                    "ACTION": "MENU.nextHarmonicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&darr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Previous harmonic note",
+                    "ACTION": "MENU.previousHarmonicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&uarr;"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Pitch" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a step",
+                    "ACTION": "MENU.pitchUpStep(1)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "shift-&uarr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a step",
+                    "ACTION": "MENU.pitchDownStep(1)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "shift-&darr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up an octave",
+                    "ACTION": "MENU.pitchUpOctave(1)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "ctrl-&uarr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down an octave",
+                    "ACTION": "MENU.pitchDownOctave(1)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "ctrl-&darr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Up a fifth",
+                    "ACTION": "MENU.pitchUpStep(5)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "5 shift-&uarr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Down a third",
+                    "ACTION": "MENU.pitchDownStep(3)"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "3 shift-&darr;"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Stems" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Force stem above",
+                    "ACTION": "MENU.forceNoteStemUp()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "a"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Force stem below",
+                    "ACTION": "MENU.forceNoteStemUp()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "b"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Clear stem direction",
+                    "ACTION": "MENU.removeStemDirection()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "c"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Accidentals" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle natural accidental",
+                    "ACTION": "MENU.toggleNaturalAccidental()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "n"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle sharp accidental",
+                    "ACTION": "MENU.toggleSharpAccidental()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "#"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle flat accidental",
+                    "ACTION": "MENU.toggleFlatAccidental()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "-"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle forced display of accidental",
+                    "ACTION": "MENU.toggleForcedDisplay()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "X"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle editorial accidental",
+                    "ACTION": "MENU.toggleEditorialAccidental()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "i"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Articulations" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle staccato",
+                    "ACTION": "MENU.toggleStaccato()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "'"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle staccatissimo",
+                    "ACTION": "MENU.toggleStaccatissimo()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "`"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle tenuto",
+                    "ACTION": "MENU.toggleTenuto()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "~"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle accent",
+                    "ACTION": "MENU.toggleAccent()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "6"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle marcato",
+                    "ACTION": "MENU.toggleMarcato()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "^"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle fermata",
+                    "ACTION": "MENU.toggleFermata()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": ";"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle arpeggio",
+                    "ACTION": "MENU.toggleArpeggio()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": ":"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Ornaments" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle minor trill",
+                    "ACTION": "MENU.toggleMinorTrill()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "t"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle major trill",
+                    "ACTION": "MENU.toggleMajorTrill()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "T"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle minor lower mordent",
+                    "ACTION": "MENU.toggleMinorLowerMordent()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "m"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle major lower mordent",
+                    "ACTION": "MENU.toggleMajorLowerMordent()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "M"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle minor upper mordent",
+                    "ACTION": "MENU.toggleMinorUpperMordent()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "w"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Toggle major upper mordent",
+                    "ACTION": "MENU.toggleMajorUpperMordent()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "W"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Slurs" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": {
+                "TEXT": {
+                  "DEFAULT": "Add slur to next note",
+                  "ACTION": "MENU.addSlur(1)"
+                },
+                "RIGHT_TEXT": {
+                  "TYPE": "shortcut",
+                  "DEFAULT": "shift-&uarr;"
+                }
+              }
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Break beam before note",
+              "ACTION": "MENU.breakBeamBeforeNote()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "L"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Break beam after note",
+              "ACTION": "MENU.breakBeamAfterNote()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "L"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle pedal down before note",
+              "ACTION": "MENU.togglePedalDown()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "p"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle pedal up after note",
+              "ACTION": "MENU.togglePedalUp()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "P"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle gracenote style",
+              "ACTION": "MENU.toggleGraceNoteStyle()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "q"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Toggle @ mark",
+              "ACTION": "MENU.toggleAtMark()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "@"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TYPE": "contextual",
+      "TEXT": { "DEFAULT": "Rest" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Unfocus rest",
+              "ACTION": "MENU.unfocusElement()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "esc"
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Navigation" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Next melodic note",
+                    "ACTION": "MENU.nextMelodicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&rarr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Previous melodic note",
+                    "ACTION": "MENU.previousMelodicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&larr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Next harmonic note",
+                    "ACTION": "MENU.nextHarmonicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&darr;"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Previous harmonic note",
+                    "ACTION": "MENU.previousHarmonicNote()"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "shortcut",
+                    "DEFAULT": "&uarr;"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Make rest invisible",
+              "ACTION": "MENU.makeRestInvisible()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "y"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TYPE": "contextual",
+      "TEXT": { "DEFAULT": "Slur" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Unfocus slur",
+              "ACTION": "MENU.unfocusElement()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "esc"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Force slur above",
+              "ACTION": "MENU.forceSlurAbove()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "a"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Force slur below",
+              "ACTION": "MENU.forceSlurBelow()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "b"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Clear slur direction",
+              "ACTION": "MENU.removeSlurOrientation()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "c"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Delete slur",
+              "ACTION": "MENU.deleteSlur()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "D"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Move slur start left",
+              "ACTION": "MENU.moveSlurStart(-1)"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "&larr;"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Move slur start right",
+              "ACTION": "MENU.moveSlurStart(1)"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "&rarr;"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Move slur end left",
+              "ACTION": "MENU.moveSlurEnd(-1)"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "shift-&larr;"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Move slur end right",
+              "ACTION": "MENU.moveSlurEnd(1)"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "shift-&rarr;"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Move slur end 3 notes right",
+              "ACTION": "MENU.moveSlurEnd(3)"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "3 shift-&rarr;"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TYPE": "contextual",
+      "TEXT": { "DEFAULT": "Tie" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Unfocus slur",
+              "ACTION": "MENU.unfocusElement()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "esc"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Force tie above",
+              "ACTION": "MENU.forceTieAbove()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "a"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Force tie below",
+              "ACTION": "MENU.forceTieBelow()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "b"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Clear tie direction",
+              "ACTION": "MENU.removeTieOrientation()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "c"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "TEXT": { "DEFAULT": "Scores" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Bach 370 chorales",
+              "ACTION": "MENU.loadRepertory('chorales')"
+            },
+            "RIGHT_TEXT": [
+              { "TYPE": "website", "LINK": "https://chorales.sapp.org" },
+              {
+                "TYPE": "github",
+                "LINK": "https://github.com/craigsapp/bach-370-chorales"
+              }
+            ]
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Bach WTC fugues",
+              "ACTION": "MENU.loadRepertory('bach-wtc-fugues')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/humdrum-tools/bach-wtc-fugues"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Beethoven piano sonatas",
+              "ACTION": "MENU.loadRepertory('beethoven/sonatas')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/beethoven-piano-sonatas"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Beethoven string quartets",
+              "ACTION": "MENU.loadRepertory('beethoven/quartets')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/beethoven-string-quartets"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Chopin First Editions",
+              "ACTION": "MENU.loadRepertory('chopin-first-editions')"
+            },
+            "RIGHT_TEXT": [
+              { "TYPE": "website", "LINK": "https://humdrum.nifc.pl" },
+              {
+                "TYPE": "github",
+                "LINK": "https://github.com/pl-wnifc/humdrum-chopin-first-editions"
+              }
+            ]
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Chopin mazurkas",
+              "ACTION": "MENU.loadRepertory('chopin/mazurkas')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/chopin-mazurkas"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Haydn keyboard sonatas",
+              "ACTION": "MENU.loadRepertory('haydn/sonatas')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/haydn-keyboard-sonatas"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Hummel preludes, op. 67",
+              "ACTION": "MENU.loadRepertory('hummel/preludes')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/hummel-preludes"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Joplin",
+              "ACTION": "MENU.loadRepertory('joplin')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/joplin-rags"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Mozart piano sonatas",
+              "ACTION": "MENU.loadRepertory('mozart/sonatas')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/mozart-piano-sonatas"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Mozart, 100 Contradances, K<sup>6</sup> Anh. C30.01",
+              "ACTION": "MENU.loadRepertory('mozart/sonatas')"
+            },
+            "RIGHT_TEXT": {
+              "DEFAULT": "<i>measures</i>",
+              "ACTION": "MENU.loadRepertory('users/craig/dice/mozart/cda/measures')"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Scarlatti sonatas",
+              "ACTION": "MENU.loadRepertory('scarlatti/sonatas')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/craigsapp/scarlatti-keyboard-sonatas"
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Harmonized songs" },
+            "RIGHT_TEXT": {
+              "TYPE": "",
+              "DEFAULT": ""
+            },
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Barbershop quartets",
+                    "ACTION": "MENU.loadRepertory('osu/barbershop')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/humdrum-tools/barbershop"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "&nbsp;&nbsp;&nbsp;Barbershop quartets (Grand staff)",
+                    "ACTION": "MENU.loadRepertory('osu/barbershop', satb2gs)"
+                  },
+                  "RIGHT_TEXT": { "TYPE": "", "LINK": "" }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Deutscher Liderschatz",
+                    "ACTION": "MENU.loadRepertory('liederschatz1')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/craigsapp/erk-liederschatz"
+                  }
+                },
+                {
+                  "RIGHT_TEXT": [
+                    {
+                      "ACTION": "MENU.loadRepertory('liederschatz1', 'extract -k3')",
+                      "DEFAULT": "<i>vocal part</i>"
+                    },
+                    {
+                      "ACTION": "MENU.loadRepertory('liederschatz1', 'extract -k1-2')",
+                      "DEFAULT": "<i>piano part</i>"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Josquin Research Project" },
+            "RIGHT_TEXT": [
+              { "TYPE": "website", "LINK": "http://josquin.stanford.edu" },
+              {
+                "TYPE": "github",
+                "LINK": "http://github.com/josquin-research-project/jrp-scores"
+              }
+            ],
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Guillaume Du Fay(<i>c</i>1397&ndash;1474)",
+                    "ACTION": "MENU.loadRepertory('jrp/Duf')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Duf"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Johannes Ockeghem (<i>c</i>1420&ndash;1497)",
+                    "ACTION": "MENU.loadRepertory('jrp/Ock')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Ock"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Jean Japart (?&ndash;1481)",
+                    "ACTION": "MENU.loadRepertory('jrp/Jap')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Jap"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Antoine Busnoys(<i>c</i>1430&ndash;1492)",
+                    "ACTION": "MENU.loadRepertory('jrp/Bus')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Bus"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Gaspar van Weerbeke (<i>c</i>1450&ndash;<i>c</i>1517)",
+                    "ACTION": "MENU.loadRepertory('gaspar')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Gas"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Josquin des Prez (<i>c</i>1450&ndash;1521)",
+                    "ACTION": "MENU.loadRepertory('jrp/Jos')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Jos"
+                  }
+                },
+                {
+                  "RIGHT_TEXT": [
+                    {
+                      "ACTION": "MENU.loadRepertory('jrp/Joa')",
+                      "DEFAULT": "<i>secure attribution</i>"
+                    },
+                    {
+                      "ACTION": "MENU.loadRepertory('jrp/Job')",
+                      "DEFAULT": "<i>not secure</i>"
+                    }
+                  ]
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Pierre de la Rue (1452&ndash;1518)",
+                    "ACTION": "MENU.loadRepertory('jrp/Rue')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Rue"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Jacob Obrecht (1457&ndash;1505)",
+                    "ACTION": "MENU.loadRepertory('jrp/Obr')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Obr"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Mabrianus de Orto (<i>c</i>1460&ndash;1529)",
+                    "ACTION": "MENU.loadRepertory('jrp/Ort')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/josquin-research-project/Ort"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": { "DEFAULT": "Tasso in Music Edition" },
+            "RIGHT_TEXT": [
+              { "TYPE": "website", "LINK": "http://www.tassomusic.org" },
+              {
+                "TYPE": "github",
+                "LINK": "http://github.com/TassoInMusicProject/tasso-scores"
+              }
+            ],
+            "SUBMENU": {
+              "ENTRY": [
+                {
+                  "TEXT": {
+                    "DEFAULT": "Rime settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Trm')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Trm/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Gerusalemme settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Tsg')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tsg/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Aminta settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Tam')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tam/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Ecloghe settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Tec')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tec/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Rinaldo settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Tri')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tec/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Lagrima della Beata Vergine settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Tbv')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tbv/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Re Torrismondo settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Trt')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tbv/kern"
+                  }
+                },
+                {
+                  "TEXT": {
+                    "DEFAULT": "Gerusalemme conquistata settings",
+                    "ACTION": "MENU.loadRepertory('tasso/Tco')"
+                  },
+                  "RIGHT_TEXT": {
+                    "TYPE": "github",
+                    "LINK": "https://github.com/TassoInMusicProject/tasso-scores/tree/master/Tco/kern"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Polyrhythm Project",
+              "ACTION": "MENU.loadRepertory('poly')"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "github",
+              "LINK": "https://github.com/polyrhythm-project/rds-scores"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "DICTIONARY": {
+    "ENTRY": [
+      { "DEFAULT": "view repertory website" },
+      { "DEFAULT": "Github repository" },
+      { "DEFAULT": "esc" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter/dissonant" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/graphic/beam" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/graphic/pitch" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/graphic/note" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/graphic/rest" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/graphic/slur" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/graphic/tie" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter/autobeam" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/command/alt-L" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/command/alt-I" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/command/alt-D" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter/autostem" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter/extract" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-e" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-c" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-R" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-S" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-s" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-t" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-T" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-r" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-m" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-h" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-g" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/interface/buffers" },
+      {
+        "DEFAULT": "https://doc.verovio.humdrum.org/interface/getting_started"
+      },
+      {
+        "DEFAULT": "https://doc.verovio.humdrum.org/humdrum/getting_started"
+      },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/repertory" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/options" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-home" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-end" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-left" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-right" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/shift-right" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/shift-left" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/space" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-w" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-lesser" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter/tabber" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-y" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-p" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-l" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-b" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-v" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-f" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/commands/alt-o" },
+      { "DEFAULT": "https://doc.verovio.humdrum.org/filter/chord" }
+    ]
+  }
+}

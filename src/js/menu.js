@@ -29,8 +29,8 @@ function setInitialLanguage() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-	setInitialLanguage();
-	processMenuAton();
+	// setInitialLanguage();
+	// processMenuAton();
 	window.MENU = new MenuInterface();
 	window.MENU.initialize();
 });

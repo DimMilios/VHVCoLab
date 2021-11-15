@@ -103,6 +103,17 @@ We still expose many global variables to make the app functional. This creates a
   - [] `pdfkit`: can be found on [NPM](https://www.npmjs.com/package/pdfkit)
   - [] `scripts/FileSave.js`: The project has evolved into being an NPM package [Github repo](https://github.com/eligrey/FileSaver.js)
 
+#### Today 15-11
+- [] Refactor Menu using bootstrap for styling and drop `.aton` files
+- Remove language specific words regex: 
+```
+^@(AR:|BE:|CA:|CS:|DE:|DK:|EL:|EN:|ES:|ET:|EU:|FI:|FR:|HE:|HI:|ID:|IT:|JA:|KO:|LT:|LV:|NL:|NO:|PL:|PT:|RU:|SK:|SV:|TR:|UK:|VI:|ZH-simplified:|ZH-traditional:|TA:)\s*.*
+```
+- Remove `LINK` from `RIGHT_TEXT` menu entries regex:
+```
+,(\n\s*)"LINK":\s\{.*\n\s*"DEFAULT":\s.*\n\s*\}
+```
+
 ## Dependencies
 The wasm verovio toolkit script `scripts/local/verovio-toolkit-wasm.js` has to be downloaded locally since it is in `.gitignore` cause it's a big file (8.6MB)
 
