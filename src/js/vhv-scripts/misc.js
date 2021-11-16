@@ -1688,8 +1688,8 @@ window.playCurrentMidi = playCurrentMidi;
 //
 
 export function setCursorNote(item, location) {
- window.CursorNote = item;
- window.MENU.showCursorNoteMenu(window.CursorNote);
+  window.CursorNote = item;
+  window.MENU.showCursorNoteMenu(window.CursorNote);
 }
 
 //////////////////////////////

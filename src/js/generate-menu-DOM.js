@@ -30,8 +30,9 @@ window.addEventListener('DOMContentLoaded', () => {
       const type = entry?.TYPE;
       
       const li = document.createElement('li');
+      li.id = `${textValue}__menu-item`.toLowerCase();
       li.setAttribute('class', 'nav-item dropdown mr-2');
-      li.innerHTML += `<a class="nav-link" href="#" id="${textValue}-menu-item" role="button" data-toggle="dropdown" aria-expanded="false">${textValue}</a>`;
+      li.innerHTML += `<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-expanded="false">${textValue}</a>`;
       
       const submenuItem = createSubmenu(submenu);
       if (submenuItem) {
@@ -63,6 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const rightText = entry?.RIGHT_TEXT;
 
     const li = document.createElement('li');
+    li.id = `${defaultText?.split(/\W/).join('-')}__submenu-item`.toLowerCase();
     li.setAttribute('class', 'dropdown-item d-flex justify-content-between bg-dark text-white');
 
     const item = document.createElement('a');

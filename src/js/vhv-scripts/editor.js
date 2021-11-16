@@ -82,8 +82,8 @@ export function processNotationKey(key, element) {
 
 
 	if (key === "esc") {
-	window.MENU.hideContextualMenus();
-	window.HIGHLIGHTQUERY = "";
+		window.MENU.hideContextualMenus();
+		window.HIGHLIGHTQUERY = "";
 		if (!element) {
 			return;
 		}
@@ -97,7 +97,7 @@ export function processNotationKey(key, element) {
 			outclass += " " + classlist[i];
 		}
 		element.setAttribute("class", outclass);
-	window.CursorNote = "";
+		window.CursorNote = "";
 		return;
 	}
 
