@@ -631,10 +631,8 @@ if (!editor) {
 
 MenuInterface.prototype.applyFilter = function (filter, data, callback) {
 	var contents = "";
-	var editor = 0;
 	if (!data) {
 		contents = editor.getValue().replace(/^\s+|\s+$/g, "");
-		editor = 1;
 	} else {
 		contents = data.replace(/^\s+|\s+$/g, "");;
 	}
@@ -658,9 +656,7 @@ MenuInterface.prototype.applyFilter = function (filter, data, callback) {
 			}
 			newdata += lines[i] + "\n";
 		}
-		if (editor) {
-			editor.setValue(newdata, -1);
-		}
+		editor.setValue(newdata, -1);
 		if (callback) {
 			callback(newdata);
 		}

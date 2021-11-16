@@ -80,4 +80,4 @@ export * from './pdf.js'
 export * from './convertToMusicXmlAndSave.js'
 
 // Extensions for collaboration
-// export * from './collab-extension.js'
+export * from './collab-extension.js'

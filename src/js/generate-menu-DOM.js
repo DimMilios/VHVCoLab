@@ -39,60 +39,61 @@ window.addEventListener('DOMContentLoaded', () => {
       }
   
       navBarList.appendChild(li);
-  
     }
   }
   
   function createSubmenu(submenuJSON, nested = false) {
-    const submenuItem = document.createElement('ul');
-    submenuItem.setAttribute('class', `dropdown-menu p-0 ${nested && 'dropdown-submenu'}`);
+    const submenu = document.createElement('ul');
+    submenu.setAttribute('class', `dropdown-menu p-0 ${nested && 'dropdown-submenu'}`);
   
     if (isIterable(submenuJSON)) {
       for (const entry of submenuJSON) {
-        const defaultText = entry?.TEXT?.DEFAULT;
-        const action = entry?.TEXT?.ACTION;
-        const rightText = entry?.RIGHT_TEXT;
-        
-        const li = document.createElement('li');
-        li.setAttribute('class', 'dropdown-item d-flex justify-content-between bg-dark text-white');
-
-        const item = document.createElement('a');
-        // item.setAttribute('class', 'dropdown-item');
-        item.setAttribute('class', 'text-decoration-none');
-        item.href = '#';
-  
-        const functionExistsOn = (func, obj) => typeof obj[func] === 'function';
-        if (action) {
-          let funcName = action;
-          funcName = funcName.slice(action.indexOf(".") + 1).replace(/\(|\)/g, '');
-          // FIX: function calls with parameters don't work properly, e.g MENU.pitchUpOctave(1)
-          li.onclick = functionExistsOn(funcName, window.MENU) ? () => new Function(action)() : null;
-        }
-  
-        item.textContent = `${defaultText} ${entry?.SUBMENU ? '»' : ''}`;
-    
-        li.appendChild(item);
-        if (rightText?.DEFAULT?.length > 0) {
-          li.innerHTML += `<small class="ml-3 text-nowrap"><strong>${rightText.DEFAULT}</strong></small>`;
-        }
-
-        
-        if (entry?.SUBMENU?.ENTRY) {
-          // console.log('Recursively creating SUBMENU', entry.SUBMENU.ENTRY);
-          // const submenuList = document.createElement('ul');
-          // submenuList.setAttribute('class', 'dropdown-menu dropdown-submenu');
-          li.appendChild(createSubmenu(entry.SUBMENU.ENTRY, true));
-        }
-
-        submenuItem.appendChild(li);
+        submenu.appendChild(createSubmenuItem(entry));
       }
-    
     } else {
-      console.log('Not iterable, value:', submenuJSON);
+      submenu.appendChild(createSubmenuItem(submenuJSON));
     }
-    return submenuItem;
+
+    return submenu;
   }
   
+  function createSubmenuItem(entry) {
+    const defaultText = entry?.TEXT?.DEFAULT;
+    const action = entry?.TEXT?.ACTION;
+    const rightText = entry?.RIGHT_TEXT;
+
+    const li = document.createElement('li');
+    li.setAttribute('class', 'dropdown-item d-flex justify-content-between bg-dark text-white');
+
+    const item = document.createElement('a');
+    // item.setAttribute('class', 'dropdown-item');
+    item.setAttribute('class', 'text-decoration-none');
+    item.href = '#';
+
+    const isFunctionOf = (func, obj) => typeof obj[func] === 'function';
+    if (action) {
+      const funcName = action.slice(action.indexOf(".") + 1).replace(/\(.*\)/g, '');
+      li.onclick = isFunctionOf(funcName, window.MENU) ? () => new Function(action)() : null;
+    }
+
+    item.textContent = `${defaultText} ${entry?.SUBMENU ? '»' : ''}`;
+
+    li.appendChild(item);
+    if (rightText?.DEFAULT?.length > 0) {
+      li.innerHTML += `<small class="ml-3 text-nowrap"><strong>${rightText.DEFAULT}</strong></small>`;
+    }
+
+
+    if (entry?.SUBMENU?.ENTRY) {
+      // console.log('Recursively creating SUBMENU', entry.SUBMENU.ENTRY);
+      // const submenuList = document.createElement('ul');
+      // submenuList.setAttribute('class', 'dropdown-menu dropdown-submenu');
+      li.appendChild(createSubmenu(entry.SUBMENU.ENTRY, true));
+    }
+
+    return li;
+  }
+
   function isIterable(dataStructure) {
     if (typeof dataStructure === 'null' || typeof dataStructure === 'undefined') {
       return false;
