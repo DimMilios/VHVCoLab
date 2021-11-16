@@ -57,6 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     return submenu;
   }
+  const clickHandlers = [];
   
   function createSubmenuItem(entry) {
     const defaultText = entry?.TEXT?.DEFAULT;
@@ -76,6 +77,14 @@ window.addEventListener('DOMContentLoaded', () => {
     if (action) {
       const funcName = action.slice(action.indexOf(".") + 1).replace(/\(.*\)/g, '');
       li.onclick = isFunctionOf(funcName, window.MENU) ? () => new Function(action)() : null;
+
+      if (li.onclick !== null) {
+        clickHandlers.push(`document.querySelector('#${li.id}').addEventListener('click', () => ${action});`)
+      }
+
+      // console.log('Click handler of:', {defaultText,
+      //   action: `document.querySelector('#${li.id}').addEventListener('click', () => ${action});`
+      // });
     }
 
     item.textContent = `${defaultText} ${entry?.SUBMENU ? '»' : ''}`;
