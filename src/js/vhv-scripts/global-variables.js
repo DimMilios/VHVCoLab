@@ -126,44 +126,20 @@ window.MuseDataBuffer = "";
 // setup.js file.
 // window.EDITOR = undefined;
 // window.dummyEDITOR;
-
 // EditorModes: list the various setup for colorizing and editing for each of the
 // known data format.  The first index is set with the EditorMode variable, and the
 // second index is set with the KeyboardMode variable.
-window.EditorModes = {
-	humdrum: {
-		vim: {
-			theme: "ace/theme/humdrum_dark"
-		},
-		ace: {
-			theme: "ace/theme/humdrum_light"
-		}
-	},
-	xml: {
-		vim: {
-			theme: "ace/theme/solarized_dark"
-		},
-		ace: {
-			theme: "ace/theme/solarized_light"
-		}
-	},
-	musedata: {
-		vim: {
-			theme: "ace/theme/solarized_dark"
-		},
-		ace: {
-			theme: "ace/theme/solarized_light"
-		}
-	},
-	mime: {
-		vim: {
-			theme: "ace/theme/solarized_dark"
-		},
-		ace: {
-			theme: "ace/theme/solarized_light"
-		}
-	}
-};
+// window.EditorModes = {
+//   humdrum: {
+//     theme: 'ace/theme/humdrum_light',
+//   },
+//   xml: {
+//     theme: 'ace/theme/solarized_light',
+//   },
+//   musedata: {
+//     theme: 'ace/theme/solarized_light',
+//   },
+// };
 
 // EditorMode: specifies what type of data is present in the text editor.
 // Setting this will in turn control which colorizing rules to apply to the
@@ -177,11 +153,11 @@ let editorModeData = "humdrum";
 export const editorMode = () => editorModeData;
 /**
  * 
- * @param {"humdrum"|"xml"|"musedata"|"mime"} mode 
+ * @param {"humdrum"|"xml"|"musedata"} mode 
  * @returns {string}
  */
 export const setEditorMode = mode => {
-	if (!["humdrum", "xml", "musedata", "mime"].includes(mode)) {
+	if (!["humdrum", "xml", "musedata"].includes(mode)) {
 		console.log('Invalid editor mode');
 		return;
 	}
@@ -189,12 +165,6 @@ export const setEditorMode = mode => {
 	return editorModeData;
 }
 // window.EditorMode = "humdrum";
-
-// KeyboardMode: controls if plain ace editor keybindings are used or vim key bindings.
-// Values can be:
-//     "ace" for the pain text editing mode
-//     "vim" for the vim editing mode
-window.KeyboardMode = "ace";
 
 //var EditorTheme = "ace/theme/solarized_light";
 window.EditorLine = -1;
@@ -205,10 +175,6 @@ window.EDITINGID = null;
 window.SAVEFILENAME = "data.txt";
 window.SPACINGADJUSTMENT = 0.0;
 
-// no timeout for slow delivery of verovio
-window.basketSession.timeout = 1000000000;
-
-window.COUNTER = 0;
 
 // used to highlight the current note at the location of the cursor.
 window.CursorNote = undefined;

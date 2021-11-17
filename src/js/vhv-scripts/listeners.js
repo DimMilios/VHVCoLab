@@ -487,7 +487,6 @@ import {
 	goToNextNoteOrRest,
 	goToPreviousNoteOrRest
 } from './utility-svg.js';
-import { toggleEditorMode } from './utility-ace.js';
 import {
   saveSvgData,
   restoreEditorContentsLocally,
@@ -735,13 +734,6 @@ export function processInterfaceKeyCommand(event) {
 				event.preventDefault();
 			} else {
 				toggleHumdrumCsvTsv();
-				event.preventDefault();
-			}
-			break;
-
-		case VKey:          // toggle vi mode in text editor
-			if (event.altKey) {
-				toggleEditorMode();
 				event.preventDefault();
 			}
 			break;

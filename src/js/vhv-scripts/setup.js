@@ -66,6 +66,7 @@ export function getAceEditor() {
 export function setupAceEditor(idtag) {
 	// window.EDITOR = Ace.edit(idtag);
 	editor = Ace.edit(idtag);
+	window.EDITOR = editor;
 
 	editor.on('ready', () => {
 		if (!configureAce) {
@@ -152,7 +153,7 @@ export function configureAceEditor() {
 		CURSOR_OBSERVER.observe(cursor, {attributes: true});
 	}
 
-	// editor.setTheme('ace/theme/humdrum_light');
+	editor.setTheme('ace/theme/humdrum_light');
 	// editor.session.setMode('ace/mode/humdrum');
 
 	// setEditorModeAndKeyboard();

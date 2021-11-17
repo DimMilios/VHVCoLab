@@ -13,6 +13,7 @@ if (!vrvWorker) {
 //
 // loadKernScoresFile --
 //
+let recursionCnt = 0;
 
 export function loadKernScoresFile(obj, force) {
 	var file        = obj.file;
@@ -28,8 +29,8 @@ export function loadKernScoresFile(obj, force) {
 		var getprevious = false;
 	}
 
-	window.COUNTER++;
-	if (window.COUNTER > 10000) {
+	recursionCnt++;
+	if (recursionCnt > 10000) {
 		console.log("RECURSION TOO LARGE", file);
 		return;
 	}

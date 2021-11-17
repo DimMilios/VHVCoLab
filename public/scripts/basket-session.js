@@ -13,6 +13,8 @@
 	var storagePrefix = 'basket-';
 	var defaultExpiration = 5000;
 	var inBasket = [];
+	// no timeout for slow delivery of verovio
+	var timeout = 1000000000;
 
 	var addLocalStorage = function( key, storeObj ) {
 		try {
@@ -77,7 +79,7 @@
 				if( xhr.readyState < 4 ) {
 					xhr.abort();
 				}
-			}, basketSession.timeout );
+			}, timeout );
 
 			xhr.send();
 		});

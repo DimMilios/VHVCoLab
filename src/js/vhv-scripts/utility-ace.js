@@ -26,7 +26,17 @@ export function centerCursorHorizontallyInEditor() {
 	}
 }
 
-
+const editorModes = {
+  humdrum: {
+    theme: 'ace/theme/humdrum_light',
+  },
+  xml: {
+    theme: 'ace/theme/solarized_light',
+  },
+  musedata: {
+    theme: 'ace/theme/solarized_light',
+  },
+}
 
 //////////////////////////////
 //
@@ -35,12 +45,14 @@ export function centerCursorHorizontallyInEditor() {
 
 export function setEditorModeAndKeyboard() {
 	if (editor) {
-		editor.setTheme(window.EditorModes[editorMode()][window.KeyboardMode].theme);
-		editor.getSession().setMode("ace/mode/" + editorMode());
+		const mode = editorMode();
+		editor.setTheme(editorModes[mode].theme);
+		editor.getSession().setMode("ace/mode/" + mode);
+		console.log('Set ace mode: ace/mode/', mode);
 		// editor.setTheme(window.EditorModes[EditorMode][window.KeyboardMode].theme);
 		// editor.getSession().setMode("ace/mode/" + EditorMode);
 		// null to reset to default (ace) mode
-		editor.setKeyboardHandler(window.KeyboardMode === "ace" ? null : "ace/keyboard/" + window.KeyboardMode);
+		// editor.setKeyboardHandler(window.KeyboardMode === "ace" ? null : "ace/keyboard/" + window.KeyboardMode);
 	}
 };
 
@@ -53,11 +65,11 @@ export function setEditorModeAndKeyboard() {
 //
 
 export function toggleEditorMode() {
-	if (window.KeyboardMode == "ace") {
-		window.KeyboardMode  = "vim";
-	} else {
-		window.KeyboardMode  = "ace";
-	};
+	// if (window.KeyboardMode == "ace") {
+	// 	window.KeyboardMode  = "vim";
+	// } else {
+	// 	window.KeyboardMode  = "ace";
+	// };
 	setEditorModeAndKeyboard();
 };
 
