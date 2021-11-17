@@ -24,7 +24,7 @@ export * from './hmdindex.js'
 
 // Functions for to Google spreadsheet interaction
 // and also related to spreadsheet toolbar:
-export * from './spreadsheet.js'
+// export * from './spreadsheet.js'
 
 // Functions related to the toolbar:
 // export * from './toolbar.js'

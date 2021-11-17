@@ -764,12 +764,12 @@ HnpSvgMeasure.prototype.m_setVuScale = function () {
 // scrollToMeasure -- Bring a particular measure into view at the
 //   top of the selected element.
 //
-
+let scrollHash = true;
 function scrollToMeasure(number, selector) {
-	if (!window.SCROLL_HASH) {
+	if (!scrollHash) {
 		return;
 	}
-	window.SCROLL_HASH = false;
+	scrollHash = false;
 	let scroller = document.querySelector("#output");
 	let element = window.MARKUP.getMeasureElement(number);
 	if (scroller && element) {

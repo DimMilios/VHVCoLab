@@ -271,17 +271,26 @@ export function toggleVhvTitle() {
 // hideWorkNavigator --
 //
 
+let erasedWorkNavigator = '';
+let erasedFileInfo = {};
+
 function restoreWorkNavigator(selector) {
   if (!selector) {
     selector = '#work-navigator';
   }
-  if (window.ERASED_WORK_NAVIGATOR.match(/^\s*$/)) {
+  // if (window.ERASED_WORK_NAVIGATOR.match(/^\s*$/)) {
+  //   return;
+  // }
+  if (erasedWorkNavigator.match(/^\s*$/)) {
     return;
   }
-  window.FILEINFO = window.ERASED_FILEINFO;
+  // window.FILEINFO = window.ERASED_FILEINFO;
+  window.FILEINFO = erasedFileInfo;
   let element = document.querySelector(selector);
-  element.innerHTML = window.ERASED_WORK_NAVIGATOR;
-  window.ERASED_WORK_NAVIGATOR = '';
+  element.innerHTML = erasedWorkNavigator;
+  erasedWorkNavigator = '';
+  // element.innerHTML = window.ERASED_WORK_NAVIGATOR;
+  // window.ERASED_WORK_NAVIGATOR = '';
 }
 
 //////////////////////////////
@@ -294,8 +303,10 @@ function removeWorkNavigator(selector) {
     selector = '#work-navigator';
   }
   let element = document.querySelector(selector);
-  window.ERASED_WORK_NAVIGATOR = element.innerHTML;
-  window.ERASED_FILEINFO = window.FILEINFO;
+  // window.ERASED_WORK_NAVIGATOR = element.innerHTML;
+  erasedWorkNavigator = element.innerHTML;
+  // window.ERASED_FILEINFO = window.FILEINFO;
+  erasedFileInfo = window.FILEINFO;
   element.innerHTML = '';
 }
 
@@ -750,7 +761,8 @@ export function gotoFirstPage() {
 //
 // showBufferedHumdrumData --
 //
-import { editorMode, setEditorMode } from './global-variables.js'
+import { editorMode, setEditorMode } from './global-variables.js';
+let bufferedHumdrumFile = '';
 
 export function showBufferedHumdrumData() {
   // let oldmode = EditorMode;
@@ -764,11 +776,14 @@ export function showBufferedHumdrumData() {
     // EditorMode = 'humdrum';
     setEditorMode('humdrum');
     setEditorModeAndKeyboard();
-    if (!window.BufferedHumdrumFile.match(/^\s*$/)) {
-      let page = vrvWorker.page;
-      displayScoreTextInEditor(window.BufferedHumdrumFile, vrvWorker.page);
-      window.BufferedHumdrumFile = '';
+    if (!bufferedHumdrumFile.match(/^\s*$/)) {
+      displayScoreTextInEditor(bufferedHumdrumFile, vrvWorker.page);
+      bufferedHumdrumFile = '';
     }
+    // if (!window.BufferedHumdrumFile.match(/^\s*$/)) {
+    //   displayScoreTextInEditor(window.BufferedHumdrumFile, vrvWorker.page);
+    //   window.BufferedHumdrumFile = '';
+    // }
   }
 }
 
@@ -788,12 +803,13 @@ function displayHumdrum() {
 //
 // showHumdrum --
 //
-
+let museDataBuffer = '';
 function showHumdrum(humdrumdata) {
   // if (EditorMode == 'musedata') {
   if (editorMode() == 'musedata') {
     // could implement a key to return to MuseData contents
-    window.MuseDataBuffer = getTextFromEditor();
+    // window.MuseDataBuffer = getTextFromEditor();
+    museDataBuffer = getTextFromEditor();
   }
   setTextInEditor(humdrumdata);
 }
@@ -955,9 +971,12 @@ function showMei(meidata) {
   setEditorMode('xml');
   // EditorMode = 'xml';
   setEditorModeAndKeyboard();
-  if (window.BufferedHumdrumFile.match(/^\s*$/)) {
-    window.BufferedHumdrumFile = getTextFromEditor();
+  if (bufferedHumdrumFile.match(/^\s*$/)) {
+    bufferedHumdrumFile = getTextFromEditor();
   }
+  // if (window.BufferedHumdrumFile.match(/^\s*$/)) {
+  //   window.BufferedHumdrumFile = getTextFromEditor();
+  // }
   displayScoreTextInEditor(meidata, vrvWorker.page);
 }
 
@@ -1093,10 +1112,10 @@ function displayKeyscape() {
   console.log('Keyscape URL is', url);
 
   console.log('Loading Keyscape', url);
-  if (window.WKEY) {
-    window.WKEY.close();
-    window.WKEY = null;
-  }
+  // if (window.WKEY) {
+  //   window.WKEY.close();
+  //   window.WKEY = null;
+  // }
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Window/open#window____features
   let features = '';
@@ -1112,8 +1131,8 @@ function displayKeyscape() {
   features += ', toolbar=no';
   features += ', location=0';
   console.log('FEATURES', features);
-  window.WKEY = window.open(url, '', features);
-  window.WKEY.focus();
+  // window.WKEY = window.open(url, '', features);
+  // window.WKEY.focus();
 }
 
 //////////////////////////////
@@ -1397,14 +1416,17 @@ window.monitorNotationUpdating = monitorNotationUpdating;
 //
 // downloadWildWebMidi --
 //
+// Increment BasketVersion when the verovio toolkit is updated, or
+// the Midi player software or soundfont is updated.
+const basketVersion = 531;
 
 function downloadWildWebMidi(url) {
   let url3 = 'scripts/midiplayer/midiplayer.js';
 
   basket
     .require(
-      { url: url, expire: 26, unique: window.BasketVersion },
-      { url: url3, expire: 17, unique: window.BasketVersion }
+      { url: url, expire: 26, unique: basketVersion },
+      { url: url3, expire: 17, unique: basketVersion }
     )
     .then(
       function () {
@@ -1717,6 +1739,7 @@ export function hideRepertoryIndex() {
 //
 import { getMode } from './utility-ace.js';
 import { getAceEditor } from './setup.js';
+import { buffer } from 'lib0';
 
 export function updateEditorMode() {
   if (!editor) {

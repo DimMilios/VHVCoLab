@@ -14,6 +14,7 @@ if (!vrvWorker) {
 // loadKernScoresFile --
 //
 let recursionCnt = 0;
+let hmdIndex;
 
 export function loadKernScoresFile(obj, force) {
 	var file        = obj.file;
@@ -201,9 +202,12 @@ export function loadKernScoresFile(obj, force) {
 			info = basketSession.get(key);
 			if (info) {
 				if (info.url.match(/\/index.hmd$/)) {
-					window.HMDINDEX = new HMDIndex(info.data);
-					window.HMDINDEX.parameters.githubbase = file;
-					displayHmdIndexFinally(window.HMDINDEX, url);
+					hmdIndex = new HMDIndex(info.data);
+					hmdIndex.parameters.githubbase = file;
+					displayHmdIndexFinally(hmdIndex, url);
+					// window.HMDINDEX = new HMDIndex(info.data);
+					// window.HMDINDEX.parameters.githubbase = file;
+					// displayHmdIndexFinally(window.HMDINDEX, url);
 				} else {
 					try {
 						jinfo = JSON.parse(info.data);
@@ -538,10 +542,12 @@ function loadHmdIndexFile(location) {
 	request.addEventListener("load", function() {
 		if (request.status == 200) {
 			var INDEX = request.responseText;
-			window.HMDINDEX = new HMDIndex(info.data);
+			// window.HMDINDEX = new HMDIndex(info.data);
+			hmdIndex = new HMDIndex(info.data);
 			// console.log("INDEX= ", INDEX);
 			$('html').css('cursor', 'auto');
-			displayHmdIndexFinally(window.HMDINDEX, location);
+			// displayHmdIndexFinally(window.HMDINDEX, location);
+			displayHmdIndexFinally(hmdIndex, location);
 		}
 	});
 	request.send();

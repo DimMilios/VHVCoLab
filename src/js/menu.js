@@ -1292,7 +1292,6 @@ class MenuInterface {
   }
 
   singlePageView() {
-    window.PAGED = false;
     var element = document.querySelector('#page-nav');
     if (element) {
       element.style.display = 'none';

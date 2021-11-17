@@ -1424,23 +1424,29 @@ export function humdrumToSvgOptions() {
 	output.outputIndent         = 1;
 	// output.svgRemoveXlink       = true; // enable to remove xlink: from href use element property
 	
-	if (window.PAGED) {
-		var tw = $("#input").outerWidth();
-		if ($("#input").css("display") == "none") {
-			tw = 0;
-		}
-		// output.pageHeight = ($(window).innerHeight() - $("#navbar").outerHeight()) / window.ZOOM - 100;
-		// output.pageWidth = ($(window).innerWidth() - tw) / window.ZOOM - 100;
-		// jQuery $window.innerHeight() not working properly (in Chrome).
-		output.pageHeight = (window.innerHeight - $("#topnav").outerHeight()) / (window.ZOOM * window.SCALE / 40) - 50;
-		output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
-	} else {
-		var tw = $("#input").outerWidth();
-		if ($("#input").css("display") == "none") {
-			tw = 0;
-		}
-		output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
+	// if (window.PAGED) {
+	// 	var tw = $("#input").outerWidth();
+	// 	if ($("#input").css("display") == "none") {
+	// 		tw = 0;
+	// 	}
+	// 	// output.pageHeight = ($(window).innerHeight() - $("#navbar").outerHeight()) / window.ZOOM - 100;
+	// 	// output.pageWidth = ($(window).innerWidth() - tw) / window.ZOOM - 100;
+	// 	// jQuery $window.innerHeight() not working properly (in Chrome).
+	// 	output.pageHeight = (window.innerHeight - $("#topnav").outerHeight()) / (window.ZOOM * window.SCALE / 40) - 50;
+	// 	output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
+	// } else {
+	// 	var tw = $("#input").outerWidth();
+	// 	if ($("#input").css("display") == "none") {
+	// 		tw = 0;
+	// 	}
+	// 	output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
+	// }
+
+	var tw = $("#input").outerWidth();
+	if ($("#input").css("display") == "none") {
+		tw = 0;
 	}
+	output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
 	
 	var newLinearSpacing = window.SPACINGADJUSTMENT + output.spacingLinear;
 	if (newLinearSpacing < 0.05) {

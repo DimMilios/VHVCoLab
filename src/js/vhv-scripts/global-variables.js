@@ -19,12 +19,11 @@ window.PDFOPTIONS = {};
 // var turl = "https://raw.githubusercontent.com/craigsapp/mozart-piano-sonatas/master/index.hmd";
 
 // HMDINDEX: used to store a repertory index in the .hmd format.
-window.HMDINDEX = null;
+// window.HMDINDEX = null;
 
 // WKEY: window for displaying keyscape
-window.WKEY = null;
+// window.WKEY = null;
 
-window.SCROLL_HASH = true;
 window.GOTOTOPOFNOTATION = false;
 
 ////////////////////////////////////////////////////////////
@@ -78,23 +77,23 @@ window.BREAKS         = false;
 
 // ERASED_WORK_NAVIGATOR: HTML code for the navigator that can be restored
 // if alt-e is pressed twice.
-window.ERASED_WORK_NAVIGATOR = "";
+// window.ERASED_WORK_NAVIGATOR = "";
 
 // ERASED_FILEINFO: data structure containing the currently displyed
 // work from a repertory.
-window.ERASED_FILEINFO = {};
+// window.ERASED_FILEINFO = {};
 
-window.PAGED = false;
+// window.PAGED = false;
 
-window.SPREADSHEETSCRIPTID = "";
-window.SPREADSHEETID = "";
+// window.SPREADSHEETSCRIPTID = "";
+// window.SPREADSHEETID = "";
 
-if (localStorage.SPREADSHEETSCRIPTID) {
-	window.SPREADSHEETSCRIPTID = localStorage.SPREADSHEETSCRIPTID;
-}
-if (localStorage.SPREADSHEETID) {
-	window.SPREADSHEETID = localStorage.SPREADSHEETID;
-}
+// if (localStorage.SPREADSHEETSCRIPTID) {
+// 	window.SPREADSHEETSCRIPTID = localStorage.SPREADSHEETSCRIPTID;
+// }
+// if (localStorage.SPREADSHEETID) {
+// 	window.SPREADSHEETID = localStorage.SPREADSHEETID;
+// }
 
 
 
@@ -113,7 +112,7 @@ window.FILEINFO = {};
 // MuseData variables --
 //
 
-window.MuseDataBuffer = "";
+// window.MuseDataBuffer = "";
 
 
 //////////////////////////////
@@ -170,12 +169,12 @@ export const setEditorMode = mode => {
 window.EditorLine = -1;
 window.TABSIZE = 12;
 // window.DISPLAYTIME = 0;
-window.HIGHLIGHTQUERY = null;
 window.EDITINGID = null;
 window.SAVEFILENAME = "data.txt";
 window.SPACINGADJUSTMENT = 0.0;
 
 
+window.HIGHLIGHTQUERY = null;
 // used to highlight the current note at the location of the cursor.
 window.CursorNote = undefined;
 
@@ -183,19 +182,14 @@ window.CursorNote = undefined;
 // This is an ID string rather than an element.
 window.RestoreCursorNote = undefined;
 
-// Increment BasketVersion when the verovio toolkit is updated, or
-// the Midi player software or soundfont is updated.
-window.BasketVersion = 531;
-// Basket is no longer working since verovio.js is now over 5MB (maximum for localStorage)
-// console.log("VERSION", BasketVersion);
+window.ERASED_DATA = "";
 
 // window.Actiontime = 0;
 
-window.ERASED_DATA = "";
 
 // see https://github.com/ajaxorg/ace/wiki/Embedding-API
 // Use EditSession instead of BufferedHumdrumFile:
-window.BufferedHumdrumFile = "";
+// window.BufferedHumdrumFile = "";
 window.Range = function() { console.log("Range is undefined"); }
 
 // window.IDS   = [];
