@@ -874,7 +874,7 @@ function addSlur(id, line, field) {
 				classname += " highlight";
 				element.setAttribute("class", classname);
 			}
-		window.CursorNote = element;
+			window.CursorNote = element;
 		}
 	}, 300);
 
