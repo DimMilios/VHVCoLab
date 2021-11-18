@@ -1,5 +1,6 @@
 /* global saveAs */
-import { setTextInEditor } from './misc.js'
+import { setTextInEditor } from './misc.js';
+import { getMenu } from '../menu.js';
 
 //////////////////////////////
 //
@@ -27,7 +28,8 @@ function loadBuffer(number, event) {
 		}
 	} else {
 		// store contents of text editor in given buffer.
-		window.MENU.loadFromBuffer(number);
+		// window.MENU.loadFromBuffer(number);
+		getMenu().loadFromBuffer(number);
 	}
 }
 
@@ -59,7 +61,8 @@ function saveBuffer(number, event) {
 		}
 	} else {
 		// store contents of text editor in given buffer.
-		window.MENU.saveToBuffer(number);
+		// window.MENU.saveToBuffer(number);
+		getMenu().saveToBuffer(number);
 	}
 }
 

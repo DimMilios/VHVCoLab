@@ -495,6 +495,7 @@ function getOnClassElements(onclass) {
 // goToPreviousNoteOrRest --
 //
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { getMenu } from '../menu.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
@@ -912,7 +913,8 @@ export function highlightIdInEditor(id, source) {
 	}
 
 	window.CursorNote = document.querySelector("#" + id);
-	window.MENU.showCursorNoteMenu(window.CursorNote);
+	// window.MENU.showCursorNoteMenu(window.CursorNote);
+	getMenu().showCursorNoteMenu(window.CursorNote);
 	editor.gotoLine(row, col);
 
 	// 0.5 = center the cursor vertically:

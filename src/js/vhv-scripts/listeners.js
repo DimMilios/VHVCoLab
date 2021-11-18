@@ -494,6 +494,7 @@ import {
 } from './buffer.js';
 import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
+import { getMenu } from '../menu.js';
 
 export function processInterfaceKeyCommand(event) {
 
@@ -513,7 +514,8 @@ export function processInterfaceKeyCommand(event) {
 	if (event.metaKey) {
 		// usually ignore metaKey unless 0:
 		if (event.code == ZeroKey) {
-			window.MENU.resetTextFontSize();
+			getMenu().resetTextFontSize();
+			// window.MENU.resetTextFontSize();
 			window.SCALE = 40;
 			localStorage.SCALE = window.SCALE;
 			displayNotation();

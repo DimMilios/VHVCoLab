@@ -1711,7 +1711,8 @@ window.playCurrentMidi = playCurrentMidi;
 
 export function setCursorNote(item, location) {
   window.CursorNote = item;
-  window.MENU.showCursorNoteMenu(window.CursorNote);
+  getMenu().showCursorNoteMenu(window.CursorNote);
+  // window.MENU.showCursorNoteMenu(window.CursorNote);
 }
 
 //////////////////////////////
@@ -1739,7 +1740,7 @@ export function hideRepertoryIndex() {
 //
 import { getMode } from './utility-ace.js';
 import { getAceEditor } from './setup.js';
-import { buffer } from 'lib0';
+import { getMenu } from '../menu.js';
 
 export function updateEditorMode() {
   if (!editor) {
@@ -1774,14 +1775,23 @@ export function updateEditorMode() {
 //
 
 function nextPageClick(event) {
+  const menu = getMenu();
   if (!event) {
-   window.MENU.goToNextPage(event);
+   menu.goToNextPage(event);
   }
   if (event.shiftKey) {
-   window.MENU.goToLastPage(event);
+   menu.goToLastPage(event);
   } else {
-   window.MENU.goToNextPage(event);
+   menu.goToNextPage(event);
   }
+  // if (!event) {
+  //  window.MENU.goToNextPage(event);
+  // }
+  // if (event.shiftKey) {
+  //  window.MENU.goToLastPage(event);
+  // } else {
+  //  window.MENU.goToNextPage(event);
+  // }
 }
 
 //////////////////////////////
@@ -1792,14 +1802,24 @@ function nextPageClick(event) {
 //
 
 function previousPageClick(event) {
+  const menu = getMenu();
+  
   if (!event) {
-   window.MENU.goToPreviousPage(event);
+   menu.goToPreviousPage(event);
   }
   if (event.shiftKey) {
-   window.MENU.goToFirstPage(event);
+   menu.goToFirstPage(event);
   } else {
-   window.MENU.goToPreviousPage(event);
+   menu.goToPreviousPage(event);
   }
+  // if (!event) {
+  //  window.MENU.goToPreviousPage(event);
+  // }
+  // if (event.shiftKey) {
+  //  window.MENU.goToFirstPage(event);
+  // } else {
+  //  window.MENU.goToPreviousPage(event);
+  // }
 }
 
 //////////////////////////////

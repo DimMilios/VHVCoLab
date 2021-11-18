@@ -1,3 +1,4 @@
+import { menu } from './menu';
 import * as menuJSON from '/src/menu.json';
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -76,7 +77,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const isFunctionOf = (func, obj) => typeof obj[func] === 'function';
     if (action) {
       const funcName = action.slice(action.indexOf(".") + 1).replace(/\(.*\)/g, '');
-      li.onclick = isFunctionOf(funcName, window.MENU) ? () => new Function(action)() : null;
+      li.onclick = isFunctionOf(funcName, menu()) ? () => new Function(action)() : null;
 
       if (li.onclick !== null) {
         clickHandlers.push(`document.querySelector('#${li.id}').addEventListener('click', () => ${action});`)

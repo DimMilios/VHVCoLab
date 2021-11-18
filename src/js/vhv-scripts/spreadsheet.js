@@ -32,6 +32,7 @@ function downloadDataFromSpreadsheet(event) {
 	request.send();
 }
 
+import { menu } from '../menu.js';
 import { setTextInEditor, getTextFromEditor } from './misc.js'
 
 function storeSpreadsheetDataInEditor(data, shiftkey) {
@@ -43,7 +44,8 @@ function storeSpreadsheetDataInEditor(data, shiftkey) {
 		if (shiftkey) {
 			storeSpreadsheetDataInEditor2(data);
 		} else {
-		window.MENU.applyFilter("tabber -r", data, storeSpreadsheetDataInEditor2);
+		// window.MENU.applyFilter("tabber -r", data, storeSpreadsheetDataInEditor2);
+			menu().applyFilter("tabber -r", data, storeSpreadsheetDataInEditor2);
 		}
 	} else {
 		// preserve presumed expanded tab data.
@@ -70,7 +72,8 @@ function uploadDataToSpreadsheet(event) {
 		// upload without passing through tabber filter.
 		uploadDataToSpreadsheet2(getTextFromEditor());
 	} else {
-	window.MENU.applyFilter("tabber", getTextFromEditor(), uploadDataToSpreadsheet2);
+	// window.MENU.applyFilter("tabber", getTextFromEditor(), uploadDataToSpreadsheet2);
+		menu().applyFilter("tabber", getTextFromEditor(), uploadDataToSpreadsheet2);
 	}
 }
 

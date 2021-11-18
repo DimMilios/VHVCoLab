@@ -17,6 +17,7 @@
 window.InterfaceSingleNumber = 0;
 
 import { insertDirectionRdfs, transposeDiatonic, insertEditorialAccidentalRdf, insertMarkedNoteRdf } from './utility-humdrum.js';
+import { getMenu } from '../menu.js';
 
 //////////////////////////////
 //
@@ -82,7 +83,8 @@ export function processNotationKey(key, element) {
 
 
 	if (key === "esc") {
-		window.MENU.hideContextualMenus();
+		// window.MENU.hideContextualMenus();
+		getMenu().hideContextualMenus();
 		window.HIGHLIGHTQUERY = "";
 		if (!element) {
 			return;
@@ -3221,7 +3223,8 @@ function addSpineToRight(exinterp, currentline, location) {
 	if (exinterp !== "**blank") {
 		filter += " -n " + exinterp;
 	}
-	window.MENU.applyFilter(filter);
+	// window.MENU.applyFilter(filter);
+	getMenu().applyFilter(filter);
 }
 
 

@@ -31,8 +31,6 @@ import { trimTabsInEditor } from './vhv-scripts/utility.js';
 import { convertToMusicXmlAndSave } from './vhv-scripts/convertToMusicXmlAndSave.js';
 import { processNotationKey } from './vhv-scripts/editor.js';
 
-window.MENU = {};
-
 class MenuInterface {
   constructor() {
     this.contextualMenus = {};
@@ -1540,120 +1538,15 @@ class MenuInterface {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  window.MENU = new MenuInterface();
-  window.MENU.initialize();
-});
+let menuInterface;
+export function getMenu() {
+  if (typeof menuInterface === 'undefined') {
+    menuInterface = new MenuInterface();
+    menuInterface.initialize();
+  }
 
-// function processMenuAton() {
-// 	var element = document.querySelector("script#aton-menu-data");
-// 	if (!element) {
-// 		console.log("Warning: cannot find element script#aton-menu-data");
-// 		return;
-// 	}
-// 	var aton = new window.ATON();
-// 	MENUDATA = aton.parse(element.textContent).MENU;
-// 	adjustMenu(MENUDATA);
-
-// 	window.DICTIONARY = {};
-// 	var MD = MENUDATA.DICTIONARY.ENTRY;
-// 	for (var i=0; i<MD.length; i++) {
-// 			window.DICTIONARY[MD[i].DEFAULT] = MD[i];
-// 	}
-
-// 	// Use handlebars to generate HTML code for menu.
-
-// 	var tsource = document.querySelector("#template-menu").textContent;
-// 	var menuTemplate = window.Handlebars.compile(tsource);
-// 	var output = menuTemplate(MENUDATA);
-// 	var newmenuelement = document.querySelector("#menu-div");
-
-// 	if (newmenuelement) {
-// 		newmenuelement.innerHTML = output;
-// 		prepareBufferStates();
-// 		// if (HIDEINITIALTOOLBAR) {
-// 		// 	toggleNavigationToolbar();
-// 		// }
-// 		// if (HIDEMENUANDTOOLBAR) {
-// 		// 	toggleMenuAndToolbarDisplay();
-// 		// }
-// 		// if (window.HIDEMENU) {
-// 		// 	toggleMenuDisplay();
-// 		// }
-
-// 	}
-
-// 	// var tsource2 = document.querySelector("#template-toolbar").textContent;
-// 	// var toolbarTemplate = window.Handlebars.compile(tsource2);
-// 	// var output2 = toolbarTemplate("");
-// 	// var toolbarelement = document.querySelector("#toolbar");
-
-// 	// if (newmenuelement && toolbarelement) {
-// 	// 	newmenuelement.innerHTML = output;
-// 	// 	toolbarelement.innerHTML = output2;
-// 	// 	prepareBufferStates();
-// 	// 	if (HIDEINITIALTOOLBAR) {
-// 	// 		toggleNavigationToolbar();
-// 	// 	}
-// 	// 	if (HIDEMENUANDTOOLBAR) {
-// 	// 		toggleMenuAndToolbarDisplay();
-// 	// 	}
-// 	// 	if (window.HIDEMENU) {
-// 	// 		toggleMenuDisplay();
-// 	// 	}
-// 	// 	if (!InputVisible) {
-// 	// 		// Or do it all of the time.
-// 	// 		matchToolbarVisibilityIconToState();
-// 	// 	}
-// 	// }
-// 	// if (TOOLBAR) {
-// 	// 	if (TOOLBAR.match(/save/i)) {
-// 	// 		chooseToolbarMenu("save");
-// 	// 	} else if (TOOLBAR.match(/load/i)) {
-// 	// 		chooseToolbarMenu("load");
-// 	// 	} else if (TOOLBAR.match(/search/i)) {
-// 	// 		chooseToolbarMenu("search");
-// 	// 	} else if (TOOLBAR.match(/filter/i)) {
-// 	// 		chooseToolbarMenu("filter");
-// 	// 	} else {
-// 	// 		// toolbar menu 1 is otherwise the default
-// 	// 		chooseToolbarMenu(1);
-// 	// 	}
-// 	// } else if (LASTTOOLBAR) {
-// 	// 		// load toolbar from last visit
-// 	// 		chooseToolbarMenu(LASTTOOLBAR);
-// 	// }
-// 	// fillSpreadsheetId();
-// }
-
-// function fillSpreadsheetScriptId() {
-// 	if (!window.SPREADSHEETSCRIPTID) {
-// 		return;
-// 	}
-// 	var element = document.querySelector("input#scriptid");
-// 	if (!element) {
-// 		return;
-// 	}
-// 	var value = window.SPREADSHEETSCRIPTID;
-// 	if (window.SPREADSHEETID) {
-// 		value += "|" + window.SPREADSHEETID;
-// 	}
-// 	element.value = value;
-// }
-
-// function adjustMenu (object) {
-// 	for (var property in object) {
-// 		if (object.hasOwnProperty(property)) {
-// 			if (property === "RIGHT_TEXT") {
-// 				if (!Array.isArray(object[property])) {
-// 					object[property] = [ object[property] ];
-// 				}
-// 			} else if (typeof object[property] == "object") {
-// 				adjustMenu(object[property]);
-// 			}
-// 		}
-// 	}
-// }
+  return menuInterface;
+}
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
@@ -1664,17 +1557,3 @@ let editor = getAceEditor();
 if (!editor) {
   throw new Error('Ace Editor is undefined');
 }
-
-// $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
-//   if (!$(this).next().hasClass('show')) {
-//     $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-//   }
-//   var $subMenu = $(this).next(".dropdown-menu");
-//   $subMenu.toggleClass('show');
-
-//   $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
-//     $('.dropdown-submenu .show').removeClass("show");
-//   });
-
-//   return false;
-// });
