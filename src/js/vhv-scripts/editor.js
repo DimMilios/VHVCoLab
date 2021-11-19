@@ -576,7 +576,7 @@ function createEmptyLine(line) {
 	output += "\n" + text;
 
 	var range = new Range(line-1, 0, line-1, text.length);
-editor.session.replace(range, output);
+	editor.session.replace(range, output);
 
 	// don't redraw the data
 	window.FreezeRendering = freezeBackup;
@@ -633,7 +633,7 @@ function setSlurAboveMarker(id, line, field, number) {
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
 		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		window.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 

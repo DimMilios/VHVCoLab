@@ -451,7 +451,6 @@ function processNotationKeyCommand(event) {
 //
 import {
   clearContent,
-  toggleVhvTitle,
   toggleFreeze,
   showBufferedHumdrumData,
   displayMei,
@@ -526,16 +525,16 @@ export function processInterfaceKeyCommand(event) {
 
 	switch (event.code) {
 		case AKey:          // UNUSED
-			if (event.altKey) {
-				if (event.shiftKey) {
-					// toggle display of toolbar
-					// toggleNavigationToolbar();
-				} else {
-					// toggle display of banner
-					toggleVhvTitle();
-				}
-				event.preventDefault();
-			}
+			// if (event.altKey) {
+			// 	if (event.shiftKey) {
+			// 		// toggle display of toolbar
+			// 		// toggleNavigationToolbar();
+			// 	} else {
+			// 		// toggle display of banner
+			// 		toggleVhvTitle();
+			// 	}
+			// 	event.preventDefault();
+			// }
 			break;
 
 		case BKey:

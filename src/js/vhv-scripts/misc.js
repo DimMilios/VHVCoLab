@@ -254,17 +254,17 @@ function showInputArea(suppressZoom) {
 // toggleVhvTitle --
 //
 
-export function toggleVhvTitle() {
-  window.VrvTitle = !window.VrvTitle;
-  let area = document.querySelector('#vhv');
-  if (window.VrvTitle) {
-    area.style.visibility = 'visible';
-    area.style.display = 'inline';
-  } else {
-    area.style.visibility = 'hidden';
-    area.style.display = 'none';
-  }
-}
+// export function toggleVhvTitle() {
+//   window.VrvTitle = !window.VrvTitle;
+//   let area = document.querySelector('#vhv');
+//   if (window.VrvTitle) {
+//     area.style.visibility = 'visible';
+//     area.style.display = 'inline';
+//   } else {
+//     area.style.visibility = 'hidden';
+//     area.style.display = 'none';
+//   }
+// }
 
 //////////////////////////////
 //

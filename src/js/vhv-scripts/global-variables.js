@@ -202,12 +202,12 @@ window.PAUSE = false;
 // window.FirstInitialization = false;
 window.InputVisible        = true;
 window.LastInputWidth      = 0;
-window.VrvTitle            = true;
 window.OriginalClef        = false;
 window.UndoHide            = false;
 window.ApplyZoom           = false;
 window.ShowingIndex        = false;
 window.FreezeRendering     = false;
+// window.VrvTitle            = true;
 
 
 
