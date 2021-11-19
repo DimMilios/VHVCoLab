@@ -182,7 +182,7 @@ window.CursorNote = undefined;
 // This is an ID string rather than an element.
 window.RestoreCursorNote = undefined;
 
-window.ERASED_DATA = "";
+// window.ERASED_DATA = "";
 
 // window.Actiontime = 0;
 

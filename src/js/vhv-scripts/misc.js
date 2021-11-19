@@ -1652,21 +1652,25 @@ export function increaseTab() {
 // clearContent -- Used by the alt-e option or the erase button
 // in the main toolbar.
 //
+let erasedData = '';
 
 export function clearContent() {
   let data = getTextFromEditorNoCsvProcessing();
   moveToTopOfNotation();
   if (data.match(/^\s*$/)) {
     // restore the text (which may have accidentally been erased)
-    setTextInEditor(window.ERASED_DATA);
-    displayFileTitle(window.ERASED_DATA);
+    // setTextInEditor(window.ERASED_DATA);
+    // displayFileTitle(window.ERASED_DATA);
+    setTextInEditor(erasedData);
+    displayFileTitle(erasedData);
     restoreWorkNavigator();
     // The left/right arrows are still active for navigating to
     // other works in the repertory.
   } else {
     // Erase the text, but store it in a buffer in case
     // the user wants to recall it if the editor is still empty.
-    window.ERASED_DATA = data;
+    // window.ERASED_DATA = data;
+    erasedData = data;
     let element;
     setTextInEditor('');
     let output = document.querySelector('#output');
