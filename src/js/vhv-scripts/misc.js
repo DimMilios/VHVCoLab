@@ -1448,8 +1448,10 @@ function initializeWildWebMidi() {
   $("#player").midiPlayer({
     color: null,
     // color: "#c00",
-    onUnpdate: window.midiUpdate,
-    onStop: window.midiStop,
+    // onUnpdate: window.midiUpdate,
+    // onStop: window.midiStop,
+    onUnpdate: midiUpdate,
+    onStop: midiStop,
     width: 250,
     locateFile: function () {
       return 'wildwebmidi.data';
@@ -1695,7 +1697,7 @@ export function clearContent() {
 //   playCurrentMidi();
 // })
 
-import { play_midi } from '../midifunctions.js';
+import { midiStop, midiUpdate, play_midi } from '../midifunctions.js';
 export function playCurrentMidi() {
   if (global_cursor.CursorNote && global_cursor.CursorNote.id) {
     let id = global_cursor.CursorNote.id;
@@ -1707,7 +1709,7 @@ export function playCurrentMidi() {
   }
 }
 
-window.playCurrentMidi = playCurrentMidi;
+// window.playCurrentMidi = playCurrentMidi;
 
 //////////////////////////////
 //

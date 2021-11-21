@@ -21,6 +21,8 @@ import { HnpMarkup } from './highlight.js';
 var PDFLISTINTERVAL = null;
 window.HIDEMENU = false;
 
+document.getElementById('play-button')?.addEventListener('click', () => playCurrentMidi());
+
 // var HIDEINITIALTOOLBAR = false;
 // var HIDEMENUANDTOOLBAR = false;
 // var TOOLBAR = null;  // used to select the toolbar from URL toolbar parameter.

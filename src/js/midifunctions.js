@@ -15,17 +15,17 @@ var DELAY = 600;
 
 import { getVrvWorker } from './humdrum-notation-plugin-worker.js';
 
-let vrvWorker = getVrvWorker();
-if (!vrvWorker) {
-	throw new Error('Verovio worker is undefined');
-}
-
 export function play_midi(starttime) {
 	starttime = starttime ? starttime : 0;
 	if (starttime == 0) {
 		DELAY = 600;
 	} else {
 		DELAY = 600;
+	}
+
+	let vrvWorker = getVrvWorker();
+	if (!vrvWorker) {
+		throw new Error('Verovio worker is undefined');
 	}
 
 	// window.vrvWorker.renderToMidi()
@@ -45,7 +45,7 @@ export function play_midi(starttime) {
 	.catch(err => console.log('Error when trying to play midi', err));
 }
 
-window.play_midi = play_midi;
+// window.play_midi = play_midi;
 
 
 //////////////////////////////
@@ -57,7 +57,11 @@ import { loadPage } from './vhv-scripts/misc.js';
 import { global_cursor, global_playerOptions } from './vhv-scripts/global-variables.js';
 
 var ids = [];
-var midiUpdate = function (time) {
+export const midiUpdate = function (time) {
+	let vrvWorker = getVrvWorker();
+	if (!vrvWorker) {
+		throw new Error('Verovio worker is undefined');
+	}
 
 	var vrvTime = Math.max(0, time - DELAY);
 	// window.vrvWorker.getElementsAtTime(vrvTime)
@@ -192,7 +196,7 @@ window.midiUpdate = midiUpdate;
 // midiStop -- Callback for WildWestMidi when stopping MIDI playback.
 //
 
-var midiStop = function () {
+export const midiStop = function () {
 	ids.forEach(function (noteid) {
 		// $("#" + noteid ).attr("fill", "#000");
 		// $("#" + noteid ).attr("stroke", "#000");

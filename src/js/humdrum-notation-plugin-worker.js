@@ -61,6 +61,10 @@
 // });
 
 /* global $ */
+import { midiStop, midiUpdate } from './midifunctions.js';
+import { global_interface } from './vhv-scripts/global-variables.js';
+import { monitorNotationUpdating, displayNotation, applyZoom } from './vhv-scripts/misc.js';
+import { getAceEditor } from './vhv-scripts/setup.js';
 
 let vrvWorker;
 
@@ -87,10 +91,6 @@ function callbackAfterInitialized() {
 	console.log("Initialized verovio worker");
 	initializeVerovioToolkit();
 }
-
-import { global_interface } from './vhv-scripts/global-variables.js';
-import { monitorNotationUpdating, displayNotation, applyZoom } from './vhv-scripts/misc.js';
-import { getAceEditor } from './vhv-scripts/setup.js';
 
 function initializeVerovioToolkit() {
   // console.log("Verovio toolkit being initialized.");
@@ -135,8 +135,10 @@ function initializeWildWebMidi() {
   $("#player").midiPlayer({
     color: null,
     // color: "#c00",
-    onUnpdate: window.midiUpdate,
-    onStop: window.midiStop,
+    // onUnpdate: window.midiUpdate,
+    // onStop: window.midiStop,
+    onUnpdate: midiUpdate,
+    onStop: midiStop,
     width: 250,
     // locateFile: function () {
     //   return 'wildwebmidi.data';
