@@ -12,6 +12,7 @@
 // Description:   Event listeners and related code for index.html.
 //
 
+import { FILEINFO, global_cursor, global_editorOptions, global_interface, global_playerOptions, global_verovioOptions } from './global-variables.js';
 import { getAceEditor, setupAceEditor, setupSplitter} from './setup.js'
 import { displayNotation, cleanFont, updateEditorMode, setTextInEditor } from './misc.js';
 import { observeSvgContent } from './utility-svg.js';
@@ -28,7 +29,7 @@ window.HIDEMENU = false;
 // 	LASTTOOLBAR = parseInt(localStorage.LASTTOOLBAR);
 // }
 if (localStorage.FONT) {
-window.FONT = cleanFont(localStorage.FONT);
+	global_verovioOptions.FONT = cleanFont(localStorage.FONT);
 
 }
 // var PQUERY = "";
@@ -62,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	loadEditorFontSizes();
 	var inputElement = document.querySelector("#input");
 	if (inputElement) {
-			inputElement.style.fontSize = window.INPUT_FONT_SIZE + "rem";
+			inputElement.style.fontSize = global_editorOptions.INPUT_FONT_SIZE + "rem";
 	}
 
 	// EditorMode = "humdrum";
@@ -158,48 +159,48 @@ function processNotationKeyCommand(event) {
 		return;
 	};
 
-	if (!window.CursorNote) {
+	if (!global_cursor.CursorNote) {
 		return;
 	}
-	if (!window.CursorNote.id) {
+	if (!global_cursor.CursorNote.id) {
 		return;
 	}
 
 	switch (event.code) {
 		case AKey:
-			processNotationKey("a",window.CursorNote);
+			processNotationKey("a",global_cursor.CursorNote);
 			break;
 
 		case BKey:
-			processNotationKey("b",window.CursorNote);
+			processNotationKey("b",global_cursor.CursorNote);
 			break;
 
 		case CKey:
-			processNotationKey("c",window.CursorNote);
+			processNotationKey("c",global_cursor.CursorNote);
 			break;
 
 		case DKey:
 			if (event.shiftKey) {
-				processNotationKey("D",window.CursorNote);
+				processNotationKey("D",global_cursor.CursorNote);
 			}
 			break;
 
 		// case EKey:
 
 		case FKey:
-			processNotationKey("f",window.CursorNote);
+			processNotationKey("f",global_cursor.CursorNote);
 			break;
 
 		// case GKey:
 		// case HKey:
 
 		case IKey:
-			processNotationKey("i",window.CursorNote);
+			processNotationKey("i",global_cursor.CursorNote);
 			break;
 
 		case JKey:
 			if (event.shiftKey) {
-				processNotationKey("J",window.CursorNote);
+				processNotationKey("J",global_cursor.CursorNote);
 			}
 			break;
 
@@ -207,149 +208,149 @@ function processNotationKeyCommand(event) {
 
 		case LKey:
 			if (event.shiftKey) {
-				processNotationKey("L",window.CursorNote);
+				processNotationKey("L",global_cursor.CursorNote);
 			}
 			break;
 
 		case MKey:
 			if (event.shiftKey) {
-				processNotationKey("M",window.CursorNote);
+				processNotationKey("M",global_cursor.CursorNote);
 			} else {
-				processNotationKey("m",window.CursorNote);
+				processNotationKey("m",global_cursor.CursorNote);
 			}
 			break;
 
 		case NKey:
-			processNotationKey("n",window.CursorNote);
+			processNotationKey("n",global_cursor.CursorNote);
 			break;
 
 		// case OKey:
 
 		case PKey:
 			if (event.shiftKey) {
-				processNotationKey("P",window.CursorNote);
+				processNotationKey("P",global_cursor.CursorNote);
 			} else {
-				processNotationKey("p",window.CursorNote);
+				processNotationKey("p",global_cursor.CursorNote);
 			}
 			break;
 
 		case QKey:
-			processNotationKey("q",window.CursorNote);
+			processNotationKey("q",global_cursor.CursorNote);
 			break;
 
 		// case RKey:
 
 		case SKey:
-			processNotationKey("s",window.CursorNote);
+			processNotationKey("s",global_cursor.CursorNote);
 			break;
 
 		case TKey:
 			if (event.shiftKey) {
-				processNotationKey("T",window.CursorNote);
+				processNotationKey("T",global_cursor.CursorNote);
 			} else {
-				processNotationKey("t",window.CursorNote);
+				processNotationKey("t",global_cursor.CursorNote);
 			}
 			break;
 
 		// case UKey:
 
 		case VKey:
-			if (window.CursorNote.id.match("note-")) {
-				processNotationKey("^",window.CursorNote);
+			if (global_cursor.CursorNote.id.match("note-")) {
+				processNotationKey("^",global_cursor.CursorNote);
 			}
 			break;
 
 		case WKey:
 			if (event.shiftKey) {
-				processNotationKey("W",window.CursorNote);
+				processNotationKey("W",global_cursor.CursorNote);
 			} else {
-				processNotationKey("w",window.CursorNote);
+				processNotationKey("w",global_cursor.CursorNote);
 			}
 			break;
 
 		case XKey:
-			processNotationKey("X",window.CursorNote);
+			processNotationKey("X",global_cursor.CursorNote);
 			break;
 
 		case YKey:
-			processNotationKey("y",window.CursorNote);
+			processNotationKey("y",global_cursor.CursorNote);
 			break;
 
 		// case ZKey:
 
 		case OneKey:
-			processNotationKey("1",window.CursorNote);
+			processNotationKey("1",global_cursor.CursorNote);
 			break;
 
 		case TwoKey:
 			if (event.shiftKey) {
-				processNotationKey("@",window.CursorNote);
+				processNotationKey("@",global_cursor.CursorNote);
 			} else {
-				processNotationKey("2",window.CursorNote);
+				processNotationKey("2",global_cursor.CursorNote);
 			}
 			break;
 
 		case ThreeKey:
 			if (event.shiftKey) {
-				processNotationKey("#",window.CursorNote);
+				processNotationKey("#",global_cursor.CursorNote);
 			} else {
-				processNotationKey("3",window.CursorNote);
+				processNotationKey("3",global_cursor.CursorNote);
 			}
 			break;
 
 		case FourKey:
-			processNotationKey("4",window.CursorNote);
+			processNotationKey("4",global_cursor.CursorNote);
 			break;
 
 		case FiveKey:
-			processNotationKey("5",window.CursorNote);
+			processNotationKey("5",global_cursor.CursorNote);
 			break;
 
 		case SixKey:
-			if (window.CursorNote.id.match("note-")) {
+			if (global_cursor.CursorNote.id.match("note-")) {
 				if (event.shiftKey) {
-					processNotationKey("^^",window.CursorNote);
+					processNotationKey("^^",global_cursor.CursorNote);
 				} else {
-					processNotationKey("6",window.CursorNote);
+					processNotationKey("6",global_cursor.CursorNote);
 				}
 			} else {
-				processNotationKey("6",window.CursorNote);
+				processNotationKey("6",global_cursor.CursorNote);
 			}
 			break;
 
 		case SevenKey:
-			processNotationKey("7",window.CursorNote);
+			processNotationKey("7",global_cursor.CursorNote);
 			break;
 
 		case EightKey:
-			processNotationKey("8",window.CursorNote);
+			processNotationKey("8",global_cursor.CursorNote);
 			break;
 
 		case NineKey:
-			processNotationKey("9",window.CursorNote);
+			processNotationKey("9",global_cursor.CursorNote);
 			break;
 
 		case MinusKey:
-			processNotationKey("-",window.CursorNote);
+			processNotationKey("-",global_cursor.CursorNote);
 			break;
 
 		case SingleQuoteKey:
-			processNotationKey("'",window.CursorNote);
+			processNotationKey("'",global_cursor.CursorNote);
 			break;
 
 		case SemiColonKey:
 			if (event.shiftKey) {
-				processNotationKey(":",window.CursorNote);
+				processNotationKey(":",global_cursor.CursorNote);
 			} else {
-				processNotationKey(";",window.CursorNote);
+				processNotationKey(";",global_cursor.CursorNote);
 			}
 			break;
 
 		case BackQuoteKey:
 			if (event.shiftKey) {
-				processNotationKey("~",window.CursorNote);
+				processNotationKey("~",global_cursor.CursorNote);
 			} else {
-				processNotationKey("`",window.CursorNote);
+				processNotationKey("`",global_cursor.CursorNote);
 			}
 			break;
 
@@ -357,20 +358,20 @@ function processNotationKeyCommand(event) {
 			if (event.shiftKey) {
 				event.preventDefault();
 				event.stopPropagation();
-				if (window.CursorNote.id.match("note-")) {
-					console.log('Shift + Up, Current note: ',window.CursorNote);
-					processNotationKey("transpose-up-step",window.CursorNote);
+				if (global_cursor.CursorNote.id.match("note-")) {
+					console.log('Shift + Up, Current note: ',global_cursor.CursorNote);
+					processNotationKey("transpose-up-step",global_cursor.CursorNote);
 				}
 			} else if (event.ctrlKey) {
 				event.preventDefault();
 				event.stopPropagation();
-				if (window.CursorNote.id.match("note-")) {
-					processNotationKey("transpose-up-octave",window.CursorNote);
+				if (global_cursor.CursorNote.id.match("note-")) {
+					processNotationKey("transpose-up-octave",global_cursor.CursorNote);
 				}
 			} else {
 				event.preventDefault();
 				event.stopPropagation();
-				goUpHarmonically(window.CursorNote);
+				goUpHarmonically(global_cursor.CursorNote);
 			}
 			break;
 
@@ -378,66 +379,66 @@ function processNotationKeyCommand(event) {
 			if (event.shiftKey) {
 				event.preventDefault();
 				event.stopPropagation();
-				if (window.CursorNote.id.match("note-")) {
-					processNotationKey("transpose-down-step",window.CursorNote);
+				if (global_cursor.CursorNote.id.match("note-")) {
+					processNotationKey("transpose-down-step",global_cursor.CursorNote);
 				}
 			} else if (event.ctrlKey) {
 				event.preventDefault();
 				event.stopPropagation();
-				if (window.CursorNote.id.match("note-")) {
-					processNotationKey("transpose-down-octave",window.CursorNote);
+				if (global_cursor.CursorNote.id.match("note-")) {
+					processNotationKey("transpose-down-octave",global_cursor.CursorNote);
 				}
 			} else {
 				event.preventDefault();
 				event.stopPropagation();
-				goDownHarmonically(window.CursorNote);
+				goDownHarmonically(global_cursor.CursorNote);
 			}
 			break;
 
 		case DeleteKey:
 		case BackKey:
-			processNotationKey("delete",window.CursorNote);
+			processNotationKey("delete",global_cursor.CursorNote);
 			event.stopPropagation();
 			break;
 
 		case LeftKey:
-			if (window.CursorNote.id.match("slur-")) {
+			if (global_cursor.CursorNote.id.match("slur-")) {
 				event.preventDefault();
 				event.stopPropagation();
 				if (event.shiftKey) {
-					processNotationKey("rightEndMoveBack",window.CursorNote);
+					processNotationKey("rightEndMoveBack",global_cursor.CursorNote);
 				} else {
-					processNotationKey("leftEndMoveBack",window.CursorNote);
+					processNotationKey("leftEndMoveBack",global_cursor.CursorNote);
 				}
 			} else {
 				// move one note to the left
 				event.preventDefault();
 				event.stopPropagation();
-				goToPreviousNoteOrRest(window.CursorNote.id);
+				goToPreviousNoteOrRest(global_cursor.CursorNote.id);
 			}
 			break;
 
 		case RightKey:
-			if (window.CursorNote.id.match("slur-")) {
+			if (global_cursor.CursorNote.id.match("slur-")) {
 				event.preventDefault();
 				event.stopPropagation();
 				if (event.shiftKey) {
-					processNotationKey("rightEndMoveForward",window.CursorNote);
+					processNotationKey("rightEndMoveForward",global_cursor.CursorNote);
 				} else {
-					processNotationKey("leftEndMoveForward",window.CursorNote);
+					processNotationKey("leftEndMoveForward",global_cursor.CursorNote);
 				}
 			} else {
 				// move one note to the right
 				event.preventDefault();
 				event.stopPropagation();
-				goToNextNoteOrRest(window.CursorNote.id);
+				goToNextNoteOrRest(global_cursor.CursorNote.id);
 			}
 			break;
 
 		case EscKey:
 			event.preventDefault();
 			event.stopPropagation();
-			processNotationKey("esc",window.CursorNote);
+			processNotationKey("esc",global_cursor.CursorNote);
 			break;
 
 	}
@@ -515,8 +516,8 @@ export function processInterfaceKeyCommand(event) {
 		if (event.code == ZeroKey) {
 			getMenu().resetTextFontSize();
 			// window.MENU.resetTextFontSize();
-			window.SCALE = 40;
-			localStorage.SCALE = window.SCALE;
+			global_verovioOptions.SCALE = 40;
+			localStorage.SCALE = global_verovioOptions.SCALE;
 			displayNotation();
 			// not preventingDefault so that web browser can reset size as well.
 		}
@@ -600,7 +601,7 @@ export function processInterfaceKeyCommand(event) {
 
 		case HKey:          // show Humdrum data in text editor
 			if (event.altKey) {
-				if (!window.ShowingIndex) {
+				if (!global_interface.ShowingIndex) {
 					showBufferedHumdrumData();
 					event.preventDefault();
 				}
@@ -662,9 +663,9 @@ export function processInterfaceKeyCommand(event) {
 
 		case OKey:          // toggle display of *oclef data
 			if (event.altKey) {
-				window.OriginalClef = !window.OriginalClef;
-				console.log("Original clef changed to:", window.OriginalClef);
-				if (!window.ShowingIndex) {
+				global_interface.OriginalClef = !global_interface.OriginalClef;
+				console.log("Original clef changed to:", global_interface.OriginalClef);
+				if (!global_interface.ShowingIndex) {
 					displayNotation();
 				}
 				event.preventDefault();
@@ -742,12 +743,12 @@ export function processInterfaceKeyCommand(event) {
 	 	case WKey:          // adjust notation width parameter
 			if (event.altKey) {
 				if (event.shiftKey) {
-					window.SPACINGADJUSTMENT -= 0.05;
+					global_editorOptions.SPACINGADJUSTMENT -= 0.05;
 				} else {
-					window.SPACINGADJUSTMENT += 0.05;
+					global_editorOptions.SPACINGADJUSTMENT += 0.05;
 				}
-				if (window.SPACINGADJUSTMENT <= 0.0) {
-					window.SPACINGADJUSTMENT = 0.0;
+				if (global_editorOptions.SPACINGADJUSTMENT <= 0.0) {
+					global_editorOptions.SPACINGADJUSTMENT = 0.0;
 				}
 				event.preventDefault();
 				displayNotation();
@@ -759,7 +760,7 @@ export function processInterfaceKeyCommand(event) {
 
 		case YKey:          // show/hide text editor
 			if (event.altKey) {
-				if (!window.ShowingIndex) {
+				if (!global_interface.ShowingIndex) {
 					toggleTextVisibility();
 				}
 				event.preventDefault();
@@ -785,19 +786,19 @@ export function processInterfaceKeyCommand(event) {
 		case NineKey:  window.InterfaceSingleNumber = 9; break;
 
 		case SpaceKey:          // start/pause MIDI playback
-			if (!window.PLAY) {
-				if (window.PAUSE) {
+			if (!global_playerOptions.PLAY) {
+				if (global_playerOptions.PAUSE) {
 					window.play();
-					window.PLAY = true;
-					window.PAUSE = false;
+					global_playerOptions.PLAY = true;
+					global_playerOptions.PAUSE = false;
 				} else {
 					playCurrentMidi();
-					window.PLAY = true;
-					window.PAUSE = false;
+					global_playerOptions.PLAY = true;
+					global_playerOptions.PAUSE = false;
 				}
 			} else {
-				window.PLAY = false;
-				window.PAUSE = true;
+				global_playerOptions.PLAY = false;
+				global_playerOptions.PAUSE = true;
 				window.pause();
 			}
 			event.preventDefault();
@@ -825,8 +826,8 @@ export function processInterfaceKeyCommand(event) {
 
 		case UpKey:          // return to repertory index
 			if (event.shiftKey) {
-				if (window.FILEINFO["has-index"] == "true") {
-					displayIndex(window.FILEINFO["location"]);
+				if (FILEINFO["has-index"] == "true") {
+					displayIndex(FILEINFO["location"]);
 				}
 			}
 			event.preventDefault();
@@ -835,7 +836,7 @@ export function processInterfaceKeyCommand(event) {
 		case PgUpKey:          // shift: go to previous repertory work/movement
 		case LeftKey:          // go to previous page
 			if (event.shiftKey) {
-				displayWork(window.FILEINFO["previous-work"]);
+				displayWork(FILEINFO["previous-work"]);
 			} else {
 				gotoPreviousPage();
 			}
@@ -845,7 +846,7 @@ export function processInterfaceKeyCommand(event) {
 		case PgDnKey:          // shift: go to next repertory work/movement
 		case RightKey:         // go to next page
 			if (event.shiftKey) {
-				displayWork(window.FILEINFO["next-work"]);
+				displayWork(FILEINFO["next-work"]);
 			} else {
 				gotoNextPage();
 			}
@@ -889,7 +890,7 @@ window.addEventListener("beforeunload", function (event) {
 	var encodedcontents = encodeURIComponent(getTextFromEditorRaw());
 	localStorage.setItem("AUTOSAVE", encodedcontents);
 	localStorage.setItem("AUTOSAVE_DATE", (new Date).getTime());
-	localStorage.setItem("FONT",window.FONT);
+	localStorage.setItem("FONT",global_verovioOptions.FONT);
 });
 
 
@@ -919,8 +920,8 @@ setInterval(function() { updateEditorMode(); }, 1000);
 
 export function verovioCallback(data) {
 	console.log("SVG updated");
-	if (window.GOTOTOPOFNOTATION) {
-		window.GOTOTOPOFNOTATION = false;
+	if (global_verovioOptions.GOTOTOPOFNOTATION) {
+		global_verovioOptions.GOTOTOPOFNOTATION = false;
 		let scroller = document.querySelector("#output");
 		if (scroller) {
 			scroller.scrollTo(0, 0);

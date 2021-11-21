@@ -85,7 +85,7 @@ export function processNotationKey(key, element) {
 	if (key === "esc") {
 		// window.MENU.hideContextualMenus();
 		getMenu().hideContextualMenus();
-		window.HIGHLIGHTQUERY = "";
+		global_cursor.HIGHLIGHTQUERY = "";
 		if (!element) {
 			return;
 		}
@@ -99,7 +99,7 @@ export function processNotationKey(key, element) {
 			outclass += " " + classlist[i];
 		}
 		element.setAttribute("class", outclass);
-		window.CursorNote = "";
+		global_cursor.CursorNote = "";
 		return;
 	}
 
@@ -227,8 +227,8 @@ function setBeamAboveMarker(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -262,8 +262,8 @@ function setBeamBelowMarker(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -296,8 +296,8 @@ function deleteBeamDirectionMarker(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -431,8 +431,8 @@ function setAboveMarker(id, line, field, number, category) {
 	}
 
 	if (editQ) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(lastline, field, ptoken, id);
 	}
 }
@@ -488,8 +488,8 @@ function setBelowMarker(id, line, field, number, category) {
 	}
 
 	if (editQ) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(lastline, field, ptoken, id);
 	}
 }
@@ -503,6 +503,7 @@ function setBelowMarker(id, line, field, number, category) {
 import { displayNotation } from './misc.js'
 import { highlightIdInEditor, turnOffAllHighlights } from './utility-svg.js'
 import { getAceEditor } from './setup.js';
+import { global_cursor, global_editorOptions, global_interface } from './global-variables.js';
 
 const editor = getAceEditor();
 if (!editor) {
@@ -538,9 +539,9 @@ function deleteDirectionMarker(id, line, field, number, category) {
 
 		editor.session.remove(range);
 
-		window.RestoreCursorNote = id.replace("L" + (line), "L" + (line - 1));
+		global_cursor.RestoreCursorNote = id.replace("L" + (line), "L" + (line - 1));
 		displayNotation();
-		highlightIdInEditor(window.RestoreCursorNote);
+		highlightIdInEditor(global_cursor.RestoreCursorNote);
 	}
 }
 
@@ -553,9 +554,9 @@ function deleteDirectionMarker(id, line, field, number, category) {
 //
 
 function createEmptyLine(line) {
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 
 	var text =editor.session.getLine(line - 1);
@@ -579,7 +580,7 @@ function createEmptyLine(line) {
 	editor.session.replace(range, output);
 
 	// don't redraw the data
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 }
 
 
@@ -632,8 +633,8 @@ function setSlurAboveMarker(id, line, field, number) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-		window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+		global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 
@@ -685,8 +686,8 @@ function setSlurBelowMarker(id, line, field, number) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -734,8 +735,8 @@ function deleteSlurDirectionMarker(id, line, field, number) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -788,13 +789,13 @@ function leftEndMoveBack(id, line, field, number, line2, field2, number2) {
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var slurstart = deleteSlurStart(id, line, field, number);
 	if (slurstart !== "") {
 		addSlurStart(id, i+1, field, slurstart);
 	}
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
 	window.InterfaceSingleNumber = 0;
@@ -809,8 +810,8 @@ function leftEndMoveBack(id, line, field, number, line2, field2, number2) {
 
 function addSlur(id, line, field) {
 	var token = getEditorContents(line, field);
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	addSlurStart(id, line, field, '(');
 
 	var i = parseInt(line); // -1 for 0-index and +1 for line after
@@ -857,8 +858,8 @@ function addSlur(id, line, field) {
 	// FIX N number here later:
 	var ending = "-L" + (i+1) + "F" + field + "N" + 1;
 	newid += ending;
-	window.FreezeRendering = freezeBackup;
-	if (!window.FreezeRendering) {
+	global_interface.FreezeRendering = freezeBackup;
+	if (!global_interface.FreezeRendering) {
 		displayNotation(null, null, newid);
 	}
 	window.InterfaceSingleNumber = 0;
@@ -874,7 +875,7 @@ function addSlur(id, line, field) {
 				classname += " highlight";
 				element.setAttribute("class", classname);
 			}
-			window.CursorNote = element;
+			global_cursor.CursorNote = element;
 		}
 	}, 300);
 
@@ -917,8 +918,8 @@ function addSlurStart(id, line, field, slurstart) {
 	// console.log("OLDTOKEN2", token, "NEWTOKEN2", newtoken);
 	// console.log("OLDID", id, "NEWID", newid);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 		setEditorContents(line, field, newtoken, newid);
 	}
 }
@@ -954,8 +955,8 @@ function addSlurEnd(id, line, field, slurend) {
 	}
 
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -993,8 +994,8 @@ function deleteSlurStart(id, line, field, number) {
 
 	// console.log("OLDTOKEN1", token, "NEWTOKEN1", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 
@@ -1027,8 +1028,8 @@ function deleteSlurEnd(id, line, field, number) {
 
 	// console.log("OLDTOKEN1", token, "NEWTOKEN1", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 
@@ -1043,13 +1044,13 @@ function deleteSlurEnd(id, line, field, number) {
 
 function deleteSlur(id, line, field, number, line2, field2, number2) {
 	// console.log("DELETING SLUR");
-	var freezeBackup = window.FreezeRendering;
+	var freezeBackup = global_interface.FreezeRendering;
 	deleteSlurStart(id, line, field, number);
 	deleteSlurEnd(id, line2, field2, number2);
-	window.FreezeRendering = freezeBackup;
-	window.RestoreCursorNote = null;
-window.HIGHLIGHTQUERY = null;
-	if (!window.FreezeRendering) {
+	global_interface.FreezeRendering = freezeBackup;
+	global_cursor.RestoreCursorNote = null;
+global_cursor.HIGHLIGHTQUERY = null;
+	if (!global_interface.FreezeRendering) {
 		displayNotation();
 	}
 }
@@ -1107,13 +1108,13 @@ function leftEndMoveForward(id, line, field, number, line2, field2, number2) {
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var slurstart = deleteSlurStart(id, line, field, number);
 	if (slurstart !== "") {
 		addSlurStart(id, i+1, field, slurstart);
 	}
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
 	window.InterfaceSingleNumber = 0;
@@ -1171,8 +1172,8 @@ function rightEndMoveForward(id, line, field, number, line2, field2, number2) {
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var slurend = deleteSlurEnd(id, line2, field2, number2);
 	if (slurend !== "") {
 		addSlurEnd(id, i+1, field, slurend);
@@ -1180,9 +1181,9 @@ function rightEndMoveForward(id, line, field, number, line2, field2, number2) {
 	// need to remove "N" if "N1" (in verovio)
 	var newend = "L" + (i+1) + "F" + field2 + "N" + number2;
 	var newid = id.replace(/-[^-]+$/, "-" + newend);
-	window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
-	window.FreezeRendering = freezeBackup;
+	global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
 	window.InterfaceSingleNumber = 0;
@@ -1238,8 +1239,8 @@ function rightEndMoveBack(id, line, field, number, line2, field2, number2) {
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var slurend = deleteSlurEnd(id, line2, field2, number2);
 	if (slurend !== "") {
 		addSlurEnd(id, i+1, field, slurend);
@@ -1247,9 +1248,9 @@ function rightEndMoveBack(id, line, field, number, line2, field2, number2) {
 	// need to remove "N" if "N1" (in verovio)
 	var newend = "L" + (i+1) + "F" + field2 + "N" + number2;
 	var newid = id.replace(/-[^-]+$/, "-" + newend);
-	window.RestoreCursorNote = newid;
-window.HIGHLIGHTQUERY = newid;
-	window.FreezeRendering = freezeBackup;
+	global_cursor.RestoreCursorNote = newid;
+global_cursor.HIGHLIGHTQUERY = newid;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
 	window.InterfaceSingleNumber = 0;
@@ -1310,8 +1311,8 @@ function setTieAboveMarker(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1366,8 +1367,8 @@ function setTieBelowMarker(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1421,8 +1422,8 @@ function deleteTieDirectionMarker(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1467,8 +1468,8 @@ function setStemAboveMarker(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1507,8 +1508,8 @@ function setStemBelowMarker(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1536,8 +1537,8 @@ function deleteStemMarker(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1603,8 +1604,8 @@ function transposeNote(id, line, field, subfield, amount)  {
 
 	console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 
 		// let shouldUpdate = window.confirm('Include value?');
@@ -1664,8 +1665,8 @@ function transposeNote(id, line, field, subfield, amount)  {
 
 // 	console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 // 	if (newtoken !== token) {
-// 		window.RestoreCursorNote = id;
-// 	window.HIGHLIGHTQUERY = id;
+// 		global_cursor.RestoreCursorNote = id;
+// 	global_cursor.HIGHLIGHTQUERY = id;
 // 		setEditorContents(line, field, newtoken, id);
 // 	}
 // }
@@ -1725,8 +1726,8 @@ function toggleEditorialAccidental(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1788,8 +1789,8 @@ function toggleSharp(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1849,8 +1850,8 @@ function toggleFlat(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1897,8 +1898,8 @@ function toggleNatural(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -1956,8 +1957,8 @@ function toggleExplicitAccidental(id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 
@@ -1974,8 +1975,8 @@ function toggleStaccato(id, line, field) {
 	var counter = 0;
 	var maxline =editor.session.getLength();
 	var i = line;
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
@@ -2001,21 +2002,21 @@ function toggleStaccato(id, line, field) {
 			token = token.replace(/'+/, "");
 			token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/g,
 					function(str,p1) { return p1 ? p1 + "'" : str});
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
 		} else {
 			// remove staccato
 			token = token.replace(/'[<>]*/g, "");
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
 		}
 	}
 	window.InterfaceSingleNumber = 0;
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
 
@@ -2030,8 +2031,8 @@ function toggleAccent(id, line, field) {
 	var counter = 0;
 	var maxline =editor.session.getLength();
 	var i = line;
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
@@ -2058,14 +2059,14 @@ function toggleAccent(id, line, field) {
 			token = token.replace(/\^+/, "");
 			token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/,
 					function(str,p1) { return p1 ? p1 + "^" : str});
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
 		} else {
 			// remove accent
 			token = token.replace(/\^+[<>]*/g, "");
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
@@ -2073,7 +2074,7 @@ function toggleAccent(id, line, field) {
 
 	}
 	window.InterfaceSingleNumber = 0;
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
 
@@ -2088,8 +2089,8 @@ function toggleMarcato(id, line, field) {
 	var counter = 0;
 	var maxline =editor.session.getLength();
 	var i = line;
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
@@ -2116,14 +2117,14 @@ function toggleMarcato(id, line, field) {
 			token = token.replace(/\^+/, "");
 			token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/,
 					function(str,p1) { return p1 ? p1 + "^^" : str});
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
 		} else {
 			// remove marcato
 			token = token.replace(/\^+[<>]*/g, "");
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
@@ -2131,7 +2132,7 @@ function toggleMarcato(id, line, field) {
 
 	}
 	window.InterfaceSingleNumber = 0;
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
 
@@ -2146,8 +2147,8 @@ function toggleTenuto(id, line, field) {
 	var counter = 0;
 	var maxline =editor.session.getLength();
 	var i = line;
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
@@ -2174,14 +2175,14 @@ function toggleTenuto(id, line, field) {
 			token = token.replace(/~+/g, "");
 			token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/,
 					function(str,p1) { return p1 ? p1 + "~" : str});
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
 		} else {
 			// remove marcato
 			token = token.replace(/~[<>]*/g, "");
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			setEditorContents(line, field, token, id);
 			counter++;
@@ -2189,7 +2190,7 @@ function toggleTenuto(id, line, field) {
 
 	}
 	window.InterfaceSingleNumber = 0;
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
 
@@ -2204,8 +2205,8 @@ function toggleStaccatissimo(id, line, field) {
 	var counter = 0;
 	var maxline =editor.session.getLength();
 	var i = line;
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var target = window.InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
@@ -2232,14 +2233,14 @@ function toggleStaccatissimo(id, line, field) {
 			token = token.replace(/`/g, "");
 			token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/,
 					function(str,p1) { return p1 ? p1 + "`" : str});
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
 		} else {
 			// remove marcato
 			token = token.replace(/`[<>]*/g, "");
-			window.RestoreCursorNote = id;
+			global_cursor.RestoreCursorNote = id;
 			setEditorContents(line, field, token, id);
 			counter++;
 			line++;
@@ -2247,7 +2248,7 @@ function toggleStaccatissimo(id, line, field) {
 
 	}
 	window.InterfaceSingleNumber = 0;
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
 
@@ -2272,8 +2273,8 @@ function toggleGraceNoteType(id, line, field) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -2301,17 +2302,17 @@ function toggleMinorTrill(id, line, field) {
 		token = token.replace(/T/gi, "");
 		token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/,
 				function(str,p1) { return p1 ? p1 + "t" : str});
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else if (token.match(/T/)) {
 		// change to major-second trill
 		token = token.replace(/T/g, "t");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else {
 		// remove trill
 		token = token.replace(/T[<>]*/gi, "");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	}
 }
@@ -2373,8 +2374,8 @@ function toggleMordent(mtype, id, line, field, subfield) {
 
 	// console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -2410,16 +2411,16 @@ function toggleLigatureStart(id, line, field) {
 			console.log("DELETING BLANK LINE");
 		editor.session.replace(new Range(line-2, 0, line-1, 0), "");
 			newid = id.replace(/L\d+/, "L" + (line-1));
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		} else {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
 		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *lig on a line after the selected line at the given field.
@@ -2440,8 +2441,8 @@ function toggleLigatureStart(id, line, field) {
 		newline += "\n";
 	editor.session.insert({row:line-1, column:0}, newline);
 		newid = id.replace(/L\d+/, "L" + (line+1));
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 	}
 }
 
@@ -2476,16 +2477,16 @@ function toggleColorationStart(id, line, field) {
 			console.log("DELETING BLANK LINE");
 		editor.session.replace(new Range(line-2, 0, line-1, 0), "");
 			newid = id.replace(/L\d+/, "L" + (line-1));
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		} else {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
 		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *col on a line after the selected line at the given field.
@@ -2506,8 +2507,8 @@ function toggleColorationStart(id, line, field) {
 		newline += "\n";
 	editor.session.insert({row:line-1, column:0}, newline);
 		newid = id.replace(/L\d+/, "L" + (line+1));
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 	}
 }
 
@@ -2550,8 +2551,8 @@ function togglePedalStart(id, line, field) {
 		console.log("DELETING PEDAL START");
 	editor.session.replace(new Range(line-2, 0, line-1, 0), "");
 		newid = id.replace(/L\d+/, "L" + (line-1));
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 		return;
 	}
 
@@ -2561,8 +2562,8 @@ function togglePedalStart(id, line, field) {
 	newline = newline.replace(/^(\t*)\*(\t*)/, "$1*ped$2");
 editor.session.insert({row:line-1, column:0}, newline);
 	newid = id.replace(/L\d+/, "L" + (line+1));
-	window.RestoreCursorNote = newid;
-window.HIGHLIGHTQUERY = newid;
+	global_cursor.RestoreCursorNote = newid;
+global_cursor.HIGHLIGHTQUERY = newid;
 }
 
 
@@ -2595,16 +2596,16 @@ function toggleColorationEnd(id, line, field) {
 			console.log("DELETING BLANK LINE");
 		editor.session.replace(new Range(line, 0, line+1, 0), "");
 			var newid = id;
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		} else {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
 		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *Xcol on a line after the selected line at the given field.
@@ -2625,8 +2626,8 @@ function toggleColorationEnd(id, line, field) {
 		newline += "\n";
 	editor.session.replace(new Range(line, 0, line, 0), newline);
 		var newid = id;
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 	}
 }
 
@@ -2661,16 +2662,16 @@ function toggleLigatureEnd(id, line, field) {
 			console.log("DELETING BLANK LINE");
 		editor.session.replace(new Range(line, 0, line+1, 0), "");
 			var newid = id;
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		} else {
 			// update line
 			console.log("UPDATING LINE:", newline);
 			newline += "\n";
 		editor.session.replace(new Range(line, 0, line+1, 0), newline);
 			var newid = id;
-			window.RestoreCursorNote = newid;
-		window.HIGHLIGHTQUERY = newid;
+			global_cursor.RestoreCursorNote = newid;
+		global_cursor.HIGHLIGHTQUERY = newid;
 		}
 	} else {
 		// Add an *Xlig on a line after the selected line at the given field.
@@ -2691,8 +2692,8 @@ function toggleLigatureEnd(id, line, field) {
 		newline += "\n";
 	editor.session.replace(new Range(line, 0, line, 0), newline);
 		var newid = id;
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 	}
 }
 
@@ -2735,22 +2736,22 @@ function togglePedalEnd(id, line, field) {
 		// console.log("DELETING PEDAL END");
 	editor.session.replace(new Range(line, 0, line+1, 0), "");
 		newid = id;
-		window.RestoreCursorNote = newid;
-	window.HIGHLIGHTQUERY = newid;
+		global_cursor.RestoreCursorNote = newid;
+	global_cursor.HIGHLIGHTQUERY = newid;
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	global_interface.FreezeRendering = true;
 	var newline = createNullLine("*", text);
 	newline = newline.replace(/^(\t*)\*(\t*)/, "$1*Xped$2");
 editor.session.replace(new Range(line, 0, line, 0), newline);
 	newid = id;
   	console.log("OLDID", id, "NEWID", newid);
-	window.RestoreCursorNote = newid;
-window.HIGHLIGHTQUERY = newid;
+	global_cursor.RestoreCursorNote = newid;
+global_cursor.HIGHLIGHTQUERY = newid;
 
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
 }
@@ -2777,17 +2778,17 @@ function toggleMajorTrill(id, line, field) {
 		token = token.replace(/T/gi, "");
 		token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/,
 				function(str,p1) { return p1 ? p1 + "T" : str});
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else if (token.match(/t/)) {
 		// switch to major second trill
 		token = token.replace(/t/g, "T");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else {
 		// remove trill
 		token = token.replace(/T[<>]*/gi, "");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	}
 }
@@ -2814,12 +2815,12 @@ function toggleArpeggio(id, line, field) {
 		token = token.replace(/:/gi, "");
 		token = token.replace(/([a-gA-G]+[-#nXxYy<>]*)/g,
 				function(str,p1) { return p1 ? p1 + ":" : str});
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else {
 		// remove arpeggio
 		token = token.replace(/:/gi, "");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	}
 }
@@ -2843,12 +2844,12 @@ function toggleFermata(id, line, field) {
 		token = token.replace(/;/gi, "");
 		token = token.replace(/([ra-gA-G]+[-#nXxYy<>]*)/,
 				function(str,p1) { return p1 ? p1 + ";" : str});
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else {
 		// remove marcato
 		token = token.replace(/;[<>]*/gi, "");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	}
 }
@@ -2871,12 +2872,12 @@ function toggleVisibility(id, line, field) {
 	if (token.match(/yy/)) {
 		// token is invisible, so make it visible again.
 		token = token.replace(/yy/, "");
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	} else {
 		// make token invisible (deal with chords later)
 		token = token + "yy";
-		window.RestoreCursorNote = id;
+		global_cursor.RestoreCursorNote = id;
 		setEditorContents(line, field, token, id);
 	}
 }
@@ -2889,9 +2890,9 @@ function toggleVisibility(id, line, field) {
 //
 
 function setEditorContents(line, field, token, id, dontredraw) {
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 
 	console.log('setEditorContents args:', {line, field, token, id, dontredraw})
@@ -2935,13 +2936,13 @@ function setEditorContents(line, field, token, id, dontredraw) {
 		column += components[i].length;
 		column += tabs[i].length;
 	}
-	window.EDITINGID = id;
+	global_editorOptions.EDITINGID = id;
 
 	editor.session.replace(range, newlinecontent);
 	editor.gotoLine(line, column+1);
 
-	window.RestoreCursorNote = id;
-	window.FreezeRendering = freezeBackup;
+	global_cursor.RestoreCursorNote = id;
+	global_interface.FreezeRendering = freezeBackup;
 	if (!dontredraw) {
 		displayNotation();
 	}
@@ -3031,8 +3032,8 @@ function toggleMarkedNote(id, line, field, subfield) {
 	}
 
 	if (newtoken !== token) {
-		window.RestoreCursorNote = id;
-	window.HIGHLIGHTQUERY = id;
+		global_cursor.RestoreCursorNote = id;
+	global_cursor.HIGHLIGHTQUERY = id;
 		setEditorContents(line, field, newtoken, id);
 	}
 }
@@ -3298,9 +3299,9 @@ function startNewBeam(element, line, field) {
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 
 	if (targeti == 1) {
@@ -3322,15 +3323,15 @@ function startNewBeam(element, line, field) {
 		removeBeamInfo(children[targeti]);
 	}
 
-	window.EDITINGID = element.id;
-	window.RestoreCursorNote = element.id;
+	global_editorOptions.EDITINGID = element.id;
+	global_cursor.RestoreCursorNote = element.id;
 
-	window.FreezeRendering = freezeBackup;
-	if (!window.FreezeRendering) {
+	global_interface.FreezeRendering = freezeBackup;
+	if (!global_interface.FreezeRendering) {
 		displayNotation();
 	}
 	turnOffAllHighlights();
-	highlightIdInEditor(window.EDITINGID);
+	highlightIdInEditor(global_editorOptions.EDITINGID);
 }
 
 
@@ -3374,9 +3375,9 @@ function endNewBeam(element, line, field) {
 		return;
 	}
 
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 
 	if (targeti == 0) {
@@ -3391,15 +3392,15 @@ function endNewBeam(element, line, field) {
 		addBeamEnd(children[targeti]);
 		addBeamStart(children[targeti+1]);
 	}
-	window.EDITINGID = element.id;
-	window.RestoreCursorNote = element.id;
+	global_editorOptions.EDITINGID = element.id;
+	global_cursor.RestoreCursorNote = element.id;
 
-	window.FreezeRendering = freezeBackup;
-	if (!window.FreezeRendering) {
+	global_interface.FreezeRendering = freezeBackup;
+	if (!global_interface.FreezeRendering) {
 		displayNotation();
 	}
 	turnOffAllHighlights();
-	highlightIdInEditor(window.EDITINGID);
+	highlightIdInEditor(global_editorOptions.EDITINGID);
 }
 
 

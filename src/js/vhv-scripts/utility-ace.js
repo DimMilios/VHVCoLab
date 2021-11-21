@@ -1,4 +1,4 @@
-import { editorMode } from './global-variables.js';
+import { editorMode, global_cursor, global_editorOptions } from './global-variables.js';
 import { getFieldAndSubtoken } from './utility-humdrum.js';
 import { getAceEditor } from './setup.js';
 
@@ -154,7 +154,7 @@ import { markItem } from './utility-svg.js';
 function xmlDataNoteIntoView(event) {
 	var location = editor.selection.getCursor();
 	var line = location.row;
-	if (window.EditorLine == line) {
+	if (global_editorOptions.EditorLine == line) {
 		// already highlighted (or close enough)
 		return;
 	}
@@ -193,8 +193,8 @@ export function humdrumDataNoteIntoView(row, column) {
 	var fys = getFieldAndSubtoken(text, column);
 	var field = fys.field;
 	var subspine = fys.subspine;
-	var query = window.HIGHLIGHTQUERY;
-	window.HIGHLIGHTQUERY = "";
+	var query = global_cursor.HIGHLIGHTQUERY;
+	global_cursor.HIGHLIGHTQUERY = "";
 	// the following code causes problems with note highlighting
 	// after another note was edited.
 	//	if (!query) {

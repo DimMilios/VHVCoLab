@@ -491,8 +491,8 @@ function downloadKernScoresFile(file, measures, page) {
 	}
 
 	if (filename) {
-		window.SAVEFILENAME = filename;
-		console.log("window.SAVEFILENAME - ", window.SAVEFILENAME);
+		global_editorOptions.SAVEFILENAME = filename;
+		console.log("global_editorOptions.SAVEFILENAME - ", global_editorOptions.SAVEFILENAME);
 	}
 
 	if (bitbucket && url.match(/,/)) {
@@ -591,12 +591,12 @@ export function loadIndexFile(location) {
 //
 
 function displayIndexFinally(index, location) {
-	window.ShowingIndex = true;
+	global_interface.ShowingIndex = true;
 
 	window.IndexSupressOfInput = true;
-	if (window.InputVisible == true) {
-		window.UndoHide = true;
-		window.ApplyZoom = true;
+	if (global_interface.InputVisible == true) {
+		global_interface.UndoHide = true;
+		global_interface.ApplyZoom = true;
 		// hideInputArea(true);
 	}
 
@@ -737,12 +737,12 @@ function displayHmdIndexFinally(hmdindex, source) {
 		var baseurl = hmdindex.parameters.hmdindexurl.replace(/\/index.hmd$/, "");
 		hmdindex.parameters.baseurl = baseurl;
 	}
-	window.ShowingIndex = true;
+	global_interface.ShowingIndex = true;
 
 	window.IndexSupressOfInput = true;
-	if (window.InputVisible == true) {
-		window.UndoHide = true;
-		window.ApplyZoom = true;
+	if (global_interface.InputVisible == true) {
+		global_interface.UndoHide = true;
+		global_interface.ApplyZoom = true;
 		// hideInputArea(true);
 	}
 
@@ -854,11 +854,13 @@ function commaDuplicate(value) {
 // processInfo --
 //
 import { Base64 } from './utility.js';
+import { global_editorOptions, global_interface, setFileInfo } from "./global-variables.js";
 
 function processInfo(info, obj, nextwork, prevwork) {
 	var score;
 	if (info) {
-		window.FILEINFO = info;
+		// window.FILEINFO = info;
+		setFileInfo(info);
 		// score = atob(info.content);
 		score = Base64.decode(info.content);
 		// console.log("Score unpacked");
@@ -869,7 +871,7 @@ function processInfo(info, obj, nextwork, prevwork) {
 
 	var matches;
 	if (obj && obj.file && (matches = obj.file.match(/([^\/]+)$/))) {
-		window.SAVEFILENAME = matches[1];
+		global_editorOptions.SAVEFILENAME = matches[1];
 	}
 
 	// var inputarea = document.querySelector("#input");

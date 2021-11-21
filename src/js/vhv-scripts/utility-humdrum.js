@@ -5,6 +5,7 @@
 // getReferenceRecords --
 //
 
+import { FILEINFO, global_interface } from "./global-variables";
 import { getAceEditor } from "./setup";
 
 export function getReferenceRecords(contents) {
@@ -30,7 +31,7 @@ export function getReferenceRecords(contents) {
 	}
 
 	if ((!output["title"]) || output["title"].match(/^\s*$/)) {
-		output["title"] = window.FILEINFO["title-expansion"];
+		output["title"] = FILEINFO["title-expansion"];
 	}
 
 	var counter = 0;
@@ -329,16 +330,16 @@ export function insertMarkedNoteRdf() {
 	}
 
 	// append markers to end of file.
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 	editor.session.insert({
 			row: editor.session.getLength(),
 			column: 0
 		},
 		"\n" + text);
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 
 	return editchar;
 }
@@ -414,16 +415,16 @@ export function insertDirectionRdfs() {
 	}
 
 	// append markers to end of file.
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 	editor.session.insert({
 			row: editor.session.getLength(),
 			column: 0
 		},
 		"\n" + text);
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 
 	return [abovechar, belowchar];
 }
@@ -485,16 +486,16 @@ export function insertEditorialAccidentalRdf() {
 	}
 
 	// append markers to end of file.
-	var freezeBackup = window.FreezeRendering;
-	if (window.FreezeRendering == false) {
-		window.FreezeRendering = true;
+	var freezeBackup = global_interface.FreezeRendering;
+	if (global_interface.FreezeRendering == false) {
+		global_interface.FreezeRendering = true;
 	}
 	editor.session.insert({
 			row: editor.session.getLength(),
 			column: 0
 		},
 		"\n" + text);
-	window.FreezeRendering = freezeBackup;
+	global_interface.FreezeRendering = freezeBackup;
 
 	return editchar;
 }

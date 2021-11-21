@@ -30,6 +30,7 @@ import { trimTabsInEditor } from './vhv-scripts/utility.js';
 
 import { convertToMusicXmlAndSave } from './vhv-scripts/convertToMusicXmlAndSave.js';
 import { processNotationKey } from './vhv-scripts/editor.js';
+import { global_cursor, global_editorOptions, global_verovioOptions } from './vhv-scripts/global-variables.js';
 
 class MenuInterface {
   constructor() {
@@ -205,75 +206,75 @@ class MenuInterface {
   }
 
   decreaseStaffSpacing() {
-    window.SPACING_STAFF -= 1;
-    if (window.SPACING_STAFF < 0) {
-      window.SPACING_STAFF = 0;
+    global_verovioOptions.SPACING_STAFF -= 1;
+    if (global_verovioOptions.SPACING_STAFF < 0) {
+      global_verovioOptions.SPACING_STAFF = 0;
     }
     displayNotation();
   }
 
   increaseStaffSpacing() {
-    window.SPACING_STAFF += 1;
-    if (window.SPACING_STAFF > 24) {
-      window.SPACING_STAFF = 24;
+    global_verovioOptions.SPACING_STAFF += 1;
+    if (global_verovioOptions.SPACING_STAFF > 24) {
+      global_verovioOptions.SPACING_STAFF = 24;
     }
     displayNotation();
   }
 
   decreaseSystemSpacing() {
-    window.SPACING_SYSTEM -= 1;
-    if (window.SPACING_SYSTEM < 0) {
-      window.SPACING_SYSTEM = 0;
+    global_verovioOptions.SPACING_SYSTEM -= 1;
+    if (global_verovioOptions.SPACING_SYSTEM < 0) {
+      global_verovioOptions.SPACING_SYSTEM = 0;
     }
     displayNotation();
   }
 
   increaseSystemSpacing() {
-    window.SPACING_SYSTEM += 1;
-    if (window.SPACING_SYSTEM > 12) {
-      window.SPACING_SYSTEM = 12;
+    global_verovioOptions.SPACING_SYSTEM += 1;
+    if (global_verovioOptions.SPACING_SYSTEM > 12) {
+      global_verovioOptions.SPACING_SYSTEM = 12;
     }
     displayNotation();
   }
 
   decreaseLyricSize() {
-    window.LYRIC_SIZE -= 0.25;
-    if (window.LYRIC_SIZE < 2.0) {
-      window.LYRIC_SIZE = 2.0;
+    global_verovioOptions.LYRIC_SIZE -= 0.25;
+    if (global_verovioOptions.LYRIC_SIZE < 2.0) {
+      global_verovioOptions.LYRIC_SIZE = 2.0;
     }
     displayNotation();
   }
 
   increaseLyricSize() {
-    window.LYRIC_SIZE += 0.25;
-    if (window.LYRIC_SIZE > 8.0) {
-      window.LYRIC_SIZE = 8.0;
+    global_verovioOptions.LYRIC_SIZE += 0.25;
+    if (global_verovioOptions.LYRIC_SIZE > 8.0) {
+      global_verovioOptions.LYRIC_SIZE = 8.0;
     }
     displayNotation();
   }
 
   useLeipzigFont() {
-    window.FONT = 'Leipzig';
+    global_verovioOptions.FONT = 'Leipzig';
     displayNotation();
   }
 
   useLelandFont() {
-    window.FONT = 'Leland';
+    global_verovioOptions.FONT = 'Leland';
     displayNotation();
   }
 
   usePetalumaFont() {
-    window.FONT = 'Petaluma';
+    global_verovioOptions.FONT = 'Petaluma';
     displayNotation();
   }
 
   useBravuraFont() {
-    window.FONT = 'Bravura';
+    global_verovioOptions.FONT = 'Bravura';
     displayNotation();
   }
 
   useGootvilleFont() {
-    window.FONT = 'Gootville';
+    global_verovioOptions.FONT = 'Gootville';
     displayNotation();
   }
 
@@ -410,8 +411,8 @@ class MenuInterface {
     if (max > 25) {
       max = 25;
     }
-    window.TABSIZE = max;
-    editor.getSession().setTabSize(window.TABSIZE);
+    global_editorOptions.TABSIZE = max;
+    editor.getSession().setTabSize(global_editorOptions.TABSIZE);
   }
 
   openUrl(url, target) {
@@ -609,155 +610,155 @@ class MenuInterface {
   }
 
   forceNoteStemUp() {
-    processNotationKey('a', window.CursorNote);
+    processNotationKey('a', global_cursor.CursorNote);
   }
 
   forceNoteStemDown() {
-    processNotationKey('b', window.CursorNote);
+    processNotationKey('b', global_cursor.CursorNote);
   }
 
   removeStemDirection() {
-    processNotationKey('c', window.CursorNote);
+    processNotationKey('c', global_cursor.CursorNote);
   }
 
   toggleEditorialAccidental() {
-    processNotationKey('i', window.CursorNote);
+    processNotationKey('i', global_cursor.CursorNote);
   }
 
   toggleNaturalAccidental() {
-    processNotationKey('n', window.CursorNote);
+    processNotationKey('n', global_cursor.CursorNote);
   }
 
   toggleSharpAccidental() {
-    processNotationKey('#', window.CursorNote);
+    processNotationKey('#', global_cursor.CursorNote);
   }
 
   toggleFlatAccidental() {
-    processNotationKey('-', window.CursorNote);
+    processNotationKey('-', global_cursor.CursorNote);
   }
 
   toggleForcedDisplay() {
-    processNotationKey('X', window.CursorNote);
+    processNotationKey('X', global_cursor.CursorNote);
   }
 
   toggleStaccato() {
-    processNotationKey("'", window.CursorNote);
+    processNotationKey("'", global_cursor.CursorNote);
   }
 
   toggleMinorLowerMordent() {
-    processNotationKey('m', window.CursorNote);
+    processNotationKey('m', global_cursor.CursorNote);
   }
 
   toggleMajorLowerMordent() {
-    processNotationKey('M', window.CursorNote);
+    processNotationKey('M', global_cursor.CursorNote);
   }
 
   toggleMinorUpperMordent() {
-    processNotationKey('w', window.CursorNote);
+    processNotationKey('w', global_cursor.CursorNote);
   }
 
   toggleMajorUpperMordent() {
-    processNotationKey('W', window.CursorNote);
+    processNotationKey('W', global_cursor.CursorNote);
   }
 
   toggleFermata() {
-    processNotationKey(';', window.CursorNote);
+    processNotationKey(';', global_cursor.CursorNote);
   }
 
   toggleArpeggio() {
-    processNotationKey(':', window.CursorNote);
+    processNotationKey(':', global_cursor.CursorNote);
   }
 
   toggleAccent() {
-    processNotationKey('^', window.CursorNote);
+    processNotationKey('^', global_cursor.CursorNote);
   }
 
   toggleMarcato() {
-    processNotationKey('^^', window.CursorNote);
+    processNotationKey('^^', global_cursor.CursorNote);
   }
 
   toggleStaccatissimo() {
-    processNotationKey('`', window.CursorNote);
+    processNotationKey('`', global_cursor.CursorNote);
   }
 
   toggleTenuto() {
-    processNotationKey('~', window.CursorNote);
+    processNotationKey('~', global_cursor.CursorNote);
   }
 
   toggleMajorTrill() {
-    processNotationKey('T', window.CursorNote);
+    processNotationKey('T', global_cursor.CursorNote);
   }
 
   toggleMinorTrill() {
-    processNotationKey('t', window.CursorNote);
+    processNotationKey('t', global_cursor.CursorNote);
   }
 
   forceSlurAbove() {
-    processNotationKey('a', window.CursorNote);
+    processNotationKey('a', global_cursor.CursorNote);
   }
 
   forceSlurBelow() {
-    processNotationKey('b', window.CursorNote);
+    processNotationKey('b', global_cursor.CursorNote);
   }
 
   removeSlurOrientation() {
-    processNotationKey('c', window.CursorNote);
+    processNotationKey('c', global_cursor.CursorNote);
   }
 
   deleteSlur() {
-    processNotationKey('D', window.CursorNote);
+    processNotationKey('D', global_cursor.CursorNote);
   }
 
   forceBeamAbove() {
-    processNotationKey('a', window.CursorNote);
+    processNotationKey('a', global_cursor.CursorNote);
   }
 
   forceBeamBelow() {
-    processNotationKey('b', window.CursorNote);
+    processNotationKey('b', global_cursor.CursorNote);
   }
 
   removeBeamOrientation() {
-    processNotationKey('c', window.CursorNote);
+    processNotationKey('c', global_cursor.CursorNote);
   }
 
   forceTieAbove() {
-    processNotationKey('a', window.CursorNote);
+    processNotationKey('a', global_cursor.CursorNote);
   }
 
   forceTieBelow() {
-    processNotationKey('b', window.CursorNote);
+    processNotationKey('b', global_cursor.CursorNote);
   }
 
   removeTieOrientation() {
-    processNotationKey('c', window.CursorNote);
+    processNotationKey('c', global_cursor.CursorNote);
   }
 
   breakBeamAfterNote() {
-    processNotationKey('J', window.CursorNote);
+    processNotationKey('J', global_cursor.CursorNote);
   }
 
   breakBeamBeforeNote() {
-    processNotationKey('L', window.CursorNote);
+    processNotationKey('L', global_cursor.CursorNote);
   }
 
   makeRestInvisible() {
-    processNotationKey('y', window.CursorNote);
+    processNotationKey('y', global_cursor.CursorNote);
   }
 
   togglePedalDown() {
-    processNotationKey('p', window.CursorNote);
+    processNotationKey('p', global_cursor.CursorNote);
   }
 
   togglePedalUp() {
-    processNotationKey('P', window.CursorNote);
+    processNotationKey('P', global_cursor.CursorNote);
   }
 
   toggleGraceNoteStyle() {
-    processNotationKey('q', window.CursorNote);
+    processNotationKey('q', global_cursor.CursorNote);
   }
 
   toggleAtMark() {
-    processNotationKey('@', window.CursorNote);
+    processNotationKey('@', global_cursor.CursorNote);
   }
 
   addSlur(number) {
@@ -805,23 +806,23 @@ class MenuInterface {
       processInterfaceKeyCommand(event);
     }
 
-    processNotationKey('s', window.CursorNote);
+    processNotationKey('s', global_cursor.CursorNote);
   }
 
   nextHarmonicNote() {
-    goUpHarmonically(window.CursorNote);
+    goUpHarmonically(global_cursor.CursorNote);
   }
 
   previousHarmonicNote() {
-    goDownHarmonically(window.CursorNote);
+    goDownHarmonically(global_cursor.CursorNote);
   }
 
   nextMelodicNote() {
-    goToNextNoteOrRest(window.CursorNote.id);
+    goToNextNoteOrRest(global_cursor.CursorNote.id);
   }
 
   previousMelodicNote() {
-    goToPreviousNoteOrRest(window.CursorNote.id);
+    goToPreviousNoteOrRest(global_cursor.CursorNote.id);
   }
 
   pitchDownStep(number) {
@@ -868,7 +869,7 @@ class MenuInterface {
       event.altKey = true;
       processInterfaceKeyCommand(event);
     }
-    processNotationKey('transpose-down-step', window.CursorNote);
+    processNotationKey('transpose-down-step', global_cursor.CursorNote);
   }
 
   pitchUpStep(number) {
@@ -915,7 +916,7 @@ class MenuInterface {
       event.altKey = true;
       processInterfaceKeyCommand(event);
     }
-    processNotationKey('transpose-up-step', window.CursorNote);
+    processNotationKey('transpose-up-step', global_cursor.CursorNote);
   }
 
   pitchUpOctave(number) {
@@ -962,7 +963,7 @@ class MenuInterface {
       event.altKey = true;
       processInterfaceKeyCommand(event);
     }
-    processNotationKey('transpose-up-octave', window.CursorNote);
+    processNotationKey('transpose-up-octave', global_cursor.CursorNote);
   }
 
   pitchDownOctave(number) {
@@ -1009,7 +1010,7 @@ class MenuInterface {
       event.altKey = true;
       processInterfaceKeyCommand(event);
     }
-    processNotationKey('transpose-down-octave', window.CursorNote);
+    processNotationKey('transpose-down-octave', global_cursor.CursorNote);
   }
 
   moveSlurStart(number) {
@@ -1058,7 +1059,7 @@ class MenuInterface {
         event.altKey = true;
         processInterfaceKeyCommand(event);
       }
-      processNotationKey('leftEndMoveBack', window.CursorNote);
+      processNotationKey('leftEndMoveBack', global_cursor.CursorNote);
     } else {
       if (number < 10 && number > 1) {
         var event = {};
@@ -1103,7 +1104,7 @@ class MenuInterface {
         event.altKey = true;
         processInterfaceKeyCommand(event);
       }
-      processNotationKey('leftEndMoveForward', window.CursorNote);
+      processNotationKey('leftEndMoveForward', global_cursor.CursorNote);
     }
   }
 
@@ -1153,7 +1154,7 @@ class MenuInterface {
         event.altKey = true;
         processInterfaceKeyCommand(event);
       }
-      processNotationKey('rightEndMoveBack', window.CursorNote);
+      processNotationKey('rightEndMoveBack', global_cursor.CursorNote);
     } else {
       if (number < 10 && number > 1) {
         var event = {};
@@ -1198,7 +1199,7 @@ class MenuInterface {
         event.altKey = true;
         processInterfaceKeyCommand(event);
       }
-      processNotationKey('rightEndMoveForward', window.CursorNote);
+      processNotationKey('rightEndMoveForward', global_cursor.CursorNote);
     }
   }
   //////////////////////////////
@@ -1208,16 +1209,16 @@ class MenuInterface {
   //
   adjustNotationScale(event, number) {
     if (event && event.shiftKey) {
-      window.SCALE = 40;
+      global_verovioOptions.SCALE = 40;
     } else {
-      window.SCALE = parseInt(window.SCALE * number + 0.5);
-      if (window.SCALE < 15) {
-        window.SCALE = 15;
-      } else if (window.SCALE > 500) {
-        window.SCALE = 500;
+      global_verovioOptions.SCALE = parseInt(global_verovioOptions.SCALE * number + 0.5);
+      if (global_verovioOptions.SCALE < 15) {
+        global_verovioOptions.SCALE = 15;
+      } else if (global_verovioOptions.SCALE > 500) {
+        global_verovioOptions.SCALE = 500;
       }
     }
-    localStorage.SCALE = window.SCALE;
+    localStorage.SCALE = global_verovioOptions.SCALE;
 
     displayNotation();
   }
@@ -1237,55 +1238,55 @@ class MenuInterface {
 
   increaseTextFontSize(event) {
     if (event.shiftKey) {
-      window.INPUT_FONT_SIZE = 1.0;
+      global_editorOptions.INPUT_FONT_SIZE = 1.0;
     } else {
-      window.INPUT_FONT_SIZE *= 1.05;
-      if (window.INPUT_FONT_SIZE > 3.0) {
-        window.INPUT_FONT_SIZE = 3.0;
+      global_editorOptions.INPUT_FONT_SIZE *= 1.05;
+      if (global_editorOptions.INPUT_FONT_SIZE > 3.0) {
+        global_editorOptions.INPUT_FONT_SIZE = 3.0;
       }
     }
     var element = document.querySelector('#input');
     if (!element) {
       return;
     }
-    element.style.fontSize = window.INPUT_FONT_SIZE + 'rem';
-    localStorage.INPUT_FONT_SIZE = window.INPUT_FONT_SIZE;
+    element.style.fontSize = global_editorOptions.INPUT_FONT_SIZE + 'rem';
+    localStorage.INPUT_FONT_SIZE = global_editorOptions.INPUT_FONT_SIZE;
   }
 
   resetTextFontSize(event) {
-    window.INPUT_FONT_SIZE = 1.0;
+    global_editorOptions.INPUT_FONT_SIZE = 1.0;
     var element = document.querySelector('#input');
     if (!element) {
       return;
     }
-    element.style.fontSize = window.INPUT_FONT_SIZE + 'rem';
-    localStorage.INPUT_FONT_SIZE = window.INPUT_FONT_SIZE;
+    element.style.fontSize = global_editorOptions.INPUT_FONT_SIZE + 'rem';
+    localStorage.INPUT_FONT_SIZE = global_editorOptions.INPUT_FONT_SIZE;
   }
 
   decreaseTextFontSize(event) {
     if (event.shiftKey) {
-      window.INPUT_FONT_SIZE = 1.0;
+      global_editorOptions.INPUT_FONT_SIZE = 1.0;
     } else {
-      window.INPUT_FONT_SIZE *= 0.95;
-      if (window.INPUT_FONT_SIZE < 0.25) {
-        window.INPUT_FONT_SIZE = 0.25;
+      global_editorOptions.INPUT_FONT_SIZE *= 0.95;
+      if (global_editorOptions.INPUT_FONT_SIZE < 0.25) {
+        global_editorOptions.INPUT_FONT_SIZE = 0.25;
       }
     }
     var element = document.querySelector('#input');
     if (!element) {
       return;
     }
-    element.style.fontSize = window.INPUT_FONT_SIZE + 'rem';
-    localStorage.INPUT_FONT_SIZE = window.INPUT_FONT_SIZE;
+    element.style.fontSize = global_editorOptions.INPUT_FONT_SIZE + 'rem';
+    localStorage.INPUT_FONT_SIZE = global_editorOptions.INPUT_FONT_SIZE;
   }
 
   lineBreaksOff() {
-    window.BREAKS = true;
+    global_verovioOptions.BREAKS = true;
     // toggleLineBreaks();
   }
 
   lineBreaksOn() {
-    window.BREAKS = false;
+    global_verovioOptions.BREAKS = false;
     // toggleLineBreaks();
   }
 

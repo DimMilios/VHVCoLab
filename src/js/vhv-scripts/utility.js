@@ -5,6 +5,7 @@
 //
 // getFilenameBase --
 //
+import { FILEINFO } from './global-variables.js';
 import { getTextFromEditor, getTextFromEditorRaw } from './misc.js';
 
 export function getFilenameBase(text) {
@@ -25,9 +26,9 @@ export function getFilenameBase(text) {
 	}
 	// In the data was loaded from a repertory file, then use that
 	// file as the filename base.
-	if (window.FILEINFO) {
-		if (window.FILEINFO.file) {
-			output = window.FILEINFO.file;
+	if (FILEINFO) {
+		if (FILEINFO.file) {
+			output = FILEINFO.file;
 			output = output.replace(/.*\//, "").replace(/\..*?$/, "");
 			if (output.length > 0) {
 				return output;
@@ -81,9 +82,9 @@ export function getFilenameExtension(text) {
 				}
 			}
 		}
-		if (window.FILEINFO) {
-			if (window.FILEINFO.file) {
-				fullname = window.FILEINFO.file.replace(/.*\//, "");
+		if (FILEINFO) {
+			if (FILEINFO.file) {
+				fullname = FILEINFO.file.replace(/.*\//, "");
 				ext = fullname.replace(/.*\./, "");
 				if (ext && (ext.length > 0)) {
 					return ext;

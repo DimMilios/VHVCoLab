@@ -287,7 +287,7 @@ export function generatePdfFull(format, orientation) {
 		scale                  : scale,
 		adjustPageHeight       : 0,
 		justifyVertically      : 1,
-		breaks                 : (window.BREAKS ? "encoded" : "auto"),
+		breaks                 : (global_verovioOptions.BREAKS ? "encoded" : "auto"),
 		mmOutput               : 1,
 		// justifyIncludeLastPage : 1, // no longer a verovio option?
 		// justifySystemOnly   : 1, // no longer a verovio option?
@@ -297,7 +297,7 @@ export function generatePdfFull(format, orientation) {
 		usePgFooterForAll      : 1,
 		barLineWidth           : 0.12,
 		staffLineWidth         : 0.12,
-		font                   : window.FONT
+		font                   : global_verovioOptions.FONT
 	}
 
 
@@ -311,9 +311,6 @@ export function generatePdfFull(format, orientation) {
 
 	vrvOptions = cleanOptions2(scoredata, vrvOptions);
 	console.log("PRINTING OPTIONS", vrvOptions);
-
-	// store the options for debugging PDF files:
-	window.PDFOPTIONS = vrvOptions;
 
 	RSVP.hash({
 		fonts: loadPdfFonts(pdf),

@@ -179,10 +179,10 @@ document
   .addEventListener('click', () => menu.toggleDataDisplay());
 document
   .querySelector('#increase-font-size__submenu-item')
-  .addEventListener('click', () => menu.increaseTextFontSize());
+  .addEventListener('click', (e) => menu.increaseTextFontSize(e));
 document
   .querySelector('#decrease-font-size__submenu-item')
-  .addEventListener('click', () => menu.decreaseTextFontSize());
+  .addEventListener('click', (e) => menu.decreaseTextFontSize(e));
 document
   .querySelector('#toggle-csv-tsv-humdrum-display__submenu-item')
   .addEventListener('click', () => menu.toggleCsvTsv());

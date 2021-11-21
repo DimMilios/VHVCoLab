@@ -10,11 +10,11 @@
 
 // OPTIONS: debugging parameter to see what options were used
 // for the last call to the verovio toolkit.
-window.OPTIONS = {};
-
-// PDFOPTIONS: debugging parameter to see what options were used
-// for the last call to the verovio toolkit when creating PDF files.
-window.PDFOPTIONS = {};
+// window.OPTIONS = {};
+export let OPTIONS = {};
+export function setOptions(options) {
+  OPTIONS = options;
+}
 
 // var turl = "https://raw.githubusercontent.com/craigsapp/mozart-piano-sonatas/master/index.hmd";
 
@@ -24,7 +24,7 @@ window.PDFOPTIONS = {};
 // WKEY: window for displaying keyscape
 // window.WKEY = null;
 
-window.GOTOTOPOFNOTATION = false;
+// window.GOTOTOPOFNOTATION = false;
 
 ////////////////////////////////////////////////////////////
 //
@@ -42,33 +42,33 @@ window.GOTOTOPOFNOTATION = false;
 // verovio-related options: Primarily set in menu system and used in humdrumToSvgOptions().
 //
 
-// SCALE: controls the size of the music notation using the verovio "scale" option.
-window.SCALE          = 40;
+// // SCALE: controls the size of the music notation using the verovio "scale" option.
+// window.SCALE          = 40;
 
-// SPACING_STAFF: Set the minimum distance in diatonic steps between staves of music.
-window.SPACING_STAFF  = 12;
+// // SPACING_STAFF: Set the minimum distance in diatonic steps between staves of music.
+// window.SPACING_STAFF  = 12;
 
-// Need to add a variable SPACING_ADJUST_GROUP to add controls for spacing staff groups.
+// // Need to add a variable SPACING_ADJUST_GROUP to add controls for spacing staff groups.
 
-// SPACING_SYSTEM: Set the minimum distance in diatonc steps between systems of music.
-// the verovio option justifyVertically may expand from this minimum distance, and
-// musical elements extending outside of this range will also push the systems further
-// apart.
-window.SPACING_SYSTEM = 18;
+// // SPACING_SYSTEM: Set the minimum distance in diatonc steps between systems of music.
+// // the verovio option justifyVertically may expand from this minimum distance, and
+// // musical elements extending outside of this range will also push the systems further
+// // apart.
+// window.SPACING_SYSTEM = 18;
 
-// LYRIC_SIZE: control the relative size of lyrics in the rendered notation.  Units
-// are in terms of diatonic steps (1/2 of the space between staff lines).
-window.LYRIC_SIZE     = 4.5;
+// // LYRIC_SIZE: control the relative size of lyrics in the rendered notation.  Units
+// // are in terms of diatonic steps (1/2 of the space between staff lines).
+// window.LYRIC_SIZE     = 4.5;
 
-// FONT: controls the musical font used by verovio to render notation.  This is also
-// the font variable used to generate PDF files.
-window.FONT           = "Leland";
+// // FONT: controls the musical font used by verovio to render notation.  This is also
+// // the font variable used to generate PDF files.
+// window.FONT           = "Leland";
 
-// BREAKS: controls whether or not verovio should use system/page breaks
-// encoded in the data or decide on its own line breaks.
-//     false means use "auto" breaking method for verovio "breaks" option.
-//     true means use "encoded" breaking method for verovio "breaks" option.
-window.BREAKS         = false;
+// // BREAKS: controls whether or not verovio should use system/page breaks
+// // encoded in the data or decide on its own line breaks.
+// //     false means use "auto" breaking method for verovio "breaks" option.
+// //     true means use "encoded" breaking method for verovio "breaks" option.
+// window.BREAKS         = false;
 
 
 ///////////////////////////////////////////////////////////
@@ -102,10 +102,13 @@ window.BREAKS         = false;
 // menu interaction variables:
 //
 
-window.INPUT_FONT_SIZE = 1.0;   // used to set font-size in #input (1.0rem is the default);
+// window.INPUT_FONT_SIZE = 1.0;   // used to set font-size in #input (1.0rem is the default);
 
-window.FILEINFO = {};
-
+// window.FILEINFO = {};
+export let FILEINFO = {};
+export function setFileInfo(obj) {
+  FILEINFO = obj;
+}
 
 //////////////////////////////
 //
@@ -166,21 +169,21 @@ export const setEditorMode = mode => {
 // window.EditorMode = "humdrum";
 
 //var EditorTheme = "ace/theme/solarized_light";
-window.EditorLine = -1;
-window.TABSIZE = 12;
-// window.DISPLAYTIME = 0;
-window.EDITINGID = null;
-window.SAVEFILENAME = "data.txt";
-window.SPACINGADJUSTMENT = 0.0;
+// window.EditorLine = -1;
+// window.TABSIZE = 12;
+// // window.DISPLAYTIME = 0;
+// window.EDITINGID = null;
+// window.SAVEFILENAME = "data.txt";
+// window.SPACINGADJUSTMENT = 0.0;
 
 
-window.HIGHLIGHTQUERY = null;
-// used to highlight the current note at the location of the cursor.
-window.CursorNote = undefined;
+// window.HIGHLIGHTQUERY = null;
+// // used to highlight the current note at the location of the cursor.
+// window.CursorNote = undefined;
 
-// RestoreCursorNote: Used to go back to a highlighted note after a redraw.
-// This is an ID string rather than an element.
-window.RestoreCursorNote = undefined;
+// // RestoreCursorNote: Used to go back to a highlighted note after a redraw.
+// // This is an ID string rather than an element.
+// window.RestoreCursorNote = undefined;
 
 // window.ERASED_DATA = "";
 
@@ -193,23 +196,86 @@ window.RestoreCursorNote = undefined;
 window.Range = function() { console.log("Range is undefined"); }
 
 // window.IDS   = [];
-window.ZOOM  = 0.4;
-window.PLAY  = false;
-window.PAUSE = false;
+// window.ZOOM  = 0.4;
+// window.PLAY  = false;
+// window.PAUSE = false;
 
 
 // State variables for interface:
 // window.FirstInitialization = false;
-window.InputVisible        = true;
-window.LastInputWidth      = 0;
-window.OriginalClef        = false;
-window.UndoHide            = false;
-window.ApplyZoom           = false;
-window.ShowingIndex        = false;
-window.FreezeRendering     = false;
+// window.InputVisible        = true;
+// window.LastInputWidth      = 0;
+// window.OriginalClef        = false;
+// window.UndoHide            = false;
+// window.ApplyZoom           = false;
+// window.ShowingIndex        = false;
+// window.FreezeRendering     = false;
 // window.VrvTitle            = true;
 
+export const global_verovioOptions = {
+  GOTOTOPOFNOTATION: false,
+  // SCALE: controls the size of the music notation using the verovio "scale" option.
+  SCALE: 40,
+  // SPACING_STAFF: Set the minimum distance in diatonic steps between staves of music.
+  SPACING_STAFF: 12,
+  // Need to add a variable SPACING_ADJUST_GROUP to add controls for spacing staff groups.
 
+  // SPACING_SYSTEM: Set the minimum distance in diatonc steps between systems of music.
+  // the verovio option justifyVertically may expand from this minimum distance, and
+  // musical elements extending outside of this range will also push the systems further
+  // apart.
+  SPACING_SYSTEM: 18,
+
+  // LYRIC_SIZE: control the relative size of lyrics in the rendered notation.  Units
+  // are in terms of diatonic steps (1/2 of the space between staff lines).
+  LYRIC_SIZE: 4.5,
+
+  // FONT: controls the musical font used by verovio to render notation.  This is also
+  // the font variable used to generate PDF files.
+  FONT: 'Leland',
+
+  // BREAKS: controls whether or not verovio should use system/page breaks
+  // encoded in the data or decide on its own line breaks.
+  //     false means use "auto" breaking method for verovio "breaks" option.
+  //     true means use "encoded" breaking method for verovio "breaks" option.
+  BREAKS: false,
+
+	ZOOM: 0.4,
+}
+
+export const global_editorOptions = {
+  INPUT_FONT_SIZE: 1.0, // rem
+  EditorLine: -1,
+  TABSIZE: 12,
+  EDITINGID: null,
+  SAVEFILENAME: 'data.txt',
+  SPACINGADJUSTMENT: 0.0,
+}
+
+export const global_cursor = {
+  HIGHLIGHTQUERY: null,
+  // // used to highlight the current note at the location of the cursor.
+  CursorNote: null,
+  // RestoreCursorNote: Used to go back to a highlighted note after a redraw.
+  // This is an ID string rather than an element.
+  RestoreCursorNote: '',
+}
+
+export const global_playerOptions = {
+  PLAY: false,
+  PAUSE: false,
+}
+
+export const global_interface = {
+  // State variables for interface:
+  InputVisible: true,
+  LastInputWidth: 0,
+  OriginalClef: false,
+  UndoHide: false,
+  ApplyZoom: false,
+  ShowingIndex: false,
+  FreezeRendering: false,
+};
 
 //////////////////////////////
 //

@@ -39,7 +39,7 @@ export function play_midi(starttime) {
 		$("#midiPlayer_pause").show();
 		$("#player").show();
 		$("#player").midiPlayer.play(song, starttime);
-		window.PLAY = true;
+		global_playerOptions.PLAY = true;
 		LASTLINE = -1;
 	})
 	.catch(err => console.log('Error when trying to play midi', err));
@@ -54,6 +54,7 @@ window.play_midi = play_midi;
 //
 import { showIdInEditor } from './vhv-scripts/utility-ace.js';
 import { loadPage } from './vhv-scripts/misc.js';
+import { global_cursor, global_playerOptions } from './vhv-scripts/global-variables.js';
 
 var ids = [];
 var midiUpdate = function (time) {
@@ -214,8 +215,8 @@ var midiStop = function () {
 	});
 	$("#player").hide();
 	$("#play-button").show();
-	window.CursorNote = null;
-	window.PLAY = false;
+	global_cursor.CursorNote = null;
+	global_playerOptions.PLAY = false;
   LASTLINE = -1;
 }
 

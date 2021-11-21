@@ -237,6 +237,7 @@ import { getTextFromEditor } from './misc.js';
 import { dataIsHumdrum } from './utility.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 import { getAceEditor } from './setup.js';
+import { global_editorOptions, global_interface, OPTIONS } from './global-variables.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
@@ -249,12 +250,12 @@ if (!editor) {
 }
 
 export function saveSvgData() {
-	if (window.ShowingIndex) {
+	if (global_interface.ShowingIndex) {
 		return;
 	}
 
-	var options = JSON.parse(JSON.stringify(window.OPTIONS));
-	console.log("SVG PRINTING window.OPTIONS", options);
+	var options = JSON.parse(JSON.stringify(OPTIONS));
+	console.log("SVG PRINTING OPTIONS", options);
 	var data = getTextFromEditor();
 	if (data.match(/^\s*$/)) {
 		return;
@@ -269,7 +270,7 @@ export function saveSvgData() {
 	vrvWorker.renderData(options, data, page, force)
 	.then(function(data) {
 		console.log('buffer vrvWorker.renderData', data)
-		var filename = window.SAVEFILENAME;
+		var filename = global_editorOptions.SAVEFILENAME;
 		var size = editor.session.getLength();
 		var matches;
 		var line;

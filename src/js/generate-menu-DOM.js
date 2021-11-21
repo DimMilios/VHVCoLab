@@ -1,4 +1,4 @@
-import { menu } from './menu';
+import { getMenu } from './menu.js';
 import * as menuJSON from '/src/menu.json';
 
 window.addEventListener('DOMContentLoaded', () => {

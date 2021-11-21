@@ -117,7 +117,7 @@ export function configureAceEditor() {
 
 	//editor.getSession().setMode("ace/mode/javascript");
 
-	editor.getSession().setTabSize(window.TABSIZE);
+	editor.getSession().setTabSize(global_editorOptions.TABSIZE);
 	editor.getSession().setUseSoftTabs(false);
 
 	// Don't show line at 80 columns:
@@ -172,6 +172,7 @@ export function configureAceEditor() {
 // insertSplashMusic --
 //
 import { setTextInEditor } from './misc.js'
+import { global_editorOptions, global_interface } from './global-variables.js';
 
 function insertSplashMusic() {
 	var splashElement = document.querySelector("#input-splash");
@@ -286,12 +287,12 @@ export function setupSplitter() {
 			if (event.pageX < minXPos){
 				if (event.pageX < minXPos - 70){ //Adjust closing snap tolerance here
 					window.Splitter.setPositionX(0);
-					window.InputVisible = false;
+					global_interface.InputVisible = false;
 				}
 				return;
 			}
 			window.Splitter.setPositionX(event.pageX);
-			window.InputVisible = true;
+			global_interface.InputVisible = true;
 		}
 	});
 }

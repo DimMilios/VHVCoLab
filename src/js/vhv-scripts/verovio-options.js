@@ -2,6 +2,8 @@
 // let VEROVIOOPTIONS = {% include verovio-options.json %};
 // import * as VEROVIOOPTIONS from './verovio-options.json';
 
+import { global_editorOptions, global_verovioOptions } from "./global-variables";
+
 let VEROVIOOPTIONS = {
 	"OPTION": [
 		 {
@@ -1398,14 +1400,14 @@ export function humdrumToSvgOptions() {
 	output.adjustPageHeight     = 1;
 	// output.adjustPageWidth   = 1;
 	output.barLineWidth         = 0.12;
-	output.breaks               = (window.BREAKS ? "encoded" : "auto");
-	output.font                 = window.FONT;
+	output.breaks               = (global_verovioOptions.BREAKS ? "encoded" : "auto");
+	output.font                 = global_verovioOptions.FONT;
 	output.inputFrom            = "auto";
 	output.humType              = 1;
 	output.tupletNumHead        = 0;
 	output.justifyVertically    = 0;
 	output.leftMarginClef       = 1.50;
-	output.lyricSize            = window.LYRIC_SIZE;
+	output.lyricSize            = global_verovioOptions.LYRIC_SIZE;
 	output.minLastJustification = 0.5;
 	output.footer               = "none";
 	output.header               = "none";
@@ -1415,11 +1417,11 @@ export function humdrumToSvgOptions() {
 	output.pageMarginRight      = 20;
 	output.pageMarginTop        = 100;
 	output.pageWidth            = 2500;
-	output.scale                = window.SCALE;
+	output.scale                = global_verovioOptions.SCALE;
 	output.spacingLinear        = 0.25;
 	output.spacingNonLinear     = 0.6;
-	output.spacingStaff         = window.SPACING_STAFF;
-	output.spacingSystem        = window.SPACING_SYSTEM;
+	output.spacingStaff         = global_verovioOptions.SPACING_STAFF;
+	output.spacingSystem        = global_verovioOptions.SPACING_SYSTEM;
 	output.staffLineWidth       = 0.12;
 	output.outputIndent         = 1;
 	// output.svgRemoveXlink       = true; // enable to remove xlink: from href use element property
@@ -1429,26 +1431,26 @@ export function humdrumToSvgOptions() {
 	// 	if ($("#input").css("display") == "none") {
 	// 		tw = 0;
 	// 	}
-	// 	// output.pageHeight = ($(window).innerHeight() - $("#navbar").outerHeight()) / window.ZOOM - 100;
-	// 	// output.pageWidth = ($(window).innerWidth() - tw) / window.ZOOM - 100;
+	// 	// output.pageHeight = ($(window).innerHeight() - $("#navbar").outerHeight()) / global_verovioOptions.ZOOM - 100;
+	// 	// output.pageWidth = ($(window).innerWidth() - tw) / global_verovioOptions.ZOOM - 100;
 	// 	// jQuery $window.innerHeight() not working properly (in Chrome).
-	// 	output.pageHeight = (window.innerHeight - $("#topnav").outerHeight()) / (window.ZOOM * window.SCALE / 40) - 50;
-	// 	output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
+	// 	output.pageHeight = (window.innerHeight - $("#topnav").outerHeight()) / (global_verovioOptions.ZOOM * global_verovioOptions.SCALE / 40) - 50;
+	// 	output.pageWidth = (window.innerWidth - tw) / (global_verovioOptions.ZOOM * global_verovioOptions.SCALE / 40 ) - 100;
 	// } else {
 	// 	var tw = $("#input").outerWidth();
 	// 	if ($("#input").css("display") == "none") {
 	// 		tw = 0;
 	// 	}
-	// 	output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
+	// 	output.pageWidth = (window.innerWidth - tw) / (global_verovioOptions.ZOOM * global_verovioOptions.SCALE / 40 ) - 100;
 	// }
 
 	var tw = $("#input").outerWidth();
 	if ($("#input").css("display") == "none") {
 		tw = 0;
 	}
-	output.pageWidth = (window.innerWidth - tw) / (window.ZOOM * window.SCALE / 40 ) - 100;
+	output.pageWidth = (window.innerWidth - tw) / (global_verovioOptions.ZOOM * global_verovioOptions.SCALE / 40 ) - 100;
 	
-	var newLinearSpacing = window.SPACINGADJUSTMENT + output.spacingLinear;
+	var newLinearSpacing = global_editorOptions.SPACINGADJUSTMENT + output.spacingLinear;
 	if (newLinearSpacing < 0.05) {
 		newLinearSpacing = 0.05;
 	}
@@ -1477,7 +1479,7 @@ function humdrumToMeiOptions() {
 		spacingLinear		: 0.25,
 		barLineWidth		: 0.12,
 		staffLineWidth		: 0.12,
-		font              : window.FONT,
+		font              : global_verovioOptions.FONT,
 		outputIndent      : 1
 	}
 }
@@ -1532,7 +1534,7 @@ export function esacToHumdrumOptions() {
 //////////////////////////////
 //
 // loadEditorFontSizes -- Recover the last session's font size for the text editor.  If there is no previous
-//     session, the use a size of 1.0;  Also the music size (window.SCALE = 40 default).
+//     session, the use a size of 1.0;  Also the music size (global_verovioOptions.SCALE = 40 default).
 //
 
 export function loadEditorFontSizes() {
@@ -1548,7 +1550,7 @@ export function loadEditorFontSizes() {
 	if (value > 3.0) {
 		value = 3.0;
 	}
-	window.INPUT_FONT_SIZE = value;
+	global_editorOptions.INPUT_FONT_SIZE = value;
 
 	var value2 = localStorage.SCALE;
 	if (!value2) {
@@ -1561,5 +1563,5 @@ export function loadEditorFontSizes() {
 	} else if (value2 > 1000) {
 		value2 = 40;
 	}
-	window.SCALE = value2;
+	global_verovioOptions.SCALE = value2;
 }

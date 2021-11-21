@@ -7,6 +7,7 @@
 //    If there are no embedded URLs, then display the one from index.hmd
 //    if there is a PDF available from kernScores.
 //
+import { FILEINFO } from "./global-variables.js";
 import { getPdfUrlList } from "./misc.js";
 
 export function buildPdfIconListInMenu() {
@@ -23,9 +24,9 @@ export function buildPdfIconListInMenu() {
 			output += makePdfIcon(urllist[i].url, urllist[i].title);
 		}
 	} else {
-		if (window.FILEINFO && window.FILEINFO["has-pdf"] && (window.FILEINFO["has-pdf"] === "true")) {
-			var url = "https://kern.humdrum.org/data?l=" + window.FILEINFO["location"];
-			url += "&file=" + window.FILEINFO["file"];
+		if (FILEINFO && FILEINFO["has-pdf"] && (FILEINFO["has-pdf"] === "true")) {
+			var url = "https://kern.humdrum.org/data?l=" + FILEINFO["location"];
+			url += "&file=" + FILEINFO["file"];
 			url += "&format=pdf&#view=FitH";
 			output += makePdfIcon(url, "Source edition");
 		}

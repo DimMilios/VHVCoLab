@@ -20,9 +20,9 @@ if (!vrvWorker) {
 
 export function displayNotation(page, force, restoreid) {
   // vrvWorker.checkInitialized();
-  if (!vrvWorker.initialized || (window.FreezeRendering && !force)) {
+  if (!vrvWorker.initialized || (global_interface.FreezeRendering && !force)) {
     // console.log("Ignoring displayNotation request: not initialized or frozen");
-    console.log("Ignoring displayNotation", {vrvWorker: vrvWorker, FreezeRendering: window.FreezeRendering, force})
+    console.log("Ignoring displayNotation", {vrvWorker: vrvWorker, FreezeRendering: global_interface.FreezeRendering, force})
     return;
   }
 
@@ -49,8 +49,8 @@ export function displayNotation(page, force, restoreid) {
     options.inputFrom = 'musedata';
   }
  
-  window.OPTIONS = options;
-  // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: window.OPTIONS, editorValue:editor.getValue(), data, page, force, vrvWorker: vrvWorker})
+  setOptions(options);
+  // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: OPTIONS, editorValue:editor.getValue(), data, page, force, vrvWorker: vrvWorker})
   vrvWorker
     .renderData(options, data, page, force)
     .then(function (svg) {
@@ -68,8 +68,8 @@ export function displayNotation(page, force, restoreid) {
       if (ishumdrum) {
         if (restoreid) {
           restoreSelectedSvgElement(restoreid);
-        } else if (window.RestoreCursorNote) {
-          restoreSelectedSvgElement(window.RestoreCursorNote);
+        } else if (global_cursor.RestoreCursorNote) {
+          restoreSelectedSvgElement(global_cursor.RestoreCursorNote);
         }
         displayFileTitle(data);
         if (!force) document.querySelector('body').classList.remove('invalid');
@@ -86,19 +86,19 @@ export function displayNotation(page, force, restoreid) {
       let indexelement = document.querySelector('#index');
       indexelement.style.visibility = 'invisibile';
       indexelement.style.display = 'none';
-      if (window.UndoHide) {
+      if (global_interface.UndoHide) {
         showInputArea(true);
-        window.UndoHide = false;
+        global_interface.UndoHide = false;
       }
-      if (window.ApplyZoom) {
+      if (global_interface.ApplyZoom) {
         applyZoom();
-        window.ApplyZoom = false;
+        global_interface.ApplyZoom = false;
       }
-      if (window.ApplyZoom) {
+      if (global_interface.ApplyZoom) {
         applyZoom();
-        window.ApplyZoom = false;
+        global_interface.ApplyZoom = false;
       }
-      window.ShowingIndex = false;
+      global_interface.ShowingIndex = false;
       $('html').css('cursor', 'auto');
       // these lines are needed to re-highlight the note when
       // the notation has been updated.
@@ -147,16 +147,16 @@ window.displayNotation = displayNotation;
 //
 
 export function toggleFreeze() {
-  window.FreezeRendering = !window.FreezeRendering;
+  global_interface.FreezeRendering = !global_interface.FreezeRendering;
   document.querySelector('body').classList.toggle('frozen');
-  if (!window.FreezeRendering) {
+  if (!global_interface.FreezeRendering) {
     displayNotation();
   }
 
   let felement = document.querySelector('#text-freeze-icon');
   let output = '';
   if (felement) {
-    if (window.FreezeRendering) {
+    if (global_interface.FreezeRendering) {
       // display is frozen so show lock icon
       output =
         "<div title='Unfreeze notation (alt-f)' class='nav-icon fas fa-lock'></div>";
@@ -179,15 +179,15 @@ if (!editor) {
 }
 
 export function toggleTextVisibility(suppressZoom) {
-  window.InputVisible = !window.InputVisible;
+  global_interface.InputVisible = !global_interface.InputVisible;
   let input = document.querySelector('#input');
-  if (window.InputVisible) {
-    if (window.LastInputWidth == 0) {
-      window.LastInputWidth = 400;
+  if (global_interface.InputVisible) {
+    if (global_interface.LastInputWidth == 0) {
+      global_interface.LastInputWidth = 400;
     }
-    window.Splitter.setPositionX(window.LastInputWidth);
+    window.Splitter.setPositionX(global_interface.LastInputWidth);
   } else {
-    window.LastInputWidth = parseInt(input.style.width);
+    global_interface.LastInputWidth = parseInt(input.style.width);
     window.Splitter.setPositionX(0);
   }
   if (!suppressZoom) {
@@ -205,13 +205,13 @@ export function toggleTextVisibility(suppressZoom) {
 
 export function redrawInputArea(suppressZoom) {
   let input = document.querySelector('#input');
-  if (window.InputVisible) {
-    if (window.LastInputWidth == 0) {
-      window.LastInputWidth = 400;
+  if (global_interface.InputVisible) {
+    if (global_interface.LastInputWidth == 0) {
+      global_interface.LastInputWidth = 400;
     }
-    window.Splitter.setPositionX(window.LastInputWidth);
+    window.Splitter.setPositionX(global_interface.LastInputWidth);
   } else {
-    window.LastInputWidth = parseInt(input.style.width);
+    global_interface.LastInputWidth = parseInt(input.style.width);
     window.Splitter.setPositionX(0);
   }
   if (!suppressZoom) {
@@ -226,9 +226,9 @@ export function redrawInputArea(suppressZoom) {
 //
 
 function hideInputArea(suppressZoom) {
-  window.InputVisible = false;
+  global_interface.InputVisible = false;
   let input = document.querySelector('#input');
-  window.LastInputWidth = parseInt(input.style.width);
+  global_interface.LastInputWidth = parseInt(input.style.width);
   window.Splitter.setPositionX(0);
   if (!suppressZoom) {
     applyZoom();
@@ -241,8 +241,8 @@ function hideInputArea(suppressZoom) {
 //
 
 function showInputArea(suppressZoom) {
-  window.InputVisible = true;
-  window.Splitter.setPositionX(window.LastInputWidth);
+  global_interface.InputVisible = true;
+  window.Splitter.setPositionX(global_interface.LastInputWidth);
   if (!suppressZoom) {
     applyZoom();
   }
@@ -284,8 +284,9 @@ function restoreWorkNavigator(selector) {
   if (erasedWorkNavigator.match(/^\s*$/)) {
     return;
   }
-  // window.FILEINFO = window.ERASED_FILEINFO;
-  window.FILEINFO = erasedFileInfo;
+  // FILEINFO = window.ERASED_FILEINFO;
+  // FILEINFO = erasedFileInfo;
+  setFileInfo(erasedFileInfo);
   let element = document.querySelector(selector);
   element.innerHTML = erasedWorkNavigator;
   erasedWorkNavigator = '';
@@ -305,8 +306,8 @@ function removeWorkNavigator(selector) {
   let element = document.querySelector(selector);
   // window.ERASED_WORK_NAVIGATOR = element.innerHTML;
   erasedWorkNavigator = element.innerHTML;
-  // window.ERASED_FILEINFO = window.FILEINFO;
-  erasedFileInfo = window.FILEINFO;
+  // window.ERASED_FILEINFO = FILEINFO;
+  erasedFileInfo = FILEINFO;
   element.innerHTML = '';
 }
 
@@ -326,9 +327,9 @@ function displayWorkNavigation(selector) {
     return;
   }
 
-  if (window.FILEINFO['previous-work']) {
+  if (FILEINFO['previous-work']) {
     contents += '<span style="cursor:pointer" onclick="displayWork(\'';
-    contents += window.FILEINFO['previous-work'];
+    contents += FILEINFO['previous-work'];
     contents += '\');"';
     contents += " title='previous work/movement (&#8679;+&#8592;)'";
     contents += '>';
@@ -337,16 +338,16 @@ function displayWorkNavigation(selector) {
   }
 
   if (
-    window.FILEINFO['previous-work'] &&
-    window.FILEINFO['next-work'] &&
-    window.FILEINFO['has-index'] == 'true'
+    FILEINFO['previous-work'] &&
+    FILEINFO['next-work'] &&
+    FILEINFO['has-index'] == 'true'
   ) {
     contents += '&nbsp;';
   }
 
-  if (window.FILEINFO['has-index'] == 'true') {
+  if (FILEINFO['has-index'] == 'true') {
     contents += '<span style="cursor:pointer" onclick="displayIndex(\'';
-    contents += window.FILEINFO['location'];
+    contents += FILEINFO['location'];
     contents += '\');"';
     contents += " title='repertory index (&#8679;+&#8593;)'";
     contents += '>';
@@ -355,24 +356,24 @@ function displayWorkNavigation(selector) {
   }
 
   if (
-    window.FILEINFO['previous-work'] &&
-    window.FILEINFO['next-work'] &&
-    window.FILEINFO['has-index'] == 'true'
+    FILEINFO['previous-work'] &&
+    FILEINFO['next-work'] &&
+    FILEINFO['has-index'] == 'true'
   ) {
     contents += '&nbsp;';
   }
 
   if (
-    window.FILEINFO['previous-work'] &&
-    window.FILEINFO['next-work'] &&
-    window.FILEINFO['has-index'] != 'true'
+    FILEINFO['previous-work'] &&
+    FILEINFO['next-work'] &&
+    FILEINFO['has-index'] != 'true'
   ) {
     contents += '&nbsp;';
   }
 
-  if (window.FILEINFO['next-work']) {
+  if (FILEINFO['next-work']) {
     contents += '<span style="cursor:pointer" onclick="displayWork(\'';
-    contents += window.FILEINFO['next-work'];
+    contents += FILEINFO['next-work'];
     contents += '\');"';
     contents += " title='next work/movement (&#8679;+&#8594;)'";
     contents += '>';
@@ -380,7 +381,7 @@ function displayWorkNavigation(selector) {
     contents += '</span>';
   }
 
-  if (window.FILEINFO['file']) {
+  if (FILEINFO['file']) {
     contents +=
       '<span style="padding-left:3px; cursor:pointer" onclick="displayKeyscape();"';
     contents += " title='Keyscape'";
@@ -389,12 +390,12 @@ function displayWorkNavigation(selector) {
     contents += '</span>';
   }
 
-  if (window.FILEINFO['has-index'] == 'true') {
+  if (FILEINFO['has-index'] == 'true') {
     contents +=
       '<span style="padding-left:3px; cursor:pointer" onclick="copyRepertoryUrl(\'';
-    contents += window.FILEINFO['location'];
+    contents += FILEINFO['location'];
     contents += '/';
-    contents += window.FILEINFO['file'];
+    contents += FILEINFO['file'];
     contents += '\')"';
     contents += " title='copy link for work'";
     contents += '>';
@@ -402,7 +403,7 @@ function displayWorkNavigation(selector) {
     contents += '</span>';
   }
 
-  if (window.FILEINFO['previous-work'] || window.FILEINFO['next-work']) {
+  if (FILEINFO['previous-work'] || FILEINFO['next-work']) {
     contents += '&nbsp;&nbsp;';
   }
 
@@ -416,10 +417,10 @@ function displayWorkNavigation(selector) {
 
 function copyRepertoryUrl(file) {
   if (!file) {
-    if (window.FILEINFO) {
-      file = window.FILEINFO.location;
+    if (FILEINFO) {
+      file = FILEINFO.location;
       file += '/';
-      file += window.FILEINFO.file;
+      file += FILEINFO.file;
     }
   }
 
@@ -433,7 +434,7 @@ function copyRepertoryUrl(file) {
   }
 
   let kstring = '';
-  if (!window.InputVisible) {
+  if (!global_interface.InputVisible) {
     kstring += 'ey';
   }
 
@@ -559,7 +560,7 @@ window.displayWork = displayWork;
 //
 
 export function displayIndex(directory) {
-  window.ShowingIndex = true;
+  global_interface.ShowingIndex = true;
   if (!directory) {
     return;
   }
@@ -621,12 +622,12 @@ export function replaceEditorContentWithHumdrumFile(text, page) {
       vrvWorker.filterData(options, text, 'humdrum').then(showMei);
     } else {
       vrvWorker.filterData(options, text, 'humdrum').then(function (newtext) {
-        let freezeBackup = window.FreezeRendering;
-        if (window.FreezeRendering == false) {
-          window.FreezeRendering = true;
+        let freezeBackup = global_interface.FreezeRendering;
+        if (global_interface.FreezeRendering == false) {
+          global_interface.FreezeRendering = true;
         }
         setTextInEditor(newtext);
-        window.FreezeRendering = freezeBackup;
+        global_interface.FreezeRendering = freezeBackup;
         displayNotation(page);
       });
     }
@@ -652,7 +653,7 @@ export function applyZoom() {
   // }
 
   let options = humdrumToSvgOptions();
-  window.OPTIONS = options;
+  setOptions(options);
   stop();
   vrvWorker.HEIGHT = options.pageHeight;
   vrvWorker.WIDTH = options.pageWidth;
@@ -761,7 +762,7 @@ export function gotoFirstPage() {
 //
 // showBufferedHumdrumData --
 //
-import { editorMode, setEditorMode } from './global-variables.js';
+import { editorMode, FILEINFO, global_cursor, global_editorOptions, global_interface, global_verovioOptions, OPTIONS, setEditorMode, setFileInfo, setOptions } from './global-variables.js';
 let bufferedHumdrumFile = '';
 
 export function showBufferedHumdrumData() {
@@ -965,7 +966,7 @@ function getTextFromEditorWithGlobalFilter(data) {
 //
 
 function showMei(meidata) {
-  if (window.ShowingIndex) {
+  if (global_interface.ShowingIndex) {
     return;
   }
   setEditorMode('xml');
@@ -1011,7 +1012,7 @@ export function displayMei() {
 //
 
 function displaySvg() {
-  if (window.ShowingIndex) {
+  if (global_interface.ShowingIndex) {
     return;
   }
   vrvWorker.renderPage(vrvWorker.page).then(function (data) {
@@ -1060,15 +1061,15 @@ export function displayPdf() {
     return;
   }
 
-  if (!window.FILEINFO['has-pdf']) {
+  if (!FILEINFO['has-pdf']) {
     return;
   }
-  if (window.FILEINFO['has-pdf'] != 'true') {
+  if (FILEINFO['has-pdf'] != 'true') {
     return;
   }
 
-  let url = 'https://kern.humdrum.org/data?l=' + window.FILEINFO['location'];
-  url += '&file=' + window.FILEINFO['file'];
+  let url = 'https://kern.humdrum.org/data?l=' + FILEINFO['location'];
+  url += '&file=' + FILEINFO['file'];
   url += '&format=pdf&#view=FitH';
 
   openPdfAtBottomThirdOfScreen(url);
@@ -1080,7 +1081,7 @@ export function displayPdf() {
 //
 
 function displayKeyscape() {
-  let fileinfo = window.FILEINFO;
+  let fileinfo = FILEINFO;
   if (!fileinfo) {
     console.log('Error: no fileinfo');
     return;
@@ -1391,7 +1392,7 @@ export function initializeVerovioToolkit() {
     $this.data('y', $this.outerHeight());
   });
 
-  if (!window.ShowingIndex) {
+  if (!global_interface.ShowingIndex) {
     console.log('Score will be displayed after verovio has finished loading');
     displayNotation();
   }
@@ -1558,7 +1559,7 @@ export function humdrumDataIntoView(event) {
       continue;
     }
 
-   window.HIGHLIGHTQUERY = target.id;
+    global_cursor.HIGHLIGHTQUERY = target.id;
     highlightIdInEditor(target.id, 'humdrumDataIntoView');
     break;
   }
@@ -1627,11 +1628,11 @@ export function toggleHumdrumCsvTsv() {
 //
 
 export function decreaseTab() {
-  window.TABSIZE--;
-  if (window.TABSIZE < 1) {
-    window.TABSIZE = 1;
+  global_editorOptions.TABSIZE--;
+  if (global_editorOptions.TABSIZE < 1) {
+    global_editorOptions.TABSIZE = 1;
   }
- editor.getSession().setTabSize(window.TABSIZE);
+ editor.getSession().setTabSize(global_editorOptions.TABSIZE);
 }
 
 //////////////////////////////
@@ -1640,11 +1641,11 @@ export function decreaseTab() {
 //
 
 export function increaseTab() {
-  window.TABSIZE++;
-  if (window.TABSIZE > 100) {
-    window.TABSIZE = 100;
+  global_editorOptions.TABSIZE++;
+  if (global_editorOptions.TABSIZE > 100) {
+    global_editorOptions.TABSIZE = 100;
   }
- editor.getSession().setTabSize(window.TABSIZE);
+ editor.getSession().setTabSize(global_editorOptions.TABSIZE);
 }
 
 //////////////////////////////
@@ -1696,8 +1697,8 @@ export function clearContent() {
 
 import { play_midi } from '../midifunctions.js';
 export function playCurrentMidi() {
-  if (window.CursorNote && window.CursorNote.id) {
-    let id = window.CursorNote.id;
+  if (global_cursor.CursorNote && global_cursor.CursorNote.id) {
+    let id = global_cursor.CursorNote.id;
     vrvWorker.getTimeForElement(id).then(function (time) {
       play_midi(time);
     });
@@ -1714,9 +1715,9 @@ window.playCurrentMidi = playCurrentMidi;
 //
 
 export function setCursorNote(item, location) {
-  window.CursorNote = item;
-  getMenu().showCursorNoteMenu(window.CursorNote);
-  // window.MENU.showCursorNoteMenu(window.CursorNote);
+  global_cursor.CursorNote = item;
+  getMenu().showCursorNoteMenu(global_cursor.CursorNote);
+  // window.MENU.showCursorNoteMenu(global_cursor.CursorNote);
 }
 
 //////////////////////////////
@@ -1734,7 +1735,7 @@ export function hideRepertoryIndex() {
       console.log('FOCUSING ON OUTPUT');
       output.focus();
     }
-    window.ShowingIndex = 0;
+    global_interface.ShowingIndex = 0;
   }
 }
 
@@ -1908,7 +1909,7 @@ function removeLastLineInTextEditorIfMatches(line) {
 //
 
 function moveToTopOfNotation() {
-  window.GOTOTOPOFNOTATION = true;
+  global_verovioOptions.GOTOTOPOFNOTATION = true;
 }
 
 //////////////////////////////

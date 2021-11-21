@@ -88,6 +88,7 @@ function callbackAfterInitialized() {
 	initializeVerovioToolkit();
 }
 
+import { global_interface } from './vhv-scripts/global-variables.js';
 import { monitorNotationUpdating, displayNotation, applyZoom } from './vhv-scripts/misc.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 
@@ -121,7 +122,7 @@ function initializeVerovioToolkit() {
     $this.data('y', $this.outerHeight());
   });
 
-  if (!window.ShowingIndex) {
+  if (!global_interface.ShowingIndex) {
     console.log('Score will be displayed after verovio has finished loading');
     displayNotation();
   }
