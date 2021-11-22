@@ -143,10 +143,6 @@ class MenuInterface {
     processInterfaceKeyCommand(event);
   }
 
-  saveHtmlContents() {
-    // downloadEditorContentsInHtml();
-  }
-
   compileEmbeddedFilters() {
     var event = {};
     event.code = CKey;

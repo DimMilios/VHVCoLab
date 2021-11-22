@@ -16,9 +16,6 @@ document
   .querySelector('#save-view-as-svg__submenu-item')
   .addEventListener('click', () => menu.saveSvgData());
 document
-  .querySelector('#save-as-html__submenu-item')
-  .addEventListener('click', () => menu.saveHtmlContents());
-document
   .querySelector('#save-as-musicxml__submenu-item')
   .addEventListener('click', () => menu.convertToMusicXmlAndSave());
 document
@@ -141,12 +138,6 @@ document
 document
   .querySelector('#decrease-tab-width__submenu-item')
   .addEventListener('click', () => menu.decreaseTabSize());
-document
-  .querySelector('#add-spacing-tabs__submenu-item')
-  .addEventListener('click', () => menu.applyFilter('tabber'));
-document
-  .querySelector('#remove-spacing-tabs__submenu-item')
-  .addEventListener('click', () => menu.applyFilter('tabber -r'));
 document
   .querySelector('#start-splitting--32-measure-splits-__submenu-item')
   .addEventListener('click', () => menu.startSplit(32));

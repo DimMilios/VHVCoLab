@@ -27,6 +27,7 @@ import { getStaffCount } from './utility-humdrum.js';
 
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 import { getAceEditor } from './setup.js';
+import { global_verovioOptions } from './global-variables.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {

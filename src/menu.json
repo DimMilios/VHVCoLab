@@ -46,16 +46,6 @@
           },
           {
             "TEXT": {
-              "DEFAULT": "Save as HTML",
-              "ACTION": "MENU.saveHtmlContents()"
-            },
-            "RIGHT_TEXT": {
-              "TYPE": "",
-              "DEFAULT": ""
-            }
-          },
-          {
-            "TEXT": {
               "DEFAULT": "Save as MusicXML",
               "ACTION": "MENU.convertToMusicXmlAndSave()"
             },
@@ -510,26 +500,6 @@
                   "RIGHT_TEXT": {
                     "TYPE": "shortcut",
                     "DEFAULT": "alt-&lt;"
-                  }
-                },
-                {
-                  "TEXT": {
-                    "DEFAULT": "Add spacing tabs",
-                    "ACTION": "MENU.applyFilter('tabber')"
-                  },
-                  "RIGHT_TEXT": {
-                    "TYPE": "filter",
-                    "DEFAULT": "tabber"
-                  }
-                },
-                {
-                  "TEXT": {
-                    "DEFAULT": "Remove spacing tabs",
-                    "ACTION": "MENU.applyFilter('tabber -r')"
-                  },
-                  "RIGHT_TEXT": {
-                    "TYPE": "filter",
-                    "DEFAULT": "tabber -r"
                   }
                 }
               ]
