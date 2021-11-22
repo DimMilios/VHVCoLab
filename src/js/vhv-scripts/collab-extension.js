@@ -1,3 +1,5 @@
+import { RubberBandSelection } from "./util-collab";
+
 const MULTI_SELECT_ALPHA = 0.09;
 
 let DEBUG = false;
@@ -32,16 +34,13 @@ export function removeUnusedElements(clientIds) {
 }
 
 function formatUserElem(elem) {
-  if (elem instanceof HTMLElement) {
-    const [, qOn, qOff, pitchName, accidental, octave] = elem.classList;
-    const formattedElem = {};
-    // prettier-ignore
-    formattedElem.attrs = formatAttributes({ qOn, qOff, pitchName, accidental, octave });
-    // formattedElem.clientIds = Array.from(elem.clientIds);
-  
-    return JSON.stringify(formattedElem, null, 2);
-  }
-  return null;
+  const [, qOn, qOff, pitchName, accidental, octave] = elem.classList;
+  const formattedElem = {};
+  // prettier-ignore
+  formattedElem.attrs = formatAttributes({ qOn, qOff, pitchName, accidental, octave });
+  // formattedElem.clientIds = Array.from(elem.clientIds);
+
+  return JSON.stringify(formattedElem, null, 2);
 }
 
 function formatAttributes(attrs) {
@@ -212,7 +211,7 @@ window.addEventListener('DOMContentLoaded', () => {
   styleSheet.innerHTML = `
   .multi-select-area {
     position: absolute;
-    z-index: 20000;
+    z-index: var(--collab-layer-zIndex);
     background-color: blue;
     pointer-events: none;
   }
@@ -240,93 +239,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   mutationObserver.observe(document.body, { childList: true, subtree: true });
 });
-
-class RubberBandSelection {
-  coords = {
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-  };
-
-  isSelecting = false;
-
-  selectAreaElem = document.querySelector('#select-area');
-
-  constructor(coords) {
-    this.coords = coords ?? this.coords;
-
-    if (!this.selectAreaElem) {
-      this.selectAreaElem = document.createElement('div');
-      this.selectAreaElem.id = 'select-area';
-      document.body.appendChild(this.selectAreaElem);
-    }
-  }
-
-  /**
-   * Update the position new position of the selection area DOM element
-   *
-   * @returns {{ left: number, top: number, right: number, bottom: number }} The new coordinates of the DOM element
-   */
-  updateElemPosition() {
-    let { left, top, right, bottom } = this.coords;
-    let minX = Math.min(left, right);
-    let maxX = Math.max(left, right);
-    let minY = Math.min(top, bottom);
-    let maxY = Math.max(top, bottom);
-
-    this.selectAreaElem.style.transform = `translate(${minX}px, ${minY}px)`;
-    this.selectAreaElem.style.width = maxX - minX + 'px';
-    this.selectAreaElem.style.height = maxY - minY + 'px';
-
-    return {
-      left: minX,
-      top: minY,
-      right: maxX,
-      bottom: maxY,
-    };
-  }
-
-  /**
-   * Update the internal coordinates state of the object with
-   * the position of the selection area DOM element
-   *
-   * @returns {{ left: number, top: number, right: number, bottom: number }} The new coordinates of the current object
-   */
-  reCalculateCoords() {
-    return (this.coords = this.updateElemPosition());
-  }
-
-  resetCoords() {
-    this.coords = {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-    };
-    this.updateElemPosition();
-  }
-
-  /**
-   * Find every element of the array that is within the bounds of the selection
-   * area DOM element
-   *
-   * @param {Element[]} elements
-   * @returns {Element[]}
-   */
-  selectNoteElements(elements) {
-    return elements.filter(elem => {
-      const box = elem.getBoundingClientRect();
-
-      return (
-        this.coords.left <= box.left &&
-        this.coords.top <= box.top &&
-        this.coords.right >= box.right &&
-        this.coords.bottom >= box.bottom
-      );
-    });
-  }
-}
 
 function addListenersToOutput(outputTarget) {
   let startTime, endTime;
@@ -399,7 +311,7 @@ function addListenersToOutput(outputTarget) {
         selectedArea.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
         selectedArea.style.width = `${coords.width}px`;
         selectedArea.style.height = `${coords.height}px`;
-        selectedArea.style.backgroundColor = hexToRgbA(color, MULTI_SELECT_ALPHA) ?? 'blue';
+        selectedArea.style.backgroundColor = hexToRgbA(color, MULTI_SELECT_ALPHA) ?? 'rgba(0, 0, 255, 0.09)';
   
         awareness?.setLocalStateField('multiSelect', selectedNotes
             .map(note => note.id)

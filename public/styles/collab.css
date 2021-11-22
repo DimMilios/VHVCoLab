@@ -1,6 +1,10 @@
+:root {
+  --collab-layer-zIndex: 900;
+}
+
 .users-div {
   position: absolute;
-  z-index: 1000;
+  z-index: var(--collab-layer-zIndex);
   cursor: pointer;
   
   font-size: 0.7em;
@@ -28,14 +32,14 @@
   box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, .2);
 
   padding: .5rem;
-  z-index: 100000;
+  z-index: var(--collab-layer-zIndex);
 }
 
 #select-area {
   border: 1px dotted black;
   background-color: rgba(0, 140, 220, 0.2);
   position: absolute;
-  z-index: 10000;
+  z-index: var(--collab-layer-zIndex);
 }
 
 /* Given to note elements when selected */
@@ -45,7 +49,7 @@
 
 .single-note-select {
   position: absolute;
-  z-index: 10000;
+  z-index: var(--collab-layer-zIndex);
   opacity: 0.2;
 
   cursor: pointer;
@@ -60,7 +64,7 @@
   width: 100px;
   height: 30px;
 
-  z-index: 1000000;
+  z-index: 1000;
 }
 
 .dropdown-item:hover {

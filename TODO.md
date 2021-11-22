@@ -63,8 +63,6 @@
   - [MusicNet Video with Feature display](https://youtu.be/GyUu_L8t7rs?t=472)
 
 ### TODOs
-- [x] Drop `userMap` and `userColorMap` objects in favor of `awareness` local state objects. Construct application state from `awareness` objects received from its event listeners.
-- [x] Add stack based undo from https://github.com/yjs/y-codemirror/blob/main/src/y-codemirror.js
 
 ## WebsocketProvider
 Run a `Websocket` server locally
@@ -88,11 +86,11 @@ The `timemap` module found in `_includes/vhv-scripts/` isn't currently used.
 
 ### Next steps for refactoring
 - [x] Start moving project over to `NPM` with `Vite` + `Rollup` for bundling.
-- [] Remove the `.aton` menu files and the `ATON` parser needed (`scripts/aton.js`). We don't really need to worry about Internationalization and if we do we can parse the `.aton` files to `JSON` and use them.
+- [x] Remove the `.aton` menu files and the `ATON` parser needed (`scripts/aton.js`). We don't really need to worry about Internationalization and if we do we can parse the `.aton` files to `JSON` and use them.
+- [x] Consider removing the dependency on `handlebars`. It is only used for the menu bar.
+- [x] Remove unused buttons from the menu (`Analysis`, `languages`). Plus unused menu options.
 - [] Consider removing `basket`/`basket-session` and its dependencies (`rsvp`). What is `basket` used for anymore? The `MIDI` scripts were saved to `localStorage` using `basket` (Why???). Now they will be loaded as `JavaScript` scripts or `ES6` modules. `rsvp` is literally the `Promise` api so we don't really need it.
-- [] Consider removing the dependency on `handlebars`. It is only used for the menu bar.
-- [] Remove unused buttons from the menu (`Analysis`, `languages`). Plus unused menu options.
-#### Global Variables
+#### Global Variables **--Almost done--**
 We still expose many global variables to make the app functional. This creates a problem when building the app since the NPM scripts that are bundled get minified, hashed, etc. which means that scripts located in the `public/scripts` folder no longer know the names of the global variables exposed.
 #### Scripts to turn into `ES6` modules:
   - [] `scripts/local/humdrum-notation-plugin-worker-copy.js`: intializes the `Web Worker` running `Verovio` toolkit functions and contains functions for the `Humdrum` notation plugin
