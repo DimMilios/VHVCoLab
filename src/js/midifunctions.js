@@ -187,9 +187,6 @@ export const midiUpdate = function (time) {
 	});
 }
 
-window.midiUpdate = midiUpdate;
-
-
 
 //////////////////////////////
 //
@@ -223,9 +220,6 @@ export const midiStop = function () {
 	global_playerOptions.PLAY = false;
   LASTLINE = -1;
 }
-
-window.midiStop = midiStop;
-
 
 $.fn.addClassSVG = function (className) {
 	$(this).attr('class', function (index, existingClassNames) {

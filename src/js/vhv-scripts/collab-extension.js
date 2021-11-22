@@ -1,17 +1,5 @@
 const MULTI_SELECT_ALPHA = 0.09;
 
-function sendTarget(target) {
-  if (!target) return null;
-  const selectedElemAttrs = `#${target.id}.${[...target.classList].join('.')}`;
-  // sendToServer({
-  //   type: 'note-select',
-  //   attrs: selectedElemAttrs,
-  // });
-}
-
-// const socket = new WebSocket('ws://localhost:8080');
-// const socket = new WebSocket('ws://vhv-ws-server.herokuapp.com');
-
 let DEBUG = false;
 function log(text) {
   if (DEBUG) {
@@ -19,78 +7,6 @@ function log(text) {
   }
 }
 
-function sendToServer(msg) {
-  let msgJSON = JSON.stringify(msg);
-
-  log(`Sending ${msg.type} message: ${msgJSON}`);
-  socket.send(msgJSON);
-}
-
-const colors = [
-  { value: '#e6194b', used: false },
-  { value: '#3cb44b', used: false },
-  { value: '#ffe119', used: false },
-  { value: '#4363d8', used: false },
-  { value: '#f58231', used: false },
-  { value: '#911eb4', used: false },
-  { value: '#46f0f0', used: false },
-  { value: '#f032e6', used: false },
-  { value: '#bcf60c', used: false },
-  { value: '#fabebe', used: false },
-  { value: '#008080', used: false },
-  { value: '#e6beff', used: false },
-  { value: '#9a6324', used: false },
-  { value: '#800000', used: false },
-  { value: '#aaffc3', used: false },
-  { value: '#808000', used: false },
-  { value: '#ffd8b1', used: false },
-  { value: '#000075', used: false },
-  { value: '#808080', used: false },
-];
-
-function getRandomColor() {
-  let color;
-  while (colors.some(c => c.used == false)) {
-    color = colors[Math.floor(Math.random() * colors.length)];
-    if (!color.used) {
-      color.used = true;
-      return color.value;
-    }
-  }
-}
-
-// function removeUnusedElements() {
-//   const usersDivs = document.querySelectorAll('.users-div');
-//   const singleNoteSelects = document.querySelectorAll('.single-note-select');
-//   const multiNoteSelects = document.querySelectorAll('.multi-select-area');
-
-//   // Remove all users divs when no user is selecting the note element they represent
-//   [...usersDivs].forEach(div => {
-//     if (!(div.dataset.noteId in userElemMap)) {
-//       div.remove();
-//     }
-//   });
-
-//   [...singleNoteSelects].forEach(select => {
-//     if (!(select.dataset.noteId in userElemMap)) {
-//       select.remove();
-//     }
-//   });
-
-//   [...multiNoteSelects].forEach(select => {
-//     if (!(select.dataset.clientId in userMultiSelectMap)) {
-//       select.remove();
-//     }
-//   });
-
-//   document.querySelector('.note-info')?.remove();
-
-//   colors.forEach(c => {
-//     if (!Object.values(userColorMap).includes(c.value)) {
-//       c.used = false;
-//     }
-//   })
-// }
 export function removeUnusedElements(clientIds) {
   const usersDivs = document.querySelectorAll('.users-div');
   const singleNoteSelects = document.querySelectorAll('.single-note-select');
@@ -114,161 +30,18 @@ export function removeUnusedElements(clientIds) {
     }
   });
 }
-// function removeUnusedElements(itemIds) {
-//   const usersDivs = document.querySelectorAll('.users-div');
-//   const singleNoteSelects = document.querySelectorAll('.single-note-select');
-
-//   Array.from(usersDivs).forEach(div => {
-//     if (!itemIds.includes(div.dataset.noteId)) {
-//       div.remove();
-//     }
-//   });
-  
-//   Array.from(singleNoteSelects).forEach(div => {
-//     if (!itemIds.includes(div.dataset.noteId)) {
-//       div.remove();
-//     }
-//   });
-// }
-
-let userMap = {};
-
-let userColorMap = {};
-let userElemMap = {};
-// socket?.addEventListener('message', event => {
-//   const msg = JSON.parse(event.data);
-//   log(`Message from server: ${JSON.stringify(msg, null, 2)}`);
-
-//   switch (msg.type) {
-//     case 'connected':
-//       socket.self = msg.self ?? socket.self;
-
-//       if (!(socket.self in userColorMap)) {
-//         userColorMap[socket.self] = getRandomColor();
-//       }
-//       break;
-//     case 'note-select':
-//       handleNoteSelect(msg);
-//       break;
-//     case 'client-list':
-//       handleClientListUpdate(msg);
-//       break;
-//     case 'note-multi-select':
-//       handleNoteMultiSelect(msg);
-//       break;
-//     default:
-//       log('Uknown message type');
-//       return;
-//   }
-// });
-
-function handleNoteSelect(msg) {
-  // Choose a random color for each other user
-  msg.clientList?.forEach(client => {
-    // prettier-ignore
-    if (client.clientId !== socket.self && !(client.clientId in userColorMap)) {
-      userColorMap[client.clientId] = getRandomColor();
-    }
-  });
-
-  /*
-  "note-4343": {
-    attrs: "#note-4343.bla.bla",
-    count: 2,
-    clientIds: Set{'client1', 'client2'}
-  }
-  */
-  userElemMap = msg.clientList?.reduce((prevClients, client) => {
-    if (typeof client.attrs == 'undefined') {
-      return prevClients;
-    }
-
-    const id = client.attrs.match(/^#.*?(?=\.)/g)[0].slice(1);
-
-    return {
-      ...prevClients,
-      [id]: {
-        count: id in prevClients ? prevClients[id].count + 1 : 1,
-        attrs: client.attrs,
-        clientIds:
-          typeof prevClients[id]?.clientIds != 'undefined'
-            ? prevClients[id].clientIds.add(client.clientId)
-            : new Set([client.clientId]),
-      },
-    };
-  }, {});
-
-  removeUnusedElements();
-
-  Object.entries(userElemMap).forEach(([key, values]) => {
-    const options = {
-      color: userColorMap[Array.from(values?.clientIds)[0]],
-      // text: values?.clientIds?.size,
-      text: Array.from(userElemMap[key]?.clientIds)
-        .map(id => id.split('-')[0].slice(0, 5))
-        .join('\n'),
-    };
-    updateSingleSelect(document.querySelector(`#${key}`), options);
-  });
-}
-
-function handleClientListUpdate(msg) {
-  const clientIds = msg.clientList?.map(c => c.clientId);
-
-  // Delete disconnected client information
-  Object.entries(userElemMap).forEach(([id, values]) => {
-    for (const clientId of Array.from(values.clientIds)) {
-      if (!clientIds?.includes(clientId)) {
-        userElemMap[id].clientIds.delete(clientId);
-        userElemMap[id].count = userElemMap[id].clientIds.size;
-        let elem = document.querySelector(`[data-note-id=${id}]`);
-        elem.textContent = userElemMap[id].count;
-      }
-    }
-
-    if (userElemMap[id].clientIds.size === 0) {
-      delete userElemMap[id];
-    }
-  });
-
-  Object.entries(userColorMap).forEach(([id, _]) => {
-    if (!clientIds?.includes(id)) {
-      delete userColorMap[id];
-    }
-  });
-
-  Object.entries(userMultiSelectMap).forEach(([id, _]) => {
-    if (!clientIds?.includes(id)) {
-      delete userMultiSelectMap[id];
-    }
-  });
-
-  removeUnusedElements();
-}
-
-// function formatUserElem(elem) {
-//   const formattedElem = { ...elem };
-//   console.log(elem);
-//   // #note-L34F5.note.qon-5_2.qoff-3.pname-d.acc-n.oct-5.b40c-8.b12c-2
-//   const [, , qOn, qOff, pitchName, accidental, octave] =
-//      formattedElem.attrs.split('.');
-
-//   // prettier-ignore
-//   formattedElem.attrs = formatAttributes({ qOn, qOff, pitchName, accidental, octave });
-//   formattedElem.clientIds = Array.from(elem.clientIds);
-
-//   return JSON.stringify(formattedElem, null, 2);
-// }
 
 function formatUserElem(elem) {
-  const [, qOn, qOff, pitchName, accidental, octave] = elem?.classList;
-
-  const formattedElem = {};
-  // prettier-ignore
-  formattedElem.attrs = formatAttributes({ qOn, qOff, pitchName, accidental, octave });
-  // formattedElem.clientIds = Array.from(elem.clientIds);
-
-  return JSON.stringify(formattedElem, null, 2);
+  if (elem instanceof HTMLElement) {
+    const [, qOn, qOff, pitchName, accidental, octave] = elem.classList;
+    const formattedElem = {};
+    // prettier-ignore
+    formattedElem.attrs = formatAttributes({ qOn, qOff, pitchName, accidental, octave });
+    // formattedElem.clientIds = Array.from(elem.clientIds);
+  
+    return JSON.stringify(formattedElem, null, 2);
+  }
+  return null;
 }
 
 function formatAttributes(attrs) {
@@ -414,21 +187,6 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
   };
 }
 
-function styleSelectedElem(
-  elem,
-  options = { color: '', classesToAdd: [], classesToRemove: [] }
-) {
-  if (typeof options.classesToAdd != 'undefined') {
-    elem.classList.add(...options.classesToAdd);
-  }
-  if (typeof options.classesToRemove != 'undefined') {
-    elem.classList.remove(...options.classesToRemove);
-  }
-  elem.style.color = options.color;
-  elem.style.stroke = options.color;
-  elem.style.fill = options.color;
-}
-
 function getCoordinates(target) {
   const targetBounds = target.getBoundingClientRect();
   const closestStaffElem = target.parentNode?.parentNode;
@@ -447,8 +205,6 @@ function getCoordinates(target) {
     staffBounds,
   };
 }
-
-let selectArea = document.querySelector('#select-area');
 
 window.addEventListener('DOMContentLoaded', () => {
   const styleSheet = document.createElement('style');
@@ -505,10 +261,6 @@ class RubberBandSelection {
       this.selectAreaElem.id = 'select-area';
       document.body.appendChild(this.selectAreaElem);
     }
-  }
-
-  set isSelecting(value) {
-    this.isSelecting = Boolean(value);
   }
 
   /**
@@ -595,7 +347,7 @@ function addListenersToOutput(outputTarget) {
       elem => elem.dataset.clientId == window.provider.awareness.clientID
     );
     if (selectToRemove) {
-      provider.awareness.setLocalStateField('multiSelect', null);
+      window.provider.awareness.setLocalStateField('multiSelect', null);
       selectToRemove?.remove();
     }
   });
@@ -621,7 +373,7 @@ function addListenersToOutput(outputTarget) {
   document.addEventListener('mouseup', handleMouseUp(window.provider.awareness, window.userData.color));
   
   function handleMouseUp(awareness, color) {
-    return event => {
+    return () => {
       rbSelection.reCalculateCoords();
       rbSelection.isSelecting = false;
   
@@ -774,19 +526,19 @@ export function userListDisplay(users) {
 
 // Alternatively, we can use an SVG 'use' element to copy the element we want:
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use
-function copySVGElement(elem) {
-  let clone = elem.cloneNode(true);
+// function copySVGElement(elem) {
+//   let clone = elem.cloneNode(true);
   
-  let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
-  // Copy its attributes
-  for (const { nodeName, value } of clone.attributes) {
-    copy.setAttribute(nodeName, value);
-  }
+//   let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
+//   // Copy its attributes
+//   for (const { nodeName, value } of clone.attributes) {
+//     copy.setAttribute(nodeName, value);
+//   }
 
-  // Copy its children
-  while (clone.hasChildNodes()) {
-    copy.appendChild(clone.removeChild(clone.firstChild));
-  }
+//   // Copy its children
+//   while (clone.hasChildNodes()) {
+//     copy.appendChild(clone.removeChild(clone.firstChild));
+//   }
 
-  return copy;
-}
+//   return copy;
+// }
