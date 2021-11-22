@@ -1,6 +1,7 @@
 /* global saveAs */
-import { setTextInEditor } from './misc.js';
+import { setTextInEditor, getTextFromEditorRaw } from './misc.js';
 import { getMenu } from '../menu.js';
+import { InterfaceSingleNumber, setInterfaceSingleNumber } from './editor.js';
 
 //////////////////////////////
 //
@@ -72,15 +73,13 @@ function saveBuffer(number, event) {
 //
 // restoreEditorContentsLocally -- Restore the editor contents from localStorage.
 //
-import { getTextFromEditorRaw } from './misc.js';
-
 export function restoreEditorContentsLocally() {
 	// save current contents to 0th buffer
 	var encodedcontents = encodeURIComponent(getTextFromEditorRaw());
 	localStorage.setItem("SAVE0", encodedcontents);
 	// reset interval timer of buffer 0 autosave here...
 
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -92,7 +91,7 @@ export function restoreEditorContentsLocally() {
 	}
 	var decodedcontents = decodeURIComponent(localStorage.getItem(key));
 	setTextInEditor(decodedcontents);
-	window.InterfaceSingleNumber = 0;
+	setInterfaceSingleNumber(0);
 }
 
 
@@ -180,7 +179,7 @@ export function prepareBufferStates() {
 //
 
 export function saveEditorContentsLocally() {
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -224,7 +223,7 @@ export function saveEditorContentsLocally() {
 		}
 	}
 
-	window.InterfaceSingleNumber = 0;
+	setInterfaceSingleNumber(0);
 }
 
 

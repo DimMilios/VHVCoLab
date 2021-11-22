@@ -600,6 +600,7 @@ function vrvInterface(use_worker, onReady) {
 //
 // vrvInterface::createWorkerInterface --
 //
+// import Worker from './verovio-worker.js?worker&inline';
 
 vrvInterface.prototype.createWorkerInterface = function (onReady) {
 	var vrv = this;
@@ -646,7 +647,6 @@ vrvInterface.prototype.createWorkerInterface = function (onReady) {
 
 
 	console.log("LOADING /scripts/verovio-worker.js");
-	// var workerUrl = "/scripts/verovio-worker.js";
 	var workerUrl = "/scripts/verovio-worker.js";
 
 	this.worker = null;

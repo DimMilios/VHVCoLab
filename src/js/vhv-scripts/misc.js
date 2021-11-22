@@ -12,6 +12,7 @@ import { verovioCallback } from './listeners.js';
 import { convertDataToCsv, convertDataToTsv } from './utility.js';
 import { loadIndexFile } from './loading.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { InterfaceSingleNumber } from './editor.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
@@ -1152,9 +1153,9 @@ function displayHumdrumPdf() {
 
   let url = '';
   let i;
-  if (window.InterfaceSingleNumber > 1) {
+  if (InterfaceSingleNumber > 1) {
     for (i = 0; i < urllist.length; i++) {
-      if (urllist[i].number == window.InterfaceSingleNumber) {
+      if (urllist[i].number == InterfaceSingleNumber) {
         url = urllist[i].url;
         break;
       }

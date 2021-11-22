@@ -25,14 +25,9 @@ self.Module = {
 
 
 
-	importScripts("/scripts/local/verovio-toolkit-wasm.js");
-	importScripts("/scripts/local/humdrumValidator.js");
-	importScripts("/scripts/local/verovio-calls.js");
-
-	// importScripts("/scripts/local/verovio-toolkit-wasm.js");
-	// importScripts("/scripts/local/humdrumValidator.js");
-	// importScripts("/scripts/local/verovio-calls.js");
-
+importScripts("/scripts/local/verovio-toolkit-wasm.js");
+importScripts("/scripts/local/humdrumValidator.js");
+importScripts("/scripts/local/verovio-calls.js");
 
 
 // force local:

@@ -10,11 +10,16 @@
 // Description:   Processing key commands to edit music.
 //
 
-// window.InterfaceSingleNumber: digit typed on the keyboard before
+// InterfaceSingleNumber: digit typed on the keyboard before
 // certain commands, suh as slurs, which indicates the number
 // of notes to include under the slur.  Or "2" for double-flats/
 // sharps, or for the transposing interval when changing pitch.
-window.InterfaceSingleNumber = 0;
+// window.InterfaceSingleNumber = 0;
+export let InterfaceSingleNumber = 0;
+export function setInterfaceSingleNumber(value) {
+	let number = parseInt(value, 10) % 10;
+	InterfaceSingleNumber = number;
+}
 
 import { insertDirectionRdfs, transposeDiatonic, insertEditorialAccidentalRdf, insertMarkedNoteRdf } from './utility-humdrum.js';
 import { getMenu } from '../menu.js';
@@ -136,15 +141,15 @@ export function processNotationKey(key, element) {
 		else if (key === "`")  { toggleStaccatissimo(id, line, field); }
 		else if (key === ";")  { toggleFermata(id, line, field); }
 		else if (key === ":")  { toggleArpeggio(id, line, field); }
-		else if (key === "1")  { window.InterfaceSingleNumber = 1; }
-		else if (key === "2")  { window.InterfaceSingleNumber = 2; }
-		else if (key === "3")  { window.InterfaceSingleNumber = 3; }
-		else if (key === "4")  { window.InterfaceSingleNumber = 4; }
-		else if (key === "5")  { window.InterfaceSingleNumber = 5; }
-		else if (key === "6")  { window.InterfaceSingleNumber = 6; }
-		else if (key === "7")  { window.InterfaceSingleNumber = 7; }
-		else if (key === "8")  { window.InterfaceSingleNumber = 8; }
-		else if (key === "9")  { window.InterfaceSingleNumber = 9; }
+		else if (key === "1")  { InterfaceSingleNumber = 1; }
+		else if (key === "2")  { InterfaceSingleNumber = 2; }
+		else if (key === "3")  { InterfaceSingleNumber = 3; }
+		else if (key === "4")  { InterfaceSingleNumber = 4; }
+		else if (key === "5")  { InterfaceSingleNumber = 5; }
+		else if (key === "6")  { InterfaceSingleNumber = 6; }
+		else if (key === "7")  { InterfaceSingleNumber = 7; }
+		else if (key === "8")  { InterfaceSingleNumber = 8; }
+		else if (key === "9")  { InterfaceSingleNumber = 9; }
 		else if (key === "@")  { toggleMarkedNote(id, line, field, subfield); }
 	} else if (name === "rest") {
 		if (key === "y")       { toggleVisibility(id, line, field); }
@@ -170,15 +175,15 @@ export function processNotationKey(key, element) {
 		else if (key === "leftEndMoveForward")  { leftEndMoveForward(id, line, field, number, line2, field2, number2); }
 		else if (key === "rightEndMoveForward") { rightEndMoveForward(id, line, field, number, line2, field2, number2); }
 		else if (key === "rightEndMoveBack")    { rightEndMoveBack(id, line, field, number, line2, field2, number2); }
-		else if (key === "1")  { window.InterfaceSingleNumber = 1; }
-		else if (key === "2")  { window.InterfaceSingleNumber = 2; }
-		else if (key === "3")  { window.InterfaceSingleNumber = 3; }
-		else if (key === "4")  { window.InterfaceSingleNumber = 4; }
-		else if (key === "5")  { window.InterfaceSingleNumber = 5; }
-		else if (key === "6")  { window.InterfaceSingleNumber = 6; }
-		else if (key === "7")  { window.InterfaceSingleNumber = 7; }
-		else if (key === "8")  { window.InterfaceSingleNumber = 8; }
-		else if (key === "9")  { window.InterfaceSingleNumber = 9; }
+		else if (key === "1")  { InterfaceSingleNumber = 1; }
+		else if (key === "2")  { InterfaceSingleNumber = 2; }
+		else if (key === "3")  { InterfaceSingleNumber = 3; }
+		else if (key === "4")  { InterfaceSingleNumber = 4; }
+		else if (key === "5")  { InterfaceSingleNumber = 5; }
+		else if (key === "6")  { InterfaceSingleNumber = 6; }
+		else if (key === "7")  { InterfaceSingleNumber = 7; }
+		else if (key === "8")  { InterfaceSingleNumber = 8; }
+		else if (key === "9")  { InterfaceSingleNumber = 9; }
 	} else if (name === "tie") {
 		// need to fix tie functions to deal with chord notes (subfield values):
 		if (key === "a") { setTieAboveMarker(id, line, field, subfield); }
@@ -756,7 +761,7 @@ function leftEndMoveBack(id, line, field, number, line2, field2, number2) {
 	}
 	var i = line - 2; // -1 for 0-index and -1 for line after
 	var counter = 0;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -798,7 +803,7 @@ function leftEndMoveBack(id, line, field, number, line2, field2, number2) {
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 }
 
 
@@ -818,7 +823,7 @@ function addSlur(id, line, field) {
 	var counter = 0;
 	var size =editor.session.getLength();
 
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -862,7 +867,7 @@ function addSlur(id, line, field) {
 	if (!global_interface.FreezeRendering) {
 		displayNotation(null, null, newid);
 	}
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 
 	// for some reason the highlighting is lost on the note,
 	// so add it back:
@@ -1073,7 +1078,7 @@ function leftEndMoveForward(id, line, field, number, line2, field2, number2) {
 	var i = parseInt(line); // -1 for 0-index and +1 for line after
 	var counter = 0;
 	var size =editor.session.getLength();
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -1117,7 +1122,7 @@ function leftEndMoveForward(id, line, field, number, line2, field2, number2) {
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 }
 
 
@@ -1137,7 +1142,7 @@ function rightEndMoveForward(id, line, field, number, line2, field2, number2) {
 	var counter = 0;
 	var size =editor.session.getLength();
 
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -1186,7 +1191,7 @@ function rightEndMoveForward(id, line, field, number, line2, field2, number2) {
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 }
 
 
@@ -1204,7 +1209,7 @@ function rightEndMoveBack(id, line, field, number, line2, field2, number2) {
 	}
 	var i = parseInt(line2) - 2; // -1 for 0-index and -1 for line after
 	var counter = 0;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -1253,7 +1258,7 @@ global_cursor.HIGHLIGHTQUERY = newid;
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 }
 
 
@@ -1561,7 +1566,7 @@ function transposeNote(id, line, field, subfield, amount)  {
 	var token = getEditorContents(line, field);
 
 	amount = parseInt(amount);
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -1572,7 +1577,7 @@ function transposeNote(id, line, field, subfield, amount)  {
 		} else {
 			amount = -target + 1;
 		}
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 	}
 
 	if (subfield) {
@@ -1622,7 +1627,7 @@ function transposeNote(id, line, field, subfield, amount)  {
 // 	var token = getEditorContents(line, field);
 
 // 	amount = parseInt(amount);
-// 	var target = window.InterfaceSingleNumber;
+// 	var target = InterfaceSingleNumber;
 // 	if (!target) {
 // 		target = 1;
 // 	}
@@ -1633,7 +1638,7 @@ function transposeNote(id, line, field, subfield, amount)  {
 // 		} else {
 // 			amount = -target + 1;
 // 		}
-// 		window.InterfaceSingleNumber = 0;
+// 		InterfaceSingleNumber = 0;
 // 	}
 
 // 	if (subfield) {
@@ -1759,7 +1764,7 @@ function toggleSharp(id, line, field, subfield) {
 	var newtoken;
 
 
-	if (window.InterfaceSingleNumber == 2) {
+	if (InterfaceSingleNumber == 2) {
 		if (!token.match("##")) {
 			// add double sharp
 			newtoken = token.replace(/[#n-]+/, "");
@@ -1769,7 +1774,7 @@ function toggleSharp(id, line, field, subfield) {
 			// remove double-sharp
 			newtoken = token.replace(/#+i?/, "");
 		}
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 	} else {
 		if (token.match("##") || !token.match("#")) {
 			// add sharp
@@ -1820,7 +1825,7 @@ function toggleFlat(id, line, field, subfield) {
 	}
 
 	var newtoken;
-	if (window.InterfaceSingleNumber == 2) {
+	if (InterfaceSingleNumber == 2) {
 		if (!token.match("--")) {
 			// add flat
 			newtoken = token.replace(/[#n-]+/, "");
@@ -1830,7 +1835,7 @@ function toggleFlat(id, line, field, subfield) {
 			// remove flat
 			newtoken = token.replace(/-+i?/, "");
 		}
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 	} else {
 		if (token.match("--") || !token.match("-")) {
 			// add flat
@@ -1977,7 +1982,7 @@ function toggleStaccato(id, line, field) {
 	var i = line;
 	var freezeBackup = global_interface.FreezeRendering;
 	global_interface.FreezeRendering = true;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -2015,7 +2020,7 @@ function toggleStaccato(id, line, field) {
 			line++;
 		}
 	}
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
@@ -2033,7 +2038,7 @@ function toggleAccent(id, line, field) {
 	var i = line;
 	var freezeBackup = global_interface.FreezeRendering;
 	global_interface.FreezeRendering = true;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -2073,7 +2078,7 @@ function toggleAccent(id, line, field) {
 		}
 
 	}
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
@@ -2091,7 +2096,7 @@ function toggleMarcato(id, line, field) {
 	var i = line;
 	var freezeBackup = global_interface.FreezeRendering;
 	global_interface.FreezeRendering = true;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -2131,7 +2136,7 @@ function toggleMarcato(id, line, field) {
 		}
 
 	}
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
@@ -2149,7 +2154,7 @@ function toggleTenuto(id, line, field) {
 	var i = line;
 	var freezeBackup = global_interface.FreezeRendering;
 	global_interface.FreezeRendering = true;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -2189,7 +2194,7 @@ function toggleTenuto(id, line, field) {
 		}
 
 	}
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
@@ -2207,7 +2212,7 @@ function toggleStaccatissimo(id, line, field) {
 	var i = line;
 	var freezeBackup = global_interface.FreezeRendering;
 	global_interface.FreezeRendering = true;
-	var target = window.InterfaceSingleNumber;
+	var target = InterfaceSingleNumber;
 	if (!target) {
 		target = 1;
 	}
@@ -2247,7 +2252,7 @@ function toggleStaccatissimo(id, line, field) {
 		}
 
 	}
-	window.InterfaceSingleNumber = 0;
+	InterfaceSingleNumber = 0;
 	global_interface.FreezeRendering = freezeBackup;
 	displayNotation();
 }
@@ -2518,18 +2523,18 @@ function toggleColorationStart(id, line, field) {
 //
 // togglePedalStart -- Inserting before LO:TX is a problem
 //
-// window.InterfaceSingleNumber == 4 => *Xlig toggle instead of *Xped
-// window.InterfaceSingleNumber == 5 => *Xcol toggle instead of *Xped
+// InterfaceSingleNumber == 4 => *Xlig toggle instead of *Xped
+// InterfaceSingleNumber == 5 => *Xcol toggle instead of *Xped
 //
 
 function togglePedalStart(id, line, field) {
-	if (window.InterfaceSingleNumber == 4) {
+	if (InterfaceSingleNumber == 4) {
 		toggleLigatureStart(id, line, field);
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 		return;
-	} else if (window.InterfaceSingleNumber == 5) {
+	} else if (InterfaceSingleNumber == 5) {
 		toggleColorationStart(id, line, field);
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 		return;
 	}
 
@@ -2703,18 +2708,18 @@ function toggleLigatureEnd(id, line, field) {
 //
 // togglePedalEnd --
 // 
-// window.InterfaceSingleNumber == 4 => *Xlig toggle instead of *Xped
-// window.InterfaceSingleNumber == 5 => *Xcol toggle instead of *Xped
+// InterfaceSingleNumber == 4 => *Xlig toggle instead of *Xped
+// InterfaceSingleNumber == 5 => *Xcol toggle instead of *Xped
 //
 
 function togglePedalEnd(id, line, field) {
-	if (window.InterfaceSingleNumber == 4) {
+	if (InterfaceSingleNumber == 4) {
 		toggleLigatureEnd(id, line, field);
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 		return;
-	} else if (window.InterfaceSingleNumber == 5) {
+	} else if (InterfaceSingleNumber == 5) {
 		toggleColorationEnd(id, line, field);
-		window.InterfaceSingleNumber = 0;
+		InterfaceSingleNumber = 0;
 		return;
 	}
 

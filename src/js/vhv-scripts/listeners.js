@@ -478,7 +478,8 @@ import {
   addDataLineAboveCurrentPosition,
   addInterpretationLineAboveCurrentPosition,
   addLocalCommentLineAboveCurrentPosition,
-	processNotationKey
+	processNotationKey,
+	setInterfaceSingleNumber
 } from './editor.js';
 import {
   togglePlaceColoring,
@@ -776,16 +777,16 @@ export function processInterfaceKeyCommand(event) {
 			break;
 */
 
-		case ZeroKey:  window.InterfaceSingleNumber = 0; break;
-		case OneKey:   window.InterfaceSingleNumber = 1; break;
-		case TwoKey:   window.InterfaceSingleNumber = 2; break;
-		case ThreeKey: window.InterfaceSingleNumber = 3; break;
-		case FourKey:  window.InterfaceSingleNumber = 4; break;
-		case FiveKey:  window.InterfaceSingleNumber = 5; break;
-		case SixKey:   window.InterfaceSingleNumber = 6; break;
-		case SevenKey: window.InterfaceSingleNumber = 7; break;
-		case EightKey: window.InterfaceSingleNumber = 8; break;
-		case NineKey:  window.InterfaceSingleNumber = 9; break;
+		case ZeroKey:  setInterfaceSingleNumber(0); break;
+		case OneKey:   setInterfaceSingleNumber(1); break;
+		case TwoKey:   setInterfaceSingleNumber(2); break;
+		case ThreeKey: setInterfaceSingleNumber(3); break;
+		case FourKey:  setInterfaceSingleNumber(4); break;
+		case FiveKey:  setInterfaceSingleNumber(5); break;
+		case SixKey:   setInterfaceSingleNumber(6); break;
+		case SevenKey: setInterfaceSingleNumber(7); break;
+		case EightKey: setInterfaceSingleNumber(8); break;
+		case NineKey:  setInterfaceSingleNumber(9); break;
 
 		case SpaceKey:          // start/pause MIDI playback
 			if (!global_playerOptions.PLAY) {

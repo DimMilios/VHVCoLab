@@ -1,8 +1,8 @@
 import { initializeVerovioToolkit, displayNotation } from './misc.js';
 
 import Ace from 'ace-builds/src/ace';
-import 'ace-builds/src/mode-xml';
-import 'ace-builds/src/ext-searchbox';
+// import 'ace-builds/src/mode-xml';
+// import 'ace-builds/src/ext-searchbox';
 // import '../ace/mode-humdrum.js';
 
 // import 'ace-builds/src/mode-humdrum';
@@ -10,6 +10,7 @@ import 'ace-builds/src/ext-searchbox';
 // import 'ace-builds/src/worker-humdrum';
 
 // const Range = Ace.require('ace/range').Range;
+
 
 //////////////////////////////
 //
@@ -22,11 +23,11 @@ if (!vrvWorker) {
 	throw new Error('Verovio worker is undefined');
 }
 
-function downloadVerovioToolkit(use_worker) {
-	console.log('Downloading vrv toolkit from setup.js');
-	// window.vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
-	vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
-};
+// function downloadVerovioToolkit(use_worker) {
+// 	console.log('Downloading vrv toolkit from setup.js');
+// 	// window.vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
+// 	vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
+// };
 
 
 
@@ -77,9 +78,9 @@ export function setupAceEditor(idtag) {
 	})
 
 	// Ace.config.set("basePath", "/scripts/ace");
-	Ace.config.set('modePath', "/scripts/ace");
-	Ace.config.set('workerPath', "/scripts/ace");
-	Ace.config.set('themePath', "/scripts/ace");
+	Ace.config.set('modePath', '/node_modules/ace-builds/src');
+	Ace.config.set('workerPath', '/node_modules/ace-builds/src');
+	Ace.config.set('themePath', '/node_modules/ace-builds/src');
 	
 	// Ace.config.set('modePath', "/scripts/ace");
 	// Ace.config.set('workerPath', "/scripts/ace");
