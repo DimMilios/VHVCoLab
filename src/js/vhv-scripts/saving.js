@@ -20,9 +20,6 @@ export function saveEditorContents() {
 	if (extension) {
 		filename += "." + extension;
 	}
-	// var size = window.EDITOR.session.getLength();
-	// var matches;
-	// var line;
 
 	var text = getTextFromEditor();
 	// var blob = new Blob([text], {type: 'text/plain;charset=utf-8'});

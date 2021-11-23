@@ -13,13 +13,13 @@
 //
 
 import { FILEINFO, global_cursor, global_editorOptions, global_interface, global_playerOptions, global_verovioOptions } from './global-variables.js';
-import { getAceEditor, setupAceEditor, setupSplitter} from './setup.js'
+import { getAceEditor, setupSplitter} from './setup.js'
 import { displayNotation, cleanFont, updateEditorMode, setTextInEditor } from './misc.js';
 import { observeSvgContent } from './utility-svg.js';
 import { HnpMarkup } from './highlight.js';
 
+// window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
-window.HIDEMENU = false;
 
 document.getElementById('play-button')?.addEventListener('click', () => playCurrentMidi());
 
@@ -46,7 +46,7 @@ if (localStorage.FONT) {
 // highlighting options --
 //
 
-window.MARKUP = new HnpMarkup();
+const markup = new HnpMarkup();
 
 
 //////////////////////////////
@@ -54,7 +54,6 @@ window.MARKUP = new HnpMarkup();
 // DomContentLoaded event listener -- Display the sample data.
 //
 import { setEditorMode } from './global-variables.js'
-import { setEditorModeAndKeyboard } from './utility-ace.js'
 import { getTextFromEditorRaw, dataIntoView } from './misc.js'
 import { loadEditorFontSizes } from './verovio-options.js'
 import { setupDropArea } from '../drop.js'
@@ -68,9 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			inputElement.style.fontSize = global_editorOptions.INPUT_FONT_SIZE + "rem";
 	}
 
-	// EditorMode = "humdrum";
 	setEditorMode("humdrum");
-	// setEditorModeAndKeyboard();
 
 	// The block of code below loads the edits to the Ace editor from the AUTOSAVE local buffer,
 	// but it breaks Ace Editor
@@ -91,12 +88,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}
 
-	// setupAceEditor("input");
 	getAceEditor()._dispatchEvent('ready');
 	setupDropArea();
-
-	// let vrvCopy = Object.assign({}, window.vrvWorker);
-	// console.log('Calling displayNotation with: ', vrvCopy)
 
 	displayNotation();
 
@@ -930,7 +923,7 @@ export function verovioCallback(data) {
 			scroller.scrollTo(0, 0);
 		}
 	}
-	window.MARKUP.loadSvg("svg");
+	markup.loadSvg("svg");
 }
 
 

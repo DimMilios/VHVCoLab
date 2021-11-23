@@ -59,4 +59,4 @@ SPLITTER.prototype.setPositionX = function(xPosition) {
 
 };
 
-window.Splitter = new SPLITTER();
+export default new SPLITTER();

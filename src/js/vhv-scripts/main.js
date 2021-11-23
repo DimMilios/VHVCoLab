@@ -55,7 +55,7 @@ export * from './utility-ace.js'
 
 // Splitter prototypes for dealing with split
 // windowing system for text and notation:
-export * from './splitter.js'
+// export * from './splitter.js'
 
 // Functions related to load and save buffers,
 // also related to the load/save toolbar:

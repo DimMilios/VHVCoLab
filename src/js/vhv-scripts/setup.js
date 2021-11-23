@@ -23,11 +23,7 @@ if (!vrvWorker) {
 	throw new Error('Verovio worker is undefined');
 }
 
-// function downloadVerovioToolkit(use_worker) {
-// 	console.log('Downloading vrv toolkit from setup.js');
-// 	// window.vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
-// 	vrvWorker = new window.vrvInterface(use_worker, initializeVerovioToolkit);
-// };
+
 
 
 
@@ -174,6 +170,7 @@ export function configureAceEditor() {
 //
 import { setTextInEditor } from './misc.js'
 import { global_editorOptions, global_interface } from './global-variables.js';
+import splitter from './splitter.js';
 
 function insertSplashMusic() {
 	var splashElement = document.querySelector("#input-splash");
@@ -245,54 +242,54 @@ function customCursor() {
 //
 
 export function setupSplitter() {
-	var splitter = document.querySelector("#splitter");
-	if (!splitter) {
+	var splitterElem = document.querySelector("#splitter");
+	if (!splitterElem) {
 		return;
 	}
 
-	if (!window.Splitter.leftContent) {
-		window.Splitter.leftContent = document.querySelector('#input');
+	if (!splitter.leftContent) {
+		splitter.leftContent = document.querySelector('#input');
 	}
-	if (!window.Splitter.splitContent) {
-		window.Splitter.splitContent = document.querySelector('#splitter');
+	if (!splitter.splitContent) {
+		splitter.splitContent = document.querySelector('#splitter');
 	}
-	if (!window.Splitter.rightContent) {
-		window.Splitter.rightContent = document.querySelector('#output');
+	if (!splitter.rightContent) {
+		splitter.rightContent = document.querySelector('#output');
 	}
 
-	splitter.addEventListener('mousedown', function(event) {
-		window.Splitter.mouseState    = 1;
-		if (!window.Splitter.leftContent) {
-			window.Splitter.leftContent   = document.querySelector('#input');
+	splitterElem.addEventListener('mousedown', function(event) {
+		splitter.mouseState    = 1;
+		if (!splitter.leftContent) {
+			splitter.leftContent   = document.querySelector('#input');
 		}
-		if (!window.Splitter.splitContent) {
-			window.Splitter.splitContent  = document.querySelector('#splitter');
+		if (!splitter.splitContent) {
+			splitter.splitContent  = document.querySelector('#splitter');
 		}
-		if (!window.Splitter.rightContent) {
-			window.Splitter.rightContent  = document.querySelector('#output');
+		if (!splitter.rightContent) {
+			splitter.rightContent  = document.querySelector('#output');
 		}
-		window.Splitter.setPositionX(event.pageX);
+		splitter.setPositionX(event.pageX);
 	});
 
 	window.addEventListener('mouseup', function(event) {
-		if (window.Splitter.mouseState != 0) {
-			window.Splitter.mouseState = 0;
+		if (splitter.mouseState != 0) {
+			splitter.mouseState = 0;
 			editor.resize();
 			displayNotation();
 		}
 	});
 
 	window.addEventListener('mousemove', function(event) {
-		if (window.Splitter.mouseState) {
-			var minXPos = window.Splitter.minXPos;
+		if (splitter.mouseState) {
+			var minXPos = splitter.minXPos;
 			if (event.pageX < minXPos){
 				if (event.pageX < minXPos - 70){ //Adjust closing snap tolerance here
-					window.Splitter.setPositionX(0);
+					splitter.setPositionX(0);
 					global_interface.InputVisible = false;
 				}
 				return;
 			}
-			window.Splitter.setPositionX(event.pageX);
+			splitter.setPositionX(event.pageX);
 			global_interface.InputVisible = true;
 		}
 	});

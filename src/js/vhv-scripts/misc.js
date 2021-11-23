@@ -140,8 +140,6 @@ export function displayNotation(page, force, restoreid) {
     });
 }
 
-window.displayNotation = displayNotation;
-
 //////////////////////////////
 //
 // toggleFreeze --
@@ -186,10 +184,10 @@ export function toggleTextVisibility(suppressZoom) {
     if (global_interface.LastInputWidth == 0) {
       global_interface.LastInputWidth = 400;
     }
-    window.Splitter.setPositionX(global_interface.LastInputWidth);
+    splitter.setPositionX(global_interface.LastInputWidth);
   } else {
     global_interface.LastInputWidth = parseInt(input.style.width);
-    window.Splitter.setPositionX(0);
+    splitter.setPositionX(0);
   }
   if (!suppressZoom) {
     displayNotation();
@@ -210,10 +208,10 @@ export function redrawInputArea(suppressZoom) {
     if (global_interface.LastInputWidth == 0) {
       global_interface.LastInputWidth = 400;
     }
-    window.Splitter.setPositionX(global_interface.LastInputWidth);
+    splitter.setPositionX(global_interface.LastInputWidth);
   } else {
     global_interface.LastInputWidth = parseInt(input.style.width);
-    window.Splitter.setPositionX(0);
+    splitter.setPositionX(0);
   }
   if (!suppressZoom) {
     applyZoom();
@@ -230,7 +228,7 @@ function hideInputArea(suppressZoom) {
   global_interface.InputVisible = false;
   let input = document.querySelector('#input');
   global_interface.LastInputWidth = parseInt(input.style.width);
-  window.Splitter.setPositionX(0);
+  splitter.setPositionX(0);
   if (!suppressZoom) {
     applyZoom();
   }
@@ -243,7 +241,7 @@ function hideInputArea(suppressZoom) {
 
 function showInputArea(suppressZoom) {
   global_interface.InputVisible = true;
-  window.Splitter.setPositionX(global_interface.LastInputWidth);
+  splitter.setPositionX(global_interface.LastInputWidth);
   if (!suppressZoom) {
     applyZoom();
   }
@@ -552,8 +550,6 @@ export function displayWork(file) {
     next: true,
   });
 }
-
-window.displayWork = displayWork;
 
 //////////////////////////////
 //
@@ -1114,10 +1110,6 @@ function displayKeyscape() {
   console.log('Keyscape URL is', url);
 
   console.log('Loading Keyscape', url);
-  // if (window.WKEY) {
-  //   window.WKEY.close();
-  //   window.WKEY = null;
-  // }
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Window/open#window____features
   let features = '';
@@ -1133,8 +1125,6 @@ function displayKeyscape() {
   features += ', toolbar=no';
   features += ', location=0';
   console.log('FEATURES', features);
-  // window.WKEY = window.open(url, '', features);
-  // window.WKEY.focus();
 }
 
 //////////////////////////////
@@ -1412,8 +1402,6 @@ export function monitorNotationUpdating() {
   displayNotation();
 }
 
-window.monitorNotationUpdating = monitorNotationUpdating;
-
 //////////////////////////////
 //
 // downloadWildWebMidi --
@@ -1449,8 +1437,6 @@ function initializeWildWebMidi() {
   $("#player").midiPlayer({
     color: null,
     // color: "#c00",
-    // onUnpdate: window.midiUpdate,
-    // onStop: window.midiStop,
     onUnpdate: midiUpdate,
     onStop: midiStop,
     width: 250,
@@ -1663,8 +1649,6 @@ export function clearContent() {
   moveToTopOfNotation();
   if (data.match(/^\s*$/)) {
     // restore the text (which may have accidentally been erased)
-    // setTextInEditor(window.ERASED_DATA);
-    // displayFileTitle(window.ERASED_DATA);
     setTextInEditor(erasedData);
     displayFileTitle(erasedData);
     restoreWorkNavigator();
@@ -1673,9 +1657,7 @@ export function clearContent() {
   } else {
     // Erase the text, but store it in a buffer in case
     // the user wants to recall it if the editor is still empty.
-    // window.ERASED_DATA = data;
     erasedData = data;
-    let element;
     setTextInEditor('');
     let output = document.querySelector('#output');
     if (output) {
@@ -1684,7 +1666,7 @@ export function clearContent() {
     displayFileTitle('');
     removeWorkNavigator();
   }
- editor.focus();
+  editor.focus();
 }
 
 //////////////////////////////
@@ -1710,8 +1692,6 @@ export function playCurrentMidi() {
   }
 }
 
-// window.playCurrentMidi = playCurrentMidi;
-
 //////////////////////////////
 //
 // setCursorNote --
@@ -1720,7 +1700,6 @@ export function playCurrentMidi() {
 export function setCursorNote(item, location) {
   global_cursor.CursorNote = item;
   getMenu().showCursorNoteMenu(global_cursor.CursorNote);
-  // window.MENU.showCursorNoteMenu(global_cursor.CursorNote);
 }
 
 //////////////////////////////
@@ -1749,6 +1728,7 @@ export function hideRepertoryIndex() {
 import { getMode } from './utility-ace.js';
 import { getAceEditor } from './setup.js';
 import { getMenu } from '../menu.js';
+import splitter from './splitter.js';
 
 export function updateEditorMode() {
   if (!editor) {
@@ -1792,14 +1772,6 @@ function nextPageClick(event) {
   } else {
    menu.goToNextPage(event);
   }
-  // if (!event) {
-  //  window.MENU.goToNextPage(event);
-  // }
-  // if (event.shiftKey) {
-  //  window.MENU.goToLastPage(event);
-  // } else {
-  //  window.MENU.goToNextPage(event);
-  // }
 }
 
 //////////////////////////////
@@ -1820,14 +1792,6 @@ function previousPageClick(event) {
   } else {
    menu.goToPreviousPage(event);
   }
-  // if (!event) {
-  //  window.MENU.goToPreviousPage(event);
-  // }
-  // if (event.shiftKey) {
-  //  window.MENU.goToFirstPage(event);
-  // } else {
-  //  window.MENU.goToPreviousPage(event);
-  // }
 }
 
 //////////////////////////////

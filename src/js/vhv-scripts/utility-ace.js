@@ -150,6 +150,7 @@ function highlightNoteInScore(event) {
 // xmlDataNoteIntoView --
 //
 import { markItem } from './utility-svg.js';
+import splitter from './splitter.js';
 
 function xmlDataNoteIntoView(event) {
 	var location = editor.selection.getCursor();
@@ -167,9 +168,9 @@ function xmlDataNoteIntoView(event) {
 	}
 	var id = matches[1];
 	var item;
-	if (window.Splitter.rightContent) {
+	if (splitter.rightContent) {
 		// see: https://www.w3.org/TR/selectors
-		var item = window.Splitter.rightContent.querySelector("#" + id);
+		var item = splitter.rightContent.querySelector("#" + id);
 		// console.log("ITEM", item);
 	}
 	markItem(item, line);
@@ -209,9 +210,9 @@ export function humdrumDataNoteIntoView(row, column) {
 		}
 	}
 	var item = 0;
-	if (window.Splitter.rightContent) {
+	if (splitter.rightContent) {
 		// see: https://www.w3.org/TR/selectors
-		var items = window.Splitter.rightContent.querySelectorAll("g[id$='" +
+		var items = splitter.rightContent.querySelectorAll("g[id$='" +
 			query + "']");
 		if (items.length == 0) {
 			// cannot find (hidden rest for example)

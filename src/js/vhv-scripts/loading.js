@@ -593,7 +593,7 @@ export function loadIndexFile(location) {
 function displayIndexFinally(index, location) {
 	global_interface.ShowingIndex = true;
 
-	window.IndexSupressOfInput = true;
+	// window.IndexSupressOfInput = true;
 	if (global_interface.InputVisible == true) {
 		global_interface.UndoHide = true;
 		global_interface.ApplyZoom = true;
@@ -739,7 +739,7 @@ function displayHmdIndexFinally(hmdindex, source) {
 	}
 	global_interface.ShowingIndex = true;
 
-	window.IndexSupressOfInput = true;
+	// window.IndexSupressOfInput = true;
 	if (global_interface.InputVisible == true) {
 		global_interface.UndoHide = true;
 		global_interface.ApplyZoom = true;
