@@ -20,11 +20,6 @@ export function HMDIndex(contents) {
   this.parse(contents);
   return this;
 }
-// function HMDIndex(contents) {
-// 	this.clear();
-// 	this.parse(contents);
-// 	return this;
-// }
 
 //////////////////////////////
 //
