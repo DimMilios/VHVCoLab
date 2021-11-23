@@ -1,4 +1,4 @@
-import { RubberBandSelection } from "./util-collab";
+import { RubberBandSelection } from './util-collab';
 
 const MULTI_SELECT_ALPHA = 0.09;
 
@@ -14,19 +14,19 @@ export function removeUnusedElements(clientIds) {
   const singleNoteSelects = document.querySelectorAll('.single-note-select');
   const multiSelects = document.querySelectorAll('.multi-select-area');
 
-  Array.from(usersDivs).forEach(div => {
+  Array.from(usersDivs).forEach((div) => {
     if (!clientIds.includes(+div.dataset.clientId)) {
       div.remove();
     }
   });
-  
-  Array.from(singleNoteSelects).forEach(div => {
+
+  Array.from(singleNoteSelects).forEach((div) => {
     if (!clientIds.includes(+div.dataset.clientId)) {
       div.remove();
     }
   });
-  
-  Array.from(multiSelects).forEach(div => {
+
+  Array.from(multiSelects).forEach((div) => {
     if (!clientIds.includes(+div.dataset.clientId)) {
       div.remove();
     }
@@ -112,7 +112,7 @@ function updateUsersDiv(clientId, target, options) {
   let usersDivs = document.querySelectorAll('.users-div');
 
   // let usersDiv = [...usersDivs].find(div => div.dataset.noteId === target.id);
-  let usersDiv = [...usersDivs].find(div => div.dataset.clientId == clientId);
+  let usersDiv = [...usersDivs].find((div) => div.dataset.clientId == clientId);
 
   if (!usersDiv) {
     usersDiv = document.createElement('div');
@@ -137,7 +137,7 @@ function updateSingleNoteSelect(clientId, target, options) {
     document.querySelectorAll('.single-note-select')
   );
   // let select = noteSelects.find(s => s.dataset.noteId === target.id);
-  let select = noteSelects.find(s => s.dataset.clientId == clientId);
+  let select = noteSelects.find((s) => s.dataset.clientId == clientId);
   if (!select) {
     select = document.createElement('div');
     select.setAttribute('class', 'single-note-select');
@@ -156,7 +156,7 @@ function updateSingleNoteSelect(clientId, target, options) {
 }
 
 function handleSingleNoteSelectClick(singleNoteSelects) {
-  return event => {
+  return (event) => {
     const elem = event.target;
     const noteInfo = document.querySelector('.note-info');
 
@@ -166,7 +166,7 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
       return;
     }
 
-    singleNoteSelects.forEach(div => div.classList.remove('expanded'));
+    singleNoteSelects.forEach((div) => div.classList.remove('expanded'));
     const noteElem = document.querySelector(`#${elem?.dataset?.noteId}`);
 
     if (!noteInfo) {
@@ -246,7 +246,7 @@ function addListenersToOutput(outputTarget) {
 
   const rbSelection = new RubberBandSelection();
 
-  outputTarget?.addEventListener('mousedown', event => {
+  outputTarget?.addEventListener('mousedown', (event) => {
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
@@ -254,9 +254,9 @@ function addListenersToOutput(outputTarget) {
     rbSelection.coords.top = event.clientY;
 
     const selectedAreas = document.querySelectorAll('.multi-select-area');
-  
+
     const selectToRemove = [...selectedAreas].find(
-      elem => elem.dataset.clientId == window.provider.awareness.clientID
+      (elem) => elem.dataset.clientId == window.provider.awareness.clientID
     );
     if (selectToRemove) {
       window.provider.awareness.setLocalStateField('multiSelect', null);
@@ -265,7 +265,7 @@ function addListenersToOutput(outputTarget) {
   });
 
   // TODO: Use requestAnimationFrame
-  document.addEventListener('mousemove', event => {
+  document.addEventListener('mousemove', (event) => {
     if (rbSelection.isSelecting) {
       endTime = performance.now();
       let timePassed = endTime - startTime;
@@ -282,48 +282,53 @@ function addListenersToOutput(outputTarget) {
     }
   });
 
-  document.addEventListener('mouseup', handleMouseUp(window.provider.awareness, window.userData.color));
-  
+  document.addEventListener(
+    'mouseup',
+    handleMouseUp(window.provider.awareness, window.userData.color)
+  );
+
   function handleMouseUp(awareness, color) {
     return () => {
       rbSelection.reCalculateCoords();
       rbSelection.isSelecting = false;
-  
+
       if (shouldMultiSelect) {
         const selectedAreas = document.querySelectorAll('.multi-select-area');
-  
+
         let selectedArea = [...selectedAreas].find(
-          elem => elem.dataset.clientId == awareness?.clientID
+          (elem) => elem.dataset.clientId == awareness?.clientID
         );
-  
+
         // TODO: extremely inefficient, selecting every single note element
         const notes = Array.from(document.querySelectorAll('.note, .beam'));
         const selectedNotes = rbSelection.selectNoteElements(notes);
         const coords = calculateMultiSelectCoords(selectedNotes);
-        
+
         if (!selectedArea) {
           selectedArea = document.createElement('div');
           selectedArea.dataset.clientId = awareness?.clientID;
           selectedArea.classList.add('multi-select-area');
           document.body.appendChild(selectedArea);
         }
-  
+
         selectedArea.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
         selectedArea.style.width = `${coords.width}px`;
         selectedArea.style.height = `${coords.height}px`;
-        selectedArea.style.backgroundColor = hexToRgbA(color, MULTI_SELECT_ALPHA) ?? 'rgba(0, 0, 255, 0.09)';
-  
-        awareness?.setLocalStateField('multiSelect', selectedNotes
-            .map(note => note.id)
-            .filter(id => /^note/g.test(id)));
-  
+        selectedArea.style.backgroundColor =
+          hexToRgbA(color, MULTI_SELECT_ALPHA) ?? 'rgba(0, 0, 255, 0.09)';
+
+        awareness?.setLocalStateField(
+          'multiSelect',
+          selectedNotes.map((note) => note.id).filter((id) => /^note/g.test(id))
+        );
+
         shouldMultiSelect = false;
       }
-  
+
       rbSelection.resetCoords();
       rbSelection.selectAreaElem.hidden = true;
       startTime = endTime = undefined;
-    }
+    };
   }
 }
 
@@ -331,7 +336,7 @@ export function updateMultiSelect(clientState, noteIds) {
   const selectedAreas = document.querySelectorAll('.multi-select-area');
 
   let selectedArea = [...selectedAreas].find(
-    elem => elem.dataset.clientId == clientState.clientId
+    (elem) => elem.dataset.clientId == clientState.clientId
   );
 
   if (!noteIds || noteIds.length === 0) {
@@ -339,7 +344,7 @@ export function updateMultiSelect(clientState, noteIds) {
     return;
   }
 
-  const selector = noteIds?.map(id => '#' + id)?.join(',');
+  const selector = noteIds?.map((id) => '#' + id)?.join(',');
   if (selector) {
     const notes = Array.from(document.querySelectorAll(selector));
     if (notes.length === 0) {
@@ -358,20 +363,27 @@ export function updateMultiSelect(clientState, noteIds) {
     selectedArea.style.width = `${coords.width}px`;
     selectedArea.style.height = `${coords.height}px`;
     // selectedArea.style.backgroundColor = clientState?.user?.color ?? 'blue';
-    selectedArea.style.backgroundColor = `${hexToRgbA(clientState?.user?.color, MULTI_SELECT_ALPHA)}` ?? 'blue';
+    selectedArea.style.backgroundColor =
+      `${hexToRgbA(clientState?.user?.color, MULTI_SELECT_ALPHA)}` ?? 'blue';
   }
 }
 
 // https://stackoverflow.com/questions/21646738/convert-hex-to-rgba
 function hexToRgbA(hex, alpha) {
   var c;
-  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-      c= hex.substring(1).split('');
-      if(c.length== 3){
-          c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-      }
-      c= '0x'+c.join('');
-      return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255, alpha ? alpha : '1'].join(',')+')';
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length == 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c = '0x' + c.join('');
+    return (
+      'rgba(' +
+      [(c >> 16) & 255, (c >> 8) & 255, c & 255, alpha ? alpha : '1'].join(
+        ','
+      ) +
+      ')'
+    );
   }
   throw new Error('Bad Hex');
 }
@@ -408,22 +420,25 @@ export function userListDisplay(users) {
     document.body.appendChild(userList);
   }
 
-  userList.addEventListener('mouseenter', e => {
+  userList.addEventListener('mouseenter', (e) => {
     e.target.innerHTML = `${users.join(',\n')}`;
-    if (output.hasAttribute('style') && !output.getAttribute('style').includes('transition')) {
+    if (
+      output.hasAttribute('style') &&
+      !output.getAttribute('style').includes('transition')
+    ) {
       output.style.transition = 'opacity 0.4s ease-out';
     }
     output.style.opacity = 0.1;
-  })
-  
-  userList.addEventListener('mouseout', e => {
+  });
+
+  userList.addEventListener('mouseout', (e) => {
     e.target.innerHTML = userIcon + users.length + ' users';
     output.style.opacity = 1;
-  })
-  
+  });
+
   let userIcon = '👤 ';
-  let userText = ' user'
-  if(users.length > 1){
+  let userText = ' user';
+  if (users.length > 1) {
     userIcon = '👥 ';
     userText = ' users';
   }
@@ -432,7 +447,9 @@ export function userListDisplay(users) {
   const menubar = document.getElementById('menubar');
   if (menubar) {
     const menuBox = menubar.getBoundingClientRect();
-    userList.style.transform = `translate(${menuBox.right - userList.getBoundingClientRect().width * 1.1}px, ${menuBox.top * 3}px)`
+    userList.style.transform = `translate(${
+      menuBox.right - userList.getBoundingClientRect().width * 1.1
+    }px, ${menuBox.top * 3}px)`;
   }
 }
 
@@ -440,7 +457,7 @@ export function userListDisplay(users) {
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use
 // function copySVGElement(elem) {
 //   let clone = elem.cloneNode(true);
-  
+
 //   let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
 //   // Copy its attributes
 //   for (const { nodeName, value } of clone.attributes) {

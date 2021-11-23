@@ -70,7 +70,6 @@ export function setOptions(options) {
 // //     true means use "encoded" breaking method for verovio "breaks" option.
 // window.BREAKS         = false;
 
-
 ///////////////////////////////////////////////////////////
 //
 // Repertory variables --
@@ -95,8 +94,6 @@ export function setOptions(options) {
 // 	window.SPREADSHEETID = localStorage.SPREADSHEETID;
 // }
 
-
-
 //////////////////////////////
 //
 // menu interaction variables:
@@ -116,7 +113,6 @@ export function setFileInfo(obj) {
 //
 
 // window.MuseDataBuffer = "";
-
 
 //////////////////////////////
 //
@@ -151,21 +147,21 @@ export function setFileInfo(obj) {
 //     "xml"      for XML data (MEI and MusicXML)
 //     "musedata" for XML data (MEI and MusicXML)
 //     "mime"     for mime-encoded data
-let editorModeData = "humdrum";
+let editorModeData = 'humdrum';
 export const editorMode = () => editorModeData;
 /**
- * 
- * @param {"humdrum"|"xml"|"musedata"} mode 
+ *
+ * @param {"humdrum"|"xml"|"musedata"} mode
  * @returns {string}
  */
-export const setEditorMode = mode => {
-	if (!["humdrum", "xml", "musedata"].includes(mode)) {
-		console.log('Invalid editor mode');
-		return;
-	}
-	editorModeData = mode;
-	return editorModeData;
-}
+export const setEditorMode = (mode) => {
+  if (!['humdrum', 'xml', 'musedata'].includes(mode)) {
+    console.log('Invalid editor mode');
+    return;
+  }
+  editorModeData = mode;
+  return editorModeData;
+};
 // window.EditorMode = "humdrum";
 
 //var EditorTheme = "ace/theme/solarized_light";
@@ -175,7 +171,6 @@ export const setEditorMode = mode => {
 // window.EDITINGID = null;
 // window.SAVEFILENAME = "data.txt";
 // window.SPACINGADJUSTMENT = 0.0;
-
 
 // window.HIGHLIGHTQUERY = null;
 // // used to highlight the current note at the location of the cursor.
@@ -189,17 +184,17 @@ export const setEditorMode = mode => {
 
 // window.Actiontime = 0;
 
-
 // see https://github.com/ajaxorg/ace/wiki/Embedding-API
 // Use EditSession instead of BufferedHumdrumFile:
 // window.BufferedHumdrumFile = "";
-window.Range = function() { console.log("Range is undefined"); }
+window.Range = function () {
+  console.log('Range is undefined');
+};
 
 // window.IDS   = [];
 // window.ZOOM  = 0.4;
 // window.PLAY  = false;
 // window.PAUSE = false;
-
 
 // State variables for interface:
 // window.FirstInitialization = false;
@@ -240,8 +235,8 @@ export const global_verovioOptions = {
   //     true means use "encoded" breaking method for verovio "breaks" option.
   BREAKS: false,
 
-	ZOOM: 0.4,
-}
+  ZOOM: 0.4,
+};
 
 export const global_editorOptions = {
   INPUT_FONT_SIZE: 1.0, // rem
@@ -250,7 +245,7 @@ export const global_editorOptions = {
   EDITINGID: null,
   SAVEFILENAME: 'data.txt',
   SPACINGADJUSTMENT: 0.0,
-}
+};
 
 export const global_cursor = {
   HIGHLIGHTQUERY: null,
@@ -259,12 +254,12 @@ export const global_cursor = {
   // RestoreCursorNote: Used to go back to a highlighted note after a redraw.
   // This is an ID string rather than an element.
   RestoreCursorNote: '',
-}
+};
 
 export const global_playerOptions = {
   PLAY: false,
   PAUSE: false,
-}
+};
 
 export const global_interface = {
   // State variables for interface:
@@ -288,90 +283,87 @@ export const global_interface = {
 //
 
 // event:             .code           .keyCode   .key (US keyboard)
-window.AKey            = "KeyA";         // 65      "A", "a"
-window.BKey            = "KeyB";         // 66      "B", "b"
-window.CKey            = "KeyC";         // 67      "C", "c"
-window.DKey            = "KeyD";         // 68      "D", "d"
-window.EKey            = "KeyE";         // 69      "E", "e"
-window.FKey            = "KeyF";         // 70      "F", "f"
-window.GKey            = "KeyG";         // 71      "G", "g"
-window.HKey            = "KeyH";         // 72      "H", "h"
-window.IKey            = "KeyI";         // 73      "I", "i"
-window.JKey            = "KeyJ";         // 74      "J", "j"
-window.KKey            = "KeyK";         // 75      "K", "k"
-window.LKey            = "KeyL";         // 76      "L", "l"
-window.MKey            = "KeyM";         // 77      "M", "m"
-window.NKey            = "KeyN";         // 78      "N", "n"
-window.OKey            = "KeyO";         // 79      "O", "o"
-window.PKey            = "KeyP";         // 80      "P", "p"
-window.QKey            = "KeyQ";         // 81      "Q", "q"
-window.RKey            = "KeyR";         // 82      "R", "r"
-window.SKey            = "KeyS";         // 83      "S", "s"
-window.TKey            = "KeyT";         // 84      "T", "t"
-window.UKey            = "KeyU";         // 85      "U", "u"
-window.VKey            = "KeyV";         // 86      "V", "v"
-window.WKey            = "KeyW";         // 87      "W", "w"
-window.XKey            = "KeyX";         // 88      "X", "x"
-window.YKey            = "KeyY";         // 89      "Y", "y"
-window.ZKey            = "KeyZ";         // 90      "Z", "z"
-window.ZeroKey         = "Digit0";       // 48      "0", "("
-window.OneKey          = "Digit1";       // 49      "1", "@"
-window.TwoKey          = "Digit2";       // 50      "2", "@"
-window.ThreeKey        = "Digit3";       // 51      "3", "#"
-window.FourKey         = "Digit4";       // 52      "4", "$"
-window.FiveKey         = "Digit5";       // 53      "5", "%"
-window.SixKey          = "Digit6";       // 54      "6", "^"
-window.SevenKey        = "Digit7";       // 55      "7", "&"
-window.EightKey        = "Digit8";       // 56      "8", "*"
-window.NineKey         = "Digit9";       // 57      "9", "("
+window.AKey = 'KeyA'; // 65      "A", "a"
+window.BKey = 'KeyB'; // 66      "B", "b"
+window.CKey = 'KeyC'; // 67      "C", "c"
+window.DKey = 'KeyD'; // 68      "D", "d"
+window.EKey = 'KeyE'; // 69      "E", "e"
+window.FKey = 'KeyF'; // 70      "F", "f"
+window.GKey = 'KeyG'; // 71      "G", "g"
+window.HKey = 'KeyH'; // 72      "H", "h"
+window.IKey = 'KeyI'; // 73      "I", "i"
+window.JKey = 'KeyJ'; // 74      "J", "j"
+window.KKey = 'KeyK'; // 75      "K", "k"
+window.LKey = 'KeyL'; // 76      "L", "l"
+window.MKey = 'KeyM'; // 77      "M", "m"
+window.NKey = 'KeyN'; // 78      "N", "n"
+window.OKey = 'KeyO'; // 79      "O", "o"
+window.PKey = 'KeyP'; // 80      "P", "p"
+window.QKey = 'KeyQ'; // 81      "Q", "q"
+window.RKey = 'KeyR'; // 82      "R", "r"
+window.SKey = 'KeyS'; // 83      "S", "s"
+window.TKey = 'KeyT'; // 84      "T", "t"
+window.UKey = 'KeyU'; // 85      "U", "u"
+window.VKey = 'KeyV'; // 86      "V", "v"
+window.WKey = 'KeyW'; // 87      "W", "w"
+window.XKey = 'KeyX'; // 88      "X", "x"
+window.YKey = 'KeyY'; // 89      "Y", "y"
+window.ZKey = 'KeyZ'; // 90      "Z", "z"
+window.ZeroKey = 'Digit0'; // 48      "0", "("
+window.OneKey = 'Digit1'; // 49      "1", "@"
+window.TwoKey = 'Digit2'; // 50      "2", "@"
+window.ThreeKey = 'Digit3'; // 51      "3", "#"
+window.FourKey = 'Digit4'; // 52      "4", "$"
+window.FiveKey = 'Digit5'; // 53      "5", "%"
+window.SixKey = 'Digit6'; // 54      "6", "^"
+window.SevenKey = 'Digit7'; // 55      "7", "&"
+window.EightKey = 'Digit8'; // 56      "8", "*"
+window.NineKey = 'Digit9'; // 57      "9", "("
 // Numpad keys: 0=96 .. 9=105
 
-window.BackKey         = "Backspace";    // 8       "Backspace"
-window.BackQuoteKey    = "Backquote";    // 192     "`", "~"
-window.BackSlashKey    = "Backslash";    // 220     "\\"
-window.CommaKey        = "Comma";        // 188     ",", "<"
-window.DeleteKey       = "Delete";       // 46      "Delete"
-window.DotKey          = "Period";       // 190     ".", ">"
-window.EnterKey        = "Enter";        // 13      "Enter"
-window.EscKey          = "Escape";       // 27      "Escape"
-window.MinusKey        = "Minus";        // 189     "-", "_"
-window.SemiColonKey    = "Semicolon";    // 186     ";", ":"
-window.SingleQuoteKey  = "Quote";        // 222     "'", "\""
-window.SlashKey        = "Slash";        // 191     "/"
-window.SpaceKey        = "Space"         // 32      " "
-window.TabKey          = "Tab";          // 9       "Tab"
-window.BracketLeftKey  = "BracketLeft";  // 219     "[", "{"
-window.BracketRightKey = "BracketRight"; // 221     "]", "}"
-window.EqualKey        = "Equal";        // 187     "=", "+"
+window.BackKey = 'Backspace'; // 8       "Backspace"
+window.BackQuoteKey = 'Backquote'; // 192     "`", "~"
+window.BackSlashKey = 'Backslash'; // 220     "\\"
+window.CommaKey = 'Comma'; // 188     ",", "<"
+window.DeleteKey = 'Delete'; // 46      "Delete"
+window.DotKey = 'Period'; // 190     ".", ">"
+window.EnterKey = 'Enter'; // 13      "Enter"
+window.EscKey = 'Escape'; // 27      "Escape"
+window.MinusKey = 'Minus'; // 189     "-", "_"
+window.SemiColonKey = 'Semicolon'; // 186     ";", ":"
+window.SingleQuoteKey = 'Quote'; // 222     "'", "\""
+window.SlashKey = 'Slash'; // 191     "/"
+window.SpaceKey = 'Space'; // 32      " "
+window.TabKey = 'Tab'; // 9       "Tab"
+window.BracketLeftKey = 'BracketLeft'; // 219     "[", "{"
+window.BracketRightKey = 'BracketRight'; // 221     "]", "}"
+window.EqualKey = 'Equal'; // 187     "=", "+"
 
-window.ControlLeftKey  = "ControlLeft";  // 17      "Control"   event.ctrl
-window.ControlRightKey = "ControlRight"; // 17      "Control"   event.ctrl
-window.ShiftLeftKey    = "ShiftLeft";    // 16      "Shift"     event.shift
-window.ShiftRightKey   = "ShiftRight";   // 16      "Shift"     event.shift
+window.ControlLeftKey = 'ControlLeft'; // 17      "Control"   event.ctrl
+window.ControlRightKey = 'ControlRight'; // 17      "Control"   event.ctrl
+window.ShiftLeftKey = 'ShiftLeft'; // 16      "Shift"     event.shift
+window.ShiftRightKey = 'ShiftRight'; // 16      "Shift"     event.shift
 
-window.LeftKey         = "ArrowLeft";    // 37      "ArrowLeft"
-window.UpKey           = "ArrowUp";      // 38      "ArrowUp"
-window.RightKey        = "ArrowRight";   // 39      "ArrowRight"
-window.DownKey         = "ArrowDown";    // 40      "ArrowDown"
+window.LeftKey = 'ArrowLeft'; // 37      "ArrowLeft"
+window.UpKey = 'ArrowUp'; // 38      "ArrowUp"
+window.RightKey = 'ArrowRight'; // 39      "ArrowRight"
+window.DownKey = 'ArrowDown'; // 40      "ArrowDown"
 
-window.PgUpKey         = "PageUp";       // 33      "PageUp"
-window.PgDnKey         = "PageDown";     // 34      "PageDown"
-window.EndKey          = "End";          // 35      "End"
-window.HomeKey         = "Home";         // 36      "Home"
+window.PgUpKey = 'PageUp'; // 33      "PageUp"
+window.PgDnKey = 'PageDown'; // 34      "PageDown"
+window.EndKey = 'End'; // 35      "End"
+window.HomeKey = 'Home'; // 36      "Home"
 
-window.F1Key           = "F1";           // 112     "F1"
-window.F2Key           = "F2";           // 113     "F2"
-window.F3Key           = "F3";           // 114     "F3"
-window.F4Key           = "F4";           // 115     "F4"
-window.F5Key           = "F5";           // 116     "F5"
-window.F6Key           = "F6";           // 117     "F6"
-window.F7Key           = "F7";           // 118     "F7"
-window.F8Key           = "F8";           // 119     "F8"
-window.F9Key           = "F9";           // 120     "F9"
-window.F10Key          = "F10";          // 121     "F10"
-window.F11Key          = "F11";          // 122     "F11"
-window.F12Key          = "F12";          // 123     "F12"
+window.F1Key = 'F1'; // 112     "F1"
+window.F2Key = 'F2'; // 113     "F2"
+window.F3Key = 'F3'; // 114     "F3"
+window.F4Key = 'F4'; // 115     "F4"
+window.F5Key = 'F5'; // 116     "F5"
+window.F6Key = 'F6'; // 117     "F6"
+window.F7Key = 'F7'; // 118     "F7"
+window.F8Key = 'F8'; // 119     "F8"
+window.F9Key = 'F9'; // 120     "F9"
+window.F10Key = 'F10'; // 121     "F10"
+window.F11Key = 'F11'; // 122     "F11"
+window.F12Key = 'F12'; // 123     "F12"
 // etc. to F32Key
-
-
-

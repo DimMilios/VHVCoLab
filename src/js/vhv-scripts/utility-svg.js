@@ -6,10 +6,8 @@
 //
 
 export function goDownHarmonically(current) {
-	moveHarmonically(current, -1);
+  moveHarmonically(current, -1);
 }
-
-
 
 //////////////////////////////
 //
@@ -17,10 +15,8 @@ export function goDownHarmonically(current) {
 //
 
 export function goUpHarmonically(current) {
-	moveHarmonically(current, +1);
+  moveHarmonically(current, +1);
 }
-
-
 
 //////////////////////////////
 //
@@ -28,19 +24,17 @@ export function goUpHarmonically(current) {
 //
 
 function moveHarmonically(current, direction) {
-	if (!current) {
-		return;
-	}
-	var startid = current.id;
-	unhighlightCurrentNote(current);
-	var nextid = getNextHarmonicNote(startid, direction)
-	if (!nextid) {
-		return;
-	}
-	highlightIdInEditor(nextid, "moveHarmonically");
+  if (!current) {
+    return;
+  }
+  var startid = current.id;
+  unhighlightCurrentNote(current);
+  var nextid = getNextHarmonicNote(startid, direction);
+  if (!nextid) {
+    return;
+  }
+  highlightIdInEditor(nextid, 'moveHarmonically');
 }
-
-
 
 //////////////////////////////
 //
@@ -51,17 +45,15 @@ function moveHarmonically(current, direction) {
 //
 
 export function inSvgImage(node) {
-	var current = node;
-	while (current) {
-		if (current.nodeName === "svg") {
-			return true;
-		}
-		current = current.parentNode;
-	}
-	return false;
+  var current = node;
+  while (current) {
+    if (current.nodeName === 'svg') {
+      return true;
+    }
+    current = current.parentNode;
+  }
+  return false;
 }
-
-
 
 //////////////////////////////
 //
@@ -69,48 +61,48 @@ export function inSvgImage(node) {
 //
 
 export function observeSvgContent() {
-	var content = document.querySelector("#output");
-	var i;
-	var s;
-	var callback = function(mList, observer) {
-		var svg = content.querySelector("svg");
-		if (svg) {
+  var content = document.querySelector('#output');
+  var i;
+  var s;
+  var callback = function (mList, observer) {
+    var svg = content.querySelector('svg');
+    if (svg) {
+      // Mark encoding problem messages with red caution symbol.
+      let spans = svg.querySelectorAll(
+        'g.dir.problem tspan.rend tspan.text tspan.text'
+      );
+      for (i = 0; i < spans.length; i++) {
+        s = spans[i];
+        if (s.innerHTML === 'P') {
+          s.innerHTML = '&#xf071;';
+          s.classList.add('p');
+        }
+      }
 
-			// Mark encoding problem messages with red caution symbol.
-			let spans = svg.querySelectorAll("g.dir.problem tspan.rend tspan.text tspan.text");
-			for (i=0; i<spans.length; i++) {
-				s = spans[i];
-				if (s.innerHTML === "P") {
-					s.innerHTML = "&#xf071;";
-					s.classList.add("p");
-				}
-			}
+      // Mark encoding problem messages with green caution symbol.
+      spans = svg.querySelectorAll(
+        'g.dir.sic tspan.rend tspan.text tspan.text'
+      );
+      for (i = 0; i < spans.length; i++) {
+        s = spans[i];
+        if (s.innerHTML === 'S') {
+          s.innerHTML = '&#xf071;';
+          s.classList.add('s');
+        }
+      }
+    }
 
-			// Mark encoding problem messages with green caution symbol.
-			spans = svg.querySelectorAll("g.dir.sic tspan.rend tspan.text tspan.text");
-			for (i=0; i<spans.length; i++) {
-				s = spans[i];
-				if (s.innerHTML === "S") {
-					s.innerHTML = "&#xf071;";
-					s.classList.add("s");
-				}
-			}
+    for (var mu in mList) {
+      if (svg && svg.isSameNode(mList[mu].target)) {
+        //remove busy class if svg changed
+        document.body.classList.remove('busy');
+      }
+    }
+  };
+  var observer = new MutationObserver(callback);
 
-		}
-
-		for (var mu in mList) {
-			if (svg && svg.isSameNode(mList[mu].target)) {
-				//remove busy class if svg changed
-				document.body.classList.remove("busy");
-			}
-		}
-	}
-	var observer = new MutationObserver(callback);
-
-	observer.observe(content, { childList: true, subtree: true });
+  observer.observe(content, { childList: true, subtree: true });
 }
-
-
 
 //////////////////////////////
 //
@@ -118,18 +110,16 @@ export function observeSvgContent() {
 //
 
 export function turnOffAllHighlights() {
-	var svg = document.querySelector("svg");
-	var highlights = svg.querySelectorAll(".highlight");
-	for (var i=0; i<highlights.length; i++) {
-		var cname = highlights[i].className.baseVal;
-		cname = cname.replace(/\bhighlight\b/, "");
-		highlights[i].className.className = cname;
-		highlights[i].className.baseVal = cname;
-		highlights[i].className.animVal = cname;
-	}
+  var svg = document.querySelector('svg');
+  var highlights = svg.querySelectorAll('.highlight');
+  for (var i = 0; i < highlights.length; i++) {
+    var cname = highlights[i].className.baseVal;
+    cname = cname.replace(/\bhighlight\b/, '');
+    highlights[i].className.className = cname;
+    highlights[i].className.baseVal = cname;
+    highlights[i].className.animVal = cname;
+  }
 }
-
-
 
 //////////////////////////////
 //
@@ -137,96 +127,106 @@ export function turnOffAllHighlights() {
 //
 
 function getNextHarmonicNote(startid, direction) {
-	var match = startid.match(/^[^-]+-[^-]*L(\d+)/);
-	var startline = -1;
-	if (match) {
-		startline = parseInt(match[1]);
-	} else {
-		return undefined;
-	}
-	if (startline == -1) {
-		return undefined;
-	}
-	// Assuming one svg on the page, which is currently correct.
-	var svg = document.querySelector('svg');
-	var allids = svg.querySelectorAll('*[id]:not([id=""])');
-	var regex = new RegExp("^[^-]+-[^-]*L" + startline + "(?!\d)");
-	var harmonic = [];
-	var x;
-	var i;
-	for (i=0; i<allids.length; i++) {
-		if (allids[i].id.match(regex)) {
-			x = allids[i].id.replace(/-.*/, "");
-			if (!((x == "note") || (x == "rest") || (x == "mrest"))) {
-				// only keep track of certain types of elements
-				// should chords be included or not? currently not.
-				continue;
-			}
-			harmonic.push(allids[i]);
-		}
-	}
-	harmonic.sort(function(a, b) {
-		var aloc = getStaffAndLayerNumbersByElement(a);
-		var bloc = getStaffAndLayerNumbersByElement(b);
-		var astaff = aloc.staff | 0;
-		var bstaff = bloc.staff | 0;
-		var alayer = aloc.layer | 0;
-		var blayer = bloc.layer | 0;
+  var match = startid.match(/^[^-]+-[^-]*L(\d+)/);
+  var startline = -1;
+  if (match) {
+    startline = parseInt(match[1]);
+  } else {
+    return undefined;
+  }
+  if (startline == -1) {
+    return undefined;
+  }
+  // Assuming one svg on the page, which is currently correct.
+  var svg = document.querySelector('svg');
+  var allids = svg.querySelectorAll('*[id]:not([id=""])');
+  var regex = new RegExp('^[^-]+-[^-]*L' + startline + '(?!d)');
+  var harmonic = [];
+  var x;
+  var i;
+  for (i = 0; i < allids.length; i++) {
+    if (allids[i].id.match(regex)) {
+      x = allids[i].id.replace(/-.*/, '');
+      if (!(x == 'note' || x == 'rest' || x == 'mrest')) {
+        // only keep track of certain types of elements
+        // should chords be included or not? currently not.
+        continue;
+      }
+      harmonic.push(allids[i]);
+    }
+  }
+  harmonic.sort(function (a, b) {
+    var aloc = getStaffAndLayerNumbersByElement(a);
+    var bloc = getStaffAndLayerNumbersByElement(b);
+    var astaff = aloc.staff | 0;
+    var bstaff = bloc.staff | 0;
+    var alayer = aloc.layer | 0;
+    var blayer = bloc.layer | 0;
 
-		if (astaff > bstaff) { return -1; }
-		if (astaff < bstaff) { return +1; }
-		if (alayer > blayer) { return -1; }
-		if (alayer < blayer) { return +1; }
+    if (astaff > bstaff) {
+      return -1;
+    }
+    if (astaff < bstaff) {
+      return +1;
+    }
+    if (alayer > blayer) {
+      return -1;
+    }
+    if (alayer < blayer) {
+      return +1;
+    }
 
-		// notes are in a chord so sort by pitch from low to high
-		var match;
-		var aoct = 0;
-		var boct = 0;
-		var ab40 = 0;
-		var bb40 = 0;
-		if (match = a.className.baseVal.match(/oct-(-?\d+)/)) {
-			aoct = parseInt(match[1]);
-		}
-		if (match = b.className.baseVal.match(/oct-(-?\d+)/)) {
-			boct = parseInt(match[1]);
-		}
-		if (match = a.className.baseVal.match(/b40c-(\d+)/)) {
-			ab40 = aoct * 40 + parseInt(match[1]);
-		}
-		if (match = b.className.baseVal.match(/b40c-(\d+)/)) {
-			bb40 = boct * 40 + parseInt(match[1]);
-		}
-		if (ab40 < bb40) { return -1; }
-		if (ab40 > bb40) { return +1; }
-		return 0;
-	});
-	if (harmonic.length == 1) {
-		// nothing to do
-		return undefined;
-	}
-	for (var j=0; j<harmonic.length; j++) {
-		var oc = getStaffAndLayerNumbersByElement(harmonic[j]);
-	}
-	var startingindex = -1;
-	for (i=0; i<harmonic.length; i++) {
-		if (harmonic[i].id === startid) {
-			startingindex = i;
-			break;
-		}
-	}
-	if (startingindex < 0) {
-		return undefined;
-	}
-	var index = startingindex + direction;
-	if (index < 0) {
-		index = harmonic.length - 1;
-	} else if (index >= harmonic.length) {
-		index = 0;
-	}
-	return harmonic[index].id;
+    // notes are in a chord so sort by pitch from low to high
+    var match;
+    var aoct = 0;
+    var boct = 0;
+    var ab40 = 0;
+    var bb40 = 0;
+    if ((match = a.className.baseVal.match(/oct-(-?\d+)/))) {
+      aoct = parseInt(match[1]);
+    }
+    if ((match = b.className.baseVal.match(/oct-(-?\d+)/))) {
+      boct = parseInt(match[1]);
+    }
+    if ((match = a.className.baseVal.match(/b40c-(\d+)/))) {
+      ab40 = aoct * 40 + parseInt(match[1]);
+    }
+    if ((match = b.className.baseVal.match(/b40c-(\d+)/))) {
+      bb40 = boct * 40 + parseInt(match[1]);
+    }
+    if (ab40 < bb40) {
+      return -1;
+    }
+    if (ab40 > bb40) {
+      return +1;
+    }
+    return 0;
+  });
+  if (harmonic.length == 1) {
+    // nothing to do
+    return undefined;
+  }
+  for (var j = 0; j < harmonic.length; j++) {
+    var oc = getStaffAndLayerNumbersByElement(harmonic[j]);
+  }
+  var startingindex = -1;
+  for (i = 0; i < harmonic.length; i++) {
+    if (harmonic[i].id === startid) {
+      startingindex = i;
+      break;
+    }
+  }
+  if (startingindex < 0) {
+    return undefined;
+  }
+  var index = startingindex + direction;
+  if (index < 0) {
+    index = harmonic.length - 1;
+  } else if (index >= harmonic.length) {
+    index = 0;
+  }
+  return harmonic[index].id;
 }
-
-
 
 //////////////////////////////
 //
@@ -234,21 +234,19 @@ function getNextHarmonicNote(startid, direction) {
 //
 
 function unhighlightCurrentNote(element) {
-	if (element) {
-		var classes = element.getAttribute("class");
-		var classlist = classes.split(" ");
-		var outclass = "";
-		for (var i=0; i<classlist.length; i++) {
-			if (classlist[i] == "highlight") {
-				continue;
-			}
-			outclass += " " + classlist[i];
-		}
-		element.setAttribute("class", outclass);
-	}
+  if (element) {
+    var classes = element.getAttribute('class');
+    var classlist = classes.split(' ');
+    var outclass = '';
+    for (var i = 0; i < classlist.length; i++) {
+      if (classlist[i] == 'highlight') {
+        continue;
+      }
+      outclass += ' ' + classlist[i];
+    }
+    element.setAttribute('class', outclass);
+  }
 }
-
-
 
 //////////////////////////////
 //
@@ -258,71 +256,69 @@ function unhighlightCurrentNote(element) {
 //
 
 function chooseBestId(elist, targetstaff, targetlayer) {
-	var staffelements = [0,0,0,0,0,0,0,0,0,0,0,0];
-	for (var i=0; i<elist.length; i++) {
-		var location = getStaffAndLayerNumbers(elist[i].id);
-		if (location.staff == targetstaff) {
-			staffelements[location.layer] = elist[i];
-			if ((location.layer == targetlayer) && (!elist[i].id.match(/space/))) {
-				return elist[i].id;
-			}
-		}
-	}
-	// no exact match, so try a different layer on the same staff.
-	if (staffelements.length == 1) {
-		// only one choice so use it
-		return staffelements[0].id;
-	}
+  var staffelements = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for (var i = 0; i < elist.length; i++) {
+    var location = getStaffAndLayerNumbers(elist[i].id);
+    if (location.staff == targetstaff) {
+      staffelements[location.layer] = elist[i];
+      if (location.layer == targetlayer && !elist[i].id.match(/space/)) {
+        return elist[i].id;
+      }
+    }
+  }
+  // no exact match, so try a different layer on the same staff.
+  if (staffelements.length == 1) {
+    // only one choice so use it
+    return staffelements[0].id;
+  }
 
-	// find a note/rest in a lower layer
-	for (i=targetlayer; i>0; i--) {
-		if (!staffelements[i]) {
-			continue;
-		}
-		if (staffelements[i].id) {
-			if (staffelements[i].id.match(/space/)) {
-				continue;
-			}
-		}
-		return staffelements[i].id;
-	}
+  // find a note/rest in a lower layer
+  for (i = targetlayer; i > 0; i--) {
+    if (!staffelements[i]) {
+      continue;
+    }
+    if (staffelements[i].id) {
+      if (staffelements[i].id.match(/space/)) {
+        continue;
+      }
+    }
+    return staffelements[i].id;
+  }
 
-	// find a note/rest in a higher layer
-	for (i=targetlayer; i<staffelements.length; i++) {
-		if (!staffelements[i]) {
-			continue;
-		}
-		if (staffelements[i].id) {
-			if (staffelements[i].id.match(/space/)) {
-				continue;
-			}
-		}
-		return staffelements[i].id;
-	}
+  // find a note/rest in a higher layer
+  for (i = targetlayer; i < staffelements.length; i++) {
+    if (!staffelements[i]) {
+      continue;
+    }
+    if (staffelements[i].id) {
+      if (staffelements[i].id.match(/space/)) {
+        continue;
+      }
+    }
+    return staffelements[i].id;
+  }
 
-	// go back and allow matching to invisible rests
+  // go back and allow matching to invisible rests
 
-	// find a note/rest in a lower layer
-	for (i=targetlayer; i>0; i--) {
-		if (!staffelements[i]) {
-			continue;
-		}
-		return staffelements[i].id;
-	}
+  // find a note/rest in a lower layer
+  for (i = targetlayer; i > 0; i--) {
+    if (!staffelements[i]) {
+      continue;
+    }
+    return staffelements[i].id;
+  }
 
-	// find a note/rest in a higher layer
-	for (i=targetlayer; i<staffelements.length; i++) {
-		if (!staffelements[i]) {
-			continue;
-		}
-		return staffelements[i].id;
-	}
+  // find a note/rest in a higher layer
+  for (i = targetlayer; i < staffelements.length; i++) {
+    if (!staffelements[i]) {
+      continue;
+    }
+    return staffelements[i].id;
+  }
 
-	// found nothing suitable
-	return undefined;
+  // found nothing suitable
+  return undefined;
 }
-
-
 
 //////////////////////////////
 //
@@ -331,18 +327,16 @@ function chooseBestId(elist, targetstaff, targetlayer) {
 //
 
 function getStaffPosition(element) {
-	var count = 0;
-	var current = element;
-	while (current) {
-		if (current.className.baseVal.match(/staff/)) {
-			count++;
-		}
-		current = current.previousElementSibling;
-	}
-	return count;
+  var count = 0;
+  var current = element;
+  while (current) {
+    if (current.className.baseVal.match(/staff/)) {
+      count++;
+    }
+    current = current.previousElementSibling;
+  }
+  return count;
 }
-
-
 
 //////////////////////////////
 //
@@ -351,18 +345,16 @@ function getStaffPosition(element) {
 //
 
 function getLayerPosition(element) {
-	var count = 0;
-	var current = element;
-	while (current) {
-		if (current.className.baseVal.match(/layer/)) {
-			count++;
-		}
-		current = current.previousElementSibling;
-	}
-	return count;
+  var count = 0;
+  var current = element;
+  while (current) {
+    if (current.className.baseVal.match(/layer/)) {
+      count++;
+    }
+    current = current.previousElementSibling;
+  }
+  return count;
 }
-
-
 
 //////////////////////////////
 //
@@ -373,38 +365,34 @@ function getLayerPosition(element) {
 //
 
 function getStaffAndLayerNumbers(id) {
-	var element = document.querySelector("#" + id);
-	return getStaffAndLayerNumbersByElement(element);
+  var element = document.querySelector('#' + id);
+  return getStaffAndLayerNumbersByElement(element);
 }
-
 
 function getStaffAndLayerNumbersByElement(element) {
-	if (!element) {
-		return {};
-	}
-	var id = element.id;
-	var staff = 0;
-	var layer = 0;
-	var current = element;
+  if (!element) {
+    return {};
+  }
+  var id = element.id;
+  var staff = 0;
+  var layer = 0;
+  var current = element;
 
-	current = current.parentNode;
-	while (current && current.className.baseVal) {
-		// console.log("CURRENT", current.className.baseVal);
-		if (current.className.baseVal.match(/layer/)) {
-			layer = getLayerPosition(current);
-		} else if (current.className.baseVal.match(/staff/)) {
-			staff = getStaffPosition(current);
-		}
-		current = current.parentNode;
-	}
-	return {
-		layer: layer,
-		staff: staff
-	}
-
+  current = current.parentNode;
+  while (current && current.className.baseVal) {
+    // console.log("CURRENT", current.className.baseVal);
+    if (current.className.baseVal.match(/layer/)) {
+      layer = getLayerPosition(current);
+    } else if (current.className.baseVal.match(/staff/)) {
+      staff = getStaffPosition(current);
+    }
+    current = current.parentNode;
+  }
+  return {
+    layer: layer,
+    staff: staff,
+  };
 }
-
-
 
 //////////////////////////////
 //
@@ -412,41 +400,38 @@ function getStaffAndLayerNumbersByElement(element) {
 //
 
 function getOffClassElements(offclass) {
-	var nlist = document.querySelectorAll("." + offclass);
-	var rlist = document.querySelectorAll(".r" + offclass);
-	var alist = [];
-	for (var i=0; i<nlist.length; i++) {
+  var nlist = document.querySelectorAll('.' + offclass);
+  var rlist = document.querySelectorAll('.r' + offclass);
+  var alist = [];
+  for (var i = 0; i < nlist.length; i++) {
+    // Was declared as global
+    let match = nlist[i].className.baseVal.match(/qon-([^\s]+)/);
+    if (match) {
+      // Was declared as global
+      var qon = match[1];
+    } else {
+      qon = 'xyz';
+    }
 
-		// Was declared as global
-		let match = nlist[i].className.baseVal.match(/qon-([^\s]+)/);
-		if (match) {
-			// Was declared as global
-			var qon = match[1];
-		} else {
-			qon = "xyz";
-		}
+    match = nlist[i].className.baseVal.match(/qoff-([^\s]+)/);
+    if (match) {
+      // Was declared global
+      var qoff = match[1];
+    } else {
+      qoff = 'xyz';
+    }
+    if (qon === qoff) {
+      // no grace notes
+      continue;
+    }
 
-		match = nlist[i].className.baseVal.match(/qoff-([^\s]+)/);
-		if (match) {
-			// Was declared global
-			var qoff = match[1];
-		} else {
-			qoff = "xyz";
-		}
-		if (qon === qoff) {
-			// no grace notes
-			continue;
-		}
-
-		alist.push(nlist[i]);
-	}
-	for (var i=0; i<rlist.length; i++) {
-		alist.push(rlist[i]);
-	}
-	return alist;
+    alist.push(nlist[i]);
+  }
+  for (var i = 0; i < rlist.length; i++) {
+    alist.push(rlist[i]);
+  }
+  return alist;
 }
-
-
 
 //////////////////////////////
 //
@@ -454,41 +439,38 @@ function getOffClassElements(offclass) {
 //
 
 function getOnClassElements(onclass) {
-	var nlist = document.querySelectorAll("." + onclass);
-	var rlist = document.querySelectorAll(".r" + onclass);
-	var alist = [];
-	var match;
-	var qon;
-	var qoff;
-	for (var i=0; i<nlist.length; i++) {
+  var nlist = document.querySelectorAll('.' + onclass);
+  var rlist = document.querySelectorAll('.r' + onclass);
+  var alist = [];
+  var match;
+  var qon;
+  var qoff;
+  for (var i = 0; i < nlist.length; i++) {
+    match = nlist[i].className.baseVal.match(/qon-([^\s]+)/);
+    if (match) {
+      qon = match[1];
+    } else {
+      qon = 'xyz';
+    }
 
-		match = nlist[i].className.baseVal.match(/qon-([^\s]+)/);
-		if (match) {
-			qon = match[1];
-		} else {
-			qon = "xyz";
-		}
+    match = nlist[i].className.baseVal.match(/qoff-([^\s]+)/);
+    if (match) {
+      qoff = match[1];
+    } else {
+      qoff = 'xyz';
+    }
+    if (qon === qoff) {
+      // no grace notes
+      continue;
+    }
 
-		match = nlist[i].className.baseVal.match(/qoff-([^\s]+)/);
-		if (match) {
-			qoff = match[1];
-		} else {
-			qoff = "xyz";
-		}
-		if (qon === qoff) {
-			// no grace notes
-			continue;
-		}
-
-		alist.push(nlist[i]);
-	}
-	for (var i=0; i<rlist.length; i++) {
-		alist.push(rlist[i]);
-	}
-	return alist;
+    alist.push(nlist[i]);
+  }
+  for (var i = 0; i < rlist.length; i++) {
+    alist.push(rlist[i]);
+  }
+  return alist;
 }
-
-
 
 //////////////////////////////
 //
@@ -500,78 +482,76 @@ import { global_cursor, global_editorOptions } from './global-variables.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
-	throw new Error('Verovio worker is undefined');
+  throw new Error('Verovio worker is undefined');
 }
 
 export function goToPreviousNoteOrRest(currentid) {
-	var current = document.querySelector("#" + currentid);
-	if (!current) {
-		console.log("CANNOT FIND ITEM ", currentid);
-		return;
-	}
-	var location = getStaffAndLayerNumbers(current.id);
-	var matches = current.className.baseVal.match(/qon-([^\s]+)/);
-	if (!matches) {
-		console.log("CANNOT FIND QON IN", current.className);
-		return;
-	}
-	var qon = matches[1];
-	if (qon == 0) {
-		// cannot go before start of work
-		return;
-	}
-	// Was declared global
-	var offclass = "qoff-" + qon;
-	var alist = getOffClassElements(offclass);
-	var nextid;
-	if (!alist) {
-		return;
-	}
-	unhighlightCurrentNote(current);
-	if (alist.length == 1) {
-		highlightIdInEditor(alist[0].id, "goToPreviousNoteOrRest");
-	} else if (alist.length == 0) {
-		// gotoNextPage();
-		if (vrvWorker.page == 1) {
-			// at first page, so don't do anything.
-			console.log("AT FIRST PAGE, so not continuing further");
-			return;
-		}
-		vrvWorker.gotoPage(vrvWorker.page - 1)
-		.then(function(obj) {
-			// loadPage(vrvWorker.page);
-			var page = obj.page || vrvWorker.page;
-			$("#overlay").hide().css("cursor", "auto");
-			$("#jump_text").val(page);
-			vrvWorker.renderPage(page)
-			.then(function(svg) {
-				$("#output").html(svg);
-				// adjustPageHeight();
-				// resizeImage();
-			})
-			.then(function() {
-				alist = getOnClassElements(offclass);
-				if (alist.length == 1) {
-					highlightIdInEditor(alist[0].id, "goToPreviousNoteOrRest2");
-				} else {
-					nextid = chooseBestId(alist, location.staff, location.layer);
-					if (nextid) {
-						global_editorOptions.EDITINGID = nextid;
-						highlightIdInEditor(nextid, "goToPreviousNoteOrRest3");
-					}
-				}
-			});
-		});
-	} else {
-		nextid = chooseBestId(alist, location.staff, location.layer);
-		if (nextid) {
-			global_editorOptions.EDITINGID = nextid;
-			highlightIdInEditor(nextid, "goToPreviousNoteOrRest4");
-		}
-	}
+  var current = document.querySelector('#' + currentid);
+  if (!current) {
+    console.log('CANNOT FIND ITEM ', currentid);
+    return;
+  }
+  var location = getStaffAndLayerNumbers(current.id);
+  var matches = current.className.baseVal.match(/qon-([^\s]+)/);
+  if (!matches) {
+    console.log('CANNOT FIND QON IN', current.className);
+    return;
+  }
+  var qon = matches[1];
+  if (qon == 0) {
+    // cannot go before start of work
+    return;
+  }
+  // Was declared global
+  var offclass = 'qoff-' + qon;
+  var alist = getOffClassElements(offclass);
+  var nextid;
+  if (!alist) {
+    return;
+  }
+  unhighlightCurrentNote(current);
+  if (alist.length == 1) {
+    highlightIdInEditor(alist[0].id, 'goToPreviousNoteOrRest');
+  } else if (alist.length == 0) {
+    // gotoNextPage();
+    if (vrvWorker.page == 1) {
+      // at first page, so don't do anything.
+      console.log('AT FIRST PAGE, so not continuing further');
+      return;
+    }
+    vrvWorker.gotoPage(vrvWorker.page - 1).then(function (obj) {
+      // loadPage(vrvWorker.page);
+      var page = obj.page || vrvWorker.page;
+      $('#overlay').hide().css('cursor', 'auto');
+      $('#jump_text').val(page);
+      vrvWorker
+        .renderPage(page)
+        .then(function (svg) {
+          $('#output').html(svg);
+          // adjustPageHeight();
+          // resizeImage();
+        })
+        .then(function () {
+          alist = getOnClassElements(offclass);
+          if (alist.length == 1) {
+            highlightIdInEditor(alist[0].id, 'goToPreviousNoteOrRest2');
+          } else {
+            nextid = chooseBestId(alist, location.staff, location.layer);
+            if (nextid) {
+              global_editorOptions.EDITINGID = nextid;
+              highlightIdInEditor(nextid, 'goToPreviousNoteOrRest3');
+            }
+          }
+        });
+    });
+  } else {
+    nextid = chooseBestId(alist, location.staff, location.layer);
+    if (nextid) {
+      global_editorOptions.EDITINGID = nextid;
+      highlightIdInEditor(nextid, 'goToPreviousNoteOrRest4');
+    }
+  }
 }
-
-
 
 //////////////////////////////
 //
@@ -582,69 +562,67 @@ export function goToPreviousNoteOrRest(currentid) {
 //
 
 export function goToNextNoteOrRest(currentid) {
-	var current = document.querySelector("#" + currentid);
-	if (!current) {
-		return;
-	}
-	var location = getStaffAndLayerNumbers(current.id);
-	var matches = current.className.baseVal.match(/qoff-([^\s]+)/);
-	if (!matches) {
-		return;
-	}
-	var qoff = matches[1];
-	var onclass = "qon-" + qoff;
-	var alist = getOnClassElements(onclass);
-	var nextid;
-	if (!alist) {
-		return;
-	}
-	unhighlightCurrentNote(current);
+  var current = document.querySelector('#' + currentid);
+  if (!current) {
+    return;
+  }
+  var location = getStaffAndLayerNumbers(current.id);
+  var matches = current.className.baseVal.match(/qoff-([^\s]+)/);
+  if (!matches) {
+    return;
+  }
+  var qoff = matches[1];
+  var onclass = 'qon-' + qoff;
+  var alist = getOnClassElements(onclass);
+  var nextid;
+  if (!alist) {
+    return;
+  }
+  unhighlightCurrentNote(current);
 
-	if (alist.length == 1) {
-		highlightIdInEditor(alist[0].id, "goToNextNoteOrRest");
-	} else if (alist.length == 0) {
-		// console.log("NO ELEMENT FOUND (ON NEXT PAGE?)");
-		// gotoNextPage();
-		if ((vrvWorker.pageCount > 0) && (vrvWorker.pageCount == vrvWorker.page)) {
-			// at last page, so don't do anything.
-			// console.log("AT LAST PAGE, so not continuing further");
-			return;
-		}
-		vrvWorker.gotoPage(vrvWorker.page + 1)
-		.then(function(obj) {
-			// loadPage(vrvWorker.page);
-			var page = obj.page || vrvWorker.page;
-			$("#overlay").hide().css("cursor", "auto");
-			$("#jump_text").val(page);
-			vrvWorker.renderPage(page)
-			.then(function(svg) {
-				$("#output").html(svg);
-				// adjustPageHeight();
-				// resizeImage();
-			})
-			.then(function() {
-				alist = getOnClassElements(onclass);
-				if (alist.length == 1) {
-					highlightIdInEditor(alist[0].id, "goToNextNoteOrRest2");
-				} else {
-					nextid = chooseBestId(alist, location.staff, location.layer);
-					if (nextid) {
-						global_editorOptions.EDITINGID = nextid;
-						highlightIdInEditor(nextid, "goToNextNoteOrRest3");
-					}
-				}
-			});
-		});
-	} else {
-		nextid = chooseBestId(alist, location.staff, location.layer);
-		if (nextid) {
-			global_editorOptions.EDITINGID = nextid;
-			highlightIdInEditor(nextid, "goToNextNoteOrRest4");
-		}
-	}
+  if (alist.length == 1) {
+    highlightIdInEditor(alist[0].id, 'goToNextNoteOrRest');
+  } else if (alist.length == 0) {
+    // console.log("NO ELEMENT FOUND (ON NEXT PAGE?)");
+    // gotoNextPage();
+    if (vrvWorker.pageCount > 0 && vrvWorker.pageCount == vrvWorker.page) {
+      // at last page, so don't do anything.
+      // console.log("AT LAST PAGE, so not continuing further");
+      return;
+    }
+    vrvWorker.gotoPage(vrvWorker.page + 1).then(function (obj) {
+      // loadPage(vrvWorker.page);
+      var page = obj.page || vrvWorker.page;
+      $('#overlay').hide().css('cursor', 'auto');
+      $('#jump_text').val(page);
+      vrvWorker
+        .renderPage(page)
+        .then(function (svg) {
+          $('#output').html(svg);
+          // adjustPageHeight();
+          // resizeImage();
+        })
+        .then(function () {
+          alist = getOnClassElements(onclass);
+          if (alist.length == 1) {
+            highlightIdInEditor(alist[0].id, 'goToNextNoteOrRest2');
+          } else {
+            nextid = chooseBestId(alist, location.staff, location.layer);
+            if (nextid) {
+              global_editorOptions.EDITINGID = nextid;
+              highlightIdInEditor(nextid, 'goToNextNoteOrRest3');
+            }
+          }
+        });
+    });
+  } else {
+    nextid = chooseBestId(alist, location.staff, location.layer);
+    if (nextid) {
+      global_editorOptions.EDITINGID = nextid;
+      highlightIdInEditor(nextid, 'goToNextNoteOrRest4');
+    }
+  }
 }
-
-
 
 //////////////////////////////
 //
@@ -652,23 +630,21 @@ export function goToNextNoteOrRest(currentid) {
 //
 
 export function toggleAppoggiaturaColoring() {
-	// Was declared global
-	var stylesheet = document.querySelector("#appoggiatura-color-stylesheet");
-	if (stylesheet) {
-		var parentElement = stylesheet.parentNode;
-		parentElement.removeChild(stylesheet);
-		return;
-	}
-	stylesheet = document.createElement('style');
-	var text = "";
-	text += "g.appoggiatura-start { fill: limegreen; }";
-	text += "g.appoggiatura-stop { fill: forestgreen; }";
-	stylesheet.innerHTML = text;
-	stylesheet.id = "appoggiatura-color-stylesheet";
-	document.body.appendChild(stylesheet);
+  // Was declared global
+  var stylesheet = document.querySelector('#appoggiatura-color-stylesheet');
+  if (stylesheet) {
+    var parentElement = stylesheet.parentNode;
+    parentElement.removeChild(stylesheet);
+    return;
+  }
+  stylesheet = document.createElement('style');
+  var text = '';
+  text += 'g.appoggiatura-start { fill: limegreen; }';
+  text += 'g.appoggiatura-stop { fill: forestgreen; }';
+  stylesheet.innerHTML = text;
+  stylesheet.id = 'appoggiatura-color-stylesheet';
+  document.body.appendChild(stylesheet);
 }
-
-
 
 //////////////////////////////
 //
@@ -676,29 +652,27 @@ export function toggleAppoggiaturaColoring() {
 //
 
 export function toggleLayerColoring() {
-	// Was declared global
-	var stylesheet = document.querySelector("#layer-color-stylesheet");
-	if (stylesheet) {
-		var parentElement = stylesheet.parentNode;
-		parentElement.removeChild(stylesheet);
-		return;
-	}
-	stylesheet = document.createElement('style');
-	var text = "";
-	text += "g[id^='layer-'][id*='N2'] { fill: #00cc00; }\n";
-	text += "g[id^='layer-'][id*='N3'] { fill: #cc00aa; }\n";
-	text += "g[id^='layer-'][id*='N4'] { fill: #0088cc; }\n";
-	text += "g[id^='layer-'][id*='N5'] { fill: #0000cc; }\n";
-	text += "g[id^='layer-'][id*='N6'] { fill: #cc0000; }\n";
-	text += "g[id^='layer-'][id*='N7'] { fill: #00cc00; }\n";
-	// Disable highlighting of clefs in layers:
-	text += "g.clef { fill: black !important; }";
-	stylesheet.innerHTML = text;
-	stylesheet.id = "layer-color-stylesheet";
-	document.body.appendChild(stylesheet);
+  // Was declared global
+  var stylesheet = document.querySelector('#layer-color-stylesheet');
+  if (stylesheet) {
+    var parentElement = stylesheet.parentNode;
+    parentElement.removeChild(stylesheet);
+    return;
+  }
+  stylesheet = document.createElement('style');
+  var text = '';
+  text += "g[id^='layer-'][id*='N2'] { fill: #00cc00; }\n";
+  text += "g[id^='layer-'][id*='N3'] { fill: #cc00aa; }\n";
+  text += "g[id^='layer-'][id*='N4'] { fill: #0088cc; }\n";
+  text += "g[id^='layer-'][id*='N5'] { fill: #0000cc; }\n";
+  text += "g[id^='layer-'][id*='N6'] { fill: #cc0000; }\n";
+  text += "g[id^='layer-'][id*='N7'] { fill: #00cc00; }\n";
+  // Disable highlighting of clefs in layers:
+  text += 'g.clef { fill: black !important; }';
+  stylesheet.innerHTML = text;
+  stylesheet.id = 'layer-color-stylesheet';
+  document.body.appendChild(stylesheet);
 }
-
-
 
 //////////////////////////////
 //
@@ -706,22 +680,20 @@ export function toggleLayerColoring() {
 //
 
 export function togglePlaceColoring() {
-	// Was declared global
-	var stylesheet = document.querySelector("#placed-color-stylesheet");
-	if (stylesheet) {
-		var parentElement = stylesheet.parentNode;
-		parentElement.removeChild(stylesheet);
-		return;
-	}
-	stylesheet = document.createElement('style');
-	var text = "g.placed { fill: orange; } ";
-	text += "g.placed path { stroke: orange; } ";
-	stylesheet.innerHTML = text;
-	stylesheet.id = "placed-color-stylesheet";
-	document.body.appendChild(stylesheet);
+  // Was declared global
+  var stylesheet = document.querySelector('#placed-color-stylesheet');
+  if (stylesheet) {
+    var parentElement = stylesheet.parentNode;
+    parentElement.removeChild(stylesheet);
+    return;
+  }
+  stylesheet = document.createElement('style');
+  var text = 'g.placed { fill: orange; } ';
+  text += 'g.placed path { stroke: orange; } ';
+  stylesheet.innerHTML = text;
+  stylesheet.id = 'placed-color-stylesheet';
+  document.body.appendChild(stylesheet);
 }
-
-
 
 ///////////////////////////////////
 //
@@ -729,24 +701,23 @@ export function togglePlaceColoring() {
 //
 
 export function restoreSelectedSvgElement(id) {
-	if (!id) {
-		return;
-	}
-	var item = document.querySelector("#" + id);
-	if (!item) {
-		return;
-	}
-	var line;
-	var matches = id.match(/L(\d+)/);
-	if (matches) {
-		line = parseInt(line);0
-	} else {
-		return;
-	}
-	markItem(item, line);
+  if (!id) {
+    return;
+  }
+  var item = document.querySelector('#' + id);
+  if (!item) {
+    return;
+  }
+  var line;
+  var matches = id.match(/L(\d+)/);
+  if (matches) {
+    line = parseInt(line);
+    0;
+  } else {
+    return;
+  }
+  markItem(item, line);
 }
-
-
 
 //////////////////////////////
 //
@@ -756,58 +727,55 @@ import { setCursorNote } from './misc.js';
 import { getAceEditor } from './setup.js';
 
 export function markItem(item, line) {
-	if (!item) {
-		item = global_cursor.CursorNote;
-	}
-	if (!item) {
-		return;
-	}
-	global_editorOptions.EditorLine = line;
-	// This case is not good for editing a note:
-	//if (global_cursor.CursorNote && item && (global_cursor.CursorNote.id == item.id)) {
-	//	console.log("THE SAME NOTE");
-	//	return;
-	//}
-	if (global_cursor.CursorNote) {
-		// console.log("TURNING OFF OLD NOTE", global_cursor.CursorNote);
-		/// global_cursor.CursorNote.setAttribute("fill", "#000");
-		// global_cursor.CursorNote.removeAttribute("fill");
+  if (!item) {
+    item = global_cursor.CursorNote;
+  }
+  if (!item) {
+    return;
+  }
+  global_editorOptions.EditorLine = line;
+  // This case is not good for editing a note:
+  //if (global_cursor.CursorNote && item && (global_cursor.CursorNote.id == item.id)) {
+  //	console.log("THE SAME NOTE");
+  //	return;
+  //}
+  if (global_cursor.CursorNote) {
+    // console.log("TURNING OFF OLD NOTE", global_cursor.CursorNote);
+    /// global_cursor.CursorNote.setAttribute("fill", "#000");
+    // global_cursor.CursorNote.removeAttribute("fill");
 
-		var classes = global_cursor.CursorNote.getAttribute("class");
-		var classlist = classes.split(" ");
-		var outclass = "";
-		for (var i=0; i<classlist.length; i++) {
-			if (classlist[i] == "highlight") {
-				continue;
-			}
-			outclass += " " + classlist[i];
-		}
-		outclass = outclass.replace(/^\s+/, "");
-		global_cursor.CursorNote.setAttribute("class", outclass);
+    var classes = global_cursor.CursorNote.getAttribute('class');
+    var classlist = classes.split(' ');
+    var outclass = '';
+    for (var i = 0; i < classlist.length; i++) {
+      if (classlist[i] == 'highlight') {
+        continue;
+      }
+      outclass += ' ' + classlist[i];
+    }
+    outclass = outclass.replace(/^\s+/, '');
+    global_cursor.CursorNote.setAttribute('class', outclass);
+  }
+  if (item) {
+    setCursorNote(item, 'markItem');
+  }
+  if (global_cursor.CursorNote) {
+    // console.log("TURNING ON NEW NOTE", global_cursor.CursorNote);
+    // global_cursor.CursorNote.setAttribute("fill", "#c00");
 
-	}
-	if (item) {
-		setCursorNote(item, "markItem");
-	}
-	if (global_cursor.CursorNote) {
-		// console.log("TURNING ON NEW NOTE", global_cursor.CursorNote);
-		// global_cursor.CursorNote.setAttribute("fill", "#c00");
-
-		var classes = global_cursor.CursorNote.getAttribute("class");
-		var classlist = classes.split(" ");
-		var outclass = "";
-		for (var i=0; i<classlist.length; i++) {
-			if (classlist[i] == "highlight") {
-				continue;
-			}
-			outclass += " " + classlist[i];
-		}
-		outclass += " highlight";
-		global_cursor.CursorNote.setAttribute("class", outclass);
-	}
+    var classes = global_cursor.CursorNote.getAttribute('class');
+    var classlist = classes.split(' ');
+    var outclass = '';
+    for (var i = 0; i < classlist.length; i++) {
+      if (classlist[i] == 'highlight') {
+        continue;
+      }
+      outclass += ' ' + classlist[i];
+    }
+    outclass += ' highlight';
+    global_cursor.CursorNote.setAttribute('class', outclass);
+  }
 }
-
-
 
 //////////////////////////////
 //
@@ -815,114 +783,107 @@ export function markItem(item, line) {
 //
 
 function unhighlightAllElements() {
-	if (!global_cursor.CursorNote) {
-		return;
-	}
-	var hilights = document.querySelectorAll("svg .highlight");
-	for (var i=0; i<hilights.length; i++) {
-		var classes = global_cursor.CursorNote.getAttribute("class");
-		var classlist = classes.split(" ");
-		var outclass = "";
-		for (var i=0; i<classlist.length; i++) {
-			if (classlist[i] == "highlight") {
-				continue;
-			}
-			outclass += " " + classlist[i];
-		}
-		outclass = outclass.replace(/^\s+/, "");
-		global_cursor.CursorNote.setAttribute("class", outclass);
-	}
+  if (!global_cursor.CursorNote) {
+    return;
+  }
+  var hilights = document.querySelectorAll('svg .highlight');
+  for (var i = 0; i < hilights.length; i++) {
+    var classes = global_cursor.CursorNote.getAttribute('class');
+    var classlist = classes.split(' ');
+    var outclass = '';
+    for (var i = 0; i < classlist.length; i++) {
+      if (classlist[i] == 'highlight') {
+        continue;
+      }
+      outclass += ' ' + classlist[i];
+    }
+    outclass = outclass.replace(/^\s+/, '');
+    global_cursor.CursorNote.setAttribute('class', outclass);
+  }
 }
-
-
 
 //////////////////////////////
 //
 // highlightIdInEditor --
 //
-import { centerCursorHorizontallyInEditor } from './utility-ace.js'
+import { centerCursorHorizontallyInEditor } from './utility-ace.js';
 
 export function highlightIdInEditor(id, source) {
+  unhighlightAllElements(id);
 
-	unhighlightAllElements(id);
+  if (!id) {
+    // no element (off of page or outside of musical range
+    console.log('NO ID so not changing to another element');
+    return;
+  }
+  let matches = id.match(/^([^-]+)-[^-]*L(\d+)F(\d+)/);
+  if (!matches) {
+    return;
+  }
 
-	if (!id) {
-		// no element (off of page or outside of musical range
-		console.log("NO ID so not changing to another element");
-		return;
-	}
-	let matches = id.match(/^([^-]+)-[^-]*L(\d+)F(\d+)/);
-	if (!matches) {
-		return;
-	}
+  var etype = matches[1];
+  var row = matches[2];
+  var field = matches[3];
+  var subtoken = 0;
+  if ((matches = id.match(/-.*L\d+F\d+S(\d+)/))) {
+    subtoken = matches[1];
+  }
 
-	var etype = matches[1];
-	var row   = matches[2];
-	var field = matches[3];
-	var subtoken = 0;
-	if (matches = id.match(/-.*L\d+F\d+S(\d+)/)) {
-		subtoken = matches[1];
-	}
+  const editor = getAceEditor();
+  if (!editor) {
+    throw new Error('Ace Editor is undefined');
+  }
+  var linecontent = editor.session.getLine(row - 1);
 
-	const editor = getAceEditor();
-	if (!editor) {
-		throw new Error('Ace Editor is undefined');
-	}
-	var linecontent = editor.session.getLine(row-1);
+  var col = 0;
+  if (field > 1) {
+    var tabcount = 0;
+    for (let i = 0; i < linecontent.length; i++) {
+      col++;
+      if (linecontent[i] == '\t') {
+        if (i > 0 && linecontent[i - 1] != '\t') {
+          tabcount++;
+        }
+      }
+      if (tabcount == field - 1) {
+        break;
+      }
+    }
+  }
 
-	var col = 0;
-	if (field > 1) {
-		var tabcount = 0;
-		for (let i=0; i<linecontent.length; i++) {
-			col++;
-			if (linecontent[i] == '\t') {
-				if ((i > 0) && (linecontent[i-1] != '\t')) {
-					tabcount++;
-				}
-			}
-			if (tabcount == field - 1) {
-				break;
-			}
-		}
-	}
+  if (subtoken >= 1) {
+    var scount = 1;
+    while (col < linecontent.length && scount < subtoken) {
+      col++;
+      if (linecontent[col] == ' ') {
+        scount++;
+        if (scount == subtoken) {
+          col++;
+          break;
+        }
+      }
+    }
+  }
 
-	if (subtoken >= 1) {
-		var scount = 1;
-		while ((col < linecontent.length) && (scount < subtoken)) {
-			col++;
-			if (linecontent[col] == " ") {
-				scount++;
-				if (scount == subtoken) {
-					col++;
-					break;
-				}
-			}
-		}
-	}
+  let col2 = col;
+  var searchstring = linecontent[col2];
+  while (col2 < linecontent.length) {
+    col2++;
+    if (linecontent[col2] == ' ') {
+      break;
+    } else if (linecontent[col2] == '\t') {
+      break;
+    } else {
+      searchstring += linecontent[col2];
+    }
+  }
 
-	let col2 = col;
-	var searchstring = linecontent[col2];
-	while (col2 < linecontent.length) {
-		col2++;
-		if (linecontent[col2] == " ") {
-			break;
-		} else if (linecontent[col2] == "\t") {
-			break;
-		} else {
-			searchstring += linecontent[col2];
-		}
-	}
+  global_cursor.CursorNote = document.querySelector('#' + id);
+  // window.MENU.showCursorNoteMenu(global_cursor.CursorNote);
+  getMenu().showCursorNoteMenu(global_cursor.CursorNote);
+  editor.gotoLine(row, col);
 
-	global_cursor.CursorNote = document.querySelector("#" + id);
-	// window.MENU.showCursorNoteMenu(global_cursor.CursorNote);
-	getMenu().showCursorNoteMenu(global_cursor.CursorNote);
-	editor.gotoLine(row, col);
-
-	// 0.5 = center the cursor vertically:
-	editor.renderer.scrollCursorIntoView({row: row-1, column: col}, 0.5);
-	centerCursorHorizontallyInEditor();
-
+  // 0.5 = center the cursor vertically:
+  editor.renderer.scrollCursorIntoView({ row: row - 1, column: col }, 0.5);
+  centerCursorHorizontallyInEditor();
 }
-
-
-

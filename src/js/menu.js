@@ -30,7 +30,11 @@ import { trimTabsInEditor } from './vhv-scripts/utility.js';
 
 import { convertToMusicXmlAndSave } from './vhv-scripts/convertToMusicXmlAndSave.js';
 import { processNotationKey } from './vhv-scripts/editor.js';
-import { global_cursor, global_editorOptions, global_verovioOptions } from './vhv-scripts/global-variables.js';
+import {
+  global_cursor,
+  global_editorOptions,
+  global_verovioOptions,
+} from './vhv-scripts/global-variables.js';
 
 class MenuInterface {
   constructor() {
@@ -1207,7 +1211,9 @@ class MenuInterface {
     if (event && event.shiftKey) {
       global_verovioOptions.SCALE = 40;
     } else {
-      global_verovioOptions.SCALE = parseInt(global_verovioOptions.SCALE * number + 0.5);
+      global_verovioOptions.SCALE = parseInt(
+        global_verovioOptions.SCALE * number + 0.5
+      );
       if (global_verovioOptions.SCALE < 15) {
         global_verovioOptions.SCALE = 15;
       } else if (global_verovioOptions.SCALE > 500) {

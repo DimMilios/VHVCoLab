@@ -10,7 +10,6 @@
 //                 files.
 //
 
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // HnpMarkup class -- Interface to highlight and markup regions of a
@@ -28,8 +27,8 @@
 //
 
 export function HnpMarkup() {
-	this.clear();
-	return this;
+  this.clear();
+  return this;
 }
 
 // function HnpMarkup() {
@@ -40,18 +39,14 @@ export function HnpMarkup() {
 // window.HnpMarkup = HnpMarkup;
 // console.log('Initialized HnpMarkup', window.HnpMarkup, HnpMarkup)
 
-
-
 //////////////////////////////
 //
 // HnpMarkup.prototype.clear -- Clear the contents of the highlighter.
 //
 
-HnpMarkup.prototype.clear = function() {
-	this.clearSvgInfo();
+HnpMarkup.prototype.clear = function () {
+  this.clearSvgInfo();
 };
-
-
 
 //////////////////////////////
 //
@@ -59,11 +54,9 @@ HnpMarkup.prototype.clear = function() {
 //    the stored SVG image.  Does not clear highlighting database.
 //
 
-HnpMarkup.prototype.clearSvgInfo = function() {
-	this.m_svg = new HnpSvg();
+HnpMarkup.prototype.clearSvgInfo = function () {
+  this.m_svg = new HnpSvg();
 };
-
-
 
 //////////////////////////////
 //
@@ -71,14 +64,12 @@ HnpMarkup.prototype.clearSvgInfo = function() {
 //
 
 HnpMarkup.prototype.loadSvg = function (svg) {
-	let status = this.m_svg.loadSvg(svg);
-	if (!status) {
-		console.warn("Warning: could not load SVG image");
-	}
-	return status;
-}
-
-
+  let status = this.m_svg.loadSvg(svg);
+  if (!status) {
+    console.warn('Warning: could not load SVG image');
+  }
+  return status;
+};
 
 //////////////////////////////
 //
@@ -86,13 +77,11 @@ HnpMarkup.prototype.loadSvg = function (svg) {
 //
 
 HnpMarkup.prototype.getMeasure = function (barnum) {
-	if (!this.m_svg) {
-		return null;
-	}
-	return this.m_svg.getMeasure(barnum);
+  if (!this.m_svg) {
+    return null;
+  }
+  return this.m_svg.getMeasure(barnum);
 };
-
-
 
 //////////////////////////////
 //
@@ -100,20 +89,18 @@ HnpMarkup.prototype.getMeasure = function (barnum) {
 //
 
 HnpMarkup.prototype.getMeasureElement = function (barnum) {
-	if (!this.m_svg) {
-		return null;
-	}
-	let measure  = this.m_svg.getMeasure(barnum);
-	if (!measure) {
-		return null;
-	}
-	if (typeof measure.element === "undefined") {
-		return null;
-	}
-	return measure.element;
+  if (!this.m_svg) {
+    return null;
+  }
+  let measure = this.m_svg.getMeasure(barnum);
+  if (!measure) {
+    return null;
+  }
+  if (typeof measure.element === 'undefined') {
+    return null;
+  }
+  return measure.element;
 };
-
-
 
 //////////////////////////////
 //
@@ -121,10 +108,8 @@ HnpMarkup.prototype.getMeasureElement = function (barnum) {
 //
 
 HnpMarkup.prototype.getLowerSystemMarkupElement = function () {
-	return this.m_svg.getLowerSystemMarkupElement();
+  return this.m_svg.getLowerSystemMarkupElement();
 };
-
-
 
 //////////////////////////////
 //
@@ -132,10 +117,8 @@ HnpMarkup.prototype.getLowerSystemMarkupElement = function () {
 //
 
 HnpMarkup.prototype.getLowerMeasureMarkupElement = function () {
-	return this.m_svg.getLowerMeasureMarkupElement();
+  return this.m_svg.getLowerMeasureMarkupElement();
 };
-
-
 
 //////////////////////////////
 //
@@ -147,75 +130,72 @@ HnpMarkup.prototype.getLowerMeasureMarkupElement = function () {
 //     padding : units of 1/2 space between stafflines
 
 HnpMarkup.prototype.highlightMeasure = function (options) {
-	let measure;
-	let color;
-	let opacity;
-	let padding;
+  let measure;
+  let color;
+  let opacity;
+  let padding;
 
-	if (typeof options === "number") {
-		measure = options;
-		color    = "goldenrod";
-		opacity  = 0.25;
-		padding  = 1;
-	} else if (typeof options === "string") {
-		measure  = parseInt(options);
-		color    = "goldenrod";
-		opacity  = 0.25;
-		padding  = 1;
-	} else {
-		measure  = options.measure || 1;
-		color    = options.color   || "goldenrod";
-		opacity  = options.opacity || 0.25;
-		if (typeof options.padding !== "undefined") {
-			padding = options.padding;
-		} else {
-			padding = 1;
-		}
-	}
-	if (measure < 0) {
-		return null;
-	}
+  if (typeof options === 'number') {
+    measure = options;
+    color = 'goldenrod';
+    opacity = 0.25;
+    padding = 1;
+  } else if (typeof options === 'string') {
+    measure = parseInt(options);
+    color = 'goldenrod';
+    opacity = 0.25;
+    padding = 1;
+  } else {
+    measure = options.measure || 1;
+    color = options.color || 'goldenrod';
+    opacity = options.opacity || 0.25;
+    if (typeof options.padding !== 'undefined') {
+      padding = options.padding;
+    } else {
+      padding = 1;
+    }
+  }
+  if (measure < 0) {
+    return null;
+  }
 
-	let measureobj = this.getMeasure(measure);
-	if (!measureobj) {
-		return null;
-	}
-	let x = measureobj.getX();
-	let y = measureobj.getY();
-	let width = measureobj.getWidth();
-	let height = measureobj.getHeight();
-	let vu = measureobj.getVuScale();
+  let measureobj = this.getMeasure(measure);
+  if (!measureobj) {
+    return null;
+  }
+  let x = measureobj.getX();
+  let y = measureobj.getY();
+  let width = measureobj.getWidth();
+  let height = measureobj.getHeight();
+  let vu = measureobj.getVuScale();
 
-	if ((padding > 0.0) && (vu > 0.0)) {
-		x = x - padding * vu;
-		y = y - padding * vu;
-		width = width + 2 * padding * vu;
-		height = height + 2 * padding * vu;
-	}
+  if (padding > 0.0 && vu > 0.0) {
+    x = x - padding * vu;
+    y = y - padding * vu;
+    width = width + 2 * padding * vu;
+    height = height + 2 * padding * vu;
+  }
 
-	let mbox = document.createElementNS("http://www.w3.org/2000/svg","rect");
-	mbox.setAttribute("x",       x);
-	mbox.setAttribute("y",       y);
-	mbox.setAttribute("width",   width);
-	mbox.setAttribute("height",  height);
-	mbox.setAttribute("fill",    color);
-	mbox.setAttribute("opacity", opacity);
+  let mbox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  mbox.setAttribute('x', x);
+  mbox.setAttribute('y', y);
+  mbox.setAttribute('width', width);
+  mbox.setAttribute('height', height);
+  mbox.setAttribute('fill', color);
+  mbox.setAttribute('opacity', opacity);
 
-	let markupLayer = this.getLowerMeasureMarkupElement();
-	if (!markupLayer) {
-		return null;
-	}
-	markupLayer.appendChild(mbox);
-	return mbox;
-}
-
-
+  let markupLayer = this.getLowerMeasureMarkupElement();
+  if (!markupLayer) {
+    return null;
+  }
+  markupLayer.appendChild(mbox);
+  return mbox;
+};
 
 ///////////////////////////////////////////////////////////////////////////
 //
 // HnpSvg class -- Interface to verovio-generated SVG image of music notation.
 //
-
 
 //////////////////////////////
 //
@@ -224,11 +204,9 @@ HnpMarkup.prototype.highlightMeasure = function (options) {
 //
 
 function HnpSvg() {
-	this.clear();
-	return this;
+  this.clear();
+  return this;
 }
-
-
 
 //////////////////////////////
 //
@@ -236,39 +214,36 @@ function HnpSvg() {
 //
 
 HnpSvg.prototype.clear = function () {
-	this.element = null;
+  this.element = null;
 
-	// List of SVG system elements in image:
-	this.svgSystems = [];
+  // List of SVG system elements in image:
+  this.svgSystems = [];
 
-	// List of list of measure elements in each system:
-	this.svgSystemMeasures = [];
+  // List of list of measure elements in each system:
+  this.svgSystemMeasures = [];
 
-	// List of all measures on the page (with other information added
-	// such as the measure number and bounding box of the measure).
-	this.svgMeasures = [];
+  // List of all measures on the page (with other information added
+  // such as the measure number and bounding box of the measure).
+  this.svgMeasures = [];
 
-	///////////////////////////
-	//
-	// Clear attributes relatd to the SVG image:
-	//
+  ///////////////////////////
+  //
+  // Clear attributes relatd to the SVG image:
+  //
 
-	// pagemargin == element for the page region of the SVG image:
-	this.pagemargin = null;
+  // pagemargin == element for the page region of the SVG image:
+  this.pagemargin = null;
 
-	// lowerMarkupLayer == element for storing highlights in SVG
-	// (behind the notation):
-	this.lowerMarkupElement = null;
+  // lowerMarkupLayer == element for storing highlights in SVG
+  // (behind the notation):
+  this.lowerMarkupElement = null;
 
-	// lowerSystemMarkups == element containing system highlights:
-	this.lowerSystemMarkupElement = null;
+  // lowerSystemMarkups == element containing system highlights:
+  this.lowerSystemMarkupElement = null;
 
-	// lowerMeasureMarkupElement == element containing measure highlights:
-	this.lowerMeasureMarkupElement = null;
-
+  // lowerMeasureMarkupElement == element containing measure highlights:
+  this.lowerMeasureMarkupElement = null;
 };
-
-
 
 //////////////////////////////
 //
@@ -277,98 +252,95 @@ HnpSvg.prototype.clear = function () {
 //
 
 HnpSvg.prototype.loadSvg = function (svg) {
-	this.clear();
+  this.clear();
 
-	// Verify the SVG image being loaded:
-	if (typeof svg === "string") {
-		// Assume selector to SVG object:
-		let element = document.querySelector(svg);
-		if (!element) {
-			console.warn("Warning: Selector for SVG element is invalid", svg);
-			return false;
-		}
-		svg = element;
-	}
-	if (!svg) {
-		console.warn("Warning: SVG element not found");
-		return false;
-	}
-	let nodename = svg.nodeName;
-	if (nodename !== "svg") {
-		console.warn("Warning: SVG element is not an SVG element:", svg);
-		return false;
-	}
-	this.element = svg;
+  // Verify the SVG image being loaded:
+  if (typeof svg === 'string') {
+    // Assume selector to SVG object:
+    let element = document.querySelector(svg);
+    if (!element) {
+      console.warn('Warning: Selector for SVG element is invalid', svg);
+      return false;
+    }
+    svg = element;
+  }
+  if (!svg) {
+    console.warn('Warning: SVG element not found');
+    return false;
+  }
+  let nodename = svg.nodeName;
+  if (nodename !== 'svg') {
+    console.warn('Warning: SVG element is not an SVG element:', svg);
+    return false;
+  }
+  this.element = svg;
 
-	// Create a list of systems in the SVG image:
-	let systems = svg.querySelectorAll('g[id^="system-"].system');
-	if (!systems) {
-		console.warn("Warning: no systems in SVG image");
-		return false;
-	}
-	this.svgSystems = [];
-	for (let i=0; i<systems.length; i++) {
-		let obj = {};
-		obj.element = systems[i];
-		this.svgSystems.push(obj);
-	}
+  // Create a list of systems in the SVG image:
+  let systems = svg.querySelectorAll('g[id^="system-"].system');
+  if (!systems) {
+    console.warn('Warning: no systems in SVG image');
+    return false;
+  }
+  this.svgSystems = [];
+  for (let i = 0; i < systems.length; i++) {
+    let obj = {};
+    obj.element = systems[i];
+    this.svgSystems.push(obj);
+  }
 
-	// Create a 2D list of the measrues in the image.
-	// this.svgSystemMeasures indexes measures by system index, then measure
-	// index on that system.
-	this.svgSystemMeasures = [];
-	for (let i=0; i<this.svgSystems.length; i++) {
-		let system = this.svgSystems[i].element;
-		let measures = system.querySelectorAll('g[id^="measure-"].measure');
-		let m = [];
-		this.svgSystemMeasures.push(m);
-		if (!measures) {
-			continue;
-		}
-		for (let j=0; j<measures.length; j++) {
-			let obj = new HnpSvgMeasure();
-			obj.element = measures[j];
-			obj.systemIndex = i;
-			obj.systemMeasureIndex = j;
-			obj.m_setMeasureNumber();
-			// Other measure information will be calculated
-			// when needed by .m_setMeasureInfo().
-			m.push(obj);
-		}
+  // Create a 2D list of the measrues in the image.
+  // this.svgSystemMeasures indexes measures by system index, then measure
+  // index on that system.
+  this.svgSystemMeasures = [];
+  for (let i = 0; i < this.svgSystems.length; i++) {
+    let system = this.svgSystems[i].element;
+    let measures = system.querySelectorAll('g[id^="measure-"].measure');
+    let m = [];
+    this.svgSystemMeasures.push(m);
+    if (!measures) {
+      continue;
+    }
+    for (let j = 0; j < measures.length; j++) {
+      let obj = new HnpSvgMeasure();
+      obj.element = measures[j];
+      obj.systemIndex = i;
+      obj.systemMeasureIndex = j;
+      obj.m_setMeasureNumber();
+      // Other measure information will be calculated
+      // when needed by .m_setMeasureInfo().
+      m.push(obj);
+    }
+  }
 
-	}
+  // Now create a 1D list of the measures in the SVG image
+  this.svgMeasures = [];
+  for (let i = 0; i < this.svgSystemMeasures.length; i++) {
+    let mlist = this.svgSystemMeasures[i];
+    for (let j = 0; j < mlist.length; j++) {
+      mlist[j].measureIndex = this.svgMeasures.length;
+      this.svgMeasures.push(mlist[j]);
+    }
+  }
 
-	// Now create a 1D list of the measures in the SVG image
-	this.svgMeasures = [];
-	for (let i=0; i<this.svgSystemMeasures.length; i++) {
-		let mlist = this.svgSystemMeasures[i];
-		for (let j=0; j<mlist.length; j++) {
-			mlist[j].measureIndex = this.svgMeasures.length;
-			this.svgMeasures.push(mlist[j]);
-		}
-	}
+  // And create a lookup table by measure number.  Each measure
+  // index contains a list of measures with a given number
+  // (in case there are multiple measures with the same number).
+  this.measures = {};
+  for (let i = 0; i < this.svgMeasures.length; i++) {
+    let item = this.svgMeasures[i];
+    let number = item.number;
+    let obj = this.measures[number];
+    if (!obj) {
+      this.measures[number] = [];
+    }
+    obj = this.measures[number];
+    obj.push(item);
+  }
 
-	// And create a lookup table by measure number.  Each measure
-	// index contains a list of measures with a given number
-	// (in case there are multiple measures with the same number).
-	this.measures = {};
-	for (let i=0; i<this.svgMeasures.length; i++) {
-		let item = this.svgMeasures[i];
-		let number = item.number;
-		let obj = this.measures[number];
-		if (!obj) {
-			this.measures[number] = [];
-		}
-		obj = this.measures[number];
-		obj.push(item);
-	}
+  this.m_insertLowerMarkupLayer();
 
-	this.m_insertLowerMarkupLayer();
-
-	return true;
+  return true;
 };
-
-
 
 /////////////////////////////
 //
@@ -376,54 +348,52 @@ HnpSvg.prototype.loadSvg = function (svg) {
 //
 
 HnpSvg.prototype.m_insertLowerMarkupLayer = function () {
-	if (!this.element) {
-		console.warn("Error: no SVG image");
-		return;
-	}
-	let svg = this.element;
-	let pagemargin = svg.querySelector(".page-margin");
-	if (!pagemargin) {
-		console.warn("Error: invalid SVG image", svg);
-		return;
-	}
-	this.pagemargin = pagemargin;
-	let child = pagemargin.firstElementChild;
-	let classlist = child.classList;
-	let hasLayer = false;
-	for (let i=0; i<classlist.length; i++) {
-		if (classlist[i] === "lowerMarkupLayer") {
-			hasLayer = true;
-			break;
-		}
-	}
-	if (hasLayer) {
-		this.lowerMarkupElement = child;
-	} else {
-		let element = document.createElementNS("http://www.w3.org/2000/svg","g");
-		let parent = child.parentNode;
-		parent.prepend(element);
-		element.classList.add("lowerMarkupLayer");
-		this.lowerMarkupElement = element;
-	}
+  if (!this.element) {
+    console.warn('Error: no SVG image');
+    return;
+  }
+  let svg = this.element;
+  let pagemargin = svg.querySelector('.page-margin');
+  if (!pagemargin) {
+    console.warn('Error: invalid SVG image', svg);
+    return;
+  }
+  this.pagemargin = pagemargin;
+  let child = pagemargin.firstElementChild;
+  let classlist = child.classList;
+  let hasLayer = false;
+  for (let i = 0; i < classlist.length; i++) {
+    if (classlist[i] === 'lowerMarkupLayer') {
+      hasLayer = true;
+      break;
+    }
+  }
+  if (hasLayer) {
+    this.lowerMarkupElement = child;
+  } else {
+    let element = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    let parent = child.parentNode;
+    parent.prepend(element);
+    element.classList.add('lowerMarkupLayer');
+    this.lowerMarkupElement = element;
+  }
 
-	// fill in lowerMarkupLayer with sublayers:
-	this.lowerMarkupElement.innerHTML = "";
-	
-	// Was declared global
-	let subelem;
+  // fill in lowerMarkupLayer with sublayers:
+  this.lowerMarkupElement.innerHTML = '';
 
-	subelem = document.createElementNS("http://www.w3.org/2000/svg","g");
-	subelem.classList.add("lowerSystemMarkups");
-	this.lowerMarkupElement.appendChild(subelem);
-	this.lowerSystemMarkupElement = subelem;
+  // Was declared global
+  let subelem;
 
-	subelem = document.createElementNS("http://www.w3.org/2000/svg","g");
-	subelem.classList.add("lowerMeasureMarkups");
-	this.lowerMarkupElement.appendChild(subelem);
-	this.lowerMeasureMarkupElement = subelem;
+  subelem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  subelem.classList.add('lowerSystemMarkups');
+  this.lowerMarkupElement.appendChild(subelem);
+  this.lowerSystemMarkupElement = subelem;
+
+  subelem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  subelem.classList.add('lowerMeasureMarkups');
+  this.lowerMarkupElement.appendChild(subelem);
+  this.lowerMeasureMarkupElement = subelem;
 };
-
-
 
 //////////////////////////////
 //
@@ -431,14 +401,12 @@ HnpSvg.prototype.m_insertLowerMarkupLayer = function () {
 //
 
 HnpSvg.prototype.getLowerSystemMarkupElement = function () {
-	if (this.lowerSystemMarkupElement) {
-		return this.lowerSystemMarkupElement;
-	} else {
-		return null;
-	}
+  if (this.lowerSystemMarkupElement) {
+    return this.lowerSystemMarkupElement;
+  } else {
+    return null;
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -446,14 +414,12 @@ HnpSvg.prototype.getLowerSystemMarkupElement = function () {
 //
 
 HnpSvg.prototype.getLowerMeasureMarkupElement = function () {
-	if (this.lowerMeasureMarkupElement) {
-		return this.lowerMeasureMarkupElement;
-	} else {
-		return null;
-	}
+  if (this.lowerMeasureMarkupElement) {
+    return this.lowerMeasureMarkupElement;
+  } else {
+    return null;
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -461,29 +427,25 @@ HnpSvg.prototype.getLowerMeasureMarkupElement = function () {
 //
 
 HnpSvg.prototype.getMeasure = function (barnum) {
-	if (typeof barnum === "undefined") {
-		console.log("Warning: no bar number given as input.");
-		return;
-	}
-	if (!this.measures) {
-		return null;
-	}
-	if (typeof barnum === "string") {
-		barnum = parseInt(barnum);
-	}
-	let output = this.measures[barnum][0];
-	return output;
+  if (typeof barnum === 'undefined') {
+    console.log('Warning: no bar number given as input.');
+    return;
+  }
+  if (!this.measures) {
+    return null;
+  }
+  if (typeof barnum === 'string') {
+    barnum = parseInt(barnum);
+  }
+  let output = this.measures[barnum][0];
+  return output;
 };
-
-
 
 ///////////////////////////////////////////////////////////////////////////
 //
 // HnpSvgMeasure class -- Interface to measure element int
 //     verovio-generated SVG image of music notation.
 //
-
-
 
 //////////////////////////////
 //
@@ -493,11 +455,9 @@ HnpSvg.prototype.getMeasure = function (barnum) {
 //
 
 function HnpSvgMeasure() {
-	this.clear();
-	return this;
+  this.clear();
+  return this;
 }
-
-
 
 //////////////////////////////
 //
@@ -505,11 +465,9 @@ function HnpSvgMeasure() {
 //
 
 HnpSvgMeasure.prototype.clear = function () {
-	delete this.element; // measure element in SVG image.
-	delete this.number;  // measure number extracted from element.
-}
-
-
+  delete this.element; // measure element in SVG image.
+  delete this.number; // measure number extracted from element.
+};
 
 //////////////////////////////
 //
@@ -517,14 +475,12 @@ HnpSvgMeasure.prototype.clear = function () {
 //
 
 HnpSvgMeasure.prototype.getMeasureNumber = function () {
-	if (typeof this.number !== "undefined") {
-		return this.number;
-	}
-	this.m_setMeasureNumber();
-	return this.number;
+  if (typeof this.number !== 'undefined') {
+    return this.number;
+  }
+  this.m_setMeasureNumber();
+  return this.number;
 };
-
-
 
 //////////////////////////////
 //
@@ -532,13 +488,11 @@ HnpSvgMeasure.prototype.getMeasureNumber = function () {
 //
 
 HnpSvgMeasure.prototype.getMeasureElement = function () {
-	if (typeof this.element !== "undefined") {
-		return this.element;
-	}
-	return null;
+  if (typeof this.element !== 'undefined') {
+    return this.element;
+  }
+  return null;
 };
-
-
 
 //////////////////////////////
 //
@@ -548,27 +502,25 @@ HnpSvgMeasure.prototype.getMeasureElement = function () {
 //
 
 HnpSvgMeasure.prototype.m_setMeasureNumber = function () {
-	if (typeof this.number !== "undefined") {
-		return this.number;
-	}
-	let output = - 1;
-	let measure = this.element;
-	if (!measure) {
-		return output;
-	}
-	let classlist = measure.classList;
-	for (let i=0; i<classlist.length; i++) {
-		let matches = classlist[i].match(/m-(\d+)/);
-		if (matches) {
-			output = parseInt(matches[1]);
-			break;
-		}
-	}
-	this.number = output;
-	return output;
+  if (typeof this.number !== 'undefined') {
+    return this.number;
+  }
+  let output = -1;
+  let measure = this.element;
+  if (!measure) {
+    return output;
+  }
+  let classlist = measure.classList;
+  for (let i = 0; i < classlist.length; i++) {
+    let matches = classlist[i].match(/m-(\d+)/);
+    if (matches) {
+      output = parseInt(matches[1]);
+      break;
+    }
+  }
+  this.number = output;
+  return output;
 };
-
-
 
 //////////////////////////////
 //
@@ -579,14 +531,12 @@ HnpSvgMeasure.prototype.m_setMeasureNumber = function () {
 //
 
 HnpSvgMeasure.prototype.getX = function () {
-	if (typeof this.x !== "undefined") {
-		return this.x;
-	}
-	this.m_setMeasureInfo();
-	return this.x;
+  if (typeof this.x !== 'undefined') {
+    return this.x;
+  }
+  this.m_setMeasureInfo();
+  return this.x;
 };
-
-
 
 //////////////////////////////
 //
@@ -596,14 +546,12 @@ HnpSvgMeasure.prototype.getX = function () {
 //
 
 HnpSvgMeasure.prototype.getY = function () {
-	if (typeof this.y !== "undefined") {
-		return this.y;
-	}
-	this.m_setMeasureInfo();
-	return this.y;
+  if (typeof this.y !== 'undefined') {
+    return this.y;
+  }
+  this.m_setMeasureInfo();
+  return this.y;
 };
-
-
 
 //////////////////////////////
 //
@@ -611,14 +559,12 @@ HnpSvgMeasure.prototype.getY = function () {
 //
 
 HnpSvgMeasure.prototype.getHeight = function () {
-	if (typeof this.height !== "undefined") {
-		return this.height;
-	}
-	this.m_setMeasureInfo();
-	return this.height;
+  if (typeof this.height !== 'undefined') {
+    return this.height;
+  }
+  this.m_setMeasureInfo();
+  return this.height;
 };
-
-
 
 //////////////////////////////
 //
@@ -626,14 +572,12 @@ HnpSvgMeasure.prototype.getHeight = function () {
 //
 
 HnpSvgMeasure.prototype.getWidth = function () {
-	if (typeof this.width !== "undefined") {
-		return this.width;
-	}
-	this.m_setMeasureInfo();
-	return this.width;
+  if (typeof this.width !== 'undefined') {
+    return this.width;
+  }
+  this.m_setMeasureInfo();
+  return this.width;
 };
-
-
 
 //////////////////////////////
 //
@@ -642,14 +586,12 @@ HnpSvgMeasure.prototype.getWidth = function () {
 //
 
 HnpSvgMeasure.prototype.getVuScale = function () {
-	if (typeof this.vu !== "undefined") {
-		return this.vu;
-	}
-	this.m_setMeasureInfo();
-	return this.vu;
+  if (typeof this.vu !== 'undefined') {
+    return this.vu;
+  }
+  this.m_setMeasureInfo();
+  return this.vu;
 };
-
-
 
 //////////////////////////////
 //
@@ -657,36 +599,34 @@ HnpSvgMeasure.prototype.getVuScale = function () {
 //
 
 HnpSvgMeasure.prototype.m_setMeasureInfo = function () {
-	if (typeof this.x !== "undefined") {
-		// Already have measure dimensions, do not recalculate.
-		return false;
-	}
-	if (!this.element) {
-		// No SVG element to process
-		console.log("NO SVG ELEMENT");
-		return false;
-	}
+  if (typeof this.x !== 'undefined') {
+    // Already have measure dimensions, do not recalculate.
+    return false;
+  }
+  if (!this.element) {
+    // No SVG element to process
+    console.log('NO SVG ELEMENT');
+    return false;
+  }
 
-	let bbox = this.element.getBBox();
-	let lines = this.element.querySelectorAll(".staff path");
-	if (lines.length <= 0) {
-		this.width = bbox.width;
-		console.warn("Warning: NO STAFF LINES IN MEASURE");
-		return false;
-	}
-	this.stafflines = lines;
-	this.m_setX();
-	this.y = bbox.y;
-	this.height = bbox.height;
+  let bbox = this.element.getBBox();
+  let lines = this.element.querySelectorAll('.staff path');
+  if (lines.length <= 0) {
+    this.width = bbox.width;
+    console.warn('Warning: NO STAFF LINES IN MEASURE');
+    return false;
+  }
+  this.stafflines = lines;
+  this.m_setX();
+  this.y = bbox.y;
+  this.height = bbox.height;
 
-	let sbbox = this.stafflines[0].getBBox();
-	this.width = sbbox.width;
+  let sbbox = this.stafflines[0].getBBox();
+  this.width = sbbox.width;
 
-	let status = this.m_setVuScale();
-	return status;
+  let status = this.m_setVuScale();
+  return status;
 };
-
-
 
 //////////////////////////////
 //
@@ -695,29 +635,26 @@ HnpSvgMeasure.prototype.m_setMeasureInfo = function () {
 //    look at the X position of the staff lines in the measure.
 //
 
-
 HnpSvgMeasure.prototype.m_setX = function () {
-	let stafflines = this.stafflines;
-	if (stafflines.length <= 0) {
-		console.log("STAFFLINES NOT FOUND");
-		this.x = 0.0;
-		return false;
-	}
-	let path1 = stafflines[0].getAttribute("d");
-	let y1;
-	let y2;
-	var matches = path1.match(/M([\d.+-]+)/);
-	if (!matches) {
-		this.x = 0.0;
-		console.log("STAFFLINES NOT FOUND B");
-		return false;
-	} else {
-		this.x = parseFloat(matches[1]);
-		return true;
-	}
+  let stafflines = this.stafflines;
+  if (stafflines.length <= 0) {
+    console.log('STAFFLINES NOT FOUND');
+    this.x = 0.0;
+    return false;
+  }
+  let path1 = stafflines[0].getAttribute('d');
+  let y1;
+  let y2;
+  var matches = path1.match(/M([\d.+-]+)/);
+  if (!matches) {
+    this.x = 0.0;
+    console.log('STAFFLINES NOT FOUND B');
+    return false;
+  } else {
+    this.x = parseFloat(matches[1]);
+    return true;
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -727,37 +664,35 @@ HnpSvgMeasure.prototype.m_setX = function () {
 //
 
 HnpSvgMeasure.prototype.m_setVuScale = function () {
-	let stafflines = this.stafflines;
-	if (stafflines.length <= 0) {
-		this.vu = 0.0;
-		return false;
-	}
-	let path1 = stafflines[0].getAttribute("d");
-	let y1;
-	let y2;
-	var matches = path1.match(/M[\d.+-]+\s+([\d.+-]+)/);
-	if (!matches) {
-		this.vu = 0.0;
-		return false;
-	} else {
-		y1 = parseInt(matches[1]);
-	}
-	let path2 = stafflines[1].getAttribute("d");
-	matches = path2.match(/M[\d.+-]+\s+([\d.+-]+)/);
-	if (!matches) {
-		this.vu = 0.0;
-		return false;
-	} else {
-		y2 = parseInt(matches[1]);
-	}
-	let difference = Math.abs(y2 - y1);
-	this.vu = difference;
-	return true;
+  let stafflines = this.stafflines;
+  if (stafflines.length <= 0) {
+    this.vu = 0.0;
+    return false;
+  }
+  let path1 = stafflines[0].getAttribute('d');
+  let y1;
+  let y2;
+  var matches = path1.match(/M[\d.+-]+\s+([\d.+-]+)/);
+  if (!matches) {
+    this.vu = 0.0;
+    return false;
+  } else {
+    y1 = parseInt(matches[1]);
+  }
+  let path2 = stafflines[1].getAttribute('d');
+  matches = path2.match(/M[\d.+-]+\s+([\d.+-]+)/);
+  if (!matches) {
+    this.vu = 0.0;
+    return false;
+  } else {
+    y2 = parseInt(matches[1]);
+  }
+  let difference = Math.abs(y2 - y1);
+  this.vu = difference;
+  return true;
 };
 
-
 //////////////////////////////////////////////////////////////////////////
-
 
 //////////////////////////////
 //
@@ -782,6 +717,3 @@ HnpSvgMeasure.prototype.m_setVuScale = function () {
 // 		scroller.scrollTo(0, scrolly);
 // 	}
 // }
-
-
-

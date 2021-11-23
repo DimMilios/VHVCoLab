@@ -6,8 +6,17 @@
 //  This function seems to be called twice in certain cases (editing).
 //
 import { setEditorModeAndKeyboard } from './utility-ace.js';
-import { highlightIdInEditor, restoreSelectedSvgElement } from './utility-svg.js';
-import { humdrumToSvgOptions, musicxmlToHumdrumOptions, musedataToHumdrumOptions, meiToHumdrumOptions, esacToHumdrumOptions } from './verovio-options.js';
+import {
+  highlightIdInEditor,
+  restoreSelectedSvgElement,
+} from './utility-svg.js';
+import {
+  humdrumToSvgOptions,
+  musicxmlToHumdrumOptions,
+  musedataToHumdrumOptions,
+  meiToHumdrumOptions,
+  esacToHumdrumOptions,
+} from './verovio-options.js';
 import { verovioCallback } from './listeners.js';
 import { convertDataToCsv, convertDataToTsv } from './utility.js';
 import { loadIndexFile } from './loading.js';
@@ -16,14 +25,18 @@ import { InterfaceSingleNumber } from './editor.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
-	throw new Error('Verovio worker is undefined');
+  throw new Error('Verovio worker is undefined');
 }
 
 export function displayNotation(page, force, restoreid) {
   // vrvWorker.checkInitialized();
   if (!vrvWorker.initialized || (global_interface.FreezeRendering && !force)) {
     // console.log("Ignoring displayNotation request: not initialized or frozen");
-    console.log("Ignoring displayNotation", {vrvWorker: vrvWorker, FreezeRendering: global_interface.FreezeRendering, force})
+    console.log('Ignoring displayNotation', {
+      vrvWorker: vrvWorker,
+      FreezeRendering: global_interface.FreezeRendering,
+      force,
+    });
     return;
   }
 
@@ -49,7 +62,7 @@ export function displayNotation(page, force, restoreid) {
   if (data.match(/Group memberships:/)) {
     options.inputFrom = 'musedata';
   }
- 
+
   setOptions(options);
   // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: OPTIONS, editorValue:editor.getValue(), data, page, force, vrvWorker: vrvWorker})
   vrvWorker
@@ -216,7 +229,7 @@ export function redrawInputArea(suppressZoom) {
   if (!suppressZoom) {
     applyZoom();
   }
- editor.resize();
+  editor.resize();
 }
 
 //////////////////////////////
@@ -245,7 +258,7 @@ function showInputArea(suppressZoom) {
   if (!suppressZoom) {
     applyZoom();
   }
- editor.resize();
+  editor.resize();
 }
 
 //////////////////////////////
@@ -446,7 +459,7 @@ function copyRepertoryUrl(file) {
     }
     url += 'k=' + kstring;
   }
-  
+
   // if (PQUERY && PQUERY.length > 0) {
   //   if (!initialized) {
   //     url += '/?';
@@ -550,6 +563,8 @@ export function displayWork(file) {
     next: true,
   });
 }
+
+window.displayWork = displayWork;
 
 //////////////////////////////
 //
@@ -759,7 +774,18 @@ export function gotoFirstPage() {
 //
 // showBufferedHumdrumData --
 //
-import { editorMode, FILEINFO, global_cursor, global_editorOptions, global_interface, global_verovioOptions, OPTIONS, setEditorMode, setFileInfo, setOptions } from './global-variables.js';
+import {
+  editorMode,
+  FILEINFO,
+  global_cursor,
+  global_editorOptions,
+  global_interface,
+  global_verovioOptions,
+  OPTIONS,
+  setEditorMode,
+  setFileInfo,
+  setOptions,
+} from './global-variables.js';
 let bufferedHumdrumFile = '';
 
 export function showBufferedHumdrumData() {
@@ -824,7 +850,7 @@ function showHumdrum(humdrumdata) {
 //
 
 export function getTextFromEditor() {
-  let text =editor.getValue();
+  let text = editor.getValue();
   if (!text) {
     return '';
   }
@@ -865,7 +891,7 @@ export function getTextFromEditorRaw() {
 //
 
 export function getTextFromEditorNoCsvProcessing() {
-  let text =editor.getValue();
+  let text = editor.getValue();
   if (!text) {
     return '';
   }
@@ -931,12 +957,12 @@ function ensureTsv(text) {
 
 export function setTextInEditor(text) {
   if (!text) {
-   editor.setValue('');
+    editor.setValue('');
   } else if (text.charAt(text.length - 1) === '\n') {
     // Get rid of #@%! empty line at end of text editor:
-   editor.setValue(text.slice(0, -1), -1);
+    editor.setValue(text.slice(0, -1), -1);
   } else {
-   editor.setValue(text, -1);
+    editor.setValue(text, -1);
   }
   editor.getSession().selection.clearSelection();
 }
@@ -1358,7 +1384,7 @@ export function initializeVerovioToolkit() {
   //		displayNotation();
   //});
   if (editor) {
-   editor.session.on('change', function (e) {
+    editor.session.on('change', function (e) {
       // console.log("EDITOR content changed", e);
       monitorNotationUpdating();
     });
@@ -1434,7 +1460,7 @@ function downloadWildWebMidi(url) {
 //
 
 function initializeWildWebMidi() {
-  $("#player").midiPlayer({
+  $('#player').midiPlayer({
     color: null,
     // color: "#c00",
     onUnpdate: midiUpdate,
@@ -1442,9 +1468,9 @@ function initializeWildWebMidi() {
     width: 250,
     locateFile: function () {
       return 'wildwebmidi.data';
-    }
+    },
   });
-  console.log('Initialized WildWebMidi', $("#player").midiPlayer)
+  console.log('Initialized WildWebMidi', $('#player').midiPlayer);
 
   $('#input').keydown(function () {
     stop();
@@ -1504,7 +1530,7 @@ export function xmlDataIntoView(event) {
       // find non-humdrum ID.
       searchstring = 'xml:id="' + target.id + '"';
       regex = new RegExp(searchstring);
-      range =editor.find(regex, {
+      range = editor.find(regex, {
         wrap: true,
         caseSensitive: true,
         wholeWord: true,
@@ -1514,7 +1540,7 @@ export function xmlDataIntoView(event) {
     // still need to verify if inside of svg element in the first place.
     searchstring = 'xml:id="' + target.id + '"';
     regex = new RegExp(searchstring);
-    range =editor.find(regex, {
+    range = editor.find(regex, {
       wrap: true,
       caseSensitive: true,
       wholeWord: true,
@@ -1566,7 +1592,7 @@ export function displayScoreTextInEditor(text, page) {
   //   EditorMode = mode;
   //   setEditorModeAndKeyboard();
   // }
-  
+
   if (mode != editorMode()) {
     // EditorMode = mode;
     setEditorMode(mode);
@@ -1621,7 +1647,7 @@ export function decreaseTab() {
   if (global_editorOptions.TABSIZE < 1) {
     global_editorOptions.TABSIZE = 1;
   }
- editor.getSession().setTabSize(global_editorOptions.TABSIZE);
+  editor.getSession().setTabSize(global_editorOptions.TABSIZE);
 }
 
 //////////////////////////////
@@ -1634,7 +1660,7 @@ export function increaseTab() {
   if (global_editorOptions.TABSIZE > 100) {
     global_editorOptions.TABSIZE = 100;
   }
- editor.getSession().setTabSize(global_editorOptions.TABSIZE);
+  editor.getSession().setTabSize(global_editorOptions.TABSIZE);
 }
 
 //////////////////////////////
@@ -1676,7 +1702,7 @@ export function clearContent() {
 //
 // document.querySelector('#play-button').addEventListener('click', () => {
 //   console.log('Calling playCurrentMidi')
-  
+
 //   playCurrentMidi();
 // })
 
@@ -1765,12 +1791,12 @@ export function updateEditorMode() {
 function nextPageClick(event) {
   const menu = getMenu();
   if (!event) {
-   menu.goToNextPage(event);
+    menu.goToNextPage(event);
   }
   if (event.shiftKey) {
-   menu.goToLastPage(event);
+    menu.goToLastPage(event);
   } else {
-   menu.goToNextPage(event);
+    menu.goToNextPage(event);
   }
 }
 
@@ -1783,14 +1809,14 @@ function nextPageClick(event) {
 
 function previousPageClick(event) {
   const menu = getMenu();
-  
+
   if (!event) {
-   menu.goToPreviousPage(event);
+    menu.goToPreviousPage(event);
   }
   if (event.shiftKey) {
-   menu.goToFirstPage(event);
+    menu.goToFirstPage(event);
   } else {
-   menu.goToPreviousPage(event);
+    menu.goToPreviousPage(event);
   }
 }
 

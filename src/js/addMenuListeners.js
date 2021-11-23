@@ -171,10 +171,10 @@ document
   .addEventListener('click', () => menu.toggleDataDisplay());
 document
   .querySelector('#increase-font-size__submenu-item')
-  .addEventListener('click', e => menu.increaseTextFontSize(e));
+  .addEventListener('click', (e) => menu.increaseTextFontSize(e));
 document
   .querySelector('#decrease-font-size__submenu-item')
-  .addEventListener('click', e => menu.decreaseTextFontSize(e));
+  .addEventListener('click', (e) => menu.decreaseTextFontSize(e));
 document
   .querySelector('#toggle-csv-tsv-humdrum-display__submenu-item')
   .addEventListener('click', () => menu.toggleCsvTsv());
@@ -650,9 +650,8 @@ document
   .querySelector('#polyrhythm-project__submenu-item')
   .addEventListener('click', () => menu.loadRepertory('poly'));
 
-
 document.querySelectorAll('li.dropdown').forEach(
-  item =>
+  (item) =>
     new ClassWatcher(
       item,
       'show',

@@ -19,35 +19,40 @@ window.addEventListener('DOMContentLoaded', () => {
   
     </nav>
   `;
-  
+
   menuBar.innerHTML = navBarTemplate;
-  
-  const navBarList = document.querySelector('#actions-nav > div.collapse > ul.navbar-nav');
-  
+
+  const navBarList = document.querySelector(
+    '#actions-nav > div.collapse > ul.navbar-nav'
+  );
+
   function createMenuItems(menuJSON) {
     for (const entry of menuJSON.ENTRY) {
       const textValue = entry.TEXT.DEFAULT;
       const submenu = entry.SUBMENU.ENTRY;
       const type = entry?.TYPE;
-      
+
       const li = document.createElement('li');
       li.id = `${textValue}__menu-item`.toLowerCase();
       li.setAttribute('class', 'nav-item dropdown mr-2');
       li.innerHTML += `<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-expanded="false">${textValue}</a>`;
-      
+
       const submenuItem = createSubmenu(submenu);
       if (submenuItem) {
         li.appendChild(submenuItem);
       }
-  
+
       navBarList.appendChild(li);
     }
   }
-  
+
   function createSubmenu(submenuJSON, nested = false) {
     const submenu = document.createElement('ul');
-    submenu.setAttribute('class', `dropdown-menu p-0 ${nested && 'dropdown-submenu'}`);
-  
+    submenu.setAttribute(
+      'class',
+      `dropdown-menu p-0 ${nested && 'dropdown-submenu'}`
+    );
+
     if (isIterable(submenuJSON)) {
       for (const entry of submenuJSON) {
         submenu.appendChild(createSubmenuItem(entry));
@@ -59,7 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
     return submenu;
   }
   const clickHandlers = [];
-  
+
   function createSubmenuItem(entry) {
     const defaultText = entry?.TEXT?.DEFAULT;
     const action = entry?.TEXT?.ACTION;
@@ -67,7 +72,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const li = document.createElement('li');
     li.id = `${defaultText?.split(/\W/).join('-')}__submenu-item`.toLowerCase();
-    li.setAttribute('class', 'dropdown-item d-flex justify-content-between bg-dark text-white');
+    li.setAttribute(
+      'class',
+      'dropdown-item d-flex justify-content-between bg-dark text-white'
+    );
 
     const item = document.createElement('a');
     // item.setAttribute('class', 'dropdown-item');
@@ -76,11 +84,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const isFunctionOf = (func, obj) => typeof obj[func] === 'function';
     if (action) {
-      const funcName = action.slice(action.indexOf(".") + 1).replace(/\(.*\)/g, '');
-      li.onclick = isFunctionOf(funcName, menu()) ? () => new Function(action)() : null;
+      const funcName = action
+        .slice(action.indexOf('.') + 1)
+        .replace(/\(.*\)/g, '');
+      li.onclick = isFunctionOf(funcName, menu())
+        ? () => new Function(action)()
+        : null;
 
       if (li.onclick !== null) {
-        clickHandlers.push(`document.querySelector('#${li.id}').addEventListener('click', () => ${action});`)
+        clickHandlers.push(
+          `document.querySelector('#${li.id}').addEventListener('click', () => ${action});`
+        );
       }
 
       // console.log('Click handler of:', {defaultText,
@@ -95,7 +109,6 @@ window.addEventListener('DOMContentLoaded', () => {
       li.innerHTML += `<small class="ml-3 text-nowrap"><strong>${rightText.DEFAULT}</strong></small>`;
     }
 
-
     if (entry?.SUBMENU?.ENTRY) {
       // console.log('Recursively creating SUBMENU', entry.SUBMENU.ENTRY);
       // const submenuList = document.createElement('ul');
@@ -107,12 +120,15 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function isIterable(dataStructure) {
-    if (typeof dataStructure === 'null' || typeof dataStructure === 'undefined') {
+    if (
+      typeof dataStructure === 'null' ||
+      typeof dataStructure === 'undefined'
+    ) {
       return false;
     }
-  
+
     return typeof dataStructure[Symbol.iterator] === 'function';
   }
-  
+
   createMenuItems(menuJSON);
-})
+});

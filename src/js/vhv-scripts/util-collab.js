@@ -72,7 +72,7 @@ export class RubberBandSelection {
    * @returns {Element[]}
    */
   selectNoteElements(elements) {
-    return elements.filter(elem => {
+    return elements.filter((elem) => {
       const box = elem.getBoundingClientRect();
 
       return (
@@ -117,7 +117,7 @@ export class ClassWatcher {
     this.observer.disconnect();
   }
 
-  mutationCallback = mutationsList => {
+  mutationCallback = (mutationsList) => {
     for (let mutation of mutationsList) {
       if (
         mutation.type === 'attributes' &&

@@ -11,16 +11,16 @@
 //
 
 // Global variables for the VHV interface:
-export * from './global-variables.js'
+export * from './global-variables.js';
 
 // // Initialization functions:
-export * as setup from './setup.js'
+export * as setup from './setup.js';
 
 // Functions related to graphical editing:
-export * from './editor.js'
+export * from './editor.js';
 
 // Functions related to repertory indexes:
-export * from './hmdindex.js'
+export * from './hmdindex.js';
 
 // Functions for to Google spreadsheet interaction
 // and also related to spreadsheet toolbar:
@@ -30,28 +30,28 @@ export * from './hmdindex.js'
 // export * from './toolbar.js'
 
 // Functions related to saving files:
-export * from './saving.js'
+export * from './saving.js';
 
 // Functions related to loading files:
-export * from './loading.js'
+export * from './loading.js';
 
 // Functions related to the menu
 // (see also _includes/menu):
 // export * from './menu.js'
-export * from '../menu.js'
+export * from '../menu.js';
 
 // General functions, mostly for text
 // processing:
-export * from './utility.js'
+export * from './utility.js';
 
 // Functions for processing Humdrum text:
-export * from './utility-humdrum.js'
+export * from './utility-humdrum.js';
 
 // Functions related to svg manipulation:
-export * from './utility-svg.js'
+export * from './utility-svg.js';
 
 // Functions related to svg manipulation:
-export * from './utility-ace.js'
+export * from './utility-ace.js';
 
 // Splitter prototypes for dealing with split
 // windowing system for text and notation:
@@ -59,25 +59,25 @@ export * from './utility-ace.js'
 
 // Functions related to load and save buffers,
 // also related to the load/save toolbar:
-export * from './buffer.js'
+export * from './buffer.js';
 
 // Functions related to verovio options:
-export * from './verovio-options.js'
+export * from './verovio-options.js';
 
 // Uncategorized files:
-export * from './misc.js'
+export * from './misc.js';
 
 // Measure highlighting:
-export * from './highlight.js'
+export * from './highlight.js';
 
 // Main event listener functions:
-export * from './listeners.js'
+export * from './listeners.js';
 
 // PDF file creating/downloading
-export * from './pdf.js'
+export * from './pdf.js';
 
 // MusicXML export
-export * from './convertToMusicXmlAndSave.js'
+export * from './convertToMusicXmlAndSave.js';
 
 // Extensions for collaboration
-export * from './collab-extension.js'
+export * from './collab-extension.js';

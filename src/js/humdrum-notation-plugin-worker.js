@@ -63,17 +63,21 @@
 /* global $ */
 import { midiStop, midiUpdate } from './midifunctions.js';
 import { global_interface } from './vhv-scripts/global-variables.js';
-import { monitorNotationUpdating, displayNotation, applyZoom } from './vhv-scripts/misc.js';
+import {
+  monitorNotationUpdating,
+  displayNotation,
+  applyZoom,
+} from './vhv-scripts/misc.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 
 let vrvWorker;
 
 export function getVrvWorker() {
-	// Download verovio if the worker hasn't been initialized yet
-	if (typeof vrvWorker === 'undefined') {
-		downloadVerovioToolkit("true");
-	}
-	return vrvWorker;
+  // Download verovio if the worker hasn't been initialized yet
+  if (typeof vrvWorker === 'undefined') {
+    downloadVerovioToolkit('true');
+  }
+  return vrvWorker;
 }
 
 //////////////////////////////
@@ -82,22 +86,22 @@ export function getVrvWorker() {
 //
 
 function downloadVerovioToolkit(use_worker) {
-	console.log('Downloading vrv toolkit from humdrum-notation-plugin-worker.js');
+  console.log('Downloading vrv toolkit from humdrum-notation-plugin-worker.js');
   vrvWorker = new vrvInterface(use_worker, callbackAfterInitialized);
-	// window.vrvWorker = vrvWorker;
+  // window.vrvWorker = vrvWorker;
 }
 
 function callbackAfterInitialized() {
-	console.log("Initialized verovio worker");
-	initializeVerovioToolkit();
+  console.log('Initialized verovio worker');
+  initializeVerovioToolkit();
 }
 
 function initializeVerovioToolkit() {
   // console.log("Verovio toolkit being initialized.");
 
-	let editor = getAceEditor();
+  let editor = getAceEditor();
   if (editor) {
-   editor.session.on('change', function (e) {
+    editor.session.on('change', function (e) {
       // console.log("EDITOR content changed", e);
       monitorNotationUpdating();
     });
@@ -132,7 +136,7 @@ function initializeVerovioToolkit() {
 }
 
 function initializeWildWebMidi() {
-  $("#player").midiPlayer({
+  $('#player').midiPlayer({
     color: null,
     // color: "#c00",
     // onUnpdate: window.midiUpdate,
@@ -145,7 +149,7 @@ function initializeWildWebMidi() {
     // }
   });
 
-	$('#input').keydown(function () {
+  $('#input').keydown(function () {
     stop();
   });
 
@@ -174,7 +178,6 @@ function initializeWildWebMidi() {
 // 	// inputFrom = input data type
 // 	vrvOptions.inputFrom = "musicxml-hum";
 
-
 // 	vrvWorker.filterData(vrvOptions, sourcetext, "humdrum")
 // 	.then(function(content) {
 // 		targetElement.textContent = content;
@@ -182,8 +185,6 @@ function initializeWildWebMidi() {
 // 	});
 
 // }
-
-
 
 //////////////////////////////
 //
@@ -193,19 +194,16 @@ function initializeWildWebMidi() {
 //    Humdrum input data).
 //
 
-
 // function getHumdrum(pluginOptions) {
 // 	var toolkit = pluginOptions.renderer;
 // 	if (typeof vrvWorker !== "undefined") {
 // 		toolkit = vrvWorker;
 // 	}
 
-
 // 	if (!toolkit) {
 // 		console.log("Error: Cannot find verovio toolkit!");
 // 		return;
 // 	}
-
 
 // 	vrvWorker.getHumdrum()
 // 	.then(function(content) {
@@ -214,20 +212,16 @@ function initializeWildWebMidi() {
 
 // }
 
-
-
 //////////////////////////////
 //
 // convertMeiToHumdrum --
 //
-
 
 // function convertMeiToHumdrum(targetElement, sourcetext, vrvOptions, pluginOptions) {
 // 	var toolkit = pluginOptions.renderer;
 // 	if (typeof vrvWorker !== "undefined") {
 // 		toolkit = vrvWorker;
 // 	}
-
 
 // 	if (!toolkit) {
 // 		console.log("Error: Cannot find verovio toolkit!");
@@ -236,7 +230,6 @@ function initializeWildWebMidi() {
 // 	// inputFrom = input data type
 // 	vrvOptions.inputFrom = "mei-hum";
 
-
 // 	vrvWorker.filterData(vrvOptions, sourcetext, "humdrum")
 // 	.then(function(content) {
 // 		targetElement.textContent = content;
@@ -244,8 +237,6 @@ function initializeWildWebMidi() {
 // 	});
 
 // }
-
-
 
 //////////////////////////////
 //
@@ -275,8 +266,6 @@ function initializeWildWebMidi() {
 // 	return output;
 // }
 
-
-
 //////////////////////////////
 //
 // executeFunctionByName -- Also allow variable names that store functions.
@@ -298,8 +287,6 @@ function initializeWildWebMidi() {
 // 	return context[func].apply(context, args);
 // }
 
-
-
 //////////////////////////////
 //
 // functionName --
@@ -311,7 +298,6 @@ function initializeWildWebMidi() {
 //   ret = ret.substr(0, ret.indexOf('('));
 //   return ret;
 // }
-
 
 //////////////////////////////
 //
@@ -405,8 +391,6 @@ function initializeWildWebMidi() {
 // 		})();
 // 	})(0, savename);
 // }
-
-
 
 // //////////////////////////////
 // //
@@ -547,8 +531,6 @@ function initializeWildWebMidi() {
 // 	saveHumdrumText(null, null, outputtext);
 // }
 
-
-
 // //////////////////////////////
 // //
 // // cloneObject -- Make a deep copy of an object, preserving arrays.
@@ -571,30 +553,27 @@ function initializeWildWebMidi() {
 // interfaced through the verovio-calls.js functions.
 //
 
-
 //////////////////////////////
 //
 // vrvInterface::vrvInterface --
 //
 
 function vrvInterface(use_worker, onReady) {
-	this.WIDTH = 0;
-	this.HEIGHT = 0;
-	this.page = 1;
-	this.pageCount = 0;
-	this.options = {};
+  this.WIDTH = 0;
+  this.HEIGHT = 0;
+  this.page = 1;
+  this.pageCount = 0;
+  this.options = {};
 
-	this.initialized = false;
-	this.usingWorker = use_worker;
+  this.initialized = false;
+  this.usingWorker = use_worker;
 
-	if (use_worker) {
-		this.createWorkerInterface(onReady);
-	} else {
-		this.createDefaultInterface(onReady);
-	}
+  if (use_worker) {
+    this.createWorkerInterface(onReady);
+  } else {
+    this.createDefaultInterface(onReady);
+  }
 }
-
-
 
 //////////////////////////////
 //
@@ -603,70 +582,69 @@ function vrvInterface(use_worker, onReady) {
 // import Worker from './verovio-worker.js?worker&inline';
 
 vrvInterface.prototype.createWorkerInterface = function (onReady) {
-	var vrv = this;
+  var vrv = this;
 
-	function handleEvent(oEvent) {
-		switch(oEvent.data.method) {
-			case "ready":
-				vrv.initialized = true;
-				onReady();
-				break;
-			default:
-				while (vrv.resolvedIdx <= oEvent.data.idx) {
-					//resolve or reject
-					if (vrv.resolvedIdx === oEvent.data.idx) {
-						if (oEvent.data.success) {
-							vrv.promises[vrv.resolvedIdx].deferred.resolve(oEvent.data.result);
-						} else {
-						vrv.promises[vrv.resolvedIdx].deferred.reject(oEvent.data.result);
-						}
-					} else {
-						vrv.promises[vrv.resolvedIdx].deferred.reject();
-					}
-					if (vrv.promises[vrv.resolvedIdx].method === "renderData") {
-						vrv.renderDataPending--;
-						if (vrv.renderDataPending === 0) vrv.handleWaitingRenderData();
-					}
-					delete vrv.promises[vrv.resolvedIdx];
-					vrv.resolvedIdx++;
-				}
-		}
-	}
+  function handleEvent(oEvent) {
+    switch (oEvent.data.method) {
+      case 'ready':
+        vrv.initialized = true;
+        onReady();
+        break;
+      default:
+        while (vrv.resolvedIdx <= oEvent.data.idx) {
+          //resolve or reject
+          if (vrv.resolvedIdx === oEvent.data.idx) {
+            if (oEvent.data.success) {
+              vrv.promises[vrv.resolvedIdx].deferred.resolve(
+                oEvent.data.result
+              );
+            } else {
+              vrv.promises[vrv.resolvedIdx].deferred.reject(oEvent.data.result);
+            }
+          } else {
+            vrv.promises[vrv.resolvedIdx].deferred.reject();
+          }
+          if (vrv.promises[vrv.resolvedIdx].method === 'renderData') {
+            vrv.renderDataPending--;
+            if (vrv.renderDataPending === 0) vrv.handleWaitingRenderData();
+          }
+          delete vrv.promises[vrv.resolvedIdx];
+          vrv.resolvedIdx++;
+        }
+    }
+  }
 
-	console.log("creating verovio worker interface");
-	this.promises = {};
-	this.promiseIdx = 0;
-	this.resolvedIdx = 0;
-	this.renderDataPending = 0;
-	this.renderDataWaiting = null;
+  console.log('creating verovio worker interface');
+  this.promises = {};
+  this.promiseIdx = 0;
+  this.resolvedIdx = 0;
+  this.renderDataPending = 0;
+  this.renderDataWaiting = null;
 
-// 
-// 	console.log("LOADING https://verovio-script.humdrum.org/scripts/verovio-worker.js");
-// 	var workerUrl = "https://verovio-script.humdrum.org/scripts/verovio-worker.js";
-// 
+  //
+  // 	console.log("LOADING https://verovio-script.humdrum.org/scripts/verovio-worker.js");
+  // 	var workerUrl = "https://verovio-script.humdrum.org/scripts/verovio-worker.js";
+  //
 
+  console.log('LOADING /scripts/verovio-worker.js');
+  var workerUrl = '/scripts/verovio-worker.js';
 
-	console.log("LOADING /scripts/verovio-worker.js");
-	var workerUrl = "/scripts/verovio-worker.js";
+  this.worker = null;
+  var that = this;
+  try {
+    that.worker = new Worker(workerUrl);
+    that.worker.addEventListener('message', handleEvent);
 
-	this.worker = null;
-	var that = this;
-	try {
-		that.worker = new Worker(workerUrl);
-		that.worker.addEventListener("message", handleEvent);
-
-		that.worker.onerror = function (event) {
-			event.preventDefault();
-			that.worker = createWorkerFallback(workerUrl);
-			that.worker.addEventListener("message", handleEvent);
-		};
-	} catch (e) {
-		that.worker = createWorkerFallback(workerUrl);
-		that.worker.addEventListener("message", handleEvent);
-	}
+    that.worker.onerror = function (event) {
+      event.preventDefault();
+      that.worker = createWorkerFallback(workerUrl);
+      that.worker.addEventListener('message', handleEvent);
+    };
+  } catch (e) {
+    that.worker = createWorkerFallback(workerUrl);
+    that.worker.addEventListener('message', handleEvent);
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -674,29 +652,31 @@ vrvInterface.prototype.createWorkerInterface = function (onReady) {
 //
 
 function createWorkerFallback(workerUrl) {
-	console.log("Getting cross-origin worker");
-	var worker = null;
-	try {
-		var blob;
-		try {
-			console.log('humdrum plugin createWorkerFallback URL', workerUrl);
-			blob = new Blob(["importScripts('" + workerUrl + "');"], { "type": 'application/javascript' });
-		} catch (e) {
-			var blobBuilder = new (window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder)();
-			console.log('createWorkerFallback BlobBuilder URL', workerUrl);
-			blobBuilder.append("importScripts('" + workerUrl + "');");
-			blob = blobBuilder.getBlob('application/javascript');
-		}
-		var url = window.URL || window.webkitURL;
-		var blobUrl = url.createObjectURL(blob);
-		worker = new Worker(blobUrl);
-	} catch (e1) {
-		//if it still fails, there is nothing much we can do
-	}
-	return worker;
+  console.log('Getting cross-origin worker');
+  var worker = null;
+  try {
+    var blob;
+    try {
+      console.log('humdrum plugin createWorkerFallback URL', workerUrl);
+      blob = new Blob(["importScripts('" + workerUrl + "');"], {
+        type: 'application/javascript',
+      });
+    } catch (e) {
+      var blobBuilder = new (window.BlobBuilder ||
+        window.WebKitBlobBuilder ||
+        window.MozBlobBuilder)();
+      console.log('createWorkerFallback BlobBuilder URL', workerUrl);
+      blobBuilder.append("importScripts('" + workerUrl + "');");
+      blob = blobBuilder.getBlob('application/javascript');
+    }
+    var url = window.URL || window.webkitURL;
+    var blobUrl = url.createObjectURL(blob);
+    worker = new Worker(blobUrl);
+  } catch (e1) {
+    //if it still fails, there is nothing much we can do
+  }
+  return worker;
 }
-
-
 
 //////////////////////////////
 //
@@ -704,8 +684,7 @@ function createWorkerFallback(workerUrl) {
 //
 
 vrvInterface.prototype.createDefaultInterface = function (onReady) {
-
-/*  No longer needed?
+  /*  No longer needed?
 
 
 	var url = 'https://verovio-script.humdrum.org/scripts/verovio-toolkit.js';
@@ -744,13 +723,7 @@ vrvInterface.prototype.createDefaultInterface = function (onReady) {
 		}
 	);
 */
-
-
-
-
 };
-
-
 
 //////////////////////////////
 //
@@ -758,11 +731,9 @@ vrvInterface.prototype.createDefaultInterface = function (onReady) {
 //
 
 vrvInterface.prototype.checkInitialized = function () {
-	console.log((new Error()).stack);
-	if (!this.initialized) throw("Verovio toolkit not (yet) initialized");
+  console.log(new Error().stack);
+  if (!this.initialized) throw 'Verovio toolkit not (yet) initialized';
 };
-
-
 
 //////////////////////////////
 //
@@ -770,11 +741,9 @@ vrvInterface.prototype.checkInitialized = function () {
 //
 
 vrvInterface.prototype.filterData = function (opts, data, type) {
-	// Don't store options when filtering data.
-	return this.execute("filterData", arguments);
+  // Don't store options when filtering data.
+  return this.execute('filterData', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -782,12 +751,10 @@ vrvInterface.prototype.filterData = function (opts, data, type) {
 //
 
 vrvInterface.prototype.renderData = function (opts, data, page) {
-	// console.log("%cvrvInterface.renderData", "color: #aa8800; font-weight: bold");
-	this.options = opts;
-	return this.execute("renderData", arguments);
+  // console.log("%cvrvInterface.renderData", "color: #aa8800; font-weight: bold");
+  this.options = opts;
+  return this.execute('renderData', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -795,12 +762,10 @@ vrvInterface.prototype.renderData = function (opts, data, page) {
 //
 
 vrvInterface.prototype.getHumdrum = function () {
-	// console.log("%cvrvInterface.getHumdrum", "color: #aa8800; font-weight: bold");
-	var value = this.execute("getHumdrum", arguments);
-	return value;
+  // console.log("%cvrvInterface.getHumdrum", "color: #aa8800; font-weight: bold");
+  var value = this.execute('getHumdrum', arguments);
+  return value;
 };
-
-
 
 //////////////////////////////
 //
@@ -808,12 +773,10 @@ vrvInterface.prototype.getHumdrum = function () {
 //
 
 vrvInterface.prototype.redoLayout = function (opts, redo, measure) {
-	// console.log("%cvrvInterface.redoLayout", "color: #8800aa; font-weight: bold");
-	this.options = opts;
-	return this.execute("redoLayout", arguments);
+  // console.log("%cvrvInterface.redoLayout", "color: #8800aa; font-weight: bold");
+  this.options = opts;
+  return this.execute('redoLayout', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -821,10 +784,8 @@ vrvInterface.prototype.redoLayout = function (opts, redo, measure) {
 //
 
 vrvInterface.prototype.renderPage = function (page) {
-	return this.execute("renderPage", arguments);
+  return this.execute('renderPage', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -832,10 +793,8 @@ vrvInterface.prototype.renderPage = function (page) {
 //
 
 vrvInterface.prototype.renderAllPages = function (data, opts) {
-	return this.execute("renderAllPages", arguments);
+  return this.execute('renderAllPages', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -843,16 +802,13 @@ vrvInterface.prototype.renderAllPages = function (data, opts) {
 //
 
 vrvInterface.prototype.gotoPage = function (page) {
-	var vrv = this;
-	return this.execute("gotoPage", arguments)
-	.then(function (obj) {
-		vrv.page = obj.page;
-		vrv.pageCount = obj.pageCount;
-		return page;
-	});
+  var vrv = this;
+  return this.execute('gotoPage', arguments).then(function (obj) {
+    vrv.page = obj.page;
+    vrv.pageCount = obj.pageCount;
+    return page;
+  });
 };
-
-
 
 //////////////////////////////
 //
@@ -860,10 +816,8 @@ vrvInterface.prototype.gotoPage = function (page) {
 //
 
 vrvInterface.prototype.getMEI = function (page) {
-	return this.execute("getMEI", arguments);
+  return this.execute('getMEI', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -871,11 +825,9 @@ vrvInterface.prototype.getMEI = function (page) {
 //
 
 vrvInterface.prototype.renderToMidi = function () {
-	var value = this.execute("renderToMidi", arguments);
-	return value;
+  var value = this.execute('renderToMidi', arguments);
+  return value;
 };
-
-
 
 //////////////////////////////
 //
@@ -883,10 +835,8 @@ vrvInterface.prototype.renderToMidi = function () {
 //
 
 vrvInterface.prototype.getElementsAtTime = function (vrvTime) {
-	return this.execute("getElementsAtTime", arguments);
+  return this.execute('getElementsAtTime', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -894,10 +844,8 @@ vrvInterface.prototype.getElementsAtTime = function (vrvTime) {
 //
 
 vrvInterface.prototype.getTimeForElement = function (id) {
-	return this.execute("getTimeForElement", arguments);
+  return this.execute('getTimeForElement', arguments);
 };
-
-
 
 //////////////////////////////
 //
@@ -905,29 +853,27 @@ vrvInterface.prototype.getTimeForElement = function (id) {
 //
 
 vrvInterface.prototype.execute = function (method, args) {
-	var vrv = this;
-	if (this.usingWorker) {
-		var arr = Array.prototype.slice.call(args);
-		switch(method) {
-			case "renderData":
-				return vrv.postRenderData(method, arr);
-			default:
-				vrv.handleWaitingRenderData();
-				return vrv.post(method, arr);
-		}
-	} else {
-		return new RSVP.Promise(function (resolve, reject) {
-			try {
-				vrv.checkInitialized();
-				resolve(vrv.verovio[method].apply(vrv.verovio, args));
-			} catch(err) {
-				reject(err);
-			}
-		});
-	}
+  var vrv = this;
+  if (this.usingWorker) {
+    var arr = Array.prototype.slice.call(args);
+    switch (method) {
+      case 'renderData':
+        return vrv.postRenderData(method, arr);
+      default:
+        vrv.handleWaitingRenderData();
+        return vrv.post(method, arr);
+    }
+  } else {
+    return new RSVP.Promise(function (resolve, reject) {
+      try {
+        vrv.checkInitialized();
+        resolve(vrv.verovio[method].apply(vrv.verovio, args));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -935,16 +881,16 @@ vrvInterface.prototype.execute = function (method, args) {
 //
 
 vrvInterface.prototype.handleWaitingRenderData = function () {
-	if (this.renderDataWaiting) {
-		this.postDeferredMessage("renderData",
-				this.renderDataWaiting.args,
-				this.renderDataWaiting.deferred);
-		this.renderDataWaiting = null;
-		this.renderDataPending++;
-	}
+  if (this.renderDataWaiting) {
+    this.postDeferredMessage(
+      'renderData',
+      this.renderDataWaiting.args,
+      this.renderDataWaiting.deferred
+    );
+    this.renderDataWaiting = null;
+    this.renderDataPending++;
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -952,23 +898,21 @@ vrvInterface.prototype.handleWaitingRenderData = function () {
 //
 
 vrvInterface.prototype.postRenderData = function (method, args) {
-	// squash pending renderings:
-	if (this.renderDataPending > 0) {
-		if (!this.renderDataWaiting) {
-			this.renderDataWaiting = {
-				deferred: new RSVP.defer(),
-			};
-		}
-		this.renderDataWaiting.args = args;
-		return this.renderDataWaiting.deferred.promise;
-	} else {
-		this.renderDataPending++;
-		this.renderDataWaiting = null;
-		return this.post(method, args);
-	}
+  // squash pending renderings:
+  if (this.renderDataPending > 0) {
+    if (!this.renderDataWaiting) {
+      this.renderDataWaiting = {
+        deferred: new RSVP.defer(),
+      };
+    }
+    this.renderDataWaiting.args = args;
+    return this.renderDataWaiting.deferred.promise;
+  } else {
+    this.renderDataPending++;
+    this.renderDataWaiting = null;
+    return this.post(method, args);
+  }
 };
-
-
 
 //////////////////////////////
 //
@@ -976,10 +920,8 @@ vrvInterface.prototype.postRenderData = function (method, args) {
 //
 
 vrvInterface.prototype.post = function (method, args) {
-	return this.postDeferredMessage(method, args, new RSVP.defer());
+  return this.postDeferredMessage(method, args, new RSVP.defer());
 };
-
-
 
 //////////////////////////////
 //
@@ -987,15 +929,15 @@ vrvInterface.prototype.post = function (method, args) {
 //
 
 vrvInterface.prototype.postDeferredMessage = function (method, args, deferred) {
-	this.worker.postMessage({
-		idx: this.promiseIdx,
-		method: method,
-		args: args
-	});
-	this.promises[this.promiseIdx] = {
-		method: method,
-		deferred: deferred
-	};
-	this.promiseIdx++;
-	return deferred.promise;
+  this.worker.postMessage({
+    idx: this.promiseIdx,
+    method: method,
+    args: args,
+  });
+  this.promises[this.promiseIdx] = {
+    method: method,
+    deferred: deferred,
+  };
+  this.promiseIdx++;
+  return deferred.promise;
 };
