@@ -1,15 +1,8 @@
 import { initializeVerovioToolkit, displayNotation } from './misc.js';
 
-import Ace from 'ace-builds/src/ace';
-// import 'ace-builds/src/mode-xml';
-// import 'ace-builds/src/ext-searchbox';
-// import '../ace/mode-humdrum.js';
+// import ace from 'ace-builds/src/ace';
 
-// import 'ace-builds/src/mode-humdrum';
-// import 'ace-builds/src/theme-humdrum_light';
-// import 'ace-builds/src/worker-humdrum';
-
-// const Range = Ace.require('ace/range').Range;
+// const Range = ace.require('ace/range').Range;
 
 //////////////////////////////
 //
@@ -50,7 +43,7 @@ let configureAce = true;
 export function getAceEditor() {
   if (typeof editor === 'undefined') {
     console.log(
-      "Ace wasn't initialized, setting Ace up now",
+      "ace wasn't initialized, setting ace up now",
       new Error().stack
     );
     setupAceEditor('input');
@@ -59,26 +52,26 @@ export function getAceEditor() {
 }
 
 export function setupAceEditor(idtag) {
-  // window.EDITOR = Ace.edit(idtag);
-  editor = Ace.edit(idtag);
+  // window.EDITOR = ace.edit(idtag);
+  editor = ace.edit(idtag);
   window.EDITOR = editor;
 
   editor.on('ready', () => {
     if (!configureAce) {
-      console.log('Ace ready event handler called');
+      console.log('ace ready event handler called');
       setEditorModeAndKeyboard();
       insertSplashMusic();
     }
   });
 
-  // Ace.config.set("basePath", "/scripts/ace");
-  Ace.config.set('modePath', '/node_modules/ace-builds/src');
-  Ace.config.set('workerPath', '/node_modules/ace-builds/src');
-  Ace.config.set('themePath', '/node_modules/ace-builds/src');
+  ace.config.set("basePath", "/scripts/ace");
+  ace.config.set('modePath', '/scripts/ace');
+  ace.config.set('workerPath', '/scripts/ace');
+  ace.config.set('themePath', '/scripts/ace');
 
-  // Ace.config.set('modePath', "/scripts/ace");
-  // Ace.config.set('workerPath', "/scripts/ace");
-  // Ace.config.set('themePath', "/scripts/ace");
+  // ace.config.set('modePath', "/scripts/ace");
+  // ace.config.set('workerPath', "/scripts/ace");
+  // ace.config.set('themePath', "/scripts/ace");
   if (configureAce) {
     configureAceEditor();
     configureAce = false;
@@ -119,7 +112,7 @@ export function configureAceEditor() {
   editor.setShowPrintMargin(false);
 
   // Range = window.require("ace/range").Range;
-  window.Range = Ace.require('ace/range').Range;
+  window.Range = ace.require('ace/range').Range;
 
   //editor.getSession().selection.on("changeCursor", function(event)
   // 	{ highlightNoteInScore(event)});
