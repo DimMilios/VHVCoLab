@@ -167,7 +167,7 @@ function xmlDataNoteIntoView(event) {
   var item;
   if (splitter.rightContent) {
     // see: https://www.w3.org/TR/selectors
-    var item = splitter.rightContent.querySelector('#' + id);
+    item = splitter.rightContent.querySelector('#' + id);
     // console.log("ITEM", item);
   }
   markItem(item, line);
@@ -179,12 +179,13 @@ function xmlDataNoteIntoView(event) {
 //
 
 export function humdrumDataNoteIntoView(row, column) {
+  var line;
   if (!row || !column) {
     var location = editor.selection.getCursor();
-    var line = location.row;
+    line = location.row;
     column = location.column;
   }
-  var line = row;
+  line = row;
   var text = editor.session.getLine(line);
   var fys = getFieldAndSubtoken(text, column);
   var field = fys.field;
@@ -199,7 +200,7 @@ export function humdrumDataNoteIntoView(row, column) {
   //		// EDITINGID = null;
   //	}
   if (!query) {
-    var query = 'L' + (line + 1) + 'F' + field;
+    query = 'L' + (line + 1) + 'F' + field;
     if (subspine > 0) {
       query += 'S' + subspine;
     }

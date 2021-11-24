@@ -1,8 +1,4 @@
-import { initializeVerovioToolkit, displayNotation } from './misc.js';
-
-// import ace from 'ace-builds/src/ace';
-
-// const Range = ace.require('ace/range').Range;
+import { displayNotation } from './misc.js';
 
 //////////////////////////////
 //

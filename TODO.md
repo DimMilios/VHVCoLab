@@ -122,3 +122,6 @@ The wasm verovio toolkit script `scripts/local/verovio-toolkit-wasm.js` has to b
 - `src/glyph/Glyph.js`
 - `src/aat/AATMorxProcessor.js`
 - `src/aat/AATLookupTable.js`
+
+### Dynamic imports
+Right now we load pretty much everything in the `public/` directory on page load. There are scripts that are not needed from the start (or might not be needed at all), like `pdfkit` with its fonts or `FileSaver`. We could introduce dynamic importing for these if and whenever it's needed.

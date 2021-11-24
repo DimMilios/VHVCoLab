@@ -315,7 +315,7 @@ export function insertMarkedNoteRdf() {
       if (i > limit) {
         break;
       }
-      var line = editor.session.getLine(i);
+      line = editor.session.getLine(i);
       if (
         (matches = line.match(
           /^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*mark.*\s+note/
@@ -397,7 +397,7 @@ export function insertDirectionRdfs() {
       if (i > limit) {
         break;
       }
-      var line = editor.session.getLine(i);
+      line = editor.session.getLine(i);
       if ((matches = line.match(/^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*above/))) {
         abovechar = matches[1];
       } else if (
@@ -481,7 +481,7 @@ export function insertEditorialAccidentalRdf() {
       if (i > limit) {
         break;
       }
-      var line = editor.session.getLine(i);
+      line = editor.session.getLine(i);
       if (
         (matches = line.match(
           /^\!\!\!RDF\*\*kern:\s+([^\s])\s*=.*edit.*\s+acc/
