@@ -72,7 +72,7 @@ window.addEventListener('load', () => {
   provider.awareness.on('change', function ({ added, updated, removed }) {
     const awarenessState = provider.awareness.getStates();
     removeUnusedElements(Array.from(awarenessState.keys()));
-    console.log(`[${new Date().toLocaleTimeString()}]`, awarenessState);
+    // console.log(`[${new Date().toLocaleTimeString()}]`, awarenessState);
 
     const users = [...awarenessState.values()].map((s) => s.user.name);
     userListDisplay(users);

@@ -1,3 +1,4 @@
+import { getAceEditor } from './setup';
 import { RubberBandSelection } from './util-collab';
 
 const MULTI_SELECT_ALPHA = 0.09;
@@ -332,17 +333,60 @@ function addListenersToOutput(outputTarget) {
   }
 }
 
+// [
+//   "note-L41F2S1",
+//   "note-L41F2S2",
+//   "note-L41F2S3",
+//   "note-L46F2S1",
+//   "note-L46F2S2",
+//   "note-L46F2S3",
+//   "note-L48F2S1",
+//   "note-L48F2S2",
+//   "note-L48F2S3",
+//   "note-L49F2S1",
+//   "note-L49F2S2",
+//   "note-L49F2S3"
+// ]
+// Break down note ids to L, F, S parts
+// L - line (row), F - field (column), S - subfield (same field but different column - chords)
+// Find the min and max lines, same for the other values
 export function updateMultiSelect(clientState, noteIds) {
   const selectedAreas = document.querySelectorAll('.multi-select-area');
-
+  
   let selectedArea = [...selectedAreas].find(
     (elem) => elem.dataset.clientId == clientState.clientId
-  );
+    );
 
+    
   if (!noteIds || noteIds.length === 0) {
     selectedArea?.remove();
     return;
   }
+
+  // const editor = getAceEditor();
+  
+  // const brokenDownIds = [];
+  // for (const noteId of noteIds) {
+  //   let id = noteId.slice(noteId.indexOf('-') + 1);
+  //   const [, line, field, subfield] = /L(\d+)F(\d+)S?(\d*)/.exec(id);
+  //   const obj = { line: parseInt(line, 10), field: parseInt(field, 10) };
+
+  //   if (subfield?.length > 0) {
+  //     obj.subfield = parseInt(subfield, 10);
+  //   }
+  //   brokenDownIds.push(obj);
+  // }
+  // console.log(brokenDownIds);
+
+  // const minLine = Math.min(...brokenDownIds.map(b => b.line))
+  // const maxLine = Math.max(...brokenDownIds.map(b => b.line))
+  // const minField = Math.min(...brokenDownIds.map(b => b.field))
+  // const maxField = Math.max(...brokenDownIds.map(b => b.field))
+
+  // editor.session.addMarker(new Range(minLine, minField, maxLine, maxField), `selection-${window.provider.awareness.clientID}`, 'line');
+
+  // doesn't work - makes the page re-render indefinitely
+  // editor.session.selection.setSelectionRange(new Range(minLine, minField, maxLine, maxField));
 
   const selector = noteIds?.map((id) => '#' + id)?.join(',');
   if (selector) {
