@@ -1,5 +1,6 @@
-import { getAceEditor } from './setup';
-import { RubberBandSelection } from './util-collab';
+import { userData, yProvider } from '../yjs-setup.js';
+import { getAceEditor } from './setup.js';
+import { RubberBandSelection } from './util-collab.js';
 
 const MULTI_SELECT_ALPHA = 0.09;
 
@@ -257,10 +258,10 @@ function addListenersToOutput(outputTarget) {
     const selectedAreas = document.querySelectorAll('.multi-select-area');
 
     const selectToRemove = [...selectedAreas].find(
-      (elem) => elem.dataset.clientId == window.provider.awareness.clientID
+      (elem) => elem.dataset.clientId == yProvider.awareness.clientID
     );
     if (selectToRemove) {
-      window.provider.awareness.setLocalStateField('multiSelect', null);
+      yProvider.awareness.setLocalStateField('multiSelect', null);
       selectToRemove?.remove();
     }
   });
@@ -285,7 +286,7 @@ function addListenersToOutput(outputTarget) {
 
   document.addEventListener(
     'mouseup',
-    handleMouseUp(window.provider.awareness, window.userData.color)
+    handleMouseUp(yProvider.awareness, userData.color)
   );
 
   function handleMouseUp(awareness, color) {
@@ -333,20 +334,6 @@ function addListenersToOutput(outputTarget) {
   }
 }
 
-// [
-//   "note-L41F2S1",
-//   "note-L41F2S2",
-//   "note-L41F2S3",
-//   "note-L46F2S1",
-//   "note-L46F2S2",
-//   "note-L46F2S3",
-//   "note-L48F2S1",
-//   "note-L48F2S2",
-//   "note-L48F2S3",
-//   "note-L49F2S1",
-//   "note-L49F2S2",
-//   "note-L49F2S3"
-// ]
 // Break down note ids to L, F, S parts
 // L - line (row), F - field (column), S - subfield (same field but different column - chords)
 // Find the min and max lines, same for the other values
@@ -383,7 +370,7 @@ export function updateMultiSelect(clientState, noteIds) {
   // const minField = Math.min(...brokenDownIds.map(b => b.field))
   // const maxField = Math.max(...brokenDownIds.map(b => b.field))
 
-  // editor.session.addMarker(new Range(minLine, minField, maxLine, maxField), `selection-${window.provider.awareness.clientID}`, 'line');
+  // editor.session.addMarker(new Range(minLine, minField, maxLine, maxField), `selection-${yProvider.awareness.clientID}`, 'line');
 
   // doesn't work - makes the page re-render indefinitely
   // editor.session.selection.setSelectionRange(new Range(minLine, minField, maxLine, maxField));
@@ -499,19 +486,59 @@ export function userListDisplay(users) {
 
 // Alternatively, we can use an SVG 'use' element to copy the element we want:
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use
-// function copySVGElement(elem) {
-//   let clone = elem.cloneNode(true);
+function copySVGElement(elem) {
+  let clone = elem.cloneNode(true);
 
-//   let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
-//   // Copy its attributes
-//   for (const { nodeName, value } of clone.attributes) {
-//     copy.setAttribute(nodeName, value);
-//   }
+  let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
+  // Copy its attributes
+  for (const { nodeName, value } of clone.attributes) {
+    copy.setAttribute(nodeName, value);
+  }
 
-//   // Copy its children
-//   while (clone.hasChildNodes()) {
-//     copy.appendChild(clone.removeChild(clone.firstChild));
-//   }
+  // Copy its children
+  while (clone.hasChildNodes()) {
+    copy.appendChild(clone.removeChild(clone.firstChild));
+  }
 
-//   return copy;
-// }
+  return copy;
+}
+
+
+// const svgContainer = document.createElement('div');
+  // svgContainer.style.position = 'fixed';
+  // svgContainer.style.top = `${parentBox.top}px`;
+  // svgContainer.style.left = `${parentBox.left}px`;
+  // svgContainer.style.zIndex = 3;
+  // svgContainer.style.opacity = 0.3;
+/**
+ * 
+ * @param {HTMLElement | undefined} parentElem 
+ */
+function createSVGCollabLayer(parentElem) {
+  if (!parentElem) return;
+  
+  const parentBox = parentElem.firstElementChild.getBoundingClientRect();
+  
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttributeNS(null, 'x', parentBox.x);
+  svg.setAttributeNS(null, 'y', parentBox.y);
+  svg.setAttributeNS(null, 'width', `${parentBox.width}px`);
+  svg.setAttributeNS(null, 'height', `${parentBox.height}px`);
+  svg.id = 'collab-container';
+  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  svg.style.backgroundColor = 'black';
+  svg.style.opacity = 0.3;
+  svg.style.position = 'fixed';
+  svg.style.top = `${parentBox.top}px`;
+  svg.style.left = `${parentBox.left}px`;
+  svg.style.bottom = `${parentBox.bottom}px`;
+  svg.style.right = `${parentBox.right}px`;
+  svg.style.zIndex = 3;
+
+  parentElem.appendChild(svg);
+}
+
+window.collabLayer = {
+  createSVGCollabLayer,
+  copySVGElement
+}

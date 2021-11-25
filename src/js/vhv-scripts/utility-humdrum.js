@@ -281,10 +281,6 @@ export function getFieldAndSubtoken(text, column) {
 //     a marked note.
 //
 const editor = getAceEditor();
-console.log(
-  'Editor instance from utility-humdrum.js',
-  Object.assign({}, editor)
-);
 if (!editor) {
   throw new Error('Ace Editor is undefined');
 }

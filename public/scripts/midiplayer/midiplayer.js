@@ -195,7 +195,7 @@ var MidiPlayer = {
 		//console.log(this.totalDependencies);
 		//console.log(left);
 		if ((left == 0) && !midiPlayer_isLoaded) {
-		  console.log("MidiPlayer is loaded");
+		  // console.log("MidiPlayer is loaded");
 		  midiPlayer_isLoaded = true;
 		}
 	}

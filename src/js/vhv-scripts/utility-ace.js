@@ -53,7 +53,6 @@ export function setEditorModeAndKeyboard() {
     const mode = editorMode();
     editor.setTheme(editorModes[mode].theme);
     editor.getSession().setMode('ace/mode/' + mode);
-    console.log('Set ace mode: ace/mode/', mode);
     // editor.setTheme(window.EditorModes[EditorMode][window.KeyboardMode].theme);
     // editor.getSession().setMode("ace/mode/" + EditorMode);
     // null to reset to default (ace) mode

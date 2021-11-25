@@ -38,10 +38,10 @@ let configureAce = true;
 
 export function getAceEditor() {
   if (typeof editor === 'undefined') {
-    console.log(
-      "ace wasn't initialized, setting ace up now",
-      new Error().stack
-    );
+    // console.log(
+    //   "ace wasn't initialized, setting ace up now",
+    //   new Error().stack
+    // );
     setupAceEditor('input');
   }
   return editor;
@@ -54,7 +54,7 @@ export function setupAceEditor(idtag) {
 
   editor.on('ready', () => {
     if (!configureAce) {
-      console.log('ace ready event handler called');
+      // console.log('ace ready event handler called');
       setEditorModeAndKeyboard();
       insertSplashMusic();
     }

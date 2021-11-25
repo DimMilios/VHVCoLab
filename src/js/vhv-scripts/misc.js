@@ -32,11 +32,11 @@ export function displayNotation(page, force, restoreid) {
   // vrvWorker.checkInitialized();
   if (!vrvWorker.initialized || (global_interface.FreezeRendering && !force)) {
     // console.log("Ignoring displayNotation request: not initialized or frozen");
-    console.log('Ignoring displayNotation', {
-      vrvWorker: vrvWorker,
-      FreezeRendering: global_interface.FreezeRendering,
-      force,
-    });
+    // console.log('Ignoring displayNotation', {
+    //   vrvWorker: vrvWorker,
+    //   FreezeRendering: global_interface.FreezeRendering,
+    //   force,
+    // });
     return;
   }
 
