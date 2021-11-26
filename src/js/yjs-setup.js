@@ -18,93 +18,93 @@ export let userData = {
   color: '#' + Math.floor(Math.random() * 16777215).toString(16),
 };
 
-window.addEventListener('load', () => {
-  // console.log(Y)
-  const ydoc = new Y.Doc();
+// window.addEventListener('load', () => {
+//   // console.log(Y)
+//   const ydoc = new Y.Doc();
   
-  if (typeof yProvider == 'undefined') {
-    // yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
-    // yProvider.on('status', event => {
-    //   console.log(event.status) // websocket logs "connected" or "disconnected"
-    // })
+//   if (typeof yProvider == 'undefined') {
+//     // yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
+//     // yProvider.on('status', event => {
+//     //   console.log(event.status) // websocket logs "connected" or "disconnected"
+//     // })
 
-    yProvider = new WebrtcProvider('ace-demo', ydoc);
-  }
+//     yProvider = new WebrtcProvider('ace-demo', ydoc);
+//   }
 
-  const type = ydoc.getText('ace');
-  const yUndoManager = new Y.UndoManager(type);
+//   const type = ydoc.getText('ace');
+//   const yUndoManager = new Y.UndoManager(type);
 
-  const editor = getAceEditor();
-  if (!editor) {
-    throw new Error('Ace Editor is undefined');
-  }
+//   const editor = getAceEditor();
+//   if (!editor) {
+//     throw new Error('Ace Editor is undefined');
+//   }
 
-  const binding = new AceBinding(type, editor, yProvider.awareness, {
-    yUndoManager,
-  });
+//   const binding = new AceBinding(type, editor, yProvider.awareness, {
+//     yUndoManager,
+//   });
 
   
-  // Define user name and user name
-  yProvider.awareness.setLocalStateField('user', userData);
+//   // Define user name and user name
+//   yProvider.awareness.setLocalStateField('user', userData);
 
-  editor.getSession().selection.on('changeCursor', function (event) {
-    const { row, column } = editor.selection.getCursor();
-    const item = humdrumDataNoteIntoView(row, column);
-    if (item) {
-      markItem(item);
-      updateSingleSelect(yProvider.awareness.clientID, item, {
-        text: userData.name,
-        color: userData.color,
-      });
+//   editor.getSession().selection.on('changeCursor', function (event) {
+//     const { row, column } = editor.selection.getCursor();
+//     const item = humdrumDataNoteIntoView(row, column);
+//     if (item) {
+//       markItem(item);
+//       updateSingleSelect(yProvider.awareness.clientID, item, {
+//         text: userData.name,
+//         color: userData.color,
+//       });
 
-      const { user, cursor } = yProvider.awareness.getLocalState();
-      yProvider.awareness.setLocalStateField('cursor', {
-        itemId: item.id,
-        ...cursor,
-      });
-    }
-  });
+//       const { user, cursor } = yProvider.awareness.getLocalState();
+//       yProvider.awareness.setLocalStateField('cursor', {
+//         itemId: item.id,
+//         ...cursor,
+//       });
+//     }
+//   });
 
-  yProvider.awareness.on('change', function ({ added, updated, removed }) {
-    const awarenessState = yProvider.awareness.getStates();
-    removeUnusedElements(Array.from(awarenessState.keys()));
-    // console.log(`[${new Date().toLocaleTimeString()}]`, awarenessState);
+//   yProvider.awareness.on('change', function ({ added, updated, removed }) {
+//     const awarenessState = yProvider.awareness.getStates();
+//     removeUnusedElements(Array.from(awarenessState.keys()));
+//     // console.log(`[${new Date().toLocaleTimeString()}]`, awarenessState);
 
-    const users = [...awarenessState.values()].map((s) => s.user.name);
-    userListDisplay(users);
+//     const users = [...awarenessState.values()].map((s) => s.user.name);
+//     userListDisplay(users);
 
-    const f = (clientId) => {
-      if (clientId === yProvider.awareness.clientID) return;
+//     const f = (clientId) => {
+//       if (clientId === yProvider.awareness.clientID) return;
 
-      const aw = awarenessState.get(clientId);
-      if (aw) {
-        updateMultiSelect({ clientId, ...aw }, aw?.multiSelect);
+//       const aw = awarenessState.get(clientId);
+//       if (aw) {
+//         updateMultiSelect({ clientId, ...aw }, aw?.multiSelect);
 
-        const item = document.querySelector(`#${aw?.cursor?.itemId}`);
-        if (item) {
-          updateSingleSelect(clientId, item, {
-            text: aw.user.name,
-            color: aw.user.color,
-          });
-        }
+//         const item = document.querySelector(`#${aw?.cursor?.itemId}`);
+//         if (item) {
+//           updateSingleSelect(clientId, item, {
+//             text: aw.user.name,
+//             color: aw.user.color,
+//           });
+//         }
 
-        // if (item) {
-        //   const usersDiv = document.querySelector(`.users-div[data-note-id=${item.id}]`);
-        //   if (usersDiv) {
-        //     let text = usersDiv.innerText;
-        //     text = !text.includes(aw?.user.name) ? text + '\n' + aw.user.name : aw.user.name;
-        //     updateSingleSelect(clientId, item, { text, color: aw.user.color });
-        //   } else {
-        //     updateSingleSelect(clientId, item, { text: aw.user.name, color: aw.user.color });
-        //   }
-        // }
-      }
-    };
+//         // if (item) {
+//         //   const usersDiv = document.querySelector(`.users-div[data-note-id=${item.id}]`);
+//         //   if (usersDiv) {
+//         //     let text = usersDiv.innerText;
+//         //     text = !text.includes(aw?.user.name) ? text + '\n' + aw.user.name : aw.user.name;
+//         //     updateSingleSelect(clientId, item, { text, color: aw.user.color });
+//         //   } else {
+//         //     updateSingleSelect(clientId, item, { text: aw.user.name, color: aw.user.color });
+//         //   }
+//         // }
+//       }
+//     };
 
-    added.forEach(f);
-    updated.forEach(f);
-    removed.forEach(f);
-  });
+//     added.forEach(f);
+//     updated.forEach(f);
+//     removed.forEach(f);
+//   });
 
-  window.example = { yProvider, ydoc, type };
-});
+//   window.example = { yProvider, ydoc, type };
+// });

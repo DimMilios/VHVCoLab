@@ -232,7 +232,7 @@ window.addEventListener('DOMContentLoaded', () => {
             !mutation.target.onmousemove &&
             !mutation.target.onmouseup
           ) {
-            addListenersToOutput(mutation.target);
+            // addListenersToOutput(mutation.target);
             observer.disconnect();
           }
         }
@@ -248,7 +248,7 @@ function addListenersToOutput(outputTarget) {
 
   const rbSelection = new RubberBandSelection();
 
-  outputTarget?.addEventListener('mousedown', (event) => {
+  outputTarget.firstElementChild?.addEventListener('mousedown', (event) => {
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
@@ -267,7 +267,7 @@ function addListenersToOutput(outputTarget) {
   });
 
   // TODO: Use requestAnimationFrame
-  document.addEventListener('mousemove', (event) => {
+  outputTarget.firstElementChild.addEventListener('mousemove', (event) => {
     if (rbSelection.isSelecting) {
       endTime = performance.now();
       let timePassed = endTime - startTime;
@@ -284,7 +284,7 @@ function addListenersToOutput(outputTarget) {
     }
   });
 
-  document.addEventListener(
+  outputTarget.firstElementChild.addEventListener(
     'mouseup',
     handleMouseUp(yProvider.awareness, userData.color)
   );
@@ -486,13 +486,13 @@ export function userListDisplay(users) {
 
 // Alternatively, we can use an SVG 'use' element to copy the element we want:
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use
-function copySVGElement(elem) {
-  let clone = elem.cloneNode(true);
+function copySVGElement(elem, deep = false) {
+  let clone = elem.cloneNode(deep);
 
   let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
   // Copy its attributes
   for (const { nodeName, value } of clone.attributes) {
-    copy.setAttribute(nodeName, value);
+    copy.setAttribute(nodeName, nodeName !== 'id' ? value : value + '-copy');
   }
 
   // Copy its children
@@ -503,13 +503,14 @@ function copySVGElement(elem) {
   return copy;
 }
 
+function toObject(svgRect) {
+  return { x: svgRect.x, y: svgRect.y, width: svgRect.width, height: svgRect.height };
+}
 
-// const svgContainer = document.createElement('div');
-  // svgContainer.style.position = 'fixed';
-  // svgContainer.style.top = `${parentBox.top}px`;
-  // svgContainer.style.left = `${parentBox.left}px`;
-  // svgContainer.style.zIndex = 3;
-  // svgContainer.style.opacity = 0.3;
+import demoSVG from '/demo.svg?raw';
+function test(parentElem) {
+  parentElem.innerHTML += demoSVG
+}
 /**
  * 
  * @param {HTMLElement | undefined} parentElem 
@@ -517,28 +518,114 @@ function copySVGElement(elem) {
 function createSVGCollabLayer(parentElem) {
   if (!parentElem) return;
   
-  const parentBox = parentElem.firstElementChild.getBoundingClientRect();
+  const defScale = document.querySelector('.definition-scale');
+  const viewBox = defScale?.viewBox;
   
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttributeNS(null, 'x', parentBox.x);
-  svg.setAttributeNS(null, 'y', parentBox.y);
-  svg.setAttributeNS(null, 'width', `${parentBox.width}px`);
-  svg.setAttributeNS(null, 'height', `${parentBox.height}px`);
-  svg.id = 'collab-container';
-  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-  svg.style.backgroundColor = 'black';
-  svg.style.opacity = 0.3;
-  svg.style.position = 'fixed';
-  svg.style.top = `${parentBox.top}px`;
-  svg.style.left = `${parentBox.left}px`;
-  svg.style.bottom = `${parentBox.bottom}px`;
-  svg.style.right = `${parentBox.right}px`;
-  svg.style.zIndex = 3;
+  // We need to set the viewBox property of the parent SVG element.
+  // SVG transforms can be then applied to the CHILDREN elements.
+  // Consider adding another SVG element inside the container created below that
+  // can be styled and transformed when needed.
 
-  parentElem.appendChild(svg);
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  if (viewBox) {
+    svg.setAttributeNS(null, 'viewBox', `${Object.values(toObject(viewBox.baseVal)).join(' ')}`);
+  }
+ 
+  svg.id = 'collab-container';
+  svg.style.opacity = 1;
+  svg.setAttribute('fill', 'red');
+ 
+  const container = copySVGElement(defScale.firstElementChild);
+  container.classList.add('draggable-group-svg');
+  
+  svg.setAttributeNS(null, 'width', '500')
+  svg.setAttributeNS(null, 'height', '500')
+  svg.appendChild(container);
+  return parentElem.firstElementChild.appendChild(svg);
+}
+
+function bootstrap() {
+  const clc = createSVGCollabLayer(document.getElementById('output'));
+  makeDraggable(clc);
+  clc.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
+
+  // test(document.querySelector('#output > svg'));
+
+  // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  // rect.setAttributeNS(null, 'width', '100');
+  // rect.setAttributeNS(null, 'height', '100');
+  // rect.setAttributeNS(null, 'fill', 'green');
+  // rect.classList.add('draggable-svg');
+  // clc.firstElementChild.appendChild(rect);
+}
+
+// https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+function makeDraggable(svgElem) {
+  svgElem.addEventListener('mousedown', startDrag);
+  svgElem.addEventListener('mousemove', drag);
+  svgElem.addEventListener('mouseup', endDrag);
+  svgElem.addEventListener('mouseleave', endDrag);
+  svgElem.addEventListener('touchstart', startDrag);
+  svgElem.addEventListener('touchmove', drag);
+  svgElem.addEventListener('touchend', endDrag);
+  svgElem.addEventListener('touchleave', endDrag);
+  svgElem.addEventListener('touchcancel', endDrag);
+
+  function getMousePosition(event) {
+    const CTM = svgElem.getScreenCTM();
+    if (event.touches) { event = event.touches[0]; }
+    return {
+      x: (event.clientX - CTM.e) / CTM.a,
+      y: (event.clientX - CTM.f) / CTM.d,
+    }
+  }
+
+  let selectedElem = null;
+  let offset, transform;
+
+  function initialiseDragging(event) {
+    offset = getMousePosition(event);
+    // Make sure the first transform on the element is a translate transform
+    const transforms = selectedElement.transform.baseVal;
+    if (transforms.length === 0 || transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+      // Create an transform that translates by (0, 0)
+      const translate = svgElem.createSVGTransform();
+      translate.setTranslate(0, 0);
+      selectedElement.transform.baseVal.insertItemBefore(translate, 0);
+    }
+    // Get initial translation
+    transform = transforms.getItem(0);
+    offset.x -= transform.matrix.e;
+    offset.y -= transform.matrix.f;
+}
+
+  function startDrag(event) {
+    console.log('start drag')
+    if (event.target.classList.contains('draggable-svg')) {
+      selectedElement = event.target;
+      initialiseDragging(event);
+    } else if (event.target.parentNode.classList.contains('draggable-group-svg')) {
+      selectedElement = event.target.parentNode;
+      console.log('Draggable group set:', selectedElem)
+      initialiseDragging(event);
+    }
+  }
+
+  function drag(event) {
+    if (selectedElem) {
+      event.preventDefault();
+      const coords = getMousePosition(event);
+      transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
+    }
+  }
+
+  function endDrag(event) {
+    selectedElem = null;
+  }
 }
 
 window.collabLayer = {
   createSVGCollabLayer,
-  copySVGElement
+  copySVGElement,
+  bootstrap
 }

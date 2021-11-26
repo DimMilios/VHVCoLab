@@ -96,3 +96,14 @@
 .dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
 }
+
+
+/* Draggable SVG items */
+.static-svg {
+  cursor: default;
+}
+
+.draggable-svg, .draggable-group-svg {
+  cursor: move;
+}
+/* Draggable SVG items */
