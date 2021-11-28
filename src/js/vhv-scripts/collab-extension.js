@@ -492,25 +492,38 @@ function copySVGElement(elem, deep = false) {
   let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
   // Copy its attributes
   for (const { nodeName, value } of clone.attributes) {
-    copy.setAttribute(nodeName, nodeName !== 'id' ? value : value + '-copy');
+    if (nodeName === 'id') continue;
+    copy.setAttribute(nodeName, value);
+    // copy.setAttribute(nodeName, nodeName !== 'id' ? value : value + '-copy');
   }
 
   // Copy its children
   while (clone.hasChildNodes()) {
-    copy.appendChild(clone.removeChild(clone.firstChild));
+    let child = clone.removeChild(clone.firstChild);
+    
+    console.log('Copying child:', child);
+    clearAttributes(child);
+    
+    copy.appendChild(child);
   }
 
   return copy;
+}
+
+function clearAttributes(elem) {
+  if (elem.removeAttribute) {
+    elem.removeAttribute('id');
+  }
+
+  if (elem.hasChildNodes()) {
+    elem.childNodes.forEach(c => clearAttributes(c));
+  }
 }
 
 function toObject(svgRect) {
   return { x: svgRect.x, y: svgRect.y, width: svgRect.width, height: svgRect.height };
 }
 
-import demoSVG from '/demo.svg?raw';
-function test(parentElem) {
-  parentElem.innerHTML += demoSVG
-}
 /**
  * 
  * @param {HTMLElement | undefined} parentElem 
@@ -535,21 +548,20 @@ function createSVGCollabLayer(parentElem) {
   svg.style.opacity = 1;
   svg.setAttribute('fill', 'red');
  
-  const container = copySVGElement(defScale.firstElementChild);
+  // const container = copySVGElement(defScale.firstElementChild);
+  const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   container.classList.add('draggable-group-svg');
   
-  svg.setAttributeNS(null, 'width', '500')
-  svg.setAttributeNS(null, 'height', '500')
+  // svg.setAttributeNS(null, 'width', '500')
+  // svg.setAttributeNS(null, 'height', '500')
   svg.appendChild(container);
   return parentElem.firstElementChild.appendChild(svg);
 }
 
 function bootstrap() {
   const clc = createSVGCollabLayer(document.getElementById('output'));
-  makeDraggable(clc);
   clc.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
-
-  // test(document.querySelector('#output > svg'));
+  makeDraggable(clc);
 
   // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
   // rect.setAttributeNS(null, 'width', '100');
@@ -586,27 +598,27 @@ function makeDraggable(svgElem) {
   function initialiseDragging(event) {
     offset = getMousePosition(event);
     // Make sure the first transform on the element is a translate transform
-    const transforms = selectedElement.transform.baseVal;
+    const transforms = selectedElem.transform.baseVal;
     if (transforms.length === 0 || transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE) {
       // Create an transform that translates by (0, 0)
       const translate = svgElem.createSVGTransform();
       translate.setTranslate(0, 0);
-      selectedElement.transform.baseVal.insertItemBefore(translate, 0);
+      selectedElem.transform.baseVal.insertItemBefore(translate, 0);
     }
     // Get initial translation
     transform = transforms.getItem(0);
     offset.x -= transform.matrix.e;
     offset.y -= transform.matrix.f;
+    // console.log({transform, offsetX: offset.x, offsetY: offset.y})
 }
 
   function startDrag(event) {
-    console.log('start drag')
     if (event.target.classList.contains('draggable-svg')) {
-      selectedElement = event.target;
+      selectedElem = event.target;
       initialiseDragging(event);
-    } else if (event.target.parentNode.classList.contains('draggable-group-svg')) {
-      selectedElement = event.target.parentNode;
-      console.log('Draggable group set:', selectedElem)
+    } else if (!!event.target.closest('.draggable-group-svg')) {
+      selectedElem = event.target.closest('.draggable-group-svg');
+      // console.log('Draggable group set:', selectedElem)
       initialiseDragging(event);
     }
   }
@@ -615,7 +627,9 @@ function makeDraggable(svgElem) {
     if (selectedElem) {
       event.preventDefault();
       const coords = getMousePosition(event);
+      // FIX: x and y are always the same value making the SVG element only draggable diagonally
       transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
+      console.log({coords, offset, transX: coords.x - offset.x, transY: coords.y - offset.y})
     }
   }
 
