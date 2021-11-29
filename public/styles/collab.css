@@ -76,6 +76,10 @@
   background-color: initial;
 }
 
+/* .dropdown-item .bg-dark {
+  background-color: aliceblue !important;
+} */
+
 /* Bootstrap nested Dropdown menu */
 .dropdown-menu li {
   position: relative;

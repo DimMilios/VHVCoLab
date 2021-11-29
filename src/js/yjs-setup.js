@@ -87,17 +87,6 @@ window.addEventListener('load', () => {
             color: aw.user.color,
           });
         }
-
-        // if (item) {
-        //   const usersDiv = document.querySelector(`.users-div[data-note-id=${item.id}]`);
-        //   if (usersDiv) {
-        //     let text = usersDiv.innerText;
-        //     text = !text.includes(aw?.user.name) ? text + '\n' + aw.user.name : aw.user.name;
-        //     updateSingleSelect(clientId, item, { text, color: aw.user.color });
-        //   } else {
-        //     updateSingleSelect(clientId, item, { text: aw.user.name, color: aw.user.color });
-        //   }
-        // }
       }
     };
 

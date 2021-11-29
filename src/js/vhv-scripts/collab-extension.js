@@ -556,7 +556,7 @@ function createSVGCollabLayer(parentElem) {
   }
  
   svg.id = 'collab-container';
-  svg.setAttribute('fill', 'red');
+  svg.setAttribute('fill', 'blue');
  
   // const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const container = copySVGElement(defScale.firstElementChild);
