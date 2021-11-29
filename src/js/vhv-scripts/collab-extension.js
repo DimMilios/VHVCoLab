@@ -638,7 +638,7 @@ function makeDraggable(svgElem) {
       const coords = getMousePosition(event);
       // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
       
-      // Allow horizontal movement only
+      // Allow vertical movement only
       transform.setTranslate(transform.matrix.e, coords.y - offset.y);
     }
   }

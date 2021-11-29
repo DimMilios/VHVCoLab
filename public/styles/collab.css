@@ -76,9 +76,9 @@
   background-color: initial;
 }
 
-/* .dropdown-item .bg-dark {
-  background-color: aliceblue !important;
-} */
+.dropdown-item {
+  background-color: #02C6FC;
+}
 
 /* Bootstrap nested Dropdown menu */
 .dropdown-menu li {

@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
     li.id = `${defaultText?.split(/\W/).join('-')}__submenu-item`.toLowerCase();
     li.setAttribute(
       'class',
-      'dropdown-item d-flex justify-content-between bg-dark text-white'
+      'dropdown-item d-flex justify-content-between text-white'
     );
 
     const item = document.createElement('a');
@@ -82,11 +82,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const isFunctionOf = (func, obj) => typeof obj[func] === 'function';
     if (action) {
+      console.log({action})
       const funcName = action
         .slice(action.indexOf('.') + 1)
         .replace(/\(.*\)/g, '');
-      li.onclick = isFunctionOf(funcName, menu())
-        ? () => new Function(action)()
+      li.onclick = isFunctionOf(funcName, getMenu())
+        ? () => new Function(action.replaceAll('MENU', 'menu'))()
         : null;
 
       if (li.onclick !== null) {
@@ -118,10 +119,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function isIterable(dataStructure) {
-    if (
-      typeof dataStructure === 'null' ||
-      typeof dataStructure === 'undefined'
-    ) {
+    if (typeof dataStructure === 'null' || typeof dataStructure === 'undefined') {
       return false;
     }
 
