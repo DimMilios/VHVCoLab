@@ -232,7 +232,7 @@ window.addEventListener('DOMContentLoaded', () => {
             !mutation.target.onmousemove &&
             !mutation.target.onmouseup
           ) {
-            // addListenersToOutput(mutation.target);
+            addListenersToOutput(mutation.target);
             observer.disconnect();
           }
         }
@@ -267,7 +267,7 @@ function addListenersToOutput(outputTarget) {
   });
 
   // TODO: Use requestAnimationFrame
-  outputTarget.firstElementChild.addEventListener('mousemove', (event) => {
+  outputTarget.addEventListener('mousemove', (event) => {
     if (rbSelection.isSelecting) {
       endTime = performance.now();
       let timePassed = endTime - startTime;
@@ -284,7 +284,7 @@ function addListenersToOutput(outputTarget) {
     }
   });
 
-  outputTarget.firstElementChild.addEventListener(
+  outputTarget.addEventListener(
     'mouseup',
     handleMouseUp(yProvider.awareness, userData.color)
   );
@@ -503,7 +503,7 @@ function copySVGElement(elem, deep = false) {
   while (clone.hasChildNodes()) {
     let child = clone.removeChild(clone.firstChild);
     
-    console.log('Copying child:', child);
+    // console.log('Copying child:', child);
     clearAttributes(child, ['id']);
     
     // Ignore elements with lyrics
@@ -630,9 +630,11 @@ function makeDraggable(svgElem) {
     }
   }
 
+  // TODO: use requestAnimationFrame
   function drag(event) {
     if (selectedElem) {
       event.preventDefault();
+
       const coords = getMousePosition(event);
       // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
       

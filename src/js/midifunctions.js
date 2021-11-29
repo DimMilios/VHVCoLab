@@ -193,6 +193,8 @@ export const midiUpdate = function (time) {
   });
 };
 
+window.midiUpdate = midiUpdate;
+
 //////////////////////////////
 //
 // midiStop -- Callback for WildWestMidi when stopping MIDI playback.
