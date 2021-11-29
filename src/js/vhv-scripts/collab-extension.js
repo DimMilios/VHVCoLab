@@ -492,9 +492,11 @@ function copySVGElement(elem, deep = false) {
   let copy = document.createElementNS('http://www.w3.org/2000/svg', clone.localName);
   // Copy its attributes
   for (const { nodeName, value } of clone.attributes) {
-    if (nodeName === 'id') continue;
+    if (nodeName === 'id') {
+      copy.dataset.refElem = value;
+      continue;
+    }
     copy.setAttribute(nodeName, value);
-    // copy.setAttribute(nodeName, nodeName !== 'id' ? value : value + '-copy');
   }
 
   // Copy its children
@@ -502,25 +504,34 @@ function copySVGElement(elem, deep = false) {
     let child = clone.removeChild(clone.firstChild);
     
     console.log('Copying child:', child);
-    clearAttributes(child);
+    clearAttributes(child, ['id']);
     
+    // Ignore elements with lyrics
+    // if (!child?.classList?.contains('verse')) {
+    //   copy.appendChild(child);
+    // }
     copy.appendChild(child);
   }
 
   return copy;
 }
 
-function clearAttributes(elem) {
+function clearAttributes(elem, attrs) {
   if (elem.removeAttribute) {
-    elem.removeAttribute('id');
+    attrs.forEach(attr => {
+      // if (attr === 'id') {
+      //   elem.dataset.refElem = elem.id;
+      // }
+      elem.removeAttribute(attr)
+    });
   }
 
   if (elem.hasChildNodes()) {
-    elem.childNodes.forEach(c => clearAttributes(c));
+    elem.childNodes.forEach(c => clearAttributes(c, attrs));
   }
 }
 
-function toObject(svgRect) {
+function fromSVGRect(svgRect) {
   return { x: svgRect.x, y: svgRect.y, width: svgRect.width, height: svgRect.height };
 }
 
@@ -541,20 +552,17 @@ function createSVGCollabLayer(parentElem) {
 
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   if (viewBox) {
-    svg.setAttributeNS(null, 'viewBox', `${Object.values(toObject(viewBox.baseVal)).join(' ')}`);
+    svg.setAttributeNS(null, 'viewBox', `${Object.values(fromSVGRect(viewBox.baseVal)).join(' ')}`);
   }
  
   svg.id = 'collab-container';
-  svg.style.opacity = 1;
   svg.setAttribute('fill', 'red');
  
-  // const container = copySVGElement(defScale.firstElementChild);
-  const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  // const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  const container = copySVGElement(defScale.firstElementChild);
   container.classList.add('draggable-group-svg');
-  
-  // svg.setAttributeNS(null, 'width', '500')
-  // svg.setAttributeNS(null, 'height', '500')
   svg.appendChild(container);
+  
   return parentElem.firstElementChild.appendChild(svg);
 }
 
@@ -568,7 +576,7 @@ function bootstrap() {
   // rect.setAttributeNS(null, 'height', '100');
   // rect.setAttributeNS(null, 'fill', 'green');
   // rect.classList.add('draggable-svg');
-  // clc.firstElementChild.appendChild(rect);
+  // clc.appendChild(rect);
 }
 
 // https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
@@ -588,7 +596,7 @@ function makeDraggable(svgElem) {
     if (event.touches) { event = event.touches[0]; }
     return {
       x: (event.clientX - CTM.e) / CTM.a,
-      y: (event.clientX - CTM.f) / CTM.d,
+      y: (event.clientY - CTM.f) / CTM.d,
     }
   }
 
@@ -609,7 +617,6 @@ function makeDraggable(svgElem) {
     transform = transforms.getItem(0);
     offset.x -= transform.matrix.e;
     offset.y -= transform.matrix.f;
-    // console.log({transform, offsetX: offset.x, offsetY: offset.y})
 }
 
   function startDrag(event) {
@@ -627,9 +634,10 @@ function makeDraggable(svgElem) {
     if (selectedElem) {
       event.preventDefault();
       const coords = getMousePosition(event);
-      // FIX: x and y are always the same value making the SVG element only draggable diagonally
-      transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
-      console.log({coords, offset, transX: coords.x - offset.x, transY: coords.y - offset.y})
+      // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
+      
+      // Allow horizontal movement only
+      transform.setTranslate(transform.matrix.e, coords.y - offset.y);
     }
   }
 
