@@ -2,7 +2,7 @@ import { userData, yProvider } from '../yjs-setup.js';
 import { getAceEditor } from './setup.js';
 import { RubberBandSelection } from './util-collab.js';
 
-const MULTI_SELECT_ALPHA = 0.09;
+const MULTI_SELECT_ALPHA = 0.3;
 
 let DEBUG = false;
 function log(text) {
@@ -248,7 +248,7 @@ function addListenersToOutput(outputTarget) {
 
   const rbSelection = new RubberBandSelection();
 
-  outputTarget.firstElementChild?.addEventListener('mousedown', (event) => {
+  document.addEventListener('mousedown', (event) => {
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
@@ -267,7 +267,7 @@ function addListenersToOutput(outputTarget) {
   });
 
   // TODO: Use requestAnimationFrame
-  outputTarget.addEventListener('mousemove', (event) => {
+  document.addEventListener('mousemove', (event) => {
     if (rbSelection.isSelecting) {
       endTime = performance.now();
       let timePassed = endTime - startTime;
@@ -284,7 +284,7 @@ function addListenersToOutput(outputTarget) {
     }
   });
 
-  outputTarget.addEventListener(
+  document.addEventListener(
     'mouseup',
     handleMouseUp(yProvider.awareness, userData.color)
   );
@@ -393,7 +393,6 @@ export function updateMultiSelect(clientState, noteIds) {
     selectedArea.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
     selectedArea.style.width = `${coords.width}px`;
     selectedArea.style.height = `${coords.height}px`;
-    // selectedArea.style.backgroundColor = clientState?.user?.color ?? 'blue';
     selectedArea.style.backgroundColor =
       `${hexToRgbA(clientState?.user?.color, MULTI_SELECT_ALPHA)}` ?? 'blue';
   }

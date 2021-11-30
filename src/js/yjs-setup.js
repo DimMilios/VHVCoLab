@@ -13,9 +13,17 @@ import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 
 export let yProvider;
+
+const names = ['Michael', 'John', 'Jim', 'Maria', 'Nick', 'Jake', 'Isabella', 'Kate'];
+const colors = [ '#30bced','#6eeb83','#ffbc42','#ecd444','#ee6352','#9ac2c9','#8acb88','#1be7ff'];
+
+const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
+
 export let userData = {
-  name: Math.random().toString(36).substring(7),
-  color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+  // name: Math.random().toString(36).substring(7),
+  // color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+  name: oneOf(names),
+  color: oneOf(colors)
 };
 
 window.addEventListener('load', () => {
@@ -44,7 +52,6 @@ window.addEventListener('load', () => {
   });
 
   
-  // Define user name and user name
   yProvider.awareness.setLocalStateField('user', userData);
 
   editor.getSession().selection.on('changeCursor', function (event) {
@@ -68,10 +75,7 @@ window.addEventListener('load', () => {
   yProvider.awareness.on('change', function ({ added, updated, removed }) {
     const awarenessState = yProvider.awareness.getStates();
     removeUnusedElements(Array.from(awarenessState.keys()));
-    // console.log(`[${new Date().toLocaleTimeString()}]`, awarenessState);
-
-    const users = [...awarenessState.values()].map((s) => s.user.name);
-    userListDisplay(users);
+    userListDisplay([...awarenessState.values()].map((s) => s.user.name));
 
     const f = (clientId) => {
       if (clientId === yProvider.awareness.clientID) return;

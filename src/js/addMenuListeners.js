@@ -657,14 +657,12 @@ document.querySelectorAll('li.dropdown').forEach(
       'show',
       () => {
         document.documentElement.style.setProperty('--collab-layer-zIndex', 1);
-        console.log('Dropdown show');
       },
       () => {
         document.documentElement.style.setProperty(
           '--collab-layer-zIndex',
           1000
         );
-        console.log('Dropdown hide');
       }
     )
 );

@@ -39,6 +39,11 @@
   - Swapping between the `ace` editor and `SVG` contexts broke when selecting notes.
   Selecting on a note through the `Humdrum` notation and then clicking on a note from the `SVG` no longer gives focus back to the `SVG` panel. Thus, keyboard listeners (moving to the previous/next note with *arrow* keys no longer works).
 
+- Collaboration
+  - [] Redraw the collaboration divs after a note has been edited on `Ace` Editor.
+  - [] Clear collab stuff when loading a new music sheet.
+  - [] Change navbar dropdown items colors
+
 ## Secondary
 ### Handle User note editing
 - Consider if a note should be editable by every user or just the creator of the note.
