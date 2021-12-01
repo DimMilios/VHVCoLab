@@ -104,6 +104,28 @@ function parseQuarterTime(quarterTime) {
   return quarterTime.includes('_') ? qTimeValue / divisor : qTimeValue;
 }
 
+export function clearSingleSelect() {
+  const aw = yProvider.awareness.getStates();
+  const localState = aw.get(yProvider.awareness.clientID);
+  const {itemId, ...cursor} = localState.cursor;
+  yProvider.awareness.setLocalStateField('cursor', cursor);
+  console.log('removing', yProvider.awareness.clientID);
+  clearSingleSelectDOM(yProvider.awareness.clientID);
+  
+  const editor = getAceEditor();
+  editor?.session?.selection?.moveCursorFileStart();
+}
+
+export function clearSingleSelectDOM(clientId) {
+  let usersDivs = document.querySelectorAll('.users-div');
+  let usersDiv = [...usersDivs].find((div) => div.dataset.clientId == clientId);
+  usersDiv?.remove();
+
+  const noteSelects = [...document.querySelectorAll('.single-note-select')];
+  let select = noteSelects.find((s) => s.dataset.clientId == clientId);
+  select?.remove();
+}
+
 export function updateSingleSelect(clientId, target, options) {
   updateUsersDiv(clientId, target, options);
 
@@ -248,7 +270,7 @@ function addListenersToOutput(outputTarget) {
 
   const rbSelection = new RubberBandSelection();
 
-  document.addEventListener('mousedown', (event) => {
+  outputTarget.addEventListener('mousedown', (event) => {
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
@@ -456,9 +478,9 @@ export function userListDisplay(users) {
       output.hasAttribute('style') &&
       !output.getAttribute('style').includes('transition')
     ) {
-      output.style.transition = 'opacity 0.4s ease-out';
+      // output.style.transition = 'opacity 0.4s ease-out';
     }
-    output.style.opacity = 0.1;
+    // output.style.opacity = 0.1;
   });
 
   userList.addEventListener('mouseout', (e) => {

@@ -442,6 +442,9 @@ function processNotationKeyCommand(event) {
     case EscKey:
       event.preventDefault();
       event.stopPropagation();
+
+      clearSingleSelect();
+
       processNotationKey('esc', global_cursor.CursorNote);
       break;
   }
@@ -497,6 +500,8 @@ import {
 import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
+import { yProvider } from '../yjs-setup.js';
+import { clearSingleSelect, removeUnusedElements } from './collab-extension.js';
 
 export function processInterfaceKeyCommand(event) {
   if (!event.preventDefault) {

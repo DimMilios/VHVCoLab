@@ -6,6 +6,7 @@ import {
   updateMultiSelect,
   removeUnusedElements,
   userListDisplay,
+  clearSingleSelectDOM,
 } from './vhv-scripts/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
@@ -31,12 +32,12 @@ window.addEventListener('load', () => {
   const ydoc = new Y.Doc();
   
   if (typeof yProvider == 'undefined') {
-    // yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
-    // yProvider.on('status', event => {
-    //   console.log(event.status) // websocket logs "connected" or "disconnected"
-    // })
+    yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
+    yProvider.on('status', event => {
+      console.log(event.status) // websocket logs "connected" or "disconnected"
+    })
 
-    yProvider = new WebrtcProvider('ace-demo', ydoc);
+    // yProvider = new WebrtcProvider('ace-demo', ydoc);
   }
 
   const type = ydoc.getText('ace');
@@ -74,6 +75,7 @@ window.addEventListener('load', () => {
 
   yProvider.awareness.on('change', function ({ added, updated, removed }) {
     const awarenessState = yProvider.awareness.getStates();
+    console.log(awarenessState)
     removeUnusedElements(Array.from(awarenessState.keys()));
     userListDisplay([...awarenessState.values()].map((s) => s.user.name));
 
@@ -90,6 +92,8 @@ window.addEventListener('load', () => {
             text: aw.user.name,
             color: aw.user.color,
           });
+        } else {
+          clearSingleSelectDOM(clientId);
         }
       }
     };
