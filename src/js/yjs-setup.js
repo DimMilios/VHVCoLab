@@ -73,6 +73,21 @@ window.addEventListener('load', () => {
     }
   });
 
+  editor.session.doc.on('change', function(event) {
+    // We need to update the collab elements when text is updating
+    const aw = yProvider.awareness.getLocalState();
+    const item = document.querySelector(`#${aw?.cursor?.itemId}`);
+    if (item) {
+      updateSingleSelect(aw.cursor.id, item, {
+        text: aw.user.name,
+        color: aw.user.color,
+      });
+    } else {
+      clearSingleSelectDOM(aw.cursor.id);
+    }
+    
+  })
+
   yProvider.awareness.on('change', function ({ added, updated, removed }) {
     const awarenessState = yProvider.awareness.getStates();
     console.log(awarenessState)
