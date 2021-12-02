@@ -32,12 +32,12 @@ window.addEventListener('load', () => {
   const ydoc = new Y.Doc();
   
   if (typeof yProvider == 'undefined') {
-    yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
-    yProvider.on('status', event => {
-      console.log(event.status) // websocket logs "connected" or "disconnected"
-    })
+    // yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
+    // yProvider.on('status', event => {
+    //   console.log(event.status) // websocket logs "connected" or "disconnected"
+    // })
 
-    // yProvider = new WebrtcProvider('ace-demo', ydoc);
+    yProvider = new WebrtcProvider('ace-demo', ydoc);
   }
 
   const type = ydoc.getText('ace');
@@ -75,16 +75,19 @@ window.addEventListener('load', () => {
 
   editor.session.doc.on('change', function(event) {
     // We need to update the collab elements when text is updating
+    console.log('Ace change event', event)
     const aw = yProvider.awareness.getLocalState();
     const item = document.querySelector(`#${aw?.cursor?.itemId}`);
-    if (item) {
-      updateSingleSelect(aw.cursor.id, item, {
-        text: aw.user.name,
-        color: aw.user.color,
-      });
-    } else {
-      clearSingleSelectDOM(aw.cursor.id);
-    }
+    // if (item) {
+    //   markItem(item);
+    //   updateSingleSelect(aw.cursor.id, item, {
+    //     text: aw.user.name,
+    //     color: aw.user.color,
+    //   });
+    // } 
+    // else {
+    //   clearSingleSelectDOM(aw.cursor.id);
+    // }
     
   })
 
@@ -108,7 +111,7 @@ window.addEventListener('load', () => {
             color: aw.user.color,
           });
         } else {
-          clearSingleSelectDOM(clientId);
+          // clearSingleSelectDOM(clientId);
         }
       }
     };
