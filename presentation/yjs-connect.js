@@ -13,17 +13,18 @@ const binding = new AceBinding(type, editor, wsProvider.awareness);
 // Assign a random name and color. This is our local user.
 // Changes to the awareness state are broadcasted to every client.
 wsProvider.awareness.setLocalStateField('user', {
-  name: oneOf(['Michael', 'John', 'Jim', 'Maria', 'Nick', 'Jake', 'Isabella', 'Kate']),
-  color: oneOf(['#30bced','#6eeb83','#ffbc42','#ecd444','#ee6352','#9ac2c9','#8acb88','#1be7ff'])
+  name: 'Jake',
+  color: '#30bced'
 });
 
 // Awareness states are stored in a Map:
-// 12342342342 => { user: {} }
+// Unique ClientID to state object for that client
+// 12342342342 => { user: {}, ... }
 
 // Listen to local and remote state changes
-wsProvider.awareness.on('change', (clientIDs) => {
-
-})
+wsProvider.awareness.on('update', function ({ added, updated, removed }) {
+  // Update UI, notify clients for new connections, etc.
+});
 
 wsProvider.on('status', (event) => {
   console.log(event.status); // logs "connected" or "disconnected"
