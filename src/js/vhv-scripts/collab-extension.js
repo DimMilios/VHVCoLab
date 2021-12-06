@@ -271,6 +271,9 @@ function addListenersToOutput(outputTarget) {
   const rbSelection = new RubberBandSelection();
 
   outputTarget.addEventListener('mousedown', (event) => {
+    // Start selecting only when there isn't a note element on the cursor
+    if (event.target.nodeName != 'svg') return;
+
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
@@ -341,10 +344,11 @@ function addListenersToOutput(outputTarget) {
         selectedArea.style.backgroundColor =
           hexToRgbA(color, MULTI_SELECT_ALPHA) ?? 'rgba(0, 0, 255, 0.09)';
 
-        awareness?.setLocalStateField(
-          'multiSelect',
-          selectedNotes.map((note) => note.id).filter((id) => /^note/g.test(id))
-        );
+        const multiSelectedNotes = selectedNotes.map((note) => note.id).filter((id) => /^note/g.test(id))
+
+        if (multiSelectedNotes.length > 0) {
+          awareness?.setLocalStateField('multiSelect', multiSelectedNotes);
+        }
 
         shouldMultiSelect = false;
       }
