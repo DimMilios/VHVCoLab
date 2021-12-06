@@ -99,6 +99,7 @@ export default class AceBinding {
     type.observe(this._typeObserver);
 
     this._aceObserver = (eventType, delta) => {
+      console.log('Ace editor', {delta, eventType});
       const aceDocument = this.ace.getSession().getDocument();
       mux(() => {
         this.type.doc.transact(() => {

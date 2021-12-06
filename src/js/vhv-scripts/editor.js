@@ -1637,9 +1637,9 @@ function deleteStemMarker(id, line, field) {
 // tranposeUp --
 //
 
-function transposeNote(id, line, field, subfield, amount) {
+export function transposeNote(id, line, field, subfield, amount) {
   // console.log("TRANSPOSE Note", line, field, subfield, id);
-  console.log('TRANSPOSE Note', { line, column: field, subfield, noteId: id });
+  // console.log('TRANSPOSE Note', { line, column: field, subfield, noteId: id });
   var token = getEditorContents(line, field);
 
   amount = parseInt(amount);
@@ -1683,11 +1683,13 @@ function transposeNote(id, line, field, subfield, amount) {
     newtoken = subtokens.join(' ');
   }
 
-  console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
+  // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
   if (newtoken !== token) {
     global_cursor.RestoreCursorNote = id;
     global_cursor.HIGHLIGHTQUERY = id;
-    setEditorContents(line, field, newtoken, id);
+    // setEditorContents(line, field, newtoken, id);
+
+    return { line, field, token: newtoken, id };
 
     // let shouldUpdate = window.confirm('Include value?');
     // if (shouldUpdate) {
@@ -2958,14 +2960,6 @@ function setEditorContents(line, field, token, id, dontredraw) {
     global_interface.FreezeRendering = true;
   }
 
-  console.log('setEditorContents args:', {
-    line,
-    field,
-    token,
-    id,
-    dontredraw,
-  });
-
   var i;
   var linecontent = editor.session.getLine(line - 1);
   var range = new Range(line - 1, 0, line - 1, linecontent.length);
@@ -3015,6 +3009,53 @@ function setEditorContents(line, field, token, id, dontredraw) {
   if (!dontredraw) {
     displayNotation();
   }
+}
+
+function setEditorContents2(line, field, token, id) {
+  var i;
+  var linecontent = editor.session.getLine(line - 1);
+  var range = new Range(line - 1, 0, line - 1, linecontent.length);
+
+  var components = linecontent.split(/\t+/);
+  components[field - 1] = token;
+
+  // count tabs between fields
+  var tabs = [];
+  for (i = 0; i < components.length + 1; i++) {
+    tabs[i] = '';
+  }
+  var pos = 0;
+  if (linecontent[0] != '\t') {
+    pos++;
+  }
+  for (i = 1; i < linecontent.length; i++) {
+    if (linecontent[i] == '\t') {
+      tabs[pos] += '\t';
+    } else if (linecontent[i] != '\t' && linecontent[i - 1] == '\t') {
+      pos++;
+    }
+  }
+
+  var newlinecontent = '';
+  for (i = 0; i < tabs.length; i++) {
+    newlinecontent += tabs[i];
+    if (components[i]) {
+      newlinecontent += components[i];
+    }
+  }
+
+  // return { range, newlinecontent };
+
+  editor.session.replace(range, newlinecontent);
+  // editor.gotoLine(line, column + 1);
+
+}
+
+export function setEditorContentsMany(notes) {
+  global_interface.FreezeRendering = true;
+  notes.forEach(note => setEditorContents2(note.line, note.field, note.token, note.id));
+  global_interface.FreezeRendering = false;
+  displayNotation();
 }
 
 //////////////////////////////

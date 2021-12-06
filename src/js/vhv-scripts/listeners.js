@@ -134,6 +134,47 @@ document.addEventListener('DOMContentLoaded', function () {
   }, 3000);
 });
 
+function extractEditorPosition(element) {
+  var id = element.id;
+  var matches;
+
+  if ((matches = id.match(/L(\d+)/))) {
+    var line = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/F(\d+)/))) {
+    var field = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/S(\d+)/))) {
+    var subfield = parseInt(matches[1]);
+  } else {
+    subfield = null;
+  }
+
+  if ((matches = id.match(/N(\d+)/))) {
+    var number = parseInt(matches[1]);
+  } else {
+    number = 1;
+  }
+
+  if ((matches = id.match(/^([a-z]+)-/))) {
+    var name = matches[1];
+  } else {
+    return; // required
+  }
+
+  if (line < 1 || field < 1) {
+    return;
+  }
+
+  return { id, line, field, subfield };
+}
+
 //////////////////////////////
 //
 // keydown event listener -- Notation editor listener.
@@ -161,6 +202,24 @@ function processNotationKeyCommand(event) {
     }
     editor.undo();
     return;
+  }
+
+  // Transpose up all multi selected notes
+  if (event.code === UpKey && event.shiftKey) {
+    const localState = yProvider.awareness.getLocalState();
+    console.log({localState});
+    if (localState.multiSelect) {
+      const elements = document.querySelectorAll(
+        localState.multiSelect.map((el) => '#' + el).join(',')
+      );
+      const notes = Array.from(elements)
+        .map((note) => extractEditorPosition(note))
+        .map((note) =>
+          transposeNote(note.id, note.line, note.field, note.subfield, +1)
+        );
+      console.log(notes);
+      setEditorContentsMany(notes);
+    }
   }
 
   if (!global_cursor.CursorNote) {
@@ -481,7 +540,9 @@ import {
   addInterpretationLineAboveCurrentPosition,
   addLocalCommentLineAboveCurrentPosition,
   processNotationKey,
+  setEditorContentsMany,
   setInterfaceSingleNumber,
+  transposeNote,
 } from './editor.js';
 import {
   togglePlaceColoring,
@@ -851,12 +912,12 @@ export function processInterfaceKeyCommand(event) {
       break;
 
     case UpKey: // return to repertory index
-      if (event.shiftKey) {
-        if (FILEINFO['has-index'] == 'true') {
-          displayIndex(FILEINFO['location']);
-        }
-      }
-      event.preventDefault();
+      // if (event.shiftKey) {
+      //   if (FILEINFO['has-index'] == 'true') {
+      //     displayIndex(FILEINFO['location']);
+      //   }
+      // }
+      // event.preventDefault();
       break;
 
     case PgUpKey: // shift: go to previous repertory work/movement

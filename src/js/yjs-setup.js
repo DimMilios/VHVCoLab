@@ -75,7 +75,6 @@ window.addEventListener('load', () => {
 
   editor.session.doc.on('change', function(event) {
     // We need to update the collab elements when text is updating
-    console.log('Ace change event', event)
     const aw = yProvider.awareness.getLocalState();
     const item = document.querySelector(`#${aw?.cursor?.itemId}`);
     // if (item) {
@@ -93,7 +92,6 @@ window.addEventListener('load', () => {
 
   yProvider.awareness.on('change', function ({ added, updated, removed }) {
     const awarenessState = yProvider.awareness.getStates();
-    console.log(awarenessState)
     removeUnusedElements(Array.from(awarenessState.keys()));
     userListDisplay([...awarenessState.values()].map((s) => s.user.name));
 
