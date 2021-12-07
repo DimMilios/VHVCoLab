@@ -58,7 +58,6 @@ window.addEventListener('load', () => {
   insertSplashMusic();
 
   editor.getSession().selection.on('changeCursor', function () {
-    
     const { row, column } = editor.selection.getCursor();
     const item = humdrumDataNoteIntoView(row, column);
     if (item) {
@@ -73,6 +72,7 @@ window.addEventListener('load', () => {
         itemId: item.id,
         ...localState.cursor,
       });
+      yProvider.awareness.setLocalStateField('multiSelect', null);
     }
   });
 
@@ -99,7 +99,7 @@ window.addEventListener('load', () => {
     userListDisplay([...awarenessState.values()].map((s) => s.user.name));
 
     const f = (clientId) => {
-      if (clientId === yProvider.awareness.clientID) return;
+      // if (clientId === yProvider.awareness.clientID) return;
 
       const aw = awarenessState.get(clientId);
       if (aw) {
