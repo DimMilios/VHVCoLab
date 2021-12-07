@@ -127,6 +127,7 @@ export function clearSingleSelectDOM(clientId) {
 }
 
 export function updateSingleSelect(clientId, target, options) {
+  console.log('updateSingleSelect', clientId, target.id)
   updateUsersDiv(clientId, target, options);
 
   updateSingleNoteSelect(clientId, target, options);

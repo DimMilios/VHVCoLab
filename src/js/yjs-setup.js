@@ -10,7 +10,7 @@ import {
 } from './vhv-scripts/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
-import { getAceEditor } from './vhv-scripts/setup.js';
+import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 
 export let yProvider;
@@ -52,10 +52,13 @@ window.addEventListener('load', () => {
     yUndoManager,
   });
 
-  
   yProvider.awareness.setLocalStateField('user', userData);
 
-  editor.getSession().selection.on('changeCursor', function (event) {
+  // Insert an initial song to the text editor
+  insertSplashMusic();
+
+  editor.getSession().selection.on('changeCursor', function () {
+    
     const { row, column } = editor.selection.getCursor();
     const item = humdrumDataNoteIntoView(row, column);
     if (item) {
@@ -64,11 +67,11 @@ window.addEventListener('load', () => {
         text: userData.name,
         color: userData.color,
       });
-
-      const { user, cursor } = yProvider.awareness.getLocalState();
+      
+      const localState = yProvider.awareness.getLocalState();
       yProvider.awareness.setLocalStateField('cursor', {
         itemId: item.id,
-        ...cursor,
+        ...localState.cursor,
       });
     }
   });

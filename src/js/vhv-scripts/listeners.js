@@ -133,7 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var input = document.querySelector('#input');
     if (input) {
       // input.textContent = autosave;
-      setTextInEditor(autosave);
+      // HERE WE RESTORE THE UPDATED EDITOR STATE FROM LOCAL STORAGE
+      // setTextInEditor(autosave);
     }
   }
 
@@ -212,13 +213,10 @@ function extractEditorPosition(element) {
   return { id, line, field, subfield };
 }
 
-function transposeMultiSelect(provider, amount) {
-  const localState = provider.awareness.getLocalState();
-  if (!localState.multiSelect) return;
-
+function transposeMultiSelect(state, amount) {
   const notes = Array.from(
     document.querySelectorAll(
-      localState.multiSelect.map((el) => '#' + el).join(',')
+      state.multiSelect.map((el) => '#' + el).join(',')
     )
   )
     .map((note) => extractEditorPosition(note))
@@ -259,21 +257,24 @@ function processNotationKeyCommand(event) {
     return;
   }
 
-  // Transposition for multi selected notes
-  // FIX: If the global CursorNote is defined, and we then try to transpose a multi-selected area
-  // the CursorNote is re-assigned to one of the multi-selected note elements
-  if (event.code === UpKey && event.shiftKey) {
-    transposeMultiSelect(yProvider, 1);
-    return;
-  } else if (event.code === DownKey && event.shiftKey) {
-    transposeMultiSelect(yProvider, -1);
-    return;
-  } else if (event.code === UpKey && event.ctrlKey) {
-    transposeMultiSelect(yProvider, 7);
-    return;
-  } else if (event.code === DownKey && event.ctrlKey) {
-    transposeMultiSelect(yProvider, -7);
-    return;
+  const localState = yProvider.awareness.getLocalState();
+  if (localState.multiSelect) {
+    // Transposition for multi selected notes
+    // FIX: If the global CursorNote is defined, and we then try to transpose a multi-selected area
+    // the CursorNote is re-assigned to one of the multi-selected note elements
+    if (event.code === UpKey && event.shiftKey) {
+      transposeMultiSelect(localState, 1);
+      return;
+    } else if (event.code === DownKey && event.shiftKey) {
+      transposeMultiSelect(localState, -1);
+      return;
+    } else if (event.code === UpKey && event.ctrlKey) {
+      transposeMultiSelect(localState, 7);
+      return;
+    } else if (event.code === DownKey && event.ctrlKey) {
+      transposeMultiSelect(localState, -7);
+      return;
+    }
   }
 
   if (!global_cursor.CursorNote) {

@@ -56,7 +56,7 @@ export function setupAceEditor(idtag) {
     if (!configureAce) {
       // console.log('ace ready event handler called');
       setEditorModeAndKeyboard();
-      insertSplashMusic();
+      // insertSplashMusic();
     }
   });
 
@@ -157,7 +157,7 @@ import { setTextInEditor } from './misc.js';
 import { global_editorOptions, global_interface } from './global-variables.js';
 import splitter from './splitter.js';
 
-function insertSplashMusic() {
+export function insertSplashMusic() {
   var splashElement = document.querySelector('#input-splash');
   if (!splashElement) {
     return;

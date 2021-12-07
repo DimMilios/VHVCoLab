@@ -249,12 +249,14 @@ export const global_editorOptions = {
 
 export const global_cursor = {
   HIGHLIGHTQUERY: null,
-  // // used to highlight the current note at the location of the cursor.
+  // used to highlight the current note at the location of the cursor.
   CursorNote: null,
   // RestoreCursorNote: Used to go back to a highlighted note after a redraw.
   // This is an ID string rather than an element.
   RestoreCursorNote: '',
 };
+
+window.global_cursor = global_cursor;
 
 export const global_playerOptions = {
   PLAY: false,
