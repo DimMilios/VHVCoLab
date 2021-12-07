@@ -30,6 +30,56 @@ import {
 import { observeSvgContent } from './utility-svg.js';
 import { HnpMarkup } from './highlight.js';
 
+import {
+  clearContent,
+  toggleFreeze,
+  showBufferedHumdrumData,
+  displayMei,
+  displayMeiNoType,
+  displayPdf,
+  reloadData,
+  decreaseTab,
+  increaseTab,
+  toggleHumdrumCsvTsv,
+  toggleTextVisibility,
+  playCurrentMidi,
+  displayWork,
+  gotoPreviousPage,
+  gotoNextPage,
+  gotoFirstPage,
+  gotoLastPage,
+  hideRepertoryIndex,
+} from './misc.js';
+import {
+  addBarlineAboveCurrentPosition,
+  addDataLineAboveCurrentPosition,
+  addInterpretationLineAboveCurrentPosition,
+  addLocalCommentLineAboveCurrentPosition,
+  processNotationKey,
+  setEditorContentsMany,
+  setInterfaceSingleNumber,
+  transposeNotes,
+} from './editor.js';
+import {
+  togglePlaceColoring,
+  toggleAppoggiaturaColoring,
+  toggleLayerColoring,
+  goUpHarmonically,
+  goDownHarmonically,
+  goToNextNoteOrRest,
+  goToPreviousNoteOrRest,
+} from './utility-svg.js';
+import {
+  saveSvgData,
+  restoreEditorContentsLocally,
+  saveEditorContentsLocally,
+} from './buffer.js';
+import { saveEditorContents } from './saving.js';
+import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
+import { getMenu } from '../menu.js';
+import { yProvider } from '../yjs-setup.js';
+import { clearSingleSelect } from './collab-extension.js';
+
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
 
@@ -37,22 +87,9 @@ document
   .getElementById('play-button')
   ?.addEventListener('click', () => playCurrentMidi());
 
-// var HIDEINITIALTOOLBAR = false;
-// var HIDEMENUANDTOOLBAR = false;
-// var TOOLBAR = null;  // used to select the toolbar from URL toolbar parameter.
-// var LASTTOOLBAR = 1;
-// if (localStorage.LASTTOOLBAR) {
-// 	LASTTOOLBAR = parseInt(localStorage.LASTTOOLBAR);
-// }
 if (localStorage.FONT) {
   global_verovioOptions.FONT = cleanFont(localStorage.FONT);
 }
-// var PQUERY = "";
-// var IQUERY = "";
-// var RQUERY = "";
-// The search toolbar is currently the 4th one.  This variable
-// will need to be updated if that changes...
-// var SEARCHTOOLBAR = 4;
 
 //////////////////////////////
 //
@@ -175,6 +212,24 @@ function extractEditorPosition(element) {
   return { id, line, field, subfield };
 }
 
+function transposeMultiSelect(provider, amount) {
+  const localState = provider.awareness.getLocalState();
+  if (!localState.multiSelect) return;
+
+  const notes = Array.from(
+    document.querySelectorAll(
+      localState.multiSelect.map((el) => '#' + el).join(',')
+    )
+  )
+    .map((note) => extractEditorPosition(note))
+    .filter(Boolean)
+    .map((note) => ({ ...note, amount }));
+
+  const transposedNotes = transposeNotes(notes);
+  setEditorContentsMany(transposedNotes);
+  return transposedNotes;
+}
+
 //////////////////////////////
 //
 // keydown event listener -- Notation editor listener.
@@ -204,22 +259,21 @@ function processNotationKeyCommand(event) {
     return;
   }
 
-  // Transpose up all multi selected notes
+  // Transposition for multi selected notes
+  // FIX: If the global CursorNote is defined, and we then try to transpose a multi-selected area
+  // the CursorNote is re-assigned to one of the multi-selected note elements
   if (event.code === UpKey && event.shiftKey) {
-    const localState = yProvider.awareness.getLocalState();
-    console.log({localState});
-    if (localState.multiSelect) {
-      const elements = document.querySelectorAll(
-        localState.multiSelect.map((el) => '#' + el).join(',')
-      );
-      const notes = Array.from(elements)
-        .map((note) => extractEditorPosition(note))
-        .map((note) =>
-          transposeNote(note.id, note.line, note.field, note.subfield, +1)
-        );
-      console.log(notes);
-      setEditorContentsMany(notes);
-    }
+    transposeMultiSelect(yProvider, 1);
+    return;
+  } else if (event.code === DownKey && event.shiftKey) {
+    transposeMultiSelect(yProvider, -1);
+    return;
+  } else if (event.code === UpKey && event.ctrlKey) {
+    transposeMultiSelect(yProvider, 7);
+    return;
+  } else if (event.code === DownKey && event.ctrlKey) {
+    transposeMultiSelect(yProvider, -7);
+    return;
   }
 
   if (!global_cursor.CursorNote) {
@@ -513,56 +567,6 @@ function processNotationKeyCommand(event) {
 //
 // keydown event listener -- Interface control listener.
 //
-import {
-  clearContent,
-  toggleFreeze,
-  showBufferedHumdrumData,
-  displayMei,
-  displayMeiNoType,
-  displayPdf,
-  reloadData,
-  decreaseTab,
-  increaseTab,
-  toggleHumdrumCsvTsv,
-  toggleTextVisibility,
-  playCurrentMidi,
-  displayIndex,
-  displayWork,
-  gotoPreviousPage,
-  gotoNextPage,
-  gotoFirstPage,
-  gotoLastPage,
-  hideRepertoryIndex,
-} from './misc.js';
-import {
-  addBarlineAboveCurrentPosition,
-  addDataLineAboveCurrentPosition,
-  addInterpretationLineAboveCurrentPosition,
-  addLocalCommentLineAboveCurrentPosition,
-  processNotationKey,
-  setEditorContentsMany,
-  setInterfaceSingleNumber,
-  transposeNote,
-} from './editor.js';
-import {
-  togglePlaceColoring,
-  toggleAppoggiaturaColoring,
-  toggleLayerColoring,
-  goUpHarmonically,
-  goDownHarmonically,
-  goToNextNoteOrRest,
-  goToPreviousNoteOrRest,
-} from './utility-svg.js';
-import {
-  saveSvgData,
-  restoreEditorContentsLocally,
-  saveEditorContentsLocally,
-} from './buffer.js';
-import { saveEditorContents } from './saving.js';
-import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
-import { getMenu } from '../menu.js';
-import { yProvider } from '../yjs-setup.js';
-import { clearSingleSelect, removeUnusedElements } from './collab-extension.js';
 
 export function processInterfaceKeyCommand(event) {
   if (!event.preventDefault) {

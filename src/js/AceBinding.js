@@ -99,7 +99,6 @@ export default class AceBinding {
     type.observe(this._typeObserver);
 
     this._aceObserver = (eventType, delta) => {
-      console.log('Ace editor', {delta, eventType});
       const aceDocument = this.ace.getSession().getDocument();
       mux(() => {
         this.type.doc.transact(() => {
@@ -173,10 +172,7 @@ export default class AceBinding {
       const aw = /** @type {any} */ (this.awareness.getLocalState());
       if (curSel === null) {
         if (this.awareness.getLocalState() !== null) {
-          this.awareness.setLocalStateField(
-            'cursor',
-                        /** @type {any} */(null)
-          );
+          this.awareness.setLocalStateField('cursor',/** @type {any} */(null));
         }
       } else {
         if (!aw ||

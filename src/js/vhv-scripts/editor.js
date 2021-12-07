@@ -1638,7 +1638,6 @@ function deleteStemMarker(id, line, field) {
 //
 
 export function transposeNote(id, line, field, subfield, amount) {
-  // console.log("TRANSPOSE Note", line, field, subfield, id);
   // console.log('TRANSPOSE Note', { line, column: field, subfield, noteId: id });
   var token = getEditorContents(line, field);
 
@@ -1687,9 +1686,7 @@ export function transposeNote(id, line, field, subfield, amount) {
   if (newtoken !== token) {
     global_cursor.RestoreCursorNote = id;
     global_cursor.HIGHLIGHTQUERY = id;
-    // setEditorContents(line, field, newtoken, id);
-
-    return { line, field, token: newtoken, id };
+    setEditorContents(line, field, newtoken, id);
 
     // let shouldUpdate = window.confirm('Include value?');
     // if (shouldUpdate) {
@@ -1699,60 +1696,47 @@ export function transposeNote(id, line, field, subfield, amount) {
   }
 }
 
-// function transposeNote(id, line, field, subfield, amount)  {
-// 	// console.log("TRANSPOSE Note", line, field, subfield, id);
-// 	console.log("TRANSPOSE Note", {line, column: field, subfield, noteId:id});
-// 	var token = getEditorContents(line, field);
-
-// 	amount = parseInt(amount);
-// 	var target = InterfaceSingleNumber;
-// 	if (!target) {
-// 		target = 1;
-// 	}
-
-// 	if (target > 1) {
-// 		if (amount > 0) {
-// 			amount = target - 1;
-// 		} else {
-// 			amount = -target + 1;
-// 		}
-// 		InterfaceSingleNumber = 0;
-// 	}
-
-// 	if (subfield) {
-// 		var subtokens = token.split(" ");
-// 		token = subtokens[subfield-1];
-// 	}
-
-// 	if ((token === ".") || (token[0] == "!") || (token[0] == "*")) {
-// 		return;
-// 	}
-// 	if (token.match("r")) {
-// 		// rest, which does not need/have a natural
-// 		return;
-// 	}
-
-// 	var newtoken;
-// 	var matches;
-// 	if (matches = token.match(/([^a-gA-G]*)([a-gA-G]+)([^a-gA-G]*)/)) {
-// 		newtoken = matches[1];
-// 		newtoken += transposeDiatonic(matches[2], amount);
-// 		newtoken += matches[3];
-
-// 	}
-
-// 	if (subfield) {
-// 		subtokens[subfield-1] = newtoken;
-// 		newtoken = subtokens.join(" ");
-// 	}
-
-// 	console.log("OLDTOKEN", token, "NEWTOKEN", newtoken);
-// 	if (newtoken !== token) {
-// 		global_cursor.RestoreCursorNote = id;
-// 	global_cursor.HIGHLIGHTQUERY = id;
-// 		setEditorContents(line, field, newtoken, id);
-// 	}
-// }
+// id, line, field, subfield, amount
+export function transposeNotes(noteDescriptions) {
+  const transposedNotes = [];
+  for (let { id, line, field, subfield, amount }  of noteDescriptions) {
+    let token = getEditorContents(line, field);
+    amount = parseInt(amount);
+  
+    let subtokens;
+    if (subfield) {
+      subtokens = token.split(' ');
+      token = subtokens[subfield - 1];
+    }
+  
+    if (token === '.' || token[0] == '!' || token[0] == '*') {
+      continue;
+    }
+    if (token.match('r')) {
+      // rest, which does not need/have a natural
+      continue;
+    }
+  
+    let newtoken;
+    let matches;
+    if ((matches = token.match(/([^a-gA-G]*)([a-gA-G]+)([^a-gA-G]*)/))) {
+      newtoken = matches[1];
+      newtoken += transposeDiatonic(matches[2], amount);
+      newtoken += matches[3];
+    }
+  
+    if (subfield) {
+      subtokens[subfield - 1] = newtoken;
+      newtoken = subtokens.join(' ');
+    }
+  
+    // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
+    if (newtoken !== token) {
+      transposedNotes.push({ line, field, token: newtoken, id });
+    }
+  }
+  return transposedNotes;
+}
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -3044,11 +3028,7 @@ function setEditorContents2(line, field, token, id) {
     }
   }
 
-  // return { range, newlinecontent };
-
   editor.session.replace(range, newlinecontent);
-  // editor.gotoLine(line, column + 1);
-
 }
 
 export function setEditorContentsMany(notes) {
