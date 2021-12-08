@@ -1,6 +1,7 @@
 import { userData, yProvider } from '../yjs-setup.js';
 import { getAceEditor } from './setup.js';
 import { RubberBandSelection } from './util-collab.js';
+import { transposeNote } from './editor.js';
 
 const MULTI_SELECT_ALPHA = 0.3;
 
@@ -127,7 +128,6 @@ export function clearSingleSelectDOM(clientId) {
 }
 
 export function updateSingleSelect(clientId, target, options) {
-  console.log('updateSingleSelect', clientId, target.id)
   updateUsersDiv(clientId, target, options);
 
   updateSingleNoteSelect(clientId, target, options);
@@ -614,7 +614,7 @@ function makeDraggable(svgElem) {
     transform = transforms.getItem(0);
     offset.x -= transform.matrix.e;
     offset.y -= transform.matrix.f;
-}
+  }
 
   function startDrag(event) {
     if (event.target.classList.contains('draggable-svg')) {
@@ -624,8 +624,15 @@ function makeDraggable(svgElem) {
       selectedElem = event.target.closest('.draggable-group-svg');
       // console.log('Draggable group set:', selectedElem)
       initialiseDragging(event);
+
+      transposeAmount = 0;
     }
   }
+
+  let prevPositionY;
+  let movementY;
+  let transposeAmount;
+  let position = {};
 
   // TODO: use requestAnimationFrame
   function drag(event) {
@@ -634,15 +641,80 @@ function makeDraggable(svgElem) {
 
       const coords = getMousePosition(event);
       // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
+
+      movementY = coords.y - offset.y;
+
+      const noteElem = selectedElem?.querySelector('.note');
+      if (noteElem) {
+        position = extractEditorPosition(noteElem);
+        if (prevPositionY > movementY) {
+          transposeAmount += 0.3;
+        } else if (prevPositionY < movementY) {
+          transposeAmount -= 0.3;
+        }
+        // console.log(position, {transposeAmount});
+      }
       
       // Allow vertical movement only
-      transform.setTranslate(transform.matrix.e, coords.y - offset.y);
+      transform.setTranslate(transform.matrix.e, movementY);
+      prevPositionY = movementY;
     }
   }
-
+  
+  // Highest note: cccc
+  // Lowest note: AAAA
   function endDrag(event) {
+    if (transposeAmount != 0) {
+      console.log(position, {transposeAmount});
+      // All notes for a piano: 88
+      // module the transposition amount with 44 (factor in negative values -
+      // moving below the note's current position)
+      transposeNote(position.id, position.line, position.field, position.subfield, Math.floor(transposeAmount) % 44);
+    }
     selectedElem = null;
   }
+}
+
+function extractEditorPosition(element) {
+  let noteElem = document.querySelector(`#${element.dataset.refElem}`);
+  var id = noteElem.id;
+  var matches;
+
+  if ((matches = id.match(/L(\d+)/))) {
+    var line = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/F(\d+)/))) {
+    var field = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/S(\d+)/))) {
+    var subfield = parseInt(matches[1]);
+  } else {
+    subfield = null;
+  }
+
+  if ((matches = id.match(/N(\d+)/))) {
+    var number = parseInt(matches[1]);
+  } else {
+    number = 1;
+  }
+
+  if ((matches = id.match(/^([a-z]+)-/))) {
+    var name = matches[1];
+  } else {
+    return; // required
+  }
+
+  if (line < 1 || field < 1) {
+    return;
+  }
+
+  return { id, line, field, subfield };
 }
 
 window.collabLayer = {

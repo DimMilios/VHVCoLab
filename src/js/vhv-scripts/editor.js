@@ -2938,7 +2938,7 @@ function toggleVisibility(id, line, field) {
 // setEditorContents --
 //
 
-function setEditorContents(line, field, token, id, dontredraw) {
+export function setEditorContents(line, field, token, id, dontredraw) {
   var freezeBackup = global_interface.FreezeRendering;
   if (global_interface.FreezeRendering == false) {
     global_interface.FreezeRendering = true;
@@ -2983,12 +2983,12 @@ function setEditorContents(line, field, token, id, dontredraw) {
     column += components[i].length;
     column += tabs[i].length;
   }
-  global_editorOptions.EDITINGID = id;
+  // global_editorOptions.EDITINGID = id;
 
   editor.session.replace(range, newlinecontent);
-  editor.gotoLine(line, column + 1);
+  // editor.gotoLine(line, column + 1);
 
-  global_cursor.RestoreCursorNote = id;
+  // global_cursor.RestoreCursorNote = id;
   global_interface.FreezeRendering = freezeBackup;
   if (!dontredraw) {
     displayNotation();
@@ -3043,7 +3043,7 @@ export function setEditorContentsMany(notes) {
 // getEditorContents -- Allow subtokens perhaps.
 //
 
-function getEditorContents(line, field) {
+export function getEditorContents(line, field) {
   var token = '';
 
   var linecontent = editor.session.getLine(line - 1);
