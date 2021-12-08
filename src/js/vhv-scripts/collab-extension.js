@@ -2,6 +2,7 @@ import { userData, yProvider } from '../yjs-setup.js';
 import { getAceEditor } from './setup.js';
 import { RubberBandSelection } from './util-collab.js';
 import { transposeNote } from './editor.js';
+import { global_cursor } from './global-variables.js';
 
 const MULTI_SELECT_ALPHA = 0.3;
 
@@ -564,9 +565,10 @@ function createSVGCollabLayer(parentElem) {
 }
 
 function bootstrap() {
-  const clc = createSVGCollabLayer(document.getElementById('output'));
-  clc.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
-  makeDraggable(clc);
+  const collabLayer = createSVGCollabLayer(document.getElementById('output'));
+  // collabLayer.firstElementChild.appendChild(copySVGElement(global_cursor.CursorNote, true));
+  collabLayer.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
+  makeDraggable(collabLayer);
 
   // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
   // rect.setAttributeNS(null, 'width', '100');
@@ -653,6 +655,7 @@ function makeDraggable(svgElem) {
           transposeAmount -= 0.3;
         }
         // console.log(position, {transposeAmount});
+        document.querySelector(`#${noteElem.dataset.refElem}`).style.opacity = 0;
       }
       
       // Allow vertical movement only
