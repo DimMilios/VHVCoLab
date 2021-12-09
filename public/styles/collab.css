@@ -52,7 +52,8 @@
   z-index: var(--collab-layer-zIndex);
   opacity: 0.2;
 
-  cursor: pointer;
+  /* cursor: pointer; */
+  pointer-events: none;
 }
 
 #output > svg {

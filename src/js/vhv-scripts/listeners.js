@@ -160,6 +160,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   body.addEventListener('dblclick', function (event) {
     console.log('DOUBLE CLICK');
+    if (inSvgImage(event.target)) {
+      // dataIntoView(event);
+      console.log('DOUBLE CLICK in SVG')
+    }
   });
 
   window.addEventListener('keydown', processNotationKeyCommand, true);

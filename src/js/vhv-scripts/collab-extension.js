@@ -167,7 +167,7 @@ function updateSingleNoteSelect(clientId, target, options) {
   if (!select) {
     select = document.createElement('div');
     select.setAttribute('class', 'single-note-select');
-    select.addEventListener('click', handleSingleNoteSelectClick(noteSelects));
+    // select.addEventListener('click', handleSingleNoteSelectClick(noteSelects));
     document.body.appendChild(select);
   }
   select.dataset.noteId = target.id;
