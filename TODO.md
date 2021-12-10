@@ -29,7 +29,8 @@
       g.measure
         g.staff
           g.layer
-            g.note
+            g.chord (optional)
+              g.note
     ```
 - [x] Draw a username (maybe part of the `uuid`) above a note instead of the currently connected users selecting on that note number.
 - [] The elements displaying note element position information for users isn't being updated when scrolling, since they are positioned with: `position: absolute`.

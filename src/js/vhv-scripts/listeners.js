@@ -78,7 +78,7 @@ import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
 import { yProvider } from '../yjs-setup.js';
-import { clearSingleSelect } from './collab-extension.js';
+import { clearSingleSelect, updateSingleSelect } from './collab-extension.js';
 
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
@@ -158,11 +158,170 @@ document.addEventListener('DOMContentLoaded', function () {
       dataIntoView(event);
     }
   });
+
+  // https://kentcdodds.com/blog/implementing-a-simple-state-machine-library-in-javascript
+  // state: none, note, chord?, layer
+  function createMachine(stateMachineDefinition) {
+    const machine = {
+      value: stateMachineDefinition.initialState,
+      transition(currentState, event) {
+        const currentStateDefinition = stateMachineDefinition[currentState]
+        const destinationTransition = currentStateDefinition.transitions[event]
+        if (!destinationTransition) {
+          return
+        }
+
+        let destinationState;
+        if (Array.isArray(destinationTransition.target)) {
+          const keys = Object.keys(stateMachineDefinition);
+          destinationState = destinationTransition.target.find(t => keys.includes(t))
+        } else {
+          destinationState = destinationTransition.target
+        }
+        // const destinationState = destinationTransition.target
+        
+        const destinationStateDefinition =
+          stateMachineDefinition[destinationState]
+  
+        destinationTransition.action()
+        currentStateDefinition.actions.onExit()
+        destinationStateDefinition.actions.onEnter()
+  
+        machine.value = destinationState
+  
+        return machine.value
+      },
+    }
+    return machine
+  }
+
+  const machine = createMachine({
+    initialState: 'none',
+    none: {
+      actions: {
+        onEnter() {
+          console.log('none: onEnter')
+        },
+        onExit() {
+          console.log('none: onExit')
+        },
+      },
+      transitions: {
+        switch: {
+          target: 'note',
+          action() {
+            console.log('transition action for "switch" in "none" state')
+          },
+        },
+      },
+    },
+    note: {
+      actions: {
+        onEnter() {
+          console.log('note: onEnter')
+        },
+        onExit() {
+          console.log('note: onExit')
+        },
+      },
+      transitions: {
+        switch: {
+          target: ['chord', 'layer'], // TODO: add optional state chord later
+          action() {
+            console.log('transition action for "switch" in "note" state')
+          },
+        },
+      },
+    },
+    chord: {
+      actions: {
+        onEnter() {
+          console.log('chord: onEnter')
+        },
+        onExit() {
+          console.log('chord: onExit')
+        },
+      },
+      transitions: {
+        switch: {
+          target: 'layer',
+          action() {
+            console.log('transition action for "switch" in "chord" state')
+          },
+        },
+      },
+    },
+    layer: {
+      actions: {
+        onEnter() {
+          console.log('layer: onEnter')
+        },
+        onExit() {
+          console.log('layer: onExit')
+        },
+      },
+      transitions: {
+        switch: {
+          target: 'note',
+          action() {
+            console.log('transition action for "switch" in "layer" state')
+          },
+        },
+      },
+    },
+  })
+
+  let target;
+  let originalNote;
+  function humdrumDataIntoView(event) {
+    if (!target) {
+      if (typeof event === 'string') {
+        target = document.querySelector('#' + event);
+      } else {
+        target = event.target;
+      }
+    }
+
+    while (target) {
+      if (!target.id) {
+        target = target.parentNode;
+        continue;
+      }
+      break;
+    }
+    
+    if (target.id.match(/^note/)) {
+      originalNote = target;
+      console.log('[note]Original note set to:', originalNote);
+      target = target.closest('.chord');
+      if (!target) {
+        target = originalNote.closest('.layer');
+      }
+      console.log('[note]Target set to:', target.id);
+    } else if (target.id.match(/^chord/)) {
+      target = target.closest('.layer');
+      console.log('[chord]Target set to:', target.id);
+    } else if (target.id.match(/^layer/)) {
+      target = originalNote;
+      console.log('[layer]Target set to:', target.id);
+    } 
+      
+    // global_cursor.HIGHLIGHTQUERY = current.id;
+    // break;
+
+    let { user } = yProvider.awareness.getLocalState();
+    updateSingleSelect(yProvider.awareness.clientID, target, { text: user.name, color: user.color });
+  }
+
   body.addEventListener('dblclick', function (event) {
     console.log('DOUBLE CLICK');
     if (inSvgImage(event.target)) {
+      if (event.detail) {
+
+      }
       // dataIntoView(event);
-      console.log('DOUBLE CLICK in SVG')
+      humdrumDataIntoView(event);
+      // console.log('DOUBLE CLICK in SVG', event.target?.id);
     }
   });
 

@@ -162,7 +162,6 @@ function updateSingleNoteSelect(clientId, target, options) {
   const noteSelects = Array.from(
     document.querySelectorAll('.single-note-select')
   );
-  // let select = noteSelects.find(s => s.dataset.noteId === target.id);
   let select = noteSelects.find((s) => s.dataset.clientId == clientId);
   if (!select) {
     select = document.createElement('div');
