@@ -1,4 +1,4 @@
-# Todos
+# Todos 
 
 ## Svg Interaction
 - Click listener interaction:
@@ -131,3 +131,20 @@ The wasm verovio toolkit script `scripts/local/verovio-toolkit-wasm.js` has to b
 
 ### Dynamic imports
 Right now we load pretty much everything in the `public/` directory on page load. There are scripts that are not needed from the start (or might not be needed at all), like `pdfkit` with its fonts or `FileSaver`. We could introduce dynamic importing for these if and whenever it's needed.
+
+## Priority (10/12/2021)
+- Check for ways to test how accurate or lossy the `humdrum/kern` to `MusicXML` conversions are
+  - Use the lilypond `MusicXML` unofficial test suite?
+  - The testing process could be:
+    - Get a `MusicXML` file
+    - Convert it to `Humdrum/kern`. Conversion happens in the method `verovioCalls.filterData` located: `public/scripts/local/verovio-calls.js`
+    - Check if conversion produced any errors (could use the `humdrumValidator` found in `public/scripts/local/humdrumValidator.js`)
+    - We could then test either of these:
+      1. If the structure of the `SVG` rendered by `Verovio` is as expected (we'll need to write the `DOM` elements by hand, or render them "normally" through `VHV`)
+      2. If the structure of the `Humdrum/kern` that was converted by `Verovio` is as expected (we'll have to write the output `kern` files for the existing `MusicXML` test files)
+- Some problematic tests after running the tests manually
+  - `23a-Tuplets.xml`
+  - `23b-Tuplets-Styles.xml`
+  - `23c-Tuplet-Display-NonStandard.xml`
+  - `31c-MetronomeMarks.xml`
+  - `74a-FiguredBass.xml` - Humdrum error
