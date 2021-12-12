@@ -112,7 +112,7 @@ window.addEventListener('load', () => {
             color: aw.user.color,
           });
         } else {
-          // clearSingleSelectDOM(clientId);
+          clearSingleSelectDOM(clientId);
         }
       }
     };

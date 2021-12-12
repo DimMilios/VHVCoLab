@@ -107,12 +107,10 @@ function parseQuarterTime(quarterTime) {
 }
 
 export function clearSingleSelect() {
-  const aw = yProvider.awareness.getStates();
-  const localState = aw.get(yProvider.awareness.clientID);
-  const {itemId, ...cursor} = localState.cursor;
-  yProvider.awareness.setLocalStateField('cursor', cursor);
-  console.log('removing', yProvider.awareness.clientID);
-  clearSingleSelectDOM(yProvider.awareness.clientID);
+  const aw = yProvider.awareness;
+  const localState = aw.getLocalState();
+  aw.setLocalStateField('cursor', { ...localState.cursor, itemId: null });
+  clearSingleSelectDOM(aw.clientID);
   
   const editor = getAceEditor();
   editor?.session?.selection?.moveCursorFileStart();
