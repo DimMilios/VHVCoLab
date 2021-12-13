@@ -155,23 +155,18 @@ document.addEventListener('DOMContentLoaded', function () {
   var body = document.querySelector('body');
 
   const selectService = interpret(selectMachine).onTransition((state) => {
-    // console.log('State changed:', state.value, state.context);
+    console.log('State changed:', state.value, state.context);
 
-    // if (!yProvider) return;
+    if (!yProvider) return;
 
-    // let { user, cursor } = yProvider.awareness.getLocalState();
-    // if (state.context?.elemId.length > 0) {
-    //   let target = document.getElementById(state.context.elemId);
-    //   updateSingleSelect(yProvider.awareness.clientID, target, {
-    //     text: user.name,
-    //     color: user.color,
-    //   });
-    //   yProvider.awareness.setLocalStateField('cursor', { ...cursor, itemId: target.id });
-    //   return;
-    // }
+    let { user, cursor } = yProvider.awareness.getLocalState();
+    if (state.context?.elemId.length > 0) {
+      let target = document.getElementById(state.context.elemId);
+      yProvider.awareness.setLocalStateField('cursor', { ...cursor, itemId: target.id });
+      return;
+    }
 
-    // yProvider.awareness.setLocalStateField('cursor', { ...cursor, itemId: null });
-    // clearSingleSelectDOM(yProvider.awareness.clientID);
+    yProvider.awareness.setLocalStateField('cursor', { ...cursor, itemId: null });
   });
 
   window.selectService = selectService;
