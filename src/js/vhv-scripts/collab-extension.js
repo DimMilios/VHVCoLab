@@ -2,6 +2,7 @@ import { userData, yProvider } from '../yjs-setup.js';
 import { getAceEditor } from './setup.js';
 import { RubberBandSelection } from './util-collab.js';
 import { transposeNote } from './editor.js';
+import { html, render } from 'lit-html';
 
 const MULTI_SELECT_ALPHA = 0.3;
 
@@ -207,6 +208,33 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
     elem.classList.add('expanded');
   };
 }
+
+export function updateHandler({ added, updated, removed }) {
+  render(
+    html`${Array.from(yProvider.awareness.getStates().entries())
+      .filter(([_, state]) => state?.cursor?.itemId != null && state?.user?.color != null)
+      .map(([clientId, state]) =>
+        singleSelectTemplate(clientId, state.cursor.itemId, state.user.color)
+      )}`,
+    document.body
+  );
+}
+
+let collabTemplate = html`<div class="collab-container"></div>`;
+
+export let singleSelectTemplate = (clientId, elemRefId, color) => {
+  const { staffY, targetX, targetBounds } = getCoordinates(document.getElementById(elemRefId));
+  return html`<div
+    class="single-select"
+    style="transform: translate(${targetX}px, ${staffY}px); width: ${Math.abs(
+      targetX - targetBounds.right
+    )}px; height: ${Math.abs(staffY - targetBounds.bottom)}px; background-color: ${color}"
+    data-client-id=${clientId}
+    data-ref-id=${elemRefId}
+  ></div>`;
+};
+
+let multiSelectTemplate = (clientId) => html`<div class="multi-select" data-client-id=${clientId}></div>`;
 
 function getCoordinates(target) {
   const targetBounds = target.getBoundingClientRect();

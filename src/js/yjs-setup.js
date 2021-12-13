@@ -7,11 +7,14 @@ import {
   removeUnusedElements,
   userListDisplay,
   clearSingleSelectDOM,
+  singleSelectTemplate,
+  updateHandler,
 } from './vhv-scripts/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
+import { render } from 'lit-html';
 
 export let yProvider;
 
@@ -62,10 +65,11 @@ window.addEventListener('load', () => {
     const item = humdrumDataNoteIntoView(row, column);
     if (item) {
       markItem(item);
-      updateSingleSelect(yProvider.awareness.clientID, item, {
-        text: userData.name,
-        color: userData.color,
-      });
+      render(singleSelectTemplate(yProvider.awareness.clientID, item.id, userData.color), document.body);
+      // updateSingleSelect(yProvider.awareness.clientID, item, {
+      //   text: userData.name,
+      //   color: userData.color,
+      // });
       
       const localState = yProvider.awareness.getLocalState();
       yProvider.awareness.setLocalStateField('cursor', {
@@ -93,34 +97,36 @@ window.addEventListener('load', () => {
     
   })
 
-  yProvider.awareness.on('change', function ({ added, updated, removed }) {
-    const awarenessState = yProvider.awareness.getStates();
-    removeUnusedElements(Array.from(awarenessState.keys()));
-    userListDisplay([...awarenessState.values()].map((s) => s.user.name));
+  yProvider.awareness.on('change', updateHandler);
 
-    const f = (clientId) => {
-      // if (clientId === yProvider.awareness.clientID) return;
+  // yProvider.awareness.on('change', function ({ added, updated, removed }) {
+  //   const awarenessState = yProvider.awareness.getStates();
+  //   removeUnusedElements(Array.from(awarenessState.keys()));
+  //   userListDisplay([...awarenessState.values()].map((s) => s.user.name));
 
-      const aw = awarenessState.get(clientId);
-      if (aw) {
-        updateMultiSelect({ clientId, ...aw }, aw?.multiSelect);
+  //   const f = (clientId) => {
+  //     // if (clientId === yProvider.awareness.clientID) return;
 
-        const item = document.querySelector(`#${aw?.cursor?.itemId}`);
-        if (item) {
-          updateSingleSelect(clientId, item, {
-            text: aw.user.name,
-            color: aw.user.color,
-          });
-        } else {
-          clearSingleSelectDOM(clientId);
-        }
-      }
-    };
+  //     const aw = awarenessState.get(clientId);
+  //     if (aw) {
+  //       updateMultiSelect({ clientId, ...aw }, aw?.multiSelect);
 
-    added.forEach(f);
-    updated.forEach(f);
-    removed.forEach(f);
-  });
+  //       const item = document.querySelector(`#${aw?.cursor?.itemId}`);
+  //       if (item) {
+  //         updateSingleSelect(clientId, item, {
+  //           text: aw.user.name,
+  //           color: aw.user.color,
+  //         });
+  //       } else {
+  //         clearSingleSelectDOM(clientId);
+  //       }
+  //     }
+  //   };
+
+  //   added.forEach(f);
+  //   updated.forEach(f);
+  //   removed.forEach(f);
+  // });
 
   window.example = { yProvider, ydoc, type };
 });

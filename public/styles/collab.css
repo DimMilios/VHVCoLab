@@ -2,6 +2,25 @@
   --collab-layer-zIndex: 900;
 }
 
+.collab-container {
+  position: absolute;
+
+  z-index: var(--collab-layer-zIndex);
+
+}
+
+.single-select {
+  position: absolute;
+  z-index: var(--collab-layer-zIndex);
+  opacity: 0.2;
+
+  pointer-events: none;
+}
+
+
+
+
+
 .users-div {
   position: absolute;
   z-index: var(--collab-layer-zIndex);
