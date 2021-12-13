@@ -15,6 +15,7 @@ export const selectMachine = createMachine({
   },
   states: {
     idle: {
+      id: 'idleState',
       on: {
         SELECT: {
           target: 'noteSelected',
@@ -43,6 +44,12 @@ export const selectMachine = createMachine({
             }),
           },
         ],
+        RESET: { 
+          target: 'idle',
+          actions: assign({
+            elemId: (_, __) => ''
+          })
+        }
       },
     },
     chordSelected: {
@@ -53,9 +60,16 @@ export const selectMachine = createMachine({
             elemId: setElemId('layer'),
           }),
         },
+        RESET: { 
+          target: 'idle',
+          actions: assign({
+            elemId: (_, __) => ''
+          })
+        }
       },
     },
     layerSelected: {
+      id: 'layer',
       on: {
         SELECT: {
           target: 'idle',
@@ -63,6 +77,12 @@ export const selectMachine = createMachine({
             elemId: (context, event) => '',
           }),
         },
+        RESET: { 
+          target: 'idle',
+          actions: assign({
+            elemId: (_, __) => ''
+          })
+        }
       },
     },
   },

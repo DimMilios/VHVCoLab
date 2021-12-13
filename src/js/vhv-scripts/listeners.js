@@ -157,6 +157,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const selectService = interpret(selectMachine).onTransition((state) => {
     console.log('State changed:', state.value, state.context);
 
+    if (!yProvider) return;
+
     let { user, cursor } = yProvider.awareness.getLocalState();
     if (state.context?.elemId.length > 0) {
       let target = document.getElementById(state.context.elemId);
@@ -173,16 +175,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   window.selectService = selectService;
+  window.selectMachine = selectMachine;
 
+  selectService.start();
   body.addEventListener('click', function (event) {
-    selectService.start();
 
     // turnOffAllHighlights();
     // console.log("SINGLE CLICK");
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
-      if (target?.id) {
+      if (target?.id && target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)) {
         selectService.send({ type: 'SELECT', elemId: target.id});
+      } else {
+        selectService.send({ type: 'RESET' });
       }
       dataIntoView(event);
     }
