@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
       if (target?.id && target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)) {
-        selectService.send({ type: 'SELECT', elemId: target.id});
+        selectService.send({ type: 'SELECT', elemId: target.id });
       } else {
         selectService.send({ type: 'RESET' });
       }

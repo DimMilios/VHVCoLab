@@ -2,7 +2,6 @@ import { userData, yProvider } from '../yjs-setup.js';
 import { getAceEditor } from './setup.js';
 import { RubberBandSelection } from './util-collab.js';
 import { transposeNote } from './editor.js';
-import { global_cursor } from './global-variables.js';
 
 const MULTI_SELECT_ALPHA = 0.3;
 
