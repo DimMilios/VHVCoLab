@@ -210,20 +210,48 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
 }
 
 export function updateHandler({ added, updated, removed }) {
-  render(
-    html`${Array.from(yProvider.awareness.getStates().entries())
-      .filter(([_, state]) => state?.cursor?.itemId != null && state?.user?.color != null)
-      .map(([clientId, state]) =>
-        singleSelectTemplate(clientId, state.cursor.itemId, state.user.color)
-      )}`,
-    document.body
-  );
+  console.log(yProvider.awareness.getStates());
+
+  let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
+    .filter(([_, state]) => state.multiSelect != null && state?.user?.color != null)
+    .map(([clientId, state]) => multiSelectTemplate(clientId, state.multiSelect, state.user.color))
+  }`;
+
+  let singleSelects = html`${Array.from(yProvider.awareness.getStates().entries())
+    .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.color != null)
+    .map(([clientId, state]) =>
+      singleSelectTemplate(clientId, state.singleSelect.elemId, state.user.color)
+    )}`;
+  
+  let userAwareness = html`${Array.from(yProvider.awareness.getStates().entries())
+    .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.name != null)
+    .map(([clientId, state]) =>
+      userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
+    )}`;
+
+  render(collabTemplate(multiSelects, singleSelects, userAwareness), document.body);
 }
 
-let collabTemplate = html`<div class="collab-container"></div>`;
+let collabTemplate = (...children) => html`<div class="collab-container">${children}</div>`;
 
-export let singleSelectTemplate = (clientId, elemRefId, color) => {
-  const { staffY, targetX, targetBounds } = getCoordinates(document.getElementById(elemRefId));
+let userAwarenessTemplate = (clientId, elemRefId, name) => {
+  let el = document.getElementById(elemRefId);
+  if (!el) return html`<div class="users-div"></div>`;
+  
+  const { staffY, targetX } = getCoordinates(el);
+  return html`<div
+    class="users-div"
+    style="transform: translate(${targetX}px, ${staffY - 25}px)"
+    data-client-id=${clientId}
+    data-ref-id=${elemRefId}
+  >${name}</div>`;
+}
+
+let singleSelectTemplate = (clientId, elemRefId, color) => {
+  let el = document.getElementById(elemRefId);
+  if (!el) return html`<div class="single-select"></div>`;
+
+  const { staffY, targetX, targetBounds } = getCoordinates(el);
   return html`<div
     class="single-select"
     style="transform: translate(${targetX}px, ${staffY}px); width: ${Math.abs(
@@ -234,7 +262,21 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
   ></div>`;
 };
 
-let multiSelectTemplate = (clientId) => html`<div class="multi-select" data-client-id=${clientId}></div>`;
+let multiSelectTemplate = (clientId, selectedNotes, color) => {
+  const selector = selectedNotes.map((id) => '#' + id).join(',');
+  const coords = calculateMultiSelectCoords(
+    Array.from(document.querySelectorAll(selector))
+  );
+
+  return html`<div
+    class="multi-select-area"
+    style="transform: translate(${coords.left}px, ${coords.top}px); width: ${coords.width}px; height:${coords.height}px; background-color: ${hexToRgbA(
+      color,
+      MULTI_SELECT_ALPHA
+    ) ?? 'rgba(0, 0, 255, 0.09)'};"
+    data-client-id=${clientId}
+  ></div>`;
+};
 
 function getCoordinates(target) {
   const targetBounds = target.getBoundingClientRect();
@@ -293,7 +335,6 @@ window.addEventListener('DOMContentLoaded', () => {
 function addListenersToOutput(outputTarget) {
   let startTime, endTime;
   let shouldMultiSelect = false;
-
   const rbSelection = new RubberBandSelection();
 
   outputTarget.addEventListener('mousedown', (event) => {
@@ -313,7 +354,7 @@ function addListenersToOutput(outputTarget) {
     );
     if (selectToRemove) {
       yProvider.awareness.setLocalStateField('multiSelect', null);
-      selectToRemove?.remove();
+      // selectToRemove?.remove();
     }
   });
 
@@ -335,40 +376,17 @@ function addListenersToOutput(outputTarget) {
     }
   });
 
-  document.addEventListener(
-    'mouseup',
-    handleMouseUp(yProvider.awareness, userData.color)
-  );
+  document.addEventListener('mouseup', handleMouseUp(yProvider.awareness));
 
-  function handleMouseUp(awareness, color) {
+  function handleMouseUp(awareness) {
     return () => {
       rbSelection.reCalculateCoords();
       rbSelection.isSelecting = false;
 
       if (shouldMultiSelect) {
-        const selectedAreas = document.querySelectorAll('.multi-select-area');
-
-        let selectedArea = [...selectedAreas].find(
-          (elem) => elem.dataset.clientId == awareness?.clientID
-        );
-
         // TODO: extremely inefficient, selecting every single note element
         const notes = Array.from(document.querySelectorAll('.note, .beam'));
         const selectedNotes = rbSelection.selectNoteElements(notes);
-        const coords = calculateMultiSelectCoords(selectedNotes);
-
-        if (!selectedArea) {
-          selectedArea = document.createElement('div');
-          selectedArea.dataset.clientId = awareness?.clientID;
-          selectedArea.classList.add('multi-select-area');
-          document.body.appendChild(selectedArea);
-        }
-
-        selectedArea.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
-        selectedArea.style.width = `${coords.width}px`;
-        selectedArea.style.height = `${coords.height}px`;
-        selectedArea.style.backgroundColor =
-          hexToRgbA(color, MULTI_SELECT_ALPHA) ?? 'rgba(0, 0, 255, 0.09)';
 
         const multiSelectedNotes = selectedNotes.map((note) => note.id).filter((id) => /^note/g.test(id))
 
@@ -383,41 +401,6 @@ function addListenersToOutput(outputTarget) {
       rbSelection.selectAreaElem.hidden = true;
       startTime = endTime = undefined;
     };
-  }
-}
-
-export function updateMultiSelect(clientState, noteIds) {
-  const selectedAreas = document.querySelectorAll('.multi-select-area');
-  
-  let selectedArea = [...selectedAreas].find(
-    (elem) => elem.dataset.clientId == clientState.clientId
-    );
-
-  if (!noteIds || noteIds.length === 0) {
-    selectedArea?.remove();
-    return;
-  }
-
-  const selector = noteIds?.map((id) => '#' + id)?.join(',');
-  if (selector) {
-    const notes = Array.from(document.querySelectorAll(selector));
-    if (notes.length === 0) {
-      return;
-    }
-    const coords = calculateMultiSelectCoords(notes);
-
-    if (!selectedArea) {
-      selectedArea = document.createElement('div');
-      selectedArea.dataset.clientId = clientState.clientId;
-      selectedArea.classList.add('multi-select-area');
-      document.body.appendChild(selectedArea);
-    }
-
-    selectedArea.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
-    selectedArea.style.width = `${coords.width}px`;
-    selectedArea.style.height = `${coords.height}px`;
-    selectedArea.style.backgroundColor =
-      `${hexToRgbA(clientState?.user?.color, MULTI_SELECT_ALPHA)}` ?? 'blue';
   }
 }
 

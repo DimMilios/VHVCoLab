@@ -78,7 +78,6 @@ import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
 import { yProvider } from '../yjs-setup.js';
-import { clearSingleSelect, clearSingleSelectDOM, updateSingleSelect } from './collab-extension.js';
 
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
@@ -159,18 +158,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!yProvider) return;
 
-    let { user, cursor } = yProvider.awareness.getLocalState();
     if (state.context?.elemId.length > 0) {
       let target = document.getElementById(state.context.elemId);
-      yProvider.awareness.setLocalStateField('cursor', { ...cursor, itemId: target.id });
+      yProvider.awareness.setLocalStateField('singleSelect', { elemId: target.id });
       return;
     }
-
-    yProvider.awareness.setLocalStateField('cursor', { ...cursor, itemId: null });
+    
+    yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
   });
-
-  window.selectService = selectService;
-  window.selectMachine = selectMachine;
 
   selectService.start();
   body.addEventListener('click', function (event) {
@@ -583,7 +578,7 @@ function processNotationKeyCommand(event) {
       event.preventDefault();
       event.stopPropagation();
 
-      // clearSingleSelect();
+      yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
 
       processNotationKey('esc', global_cursor.CursorNote);
       break;

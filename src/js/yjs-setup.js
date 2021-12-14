@@ -2,12 +2,6 @@ import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import { WebrtcProvider } from 'y-webrtc';
 import {
-  updateSingleSelect,
-  updateMultiSelect,
-  removeUnusedElements,
-  userListDisplay,
-  clearSingleSelectDOM,
-  singleSelectTemplate,
   updateHandler,
 } from './vhv-scripts/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
@@ -65,37 +59,15 @@ window.addEventListener('load', () => {
     const item = humdrumDataNoteIntoView(row, column);
     if (item) {
       markItem(item);
-      render(singleSelectTemplate(yProvider.awareness.clientID, item.id, userData.color), document.body);
-      // updateSingleSelect(yProvider.awareness.clientID, item, {
-      //   text: userData.name,
-      //   color: userData.color,
-      // });
-      
       const localState = yProvider.awareness.getLocalState();
-      yProvider.awareness.setLocalStateField('cursor', {
-        itemId: item.id,
-        ...localState.cursor,
+
+      yProvider.awareness.setLocalState({
+        ...localState,
+        singleSelect: { elemId: item.id },
+        multiSelect: null,
       });
-      yProvider.awareness.setLocalStateField('multiSelect', null);
     }
   });
-
-  editor.session.doc.on('change', function(event) {
-    // We need to update the collab elements when text is updating
-    const aw = yProvider.awareness.getLocalState();
-    const item = document.querySelector(`#${aw?.cursor?.itemId}`);
-    // if (item) {
-    //   markItem(item);
-    //   updateSingleSelect(aw.cursor.id, item, {
-    //     text: aw.user.name,
-    //     color: aw.user.color,
-    //   });
-    // } 
-    // else {
-    //   clearSingleSelectDOM(aw.cursor.id);
-    // }
-    
-  })
 
   yProvider.awareness.on('change', updateHandler);
 

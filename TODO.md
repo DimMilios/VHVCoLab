@@ -118,6 +118,23 @@ We still expose many global variables to make the app functional. This creates a
 ,(\n\s*)"LINK":\s\{.*\n\s*"DEFAULT":\s.*\n\s*\}
 ```
 
+## Restructure Yjs state
+We currently have two object keys to describe state for `Yjs`.
+- `user` holds user specific information: `name`, `color` associated with that user
+- `cursor` holds information about the user's position both on the text editor and on the music score
+- `multiSelect` holds note element ids of selected notes through multi-selection
+<br /> 
+`cursor` also contains information about the DOM elements selected by a user and I think it's time to move
+the user selection information to its own entry.
+Something like:
+```json
+  {
+    "singleSelect": {
+      "elemId": "note-L12F21" | "chord-L12F1" | "layer-L12F1",
+    }
+  }
+```
+
 ## Dependencies
 The wasm verovio toolkit script `scripts/local/verovio-toolkit-wasm.js` has to be downloaded locally since it is in `.gitignore` cause it's a big file (8.6MB)
 
