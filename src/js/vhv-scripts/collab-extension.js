@@ -13,30 +13,6 @@ function log(text) {
   }
 }
 
-export function removeUnusedElements(clientIds) {
-  const usersDivs = document.querySelectorAll('.users-div');
-  const singleNoteSelects = document.querySelectorAll('.single-note-select');
-  const multiSelects = document.querySelectorAll('.multi-select-area');
-
-  Array.from(usersDivs).forEach((div) => {
-    if (!clientIds.includes(+div.dataset.clientId)) {
-      div.remove();
-    }
-  });
-
-  Array.from(singleNoteSelects).forEach((div) => {
-    if (!clientIds.includes(+div.dataset.clientId)) {
-      div.remove();
-    }
-  });
-
-  Array.from(multiSelects).forEach((div) => {
-    if (!clientIds.includes(+div.dataset.clientId)) {
-      div.remove();
-    }
-  });
-}
-
 function formatUserElem(elem) {
   const [, qOn, qOff, pitchName, accidental, octave] = elem.classList;
   const formattedElem = {};
@@ -104,78 +80,6 @@ function parseQuarterTime(quarterTime) {
   let [qTimeValue, divisor] = quarterTime.split(/\D/).filter(Boolean);
   qTimeValue = parseInt(qTimeValue, 10);
   return quarterTime.includes('_') ? qTimeValue / divisor : qTimeValue;
-}
-
-export function clearSingleSelect() {
-  const aw = yProvider.awareness;
-  const localState = aw.getLocalState();
-  aw.setLocalStateField('cursor', { ...localState.cursor, itemId: null });
-  clearSingleSelectDOM(aw.clientID);
-  
-  const editor = getAceEditor();
-  editor?.session?.selection?.moveCursorFileStart();
-}
-
-export function clearSingleSelectDOM(clientId) {
-  let usersDivs = document.querySelectorAll('.users-div');
-  let usersDiv = [...usersDivs].find((div) => div.dataset.clientId == clientId);
-  usersDiv?.remove();
-
-  const noteSelects = [...document.querySelectorAll('.single-note-select')];
-  let select = noteSelects.find((s) => s.dataset.clientId == clientId);
-  select?.remove();
-}
-
-export function updateSingleSelect(clientId, target, options) {
-  updateUsersDiv(clientId, target, options);
-
-  updateSingleNoteSelect(clientId, target, options);
-}
-
-function updateUsersDiv(clientId, target, options) {
-  let usersDivs = document.querySelectorAll('.users-div');
-
-  // let usersDiv = [...usersDivs].find(div => div.dataset.noteId === target.id);
-  let usersDiv = [...usersDivs].find((div) => div.dataset.clientId == clientId);
-
-  if (!usersDiv) {
-    usersDiv = document.createElement('div');
-    usersDiv.setAttribute('class', 'users-div');
-    usersDiv.addEventListener('click', handleSingleNoteSelectClick(usersDivs));
-    document.body.appendChild(usersDiv);
-  }
-  usersDiv.dataset.noteId = target.id;
-  usersDiv.dataset.clientId = clientId;
-
-  const { staffY, targetX } = getCoordinates(target);
-
-  usersDiv.style.transform = `translate(${
-    targetX - usersDiv.offsetWidth / 4
-  }px, ${staffY - 25}px)`;
-
-  usersDiv.innerText = options.text;
-}
-
-function updateSingleNoteSelect(clientId, target, options) {
-  const noteSelects = Array.from(
-    document.querySelectorAll('.single-note-select')
-  );
-  let select = noteSelects.find((s) => s.dataset.clientId == clientId);
-  if (!select) {
-    select = document.createElement('div');
-    select.setAttribute('class', 'single-note-select');
-    // select.addEventListener('click', handleSingleNoteSelectClick(noteSelects));
-    document.body.appendChild(select);
-  }
-  select.dataset.noteId = target.id;
-  select.dataset.clientId = clientId;
-
-  const { staffY, targetX, targetBounds } = getCoordinates(target);
-  select.style.transform = `translate(${targetX}px, ${staffY}px)`;
-
-  select.style.width = `${Math.abs(targetX - targetBounds.right)}px`;
-  select.style.height = `${Math.abs(staffY - targetBounds.bottom)}px`;
-  select.style.backgroundColor = options.color;
 }
 
 function handleSingleNoteSelectClick(singleNoteSelects) {
@@ -354,7 +258,6 @@ function addListenersToOutput(outputTarget) {
     );
     if (selectToRemove) {
       yProvider.awareness.setLocalStateField('multiSelect', null);
-      // selectToRemove?.remove();
     }
   });
 
