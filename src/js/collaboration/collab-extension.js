@@ -115,7 +115,7 @@ export function updateHandler({ added, updated, removed }) {
 
   let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
     .filter(([_, state]) => state.multiSelect != null && state?.user?.color != null)
-    .map(([clientId, state]) => multiSelectTemplate(clientId, state.multiSelect, state.user.color))
+    .map(([clientId, state]) => multiSelectTemplate(clientId, clientId === yProvider.awareness.clientID, state.multiSelect, state.user.color))
   }`;
 
   let singleSelects = html`${Array.from(yProvider.awareness.getStates().entries())

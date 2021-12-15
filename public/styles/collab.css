@@ -2,11 +2,10 @@
   --collab-layer-zIndex: 900;
 }
 
-.collab-container {
+.collab-container, .comments {
   position: absolute;
 
   z-index: var(--collab-layer-zIndex);
-
 }
 
 .single-select {
