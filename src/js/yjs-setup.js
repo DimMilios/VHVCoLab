@@ -1,14 +1,11 @@
 import * as Y from 'yjs';
-import { WebsocketProvider } from 'y-websocket';
+// import { WebsocketProvider } from 'y-websocket';
 import { WebrtcProvider } from 'y-webrtc';
-import {
-  updateHandler,
-} from './vhv-scripts/collab-extension.js';
+import { updateHandler } from './collaboration/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import { render } from 'lit-html';
 
 export let yProvider;
 
@@ -18,14 +15,11 @@ const colors = [ '#30bced','#6eeb83','#ffbc42','#ecd444','#ee6352','#9ac2c9','#8
 const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
 
 export let userData = {
-  // name: Math.random().toString(36).substring(7),
-  // color: '#' + Math.floor(Math.random() * 16777215).toString(16),
   name: oneOf(names),
   color: oneOf(colors)
 };
 
 window.addEventListener('load', () => {
-  // console.log(Y)
   const ydoc = new Y.Doc();
   
   if (typeof yProvider == 'undefined') {
@@ -70,35 +64,6 @@ window.addEventListener('load', () => {
   });
 
   yProvider.awareness.on('change', updateHandler);
-
-  // yProvider.awareness.on('change', function ({ added, updated, removed }) {
-  //   const awarenessState = yProvider.awareness.getStates();
-  //   removeUnusedElements(Array.from(awarenessState.keys()));
-  //   userListDisplay([...awarenessState.values()].map((s) => s.user.name));
-
-  //   const f = (clientId) => {
-  //     // if (clientId === yProvider.awareness.clientID) return;
-
-  //     const aw = awarenessState.get(clientId);
-  //     if (aw) {
-  //       updateMultiSelect({ clientId, ...aw }, aw?.multiSelect);
-
-  //       const item = document.querySelector(`#${aw?.cursor?.itemId}`);
-  //       if (item) {
-  //         updateSingleSelect(clientId, item, {
-  //           text: aw.user.name,
-  //           color: aw.user.color,
-  //         });
-  //       } else {
-  //         clearSingleSelectDOM(clientId);
-  //       }
-  //     }
-  //   };
-
-  //   added.forEach(f);
-  //   updated.forEach(f);
-  //   removed.forEach(f);
-  // });
 
   window.example = { yProvider, ydoc, type };
 });
