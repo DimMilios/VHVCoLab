@@ -205,9 +205,12 @@ export function humdrumDataNoteIntoView(row, column) {
     }
   }
   var item = 0;
-  if (splitter.rightContent) {
+  // if (splitter.rightContent) {
     // see: https://www.w3.org/TR/selectors
-    var items = splitter.rightContent.querySelectorAll(
+    // var items = splitter.rightContent.querySelectorAll(
+    //   "g[id$='" + query + "']"
+    // );
+    var items = document.getElementById('output').querySelectorAll(
       "g[id$='" + query + "']"
     );
     if (items.length == 0) {
@@ -227,7 +230,7 @@ export function humdrumDataNoteIntoView(row, column) {
     if (item.id.match(/^accid/)) {
       item = items[items.length - 2];
     }
-  }
+  // }
   // markItem(item);
   return item;
   // sendTarget(item);

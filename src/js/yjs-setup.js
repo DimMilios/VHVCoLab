@@ -51,6 +51,7 @@ window.addEventListener('load', () => {
   editor.getSession().selection.on('changeCursor', function () {
     const { row, column } = editor.selection.getCursor();
     const item = humdrumDataNoteIntoView(row, column);
+    console.log('changeCursor event', { row, column, item })
     if (item) {
       markItem(item);
       const localState = yProvider.awareness.getLocalState();

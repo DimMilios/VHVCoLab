@@ -1574,6 +1574,7 @@ export function humdrumDataIntoView(event) {
       continue;
     }
 
+    console.log('HIGHLIGHT', target.id);
     global_cursor.HIGHLIGHTQUERY = target.id;
     highlightIdInEditor(target.id, 'humdrumDataIntoView');
     break;
