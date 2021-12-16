@@ -111,7 +111,7 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
 }
 
 export function updateHandler({ added, updated, removed }) {
-  console.log(yProvider.awareness.getStates());
+  // console.log(yProvider.awareness.getStates());
 
   let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
     .filter(([_, state]) => state.multiSelect != null && state?.user?.color != null)
