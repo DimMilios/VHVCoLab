@@ -6,6 +6,7 @@ import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
+import { redrawInputArea } from './vhv-scripts/misc.js';
 
 export let yProvider;
 
@@ -47,6 +48,14 @@ window.addEventListener('load', () => {
 
   // Insert an initial song to the text editor
   insertSplashMusic();
+
+  // let initialRender = true;
+  // editor.session.on('change', function() {
+  //   if (initialRender) {
+  //     editor.resize(true);
+  //     initialRender = false;
+  //   }
+  // })
 
   editor.getSession().selection.on('changeCursor', function () {
     const { row, column } = editor.selection.getCursor();

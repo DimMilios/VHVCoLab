@@ -26,6 +26,7 @@ import {
   cleanFont,
   updateEditorMode,
   setTextInEditor,
+  redrawInputArea,
 } from './misc.js';
 import { observeSvgContent } from './utility-svg.js';
 import { HnpMarkup } from './highlight.js';
@@ -145,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   displayNotation();
 
-  setupSplitter();
+  // setupSplitter();
 
   // set init (default) state
   $('#input').data('x', $('#input').outerWidth());
@@ -188,9 +189,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   observeSvgContent();
 
-  PDFLISTINTERVAL = setInterval(function () {
-    buildPdfIconListInMenu();
-  }, 3000);
+  // PDFLISTINTERVAL = setInterval(function () {
+  //   buildPdfIconListInMenu();
+  // }, 3000);
 });
 
 function extractEditorPosition(element) {

@@ -193,14 +193,25 @@ if (!editor) {
 export function toggleTextVisibility(suppressZoom) {
   global_interface.InputVisible = !global_interface.InputVisible;
   let input = document.querySelector('#input');
+  let output = document.querySelector('#output');
   if (global_interface.InputVisible) {
     if (global_interface.LastInputWidth == 0) {
       global_interface.LastInputWidth = 400;
     }
-    splitter.setPositionX(global_interface.LastInputWidth);
+    input.classList.remove('col-4');
+    input.classList.add('col-0');
+    
+    output.classList.remove('col-8');
+    output.classList.add('col-12');
+    // splitter.setPositionX(global_interface.LastInputWidth);
   } else {
+    input.classList.remove('col-0');
+    input.classList.add('col-4');
+    
+    output.classList.remove('col-12');
+    output.classList.add('col-8');
     global_interface.LastInputWidth = parseInt(input.style.width);
-    splitter.setPositionX(0);
+    // splitter.setPositionX(0);
   }
   if (!suppressZoom) {
     displayNotation();
@@ -209,6 +220,25 @@ export function toggleTextVisibility(suppressZoom) {
   editor.resize();
   // matchToolbarVisibilityIconToState();
 }
+// export function toggleTextVisibility(suppressZoom) {
+//   global_interface.InputVisible = !global_interface.InputVisible;
+//   let input = document.querySelector('#input');
+//   if (global_interface.InputVisible) {
+//     if (global_interface.LastInputWidth == 0) {
+//       global_interface.LastInputWidth = 400;
+//     }
+//     splitter.setPositionX(global_interface.LastInputWidth);
+//   } else {
+//     global_interface.LastInputWidth = parseInt(input.style.width);
+//     splitter.setPositionX(0);
+//   }
+//   if (!suppressZoom) {
+//     displayNotation();
+//     // applyZoom();
+//   }
+//   editor.resize();
+//   // matchToolbarVisibilityIconToState();
+// }
 
 //////////////////////////////
 //
@@ -956,13 +986,17 @@ function ensureTsv(text) {
 //
 
 export function setTextInEditor(text) {
+  console.log('setTextInEditor', { splash: text })
   if (!text) {
     editor.setValue('');
   } else if (text.charAt(text.length - 1) === '\n') {
     // Get rid of #@%! empty line at end of text editor:
-    editor.setValue(text.slice(0, -1), -1);
+    // editor.setValue(text.slice(0, -1), -1);
+    editor.setValue(text, -1);
+    console.log('else if')
   } else {
     editor.setValue(text, -1);
+    console.log('else', {text})
   }
   editor.getSession().selection.clearSelection();
 }
