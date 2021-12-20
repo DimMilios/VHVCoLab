@@ -811,7 +811,6 @@ import {
   global_editorOptions,
   global_interface,
   global_verovioOptions,
-  OPTIONS,
   setEditorMode,
   setFileInfo,
   setOptions,

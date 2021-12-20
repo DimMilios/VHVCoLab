@@ -270,7 +270,7 @@ div#splitter {
 }
 
 
-div#index {
+/* div#index {
 	position: relative;
 	visibility: hidden;
 	color: #888;
@@ -281,6 +281,21 @@ div#index {
 	overflow: scroll;
 	background: #f8f8f8;
 	z-index: 300;
+} */
+
+div#index {
+	position: fixed;
+	visibility: hidden;
+	color: #888;
+	display: none;
+	top: 10px;
+	left: 100px;
+	width:100%;
+	overflow: scroll;
+	background: #f8f8f8;
+	z-index: 300;
+	min-height: 100vh;
+	max-height: 100vh;
 }
 
 #output {

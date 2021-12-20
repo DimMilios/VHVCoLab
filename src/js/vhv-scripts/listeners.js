@@ -146,11 +146,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   displayNotation();
 
-  // setupSplitter();
+  setupSplitter();
 
   // set init (default) state
-  $('#input').data('x', $('#input').outerWidth());
-  $('#input').data('y', $('#input').outerHeight());
+  // $('#input').data('x', $('#input').outerWidth());
+  // $('#input').data('y', $('#input').outerHeight());
 
   var body = document.querySelector('body');
 

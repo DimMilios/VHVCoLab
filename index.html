@@ -156,7 +156,7 @@ Use fontawesome version 4 which is better for SVG insertion:
 
 </head>
 
-<body class="container-fluid p-0 overflow-hidden">
+<body style="overflow: hidden;">
 
     <!--
 	vim: ts=3:nowrap
@@ -1610,7 +1610,10 @@ Use fontawesome version 4 which is better for SVG insertion:
         </div>
     </div>
 
-    <div class="row">
+    <div class="container-fluid p-0">
+
+
+    <div class="row m-auto">
         <div id="input" class="col-4"></div>
 
 
@@ -2082,7 +2085,7 @@ Use fontawesome version 4 which is better for SVG insertion:
 </textarea>
 
 
-        <div id="output" class="col-8"></div>
+        <div id="output" class="col-8 h-100" style="min-height: 95vh; max-height: 95vh;"></div>
 
 
 
@@ -2091,6 +2094,8 @@ Use fontawesome version 4 which is better for SVG insertion:
 
 
     </div>
+</div>
+
 
     <div id="dropArea"></div>
     <div id="index"></div>

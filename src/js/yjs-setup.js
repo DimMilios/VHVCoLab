@@ -48,14 +48,7 @@ window.addEventListener('load', () => {
 
   // Insert an initial song to the text editor
   insertSplashMusic();
-
-  // let initialRender = true;
-  // editor.session.on('change', function() {
-  //   if (initialRender) {
-  //     editor.resize(true);
-  //     initialRender = false;
-  //   }
-  // })
+  editor.renderer.setOption('maxLines', 50);
 
   editor.getSession().selection.on('changeCursor', function () {
     const { row, column } = editor.selection.getCursor();
