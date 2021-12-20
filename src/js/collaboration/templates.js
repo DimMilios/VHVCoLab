@@ -1,5 +1,5 @@
 import { html, render } from 'lit-html';
-import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA } from './util-collab.js';
+import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset } from './util-collab.js';
 
 export let collabTemplate = (...children) =>
   html`<div class="collab-container">${children}</div>`;
@@ -23,12 +23,17 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
   if (!el)
     return html`<div class="single-select"></div>`;
 
-  const { staffY, targetX, targetBounds } = getCoordinates(el);
+  // const { staffY, targetX, targetBounds } = getCoordinates(el);
+  const { staffY, targetX, targetY, targetBounds } = getCoordinatesWithOffset(el, document.querySelector
+    ('#input'));
+
+    console.log({ staffY}, targetBounds)
   return html`<div
     class="single-select"
-    style="transform: translate(${targetX}px, ${staffY}px); width: ${Math.abs(
-    targetX - targetBounds.right
-  )}px; height: ${Math.abs(staffY - targetBounds.bottom)}px; background-color: ${color}"
+    style="transform: translate(${targetX}px, ${targetY}px);
+    width: ${Math.abs(targetBounds.x - targetBounds.right)}px;
+    height: ${Math.abs(staffY - targetBounds.bottom)}px;
+    background-color: ${color}"
     data-client-id=${clientId}
     data-ref-id=${elemRefId}
   ></div>`;
@@ -90,7 +95,7 @@ let commentTemplate = (coords) => {
     coords.width -
     remToPixels(commentWidth)}px, ${coords.top -
     remToPixels(commentHeight)}px);
-  width: ${commentWidth}rem; height: ${commentHeight}rem; cursor: pointer; position: fixed;"
+  width: ${commentWidth}rem; height: ${commentHeight}rem; cursor: pointer; position: fixed; pointer-events: all;"
     class="comment"
   >
   <button class="btn btn-outline-dark p-0" style="width: 100%;" data-toggle="modal" data-target="#post-comment" @click=${clickHandler}>

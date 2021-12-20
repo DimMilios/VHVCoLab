@@ -19,6 +19,22 @@ export function getCoordinates(target) {
   };
 }
 
+export function getCoordinatesWithOffset(target, offsetElem) {
+  const targetBounds = target.getBoundingClientRect();
+  const closestStaffElem = target.closest('.staff');
+
+  let staffBounds = closestStaffElem.getBoundingClientRect();
+
+  return {
+    staffX: targetBounds.x,
+    staffY: staffBounds.y,
+    targetX: targetBounds.x - offsetElem.offsetWidth,
+    targetY: targetBounds.y - offsetElem.offsetTop,
+    targetBounds,
+    staffBounds,
+  };
+}
+
 // https://stackoverflow.com/questions/21646738/convert-hex-to-rgba
 export function hexToRgbA(hex, alpha) {
   var c;

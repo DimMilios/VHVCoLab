@@ -130,7 +130,9 @@ export function updateHandler({ added, updated, removed }) {
       userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
     )}`;
 
-  render(collabTemplate(multiSelects, singleSelects, userAwareness), document.body);
+  let output = document.querySelector('#output');
+  let renderBefore = document.querySelector('#output > svg');
+  render(collabTemplate(multiSelects, singleSelects, userAwareness), output, { renderBefore });
 }
 
 window.addEventListener('DOMContentLoaded', () => {

@@ -727,7 +727,7 @@ import { setCursorNote } from './misc.js';
 import { getAceEditor } from './setup.js';
 
 export function markItem(item, line) {
-  console.log('markItem', {item, line, CursorNote: global_cursor.CursorNote})
+  // console.log('markItem', {item, line, CursorNote: global_cursor.CursorNote})
   if (!item) {
     item = global_cursor.CursorNote;
   }
