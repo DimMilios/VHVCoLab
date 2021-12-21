@@ -25,11 +25,13 @@ export function getCoordinatesWithOffset(target, offsetElem) {
 
   let staffBounds = closestStaffElem?.getBoundingClientRect();
 
+  let output = document.querySelector('#output');
+
   return {
     staffX: staffBounds.x ?? targetBounds.x,
     staffY: staffBounds.y ?? targetBounds.y,
     targetX: targetBounds.x - offsetElem.offsetWidth,
-    targetY: targetBounds.y - offsetElem.offsetTop,
+    targetY: targetBounds.y - offsetElem.offsetTop + output.scrollTop,
     targetBounds,
     staffBounds,
   };
@@ -76,7 +78,7 @@ export function calculateMultiSelectCoords(selectedNotes) {
   };
 }
 
-export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem) {
+export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem, scrollTop) {
   const coords = selectedNotes.reduce(
     (oldBox, note) => {
       const box = note.getBoundingClientRect();
@@ -87,12 +89,12 @@ export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem) 
         bottom: Math.max(oldBox.bottom, box.bottom),
       };
     },
-    { left: Infinity, top: Infinity, right: 0, bottom: 0 }
+    { left: Infinity, top: Infinity, right: Number.NEGATIVE_INFINITY, bottom: Number.NEGATIVE_INFINITY }
   );
 
   return {
-    left: Math.abs(coords.left - offsetElem.offsetWidth),
-    top: Math.abs(coords.top - offsetElem.offsetTop),
+    left: coords.left - offsetElem.offsetWidth,
+    top: coords.top - offsetElem.offsetTop + scrollTop,
     width: coords.right - coords.left,
     height: coords.bottom - coords.top,
   };

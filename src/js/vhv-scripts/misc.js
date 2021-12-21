@@ -191,7 +191,6 @@ if (!editor) {
 }
 
 export function toggleTextVisibility(suppressZoom) {
-  global_interface.InputVisible = !global_interface.InputVisible;
   let input = document.querySelector('#input');
   let output = document.querySelector('#output');
   if (global_interface.InputVisible) {
@@ -213,6 +212,9 @@ export function toggleTextVisibility(suppressZoom) {
     global_interface.LastInputWidth = parseInt(input.style.width);
     // splitter.setPositionX(0);
   }
+
+  global_interface.InputVisible = !global_interface.InputVisible;
+
   if (!suppressZoom) {
     displayNotation();
     // applyZoom();

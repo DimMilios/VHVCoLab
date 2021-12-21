@@ -1,8 +1,8 @@
 import { html, render } from 'lit-html';
 import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
-export let collabTemplate = (...children) =>
-  html`<div class="collab-container">${children}</div>`;
+export let collabTemplate = (svgHeight, ...children) =>
+  html`<div class="collab-container" style="height: ${svgHeight}px">${children}</div>`;
 
 export let userAwarenessTemplate = (clientId, elemRefId, name) => {
   let el = document.getElementById(elemRefId);
@@ -47,10 +47,12 @@ export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, 
   // const coords = calculateMultiSelectCoords(
   //   Array.from(document.querySelectorAll(selector))
   // );
+  let output = document.querySelector('#output');
 
   const coords = calculateMultiSelectCoordsWithOffset(
     Array.from(document.querySelectorAll(selector)),
-    document.querySelector('#input')
+    document.querySelector('#input'),
+    output.scrollTop
   );
 
   return html`<div
@@ -108,7 +110,7 @@ let commentTemplate = (coords) => {
     coords.width -
     remToPixels(commentWidth)}px, ${coords.top -
     remToPixels(commentHeight)}px);
-  width: ${commentWidth}rem; height: ${commentHeight}rem; cursor: pointer; position: fixed; pointer-events: all;"
+  width: ${commentWidth}rem; height: ${commentHeight}rem; cursor: pointer; position: absolute; pointer-events: all;"
     class="comment"
   >
   <button class="btn btn-outline-dark p-0" style="width: 100%; cursor: pointer;" data-toggle="modal" data-target="#post-comment" @click=${clickHandler}>

@@ -171,7 +171,14 @@ window.addEventListener('DOMContentLoaded', () => {
 function renderCollabLayer(...children) {
   let output = document.querySelector('#output');
   let renderBefore = document.querySelector('#output > svg');
-  render(collabTemplate(...children), output, { renderBefore });
+  render(
+    collabTemplate(
+      renderBefore?.height.baseVal.value ?? window.innerHeight,
+      ...children
+    ),
+    output,
+    { renderBefore }
+  );
 }
 
 function addListenersToOutput(outputTarget) {
