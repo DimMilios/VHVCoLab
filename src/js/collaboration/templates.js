@@ -73,7 +73,7 @@ export let selectAreaTemplate = (translateX, translateY, width, height, hidden =
   ></div>`;
 
 let commentFormTemplate = () => {
-  const handleSubmit = event => {
+  const handleCommentPost = event => {
     event.preventDefault();
     console.log('You sent:', document.querySelector('#comment-text').value);
 
@@ -91,7 +91,7 @@ let commentFormTemplate = () => {
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" @click=${handleSubmit}>Post</button>
+    <button type="button" class="btn btn-primary" @click=${handleCommentPost}>Post</button>
   </div>`;
 }
 
@@ -111,7 +111,7 @@ let commentTemplate = (coords) => {
   width: ${commentWidth}rem; height: ${commentHeight}rem; cursor: pointer; position: fixed; pointer-events: all;"
     class="comment"
   >
-  <button class="btn btn-outline-dark p-0" style="width: 100%;" data-toggle="modal" data-target="#post-comment" @click=${clickHandler}>
+  <button class="btn btn-outline-dark p-0" style="width: 100%; cursor: pointer;" data-toggle="modal" data-target="#post-comment" @click=${clickHandler}>
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-card-text btn-outline-dark" viewBox="0 0 16 16">
         <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
         <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
