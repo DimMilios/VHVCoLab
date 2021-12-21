@@ -63,7 +63,7 @@ export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, 
   ) ?? 'rgba(0, 0, 255, 0.09)'};"
     data-client-id=${clientId}
   ></div>
-  ${isLocalUser ? commentTemplate(coords) : null}`;
+  ${isLocalUser ? commentsButtonTemplate(coords) : null}`;
 };
 
 export let selectAreaTemplate = (translateX, translateY, width, height, hidden = true) =>
@@ -97,7 +97,7 @@ let commentFormTemplate = () => {
   </div>`;
 }
 
-let commentTemplate = (coords) => {
+let commentsButtonTemplate = (coords) => {
   let commentWidth = 2.5;
   let commentHeight = 2.5;
 
