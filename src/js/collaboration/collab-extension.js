@@ -130,9 +130,7 @@ export function updateHandler({ added, updated, removed }) {
       userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
     )}`;
 
-  let output = document.querySelector('#output');
-  let renderBefore = document.querySelector('#output > svg');
-  render(collabTemplate(multiSelects, singleSelects, userAwareness), output, { renderBefore });
+  renderCollabLayer(multiSelects, singleSelects, userAwareness);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -170,6 +168,12 @@ window.addEventListener('DOMContentLoaded', () => {
   mutationObserver.observe(document.body, { childList: true, subtree: true });
 });
 
+function renderCollabLayer(...children) {
+  let output = document.querySelector('#output');
+  let renderBefore = document.querySelector('#output > svg');
+  render(collabTemplate(...children), output, { renderBefore });
+}
+
 function addListenersToOutput(outputTarget) {
   let startTime, endTime;
   let shouldMultiSelect = false;
@@ -178,6 +182,10 @@ function addListenersToOutput(outputTarget) {
   document.addEventListener('mousedown', (event) => {
     // Start selecting only when there isn't a note element on the cursor
     if (event.target.nodeName != 'svg') return;
+
+    if (!document.querySelector('.collab-container')) {
+      renderCollabLayer();
+    }
 
     startTime = performance.now();
 
