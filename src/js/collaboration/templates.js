@@ -9,10 +9,11 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
   if (!el)
     return html`<div class="users-div"></div>`;
 
-  const { staffY, targetX } = getCoordinates(el);
+  // const { staffY, targetX } = getCoordinates(el);
+  const { targetX, targetY } = getCoordinatesWithOffset(el, document.querySelector('#input'));
   return html`<div
     class="users-div"
-    style="transform: translate(${targetX}px, ${staffY - 25}px)"
+    style="transform: translate(${targetX}px, ${targetY - 25}px)"
     data-client-id=${clientId}
     data-ref-id=${elemRefId}
   >${name}</div>`;
@@ -24,10 +25,10 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
     return html`<div class="single-select"></div>`;
 
   // const { staffY, targetX, targetBounds } = getCoordinates(el);
-  const { staffY, targetX, targetY, targetBounds } = getCoordinatesWithOffset(el, document.querySelector
-    ('#input'));
+  const { staffY, targetX, targetY, targetBounds } = 
+    getCoordinatesWithOffset(el, document.querySelector('#input'));
 
-    console.log({ staffY}, targetBounds)
+    // console.log({ staffY}, targetBounds)
   return html`<div
     class="single-select"
     style="transform: translate(${targetX}px, ${targetY}px);

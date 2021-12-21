@@ -1684,8 +1684,8 @@ export function transposeNote(id, line, field, subfield, amount) {
 
   // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
   if (newtoken !== token) {
-    // global_cursor.RestoreCursorNote = id;
-    // global_cursor.HIGHLIGHTQUERY = id;
+    global_cursor.RestoreCursorNote = id;
+    global_cursor.HIGHLIGHTQUERY = id;
     setEditorContents(line, field, newtoken, id);
 
     // let shouldUpdate = window.confirm('Include value?');

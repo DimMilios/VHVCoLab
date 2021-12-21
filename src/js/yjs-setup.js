@@ -66,7 +66,7 @@ window.addEventListener('load', () => {
     }
   });
 
-  yProvider.awareness.on('change', updateHandler);
+  yProvider.awareness.on('update', updateHandler);
 
   window.example = { yProvider, ydoc, type };
 });

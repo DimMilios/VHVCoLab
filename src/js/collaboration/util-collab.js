@@ -21,13 +21,13 @@ export function getCoordinates(target) {
 
 export function getCoordinatesWithOffset(target, offsetElem) {
   const targetBounds = target.getBoundingClientRect();
-  const closestStaffElem = target.closest('.staff');
+  const closestStaffElem = target?.closest('.staff');
 
-  let staffBounds = closestStaffElem.getBoundingClientRect();
+  let staffBounds = closestStaffElem?.getBoundingClientRect();
 
   return {
-    staffX: targetBounds.x,
-    staffY: staffBounds.y,
+    staffX: staffBounds.x ?? targetBounds.x,
+    staffY: staffBounds.y ?? targetBounds.y,
     targetX: targetBounds.x - offsetElem.offsetWidth,
     targetY: targetBounds.y - offsetElem.offsetTop,
     targetBounds,

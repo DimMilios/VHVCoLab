@@ -22,9 +22,6 @@
 }
 
 
-
-
-
 .users-div {
   position: absolute;
   z-index: var(--collab-layer-zIndex);
