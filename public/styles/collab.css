@@ -62,6 +62,13 @@
   z-index: var(--collab-layer-zIndex);
 }
 
+.multi-select-area {
+  position: absolute;
+  z-index: var(--collab-layer-zIndex);
+  background-color: blue;
+  pointer-events: none;
+}
+
 /* Given to note elements when selected */
 .selected {
   filter: url(#highlight-shadow);

@@ -136,17 +136,17 @@ export function updateHandler({ added, updated, removed }) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const styleSheet = document.createElement('style');
-  styleSheet.id = 'multi-select-sheet';
-  styleSheet.innerHTML = `
-  .multi-select-area {
-    position: absolute;
-    z-index: var(--collab-layer-zIndex);
-    background-color: blue;
-    pointer-events: none;
-  }
-  `.trim();
-  document.head.appendChild(styleSheet);
+  // const styleSheet = document.createElement('style');
+  // styleSheet.id = 'multi-select-sheet';
+  // styleSheet.innerHTML = `
+  // .multi-select-area {
+  //   position: absolute;
+  //   z-index: var(--collab-layer-zIndex);
+  //   background-color: blue;
+  //   pointer-events: none;
+  // }
+  // `.trim();
+  // document.head.appendChild(styleSheet);
 
   // Use a MutationObserver to find out when the score output SVG
   // is added to the DOM and attach mouse event listeners to it.
@@ -175,15 +175,16 @@ function addListenersToOutput(outputTarget) {
   let shouldMultiSelect = false;
   const rbSelection = new RubberBandSelection();
 
-  outputTarget.addEventListener('mousedown', (event) => {
+  document.addEventListener('mousedown', (event) => {
     // Start selecting only when there isn't a note element on the cursor
     if (event.target.nodeName != 'svg') return;
 
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
-    rbSelection.coords.left = event.clientX;
-    rbSelection.coords.top = event.clientY;
+    rbSelection.setUpperCoords(event);
+    // rbSelection.coords.left = event.clientX;
+    // rbSelection.coords.top = event.clientY;
 
     const selectedAreas = document.querySelectorAll('.multi-select-area');
 
@@ -202,11 +203,13 @@ function addListenersToOutput(outputTarget) {
       let timePassed = endTime - startTime;
 
       if (timePassed >= 300) {
-        rbSelection.coords.right = event.clientX;
-        rbSelection.coords.bottom = event.clientY;
+        // rbSelection.coords.right = event.clientX;
+        // rbSelection.coords.bottom = event.clientY;
+        rbSelection.setLowerCoords(event);
 
-        rbSelection.selectAreaElem.hidden = false;
-        rbSelection.updateElemPosition();
+        // rbSelection.selectAreaElem.hidden = false;
+        rbSelection.show();
+        // rbSelection.updateElemPosition();
 
         shouldMultiSelect = true;
       }
@@ -235,7 +238,8 @@ function addListenersToOutput(outputTarget) {
       }
 
       rbSelection.resetCoords();
-      rbSelection.selectAreaElem.hidden = true;
+      // rbSelection.selectAreaElem.hidden = true;
+      rbSelection.hide();
       startTime = endTime = undefined;
     };
   }

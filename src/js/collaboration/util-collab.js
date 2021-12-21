@@ -75,3 +75,25 @@ export function calculateMultiSelectCoords(selectedNotes) {
     height: coords.bottom - coords.top,
   };
 }
+
+export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem) {
+  const coords = selectedNotes.reduce(
+    (oldBox, note) => {
+      const box = note.getBoundingClientRect();
+      return {
+        left: Math.min(oldBox.left, box.left),
+        top: Math.min(oldBox.top, box.top),
+        right: Math.max(oldBox.right, box.right),
+        bottom: Math.max(oldBox.bottom, box.bottom),
+      };
+    },
+    { left: Infinity, top: Infinity, right: 0, bottom: 0 }
+  );
+
+  return {
+    left: Math.abs(coords.left - offsetElem.offsetWidth),
+    top: Math.abs(coords.top - offsetElem.offsetTop),
+    width: coords.right - coords.left,
+    height: coords.bottom - coords.top,
+  };
+}

@@ -1,5 +1,5 @@
 import { html, render } from 'lit-html';
-import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset } from './util-collab.js';
+import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
 export let collabTemplate = (...children) =>
   html`<div class="collab-container">${children}</div>`;
@@ -44,8 +44,13 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
 // include the comment button
 export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, color) => {
   const selector = selectedNotes.map((id) => '#' + id).join(',');
-  const coords = calculateMultiSelectCoords(
-    Array.from(document.querySelectorAll(selector))
+  // const coords = calculateMultiSelectCoords(
+  //   Array.from(document.querySelectorAll(selector))
+  // );
+
+  const coords = calculateMultiSelectCoordsWithOffset(
+    Array.from(document.querySelectorAll(selector)),
+    document.querySelector('#input')
   );
 
   return html`<div
@@ -59,6 +64,13 @@ export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, 
   ${isLocalUser ? commentTemplate(coords) : null}`;
 };
 
+export let selectAreaTemplate = (translateX, translateY, width, height, hidden = true) =>
+  html`<div
+    id="select-area"
+    ?hidden=${hidden}
+    style="transform: translate(${translateX}px, ${translateY}px);
+    width: ${width}px; height: ${height}px;"
+  ></div>`;
 
 let commentFormTemplate = () => {
   const handleSubmit = event => {
