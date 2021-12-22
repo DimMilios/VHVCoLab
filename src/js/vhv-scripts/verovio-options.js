@@ -1404,15 +1404,28 @@ export function humdrumToSvgOptions() {
   // 	}
   // 	output.pageWidth = (window.innerWidth - tw) / (global_verovioOptions.ZOOM * global_verovioOptions.SCALE / 40 ) - 100;
   // }
+  let commentsCol = document.querySelector('#comments-section');
+  let commentsWidth = 0;
+  if (commentsCol) {
+    commentsWidth = commentsCol.getBoundingClientRect().width;
+    let col = [...commentsCol.classList].find(cl => /^col/g.test(cl));
+    if (col?.includes('col-0')) {
+      commentsWidth = 0;
+    }
+  }
 
   var tw = $('#input').outerWidth();
   if ($('#input').css('display') == 'none') {
     tw = 0;
   }
   output.pageWidth =
-    (window.innerWidth - tw) /
+    (window.innerWidth - tw - commentsWidth) /
       ((global_verovioOptions.ZOOM * global_verovioOptions.SCALE) / 40) -
     100;
+  // output.pageWidth =
+  //   (window.innerWidth - tw) /
+  //     ((global_verovioOptions.ZOOM * global_verovioOptions.SCALE) / 40) -
+  //   100;
 
   var newLinearSpacing =
     global_editorOptions.SPACINGADJUSTMENT + output.spacingLinear;

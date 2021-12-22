@@ -111,6 +111,7 @@ import { inSvgImage } from './utility-svg.js';
 
 import { interpret } from 'xstate';
 import { selectMachine } from '../state/selectStateMachine.js';
+import { layoutMachine } from '../state/layoutStateMachine.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -151,11 +152,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // set init (default) state
   // $('#input').data('x', $('#input').outerWidth());
   // $('#input').data('y', $('#input').outerHeight());
+  const layoutService = interpret(layoutMachine).onTransition((state) => {
+    console.log('Layout state changed:', state.value);
+  }).start();
+
+  window.layoutService = layoutService;
+
 
   var body = document.querySelector('body');
 
   const selectService = interpret(selectMachine).onTransition((state) => {
-    console.log('State changed:', state.value, state.context);
+    // console.log('State changed:', state.value, state.context);
 
     if (!yProvider) return;
 

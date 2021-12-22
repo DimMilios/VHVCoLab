@@ -153,6 +153,8 @@ export function displayNotation(page, force, restoreid) {
     });
 }
 
+window.displayNotation = displayNotation;
+
 //////////////////////////////
 //
 // toggleFreeze --

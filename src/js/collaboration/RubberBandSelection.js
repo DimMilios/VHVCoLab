@@ -140,7 +140,6 @@ export class RubberBandSelection {
    * @returns {Element[]}
    */
   selectNoteElements(elements) {
-    console.log({ selectCoords: this.coords })
     return elements.filter((elem) => {
       const box = elem.getBoundingClientRect();
 
