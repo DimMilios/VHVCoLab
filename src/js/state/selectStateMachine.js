@@ -1,4 +1,4 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine, interpret } from "xstate";
 
 const setElemId = (parentClass) => (context, event) => {
   let target = document.querySelector(`#${event.elemId}`);
@@ -87,3 +87,5 @@ export const selectMachine = createMachine({
     },
   },
 });
+
+export let selectService = interpret(selectMachine);

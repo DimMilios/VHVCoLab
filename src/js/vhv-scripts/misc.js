@@ -199,6 +199,7 @@ export function toggleTextVisibility(suppressZoom) {
     if (global_interface.LastInputWidth == 0) {
       global_interface.LastInputWidth = 400;
     }
+
     input.classList.remove('col-4');
     input.classList.add('col-0');
     

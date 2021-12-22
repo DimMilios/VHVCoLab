@@ -1,4 +1,4 @@
-import { createMachine } from "xstate";
+import { createMachine, interpret } from "xstate";
 import { displayNotation } from "../vhv-scripts/misc";
 
 let inputElem = document.querySelector('#input');
@@ -98,3 +98,5 @@ export const layoutMachine = createMachine({
     },
   },
 });
+
+export let layoutService = interpret(layoutMachine);

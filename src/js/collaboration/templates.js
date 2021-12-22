@@ -74,12 +74,19 @@ export let selectAreaTemplate = (translateX, translateY, width, height, hidden =
     width: ${width}px; height: ${height}px;"
   ></div>`;
 
+let comments = [];
 let commentFormTemplate = () => {
   const handleCommentPost = event => {
     event.preventDefault();
-    console.log('You sent:', document.querySelector('#comment-text').value);
+    let textBox = document.querySelector('#comment-text');
+    console.log('You sent:', textBox.value);
 
-    document.querySelector('#comment-text').value = '';
+    comments.push(textBox.value);
+    
+    render(html`${comments.map(c => commentTemplate('Dimitris', c))}`,
+      document.querySelector('#comments-section'));
+
+    textBox.value = '';
     $('#post-comment').modal('hide');
   }
 
@@ -87,13 +94,13 @@ let commentFormTemplate = () => {
     <form id="post-comment-form">
       <div class="form-group">
         <label for="comment-text" class="col-form-label">Comment:</label>
-        <textarea class="form-control" id="comment-text"></textarea>
+        <input type="text" class="form-control" id="comment-text" />
+      </div>
+      <div class="form-group float-right">
+        <button type="button" class="btn btn-secondary" role="button" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" role="button" @click=${handleCommentPost}>Post</button>
       </div>
     </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" @click=${handleCommentPost}>Post</button>
   </div>`;
 }
 
@@ -124,4 +131,21 @@ let commentsButtonTemplate = (coords) => {
 
 function remToPixels(rem) {
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}
+
+// Include a user profile icon (probably img URL) when we have persistence for users
+let commentTemplate = (user, content) => {
+  return html`<div class="card ml-4" style="width: 18rem;">
+    <div class="p-3">
+      <div class="d-inline-flex justfy-content-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+        </svg>
+        <h5 class="card-title ml-2 align-self-end">
+          ${user}
+        </h5>
+      </div>
+      <p class="card-text">${content}</p>
+    </div>
+  </div>`;
 }
