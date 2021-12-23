@@ -1,4 +1,5 @@
 import { createMachine, interpret } from "xstate";
+import { updateHandler } from "../collaboration/collab-extension";
 import { displayNotation } from "../vhv-scripts/misc";
 
 let inputElem = document.querySelector('#input');

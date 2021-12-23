@@ -194,34 +194,25 @@ if (!editor) {
 
 export function toggleTextVisibility(suppressZoom) {
   let input = document.querySelector('#input');
-  let output = document.querySelector('#output');
   if (global_interface.InputVisible) {
     if (global_interface.LastInputWidth == 0) {
       global_interface.LastInputWidth = 400;
     }
 
-    input.classList.remove('col-4');
-    input.classList.add('col-0');
-    
-    output.classList.remove('col-8');
-    output.classList.add('col-12');
+    layoutService.send('HIDE_TEXT');
     // splitter.setPositionX(global_interface.LastInputWidth);
   } else {
-    input.classList.remove('col-0');
-    input.classList.add('col-4');
-    
-    output.classList.remove('col-12');
-    output.classList.add('col-8');
+    layoutService.send('SHOW_TEXT');
     global_interface.LastInputWidth = parseInt(input.style.width);
     // splitter.setPositionX(0);
   }
 
   global_interface.InputVisible = !global_interface.InputVisible;
 
-  if (!suppressZoom) {
-    displayNotation();
-    // applyZoom();
-  }
+  // if (!suppressZoom) {
+  //   displayNotation();
+  //   // applyZoom();
+  // }
   editor.resize();
   // matchToolbarVisibilityIconToState();
 }
@@ -1794,6 +1785,7 @@ import { getMode } from './utility-ace.js';
 import { getAceEditor } from './setup.js';
 import { getMenu } from '../menu.js';
 import splitter from './splitter.js';
+import { layoutService } from '../state/layoutStateMachine.js';
 
 export function updateEditorMode() {
   if (!editor) {
