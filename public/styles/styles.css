@@ -309,8 +309,12 @@ div#index {
 }
 
 #output {
+	/* overflow-y: scroll !important; */
+	/* scroll-behavior: smooth; */
+}
+
+.output-container {
 	overflow-y: scroll !important;
-	scroll-behavior: smooth;
 }
 
 /* #input {

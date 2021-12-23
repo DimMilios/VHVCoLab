@@ -1,5 +1,25 @@
 import { html, render } from 'lit-html';
+import { layoutService } from '../state/layoutStateMachine.js';
 import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
+
+export let uiCoords = {
+  outputSVGHeight: 10,
+
+  /**
+   * @param {number|string} value
+   */
+  set svgHeight(value) {
+    this.outputSVGHeight = typeof value == 'string' ? parseInt(value, 10) : value;
+    return this.outputSVGHeight;
+  },
+
+  /**
+   * @returns {number}
+   */
+  get svgHeight() {
+    return this.outputSVGHeight;
+  }
+};
 
 export let collabTemplate = (svgHeight, ...children) =>
   html`<div class="collab-container" style="height: ${svgHeight}px">${children}</div>`;
@@ -52,7 +72,7 @@ export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, 
   const coords = calculateMultiSelectCoordsWithOffset(
     Array.from(document.querySelectorAll(selector)),
     document.querySelector('#input'),
-    output.scrollTop
+    output.closest('[class*=output-container]').scrollTop
   );
 
   return html`<div
@@ -63,7 +83,7 @@ export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, 
   ) ?? 'rgba(0, 0, 255, 0.09)'};"
     data-client-id=${clientId}
   ></div>
-  ${isLocalUser ? commentsButtonTemplate(coords) : null}`;
+  ${isLocalUser ? commentsButtonTemplate(coords, coords.top) : null}`;
 };
 
 export let selectAreaTemplate = (translateX, translateY, width, height, hidden = true) =>
@@ -74,42 +94,58 @@ export let selectAreaTemplate = (translateX, translateY, width, height, hidden =
     width: ${width}px; height: ${height}px;"
   ></div>`;
 
+let commentSectionTemplate = () => {
+  render(html`<div
+    id="comments-section"
+    class="col-0 h-100"
+    style="min-height: 95vh; max-height: 95vh;"
+  >
+    <div id="comments-container" style="height: ${uiCoords.svgHeight}px; background-color: rgba(216, 215, 215, 0.8);"></div>
+  </div>`, document.querySelector('.row'));
+}
+window.cst = commentSectionTemplate;
+
+
 let comments = [];
-let commentFormTemplate = () => {
+let commentFormTemplate = (translateY) => {
   const handleCommentPost = event => {
     event.preventDefault();
     let textBox = document.querySelector('#comment-text');
     console.log('You sent:', textBox.value);
 
-    comments.push(textBox.value);
+    layoutService.send('SHOW_COMMENTS');
+
+    comments.push({ value: textBox.value, translateY });
+
+    localStorage.setItem('comments', JSON.stringify(comments));
     
-    render(html`${comments.map(c => commentTemplate('Dimitris', c))}`,
-      document.querySelector('#comments-section'));
+    render(html`${comments.map(c => commentTemplate('Dimitris', c.value, c.translateY))}`,
+      document.querySelector('#comments-container'));
 
     textBox.value = '';
     $('#post-comment').modal('hide');
   }
 
   return html` <div class="modal-body">
-    <form id="post-comment-form">
+    <form id="post-comment-form" @submit=${handleCommentPost}>
       <div class="form-group">
         <label for="comment-text" class="col-form-label">Comment:</label>
         <input type="text" class="form-control" id="comment-text" />
       </div>
       <div class="form-group float-right">
         <button type="button" class="btn btn-secondary" role="button" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" role="button" @click=${handleCommentPost}>Post</button>
+        <button type="submit" class="btn btn-primary" role="button">Post</button>
       </div>
     </form>
   </div>`;
 }
 
-let commentsButtonTemplate = (coords) => {
+let commentsButtonTemplate = (coords, translateY) => {
   let commentWidth = 2.5;
   let commentHeight = 2.5;
 
   const clickHandler = () => {
-    render(commentFormTemplate(), document.querySelector('#post-comment .modal-content'));
+    render(commentFormTemplate(translateY), document.querySelector('#post-comment .modal-content'));
   }
 
   return html`<div
@@ -133,9 +169,12 @@ function remToPixels(rem) {
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
 
+// A comment should have a reference (commentID) to a highlighted area that was multi selected
+// and the user added a comment for
+
 // Include a user profile icon (probably img URL) when we have persistence for users
-let commentTemplate = (user, content) => {
-  return html`<div class="card ml-4" style="width: 18rem;">
+let commentTemplate = (user, content, translateY) => {
+  return html`<div class="card ml-4" style="width: 18rem; transform: translateY(${translateY}px); position: absolute;">
     <div class="p-3">
       <div class="d-inline-flex justfy-content-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">

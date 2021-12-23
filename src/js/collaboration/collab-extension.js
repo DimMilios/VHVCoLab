@@ -1,7 +1,9 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate } from './templates.js';
+import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords } from './templates.js';
+
+window.ui = uiCoords;
 
 let DEBUG = false;
 function log(text) {
@@ -171,11 +173,10 @@ window.addEventListener('DOMContentLoaded', () => {
 function renderCollabLayer(...children) {
   let output = document.querySelector('#output');
   let renderBefore = document.querySelector('#output > svg');
+  uiCoords.svgHeight = renderBefore?.height.baseVal.value ?? window.innerHeight;
+
   render(
-    collabTemplate(
-      renderBefore?.height.baseVal.value ?? window.innerHeight,
-      ...children
-    ),
+    collabTemplate(uiCoords.svgHeight, ...children),
     output,
     { renderBefore }
   );
