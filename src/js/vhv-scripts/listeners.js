@@ -109,9 +109,8 @@ import { setupDropArea } from '../drop.js';
 import { buildPdfIconListInMenu } from './menu.js';
 import { inSvgImage } from './utility-svg.js';
 
-import { interpret } from 'xstate';
-import { selectMachine, selectService } from '../state/selectStateMachine.js';
-import { layoutMachine, layoutService } from '../state/layoutStateMachine.js';
+import { selectService } from '../state/selectStateMachine.js';
+import { layoutService } from '../state/layoutStateMachine.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();

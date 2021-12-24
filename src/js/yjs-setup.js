@@ -6,7 +6,6 @@ import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import { redrawInputArea } from './vhv-scripts/misc.js';
 
 export let yProvider;
 

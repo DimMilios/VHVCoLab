@@ -1,4 +1,5 @@
 import { assign, createMachine, interpret } from 'xstate';
+import { uiCoords } from '../collaboration/templates';
 import { displayNotation } from '../vhv-scripts/misc';
 
 let inputElem = document.querySelector('#input');
@@ -9,10 +10,18 @@ const replaceColValue = (elem, value) => {
   if (!elem) return;
 
   let oldValue = [...elem.classList].find((cl) => /^col/g.test(cl));
+  let shouldRerender = false;
   if (oldValue) {
+    let numeric = oldValue.match(/\d+/g);
+    if (numeric && numeric != value) {
+      shouldRerender = true;
+    }
+
     elem.classList.remove(oldValue);
   }
   elem.classList.add(`col-${value}`);
+
+  return shouldRerender;
 };
 
 const resize = (inputCol, outputCol, commentsCol) => {
@@ -20,18 +29,24 @@ const resize = (inputCol, outputCol, commentsCol) => {
 
   return () => {
     replaceColValue(inputElem, inputCol);
-    replaceColValue(outputWithCommentsElem, outputCol + commentsCol - inputCol);
-    replaceColValue(outputElem, outputCol);
+    let rerenderCol = replaceColValue(outputWithCommentsElem, outputCol + commentsCol - inputCol);
+    let rerenderSVG = replaceColValue(outputElem, outputCol);
     replaceColValue(commentsSection, commentsCol);
+
+    if (rerenderCol || rerenderSVG) {
+      displayNotation();
+      let output = document.querySelector('#output > svg');
+      uiCoords.svgHeight = output?.height.baseVal.value ?? window.innerHeight;
+    }
   };
 };
 
-const resizeAndRerender = (inputCol, outputCol, commentsCol) => {
-  return () => {
-    resize(inputCol, outputCol, commentsCol)();
-    displayNotation();
-  };
-};
+// const resizeAndRerender = (inputCol, outputCol, commentsCol) => {
+//   return () => {
+//     resize(inputCol, outputCol, commentsCol)();
+//     displayNotation();
+//   };
+// };
 
 export const layoutMachine = createMachine({
   initial: 'notationAndTextVisible',
@@ -69,7 +84,7 @@ export const layoutMachine = createMachine({
               commentsCol: 0,
             }),
             ({ inputCol, outputCol, commentsCol }) =>
-              resizeAndRerender(inputCol, outputCol, commentsCol)(),
+              resize(inputCol, outputCol, commentsCol)(),
           ],
         },
         SHOW_COMMENTS: {
@@ -81,7 +96,7 @@ export const layoutMachine = createMachine({
               commentsCol: 4,
             }),
             ({ inputCol, outputCol, commentsCol }) =>
-              resizeAndRerender(inputCol, outputCol, commentsCol)(),
+              resize(inputCol, outputCol, commentsCol)(),
           ],
         },
       },
@@ -109,7 +124,7 @@ export const layoutMachine = createMachine({
               commentsCol: 0,
             }),
             ({ inputCol, outputCol, commentsCol }) =>
-              resizeAndRerender(inputCol, outputCol, commentsCol)(),
+              resize(inputCol, outputCol, commentsCol)(),
           ],
         },
       },
@@ -137,7 +152,7 @@ export const layoutMachine = createMachine({
               commentsCol: 0,
             }),
             ({ inputCol, outputCol, commentsCol }) =>
-              resizeAndRerender(inputCol, outputCol, commentsCol)(),
+              resize(inputCol, outputCol, commentsCol)(),
           ],
         },
       },
@@ -177,7 +192,7 @@ export const layoutMachine = createMachine({
               commentsCol: 0,
             }),
             ({ inputCol, outputCol, commentsCol }) =>
-              resizeAndRerender(inputCol, outputCol, commentsCol)(),
+              resize(inputCol, outputCol, commentsCol)(),
           ],
         },
       },

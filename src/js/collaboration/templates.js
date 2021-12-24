@@ -10,7 +10,7 @@ export let uiCoords = {
    */
   set svgHeight(value) {
     this.outputSVGHeight = typeof value == 'string' ? parseInt(value, 10) : value;
-    return this.outputSVGHeight;
+    render(commentSectionTemplate(this.outputSVGHeight), document.querySelector('.output-container'));
   },
 
   /**
@@ -94,17 +94,20 @@ export let selectAreaTemplate = (translateX, translateY, width, height, hidden =
     width: ${width}px; height: ${height}px;"
   ></div>`;
 
-let commentSectionTemplate = () => {
-  render(html`<div
-    id="comments-section"
-    class="col-0 h-100"
-    style="min-height: 95vh; max-height: 95vh;"
-  >
-    <div id="comments-container" style="height: ${uiCoords.svgHeight}px; background-color: rgba(216, 215, 215, 0.8);"></div>
-  </div>`, document.querySelector('.row'));
+let commentSectionTemplate = (height) => {
+  return html`
+    <div
+      id="comments-section"
+      class="col-0 h-100"
+      style="min-height: 95vh; max-height: 95vh; position: relative;"
+    >
+      <div
+        id="comments-container"
+        style="height: ${height}px; background-color: rgba(216, 215, 215, 0.8);"
+      ></div>
+    </div>
+  `;
 }
-window.cst = commentSectionTemplate;
-
 
 let comments = [];
 let commentFormTemplate = (translateY) => {
