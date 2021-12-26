@@ -7,10 +7,12 @@
     "serve": "vite preview",
     "clean:build": "rm -rf dist && npm run build && npm run serve",
     "lint": "eslint src/**",
-    "format": "prettier --write src/**"
+    "format": "prettier --write src/**",
+    "json-server": "json-server --watch --delay 1000 --port 3001 db.json"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.3.0",
+    "json-server": "^0.17.0",
     "prettier": "^2.4.1",
     "vite": "^2.6.4"
   },
