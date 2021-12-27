@@ -60,20 +60,32 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
   ></div>`;
 };
 
-// If clientId === provider.awareness.clientID
-// include the comment button
-export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, color) => {
+export const multiSelectCoords = (selectedNotes) => {
   const selector = selectedNotes.map((id) => '#' + id).join(',');
-  // const coords = calculateMultiSelectCoords(
-  //   Array.from(document.querySelectorAll(selector))
-  // );
   let output = document.querySelector('#output');
 
-  const coords = calculateMultiSelectCoordsWithOffset(
+  return calculateMultiSelectCoordsWithOffset(
     Array.from(document.querySelectorAll(selector)),
     document.querySelector('#input'),
     output.closest('[class*=output-container]').scrollTop
   );
+}
+
+// If clientId === provider.awareness.clientID
+// include the comment button
+export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, color) => {
+  // const selector = selectedNotes.map((id) => '#' + id).join(',');
+  // // const coords = calculateMultiSelectCoords(
+  // //   Array.from(document.querySelectorAll(selector))
+  // // );
+  // let output = document.querySelector('#output');
+
+  // const coords = calculateMultiSelectCoordsWithOffset(
+  //   Array.from(document.querySelectorAll(selector)),
+  //   document.querySelector('#input'),
+  //   output.closest('[class*=output-container]').scrollTop
+  // );
+  const coords = multiSelectCoords(selectedNotes);
 
   return html`<div
     class="multi-select-area"
@@ -191,3 +203,18 @@ let commentTemplate = (user, content, translateY) => {
     </div>
   </div>`;
 }
+
+// Contains highlighted multi-selected areas referring to comments
+export let highlightLayerTemplate = (height, ...children) => {
+  return html`<div id="highlight-container" style="height: ${height}px">${children}</div>`;
+}
+
+// How can we get access to the corresponding coordinates of the multi-selected area?
+export let highlightTemplate = (clientId, coords) => {
+  return html`<div
+    class="highlight-area"
+    style="transform: translate(${coords.left}px, ${coords.top}px); width: ${coords.width}px; height:${coords.height}px; background-color: rgba(0, 0, 255, 0.09);"
+    data-client-id=${clientId}
+    data-comment-id=${'c_12345'}
+  ></div>`
+};

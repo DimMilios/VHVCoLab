@@ -1,7 +1,7 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords } from './templates.js';
+import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightTemplate, highlightLayerTemplate, multiSelectCoords } from './templates.js';
 
 window.ui = uiCoords;
 
@@ -132,7 +132,20 @@ export function updateHandler({ added, updated, removed }) {
       userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
     )}`;
 
-  renderCollabLayer(multiSelects, singleSelects, userAwareness);
+  // renderCollabLayer(multiSelects, singleSelects, userAwareness);
+  
+  // temporary, we don't want highlights to depend on Yjs at all
+  let highlights = html`${Array.from(yProvider.awareness.getStates().entries())
+    .filter(([_, state]) => state?.multiSelect != null)
+    .map(([clientId, state]) => highlightTemplate(clientId, multiSelectCoords(state.multiSelect)))
+  }`;
+  // renderHighlightLayer(highlights);
+
+  render(
+    html`${collabLayer(multiSelects, singleSelects, userAwareness)}
+    ${renderHighlightLayer(highlights)}`,
+    document.querySelector('#output')
+  );
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -163,6 +176,7 @@ window.addEventListener('DOMContentLoaded', () => {
             addListenersToOutput(mutation.target);
             observer.disconnect();
           }
+          // renderHighlightLayer();
         }
       }
     }
@@ -170,16 +184,42 @@ window.addEventListener('DOMContentLoaded', () => {
   mutationObserver.observe(document.body, { childList: true, subtree: true });
 });
 
-function renderCollabLayer(...children) {
+function collabLayer(...children) {
   let output = document.querySelector('#output');
   let renderBefore = document.querySelector('#output > svg');
   uiCoords.svgHeight = renderBefore?.height.baseVal.value ?? window.innerHeight;
 
-  render(
-    collabTemplate(uiCoords.svgHeight, ...children),
-    output,
-    { renderBefore }
-  );
+  return collabTemplate(uiCoords.svgHeight, ...children);
+}
+
+// function renderCollabLayer(...children) {
+//   let output = document.querySelector('#output');
+//   let renderBefore = document.querySelector('#output > svg');
+//   uiCoords.svgHeight = renderBefore?.height.baseVal.value ?? window.innerHeight;
+
+//   render(
+//     collabTemplate(uiCoords.svgHeight, ...children),
+//     output,
+//     { renderBefore }
+//   );
+// }
+
+export function renderHighlightLayer(...children) {
+  let output = document.querySelector('#output');
+  let svg = document.querySelector('#output > svg');
+
+  let collab = output.querySelector('.collab-container');
+  let renderBefore = collab != null ? collab : svg;
+  let svgHeight = svg?.height.baseVal.value ?? window.innerHeight;
+
+  // console.log('Rendering highlight layer', {svgHeight, output, renderBefore});
+
+  return highlightLayerTemplate(svgHeight, ...children)
+  // render(
+  //   highlightLayerTemplate(svgHeight, ...children),
+  //   output,
+  //   { renderBefore }
+  // );
 }
 
 function addListenersToOutput(outputTarget) {
@@ -192,9 +232,9 @@ function addListenersToOutput(outputTarget) {
     if (event.target.nodeName != 'svg') return;
 
     if (!document.querySelector('.collab-container')) {
-      renderCollabLayer();
+      collabLayer();
     }
-
+    
     startTime = performance.now();
 
     rbSelection.isSelecting = true;

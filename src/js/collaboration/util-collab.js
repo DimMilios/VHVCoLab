@@ -26,12 +26,13 @@ export function getCoordinatesWithOffset(target, offsetElem) {
   let staffBounds = closestStaffElem?.getBoundingClientRect();
 
   let output = document.querySelector('#output');
+  let scrollTop = output.closest('[class*=output-container]').scrollTop
 
   return {
     staffX: staffBounds.x ?? targetBounds.x,
     staffY: staffBounds.y ?? targetBounds.y,
     targetX: targetBounds.x - offsetElem.offsetWidth,
-    targetY: targetBounds.y - offsetElem.offsetTop + output.scrollTop,
+    targetY: targetBounds.y - offsetElem.offsetTop + scrollTop,
     targetBounds,
     staffBounds,
   };

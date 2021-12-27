@@ -69,6 +69,20 @@
   pointer-events: none;
 }
 
+#highlight-container {
+  position: absolute;
+  width: 100%;
+  z-index: calc(var(--collab-layer-zIndex) + 20);
+  background-color: rgba(0, 140, 220, 0.05);
+  pointer-events: none;
+}
+
+.highlight-area {
+  position: absolute;
+  background-color: blue;
+  pointer-events: none;
+}
+
 /* Given to note elements when selected */
 .selected {
   filter: url(#highlight-shadow);

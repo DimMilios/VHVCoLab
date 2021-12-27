@@ -78,7 +78,17 @@ export function displayNotation(page, force, restoreid) {
       }
 
       let output = document.querySelector('#output');
-      output.innerHTML = svg;
+      // output.innerHTML = svg;
+
+      let oldSvg = output.querySelector('svg');
+      if (oldSvg) {
+        oldSvg.remove();
+      }
+
+      let svgElem = document.createElement('svg');
+      output.appendChild(svgElem);
+      svgElem.outerHTML = svg;
+
       if (ishumdrum) {
         if (restoreid) {
           restoreSelectedSvgElement(restoreid);
