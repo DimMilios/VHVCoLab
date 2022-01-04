@@ -80,9 +80,13 @@ export function displayNotation(page, force, restoreid) {
       let output = document.querySelector('#output');
       // output.innerHTML = svg;
 
-      let oldSvg = output.querySelector('svg');
-      if (oldSvg) {
-        oldSvg.remove();
+      let oldSvg = output.querySelectorAll('svg');
+      if (oldSvg.length > 0) {
+        oldSvg.forEach(svg => { 
+          if (!svg.classList.contains('bi')) {
+            svg.remove();
+          }
+        });
       }
 
       let svgElem = document.createElement('svg');
