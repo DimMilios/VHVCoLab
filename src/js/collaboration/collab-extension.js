@@ -1,7 +1,7 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightTemplate, highlightLayerTemplate, multiSelectCoords } from './templates.js';
+import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords } from './templates.js';
 
 window.ui = uiCoords;
 
@@ -132,14 +132,11 @@ export function updateHandler({ added, updated, removed }) {
       userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
     )}`;
 
-  // renderCollabLayer(multiSelects, singleSelects, userAwareness);
   
-  // temporary, we don't want highlights to depend on Yjs at all
   let highlights = html`${Array.from(yProvider.awareness.getStates().entries())
-    .filter(([_, state]) => state?.multiSelect != null)
-    .map(([clientId, state]) => highlightTemplate(clientId, multiSelectCoords(state.multiSelect)))
+    .filter(([_, state]) => state?.highlights != null)
+    .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
   }`;
-  // renderHighlightLayer(highlights);
 
   render(
     html`${collabLayer(multiSelects, singleSelects, userAwareness)}

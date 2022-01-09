@@ -1,5 +1,6 @@
 import { html, render } from 'lit-html';
 import { layoutService } from '../state/layoutStateMachine.js';
+import { yProvider } from '../yjs-setup.js';
 import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
 export let uiCoords = {
@@ -128,14 +129,31 @@ let commentFormTemplate = (translateY) => {
     let textBox = document.querySelector('#comment-text');
     console.log('You sent:', textBox.value);
 
+    let commentId = `comment-${Math.random().toString(16).substring(2, 8)}`;
+
+    let notes = yProvider.awareness.getLocalState()?.multiSelect;
+    if (Array.isArray(notes) && notes.length > 0) {
+      let coords = multiSelectCoords(notes);
+      let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
+      yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
+        commentId,
+        ...coords,
+      }));
+      yProvider.awareness.setLocalStateField('multiSelect', null);
+    }
+
     layoutService.send('SHOW_COMMENTS');
 
-    comments.push({ value: textBox.value, translateY });
+    comments.push({ commentId, value: textBox.value, translateY });
 
     localStorage.setItem('comments', JSON.stringify(comments));
     
-    render(html`${comments.map(c => commentTemplate('Dimitris', c.value, c.translateY))}`,
-      document.querySelector('#comments-container'));
+    render(
+      html`${comments.map((c) =>
+        commentTemplate(c.commentId, 'Dimitris', c.value, c.translateY)
+      )}`,
+      document.querySelector('#comments-container')
+    );
 
     textBox.value = '';
     $('#post-comment').modal('hide');
@@ -188,8 +206,8 @@ function remToPixels(rem) {
 // and the user added a comment for
 
 // Include a user profile icon (probably img URL) when we have persistence for users
-let commentTemplate = (user, content, translateY) => {
-  return html`<div class="card ml-4" style="width: 18rem; transform: translateY(${translateY}px); position: absolute;">
+let commentTemplate = (commentId, user, content, translateY) => {
+  return html`<div id=${commentId} class="card ml-4" style="width: 18rem; transform: translateY(${translateY}px); position: absolute;">
     <div class="p-3">
       <div class="d-inline-flex justfy-content-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">
@@ -209,12 +227,13 @@ export let highlightLayerTemplate = (height, ...children) => {
   return html`<div id="highlight-container" style="height: ${height}px">${children}</div>`;
 }
 
-// How can we get access to the corresponding coordinates of the multi-selected area?
-export let highlightTemplate = (clientId, coords) => {
-  return html`<div
-    class="highlight-area"
-    style="transform: translate(${coords.left}px, ${coords.top}px); width: ${coords.width}px; height:${coords.height}px; background-color: rgba(0, 0, 255, 0.09);"
-    data-client-id=${clientId}
-    data-comment-id=${'c_12345'}
-  ></div>`
+export let highlightListTemplate = (clientId, state) => {
+  return html`${state.map((h) => highlightTemplate(clientId, h))}`;
 };
+
+let highlightTemplate = (clientId, state) => html`<div
+  class="highlight-area"
+  style="transform: translate(${state.left}px, ${state.top}px); width: ${state.width}px; height:${state.height}px; background-color: rgba(0, 0, 255, 0.09);"
+  data-client-id=${clientId}
+  data-comment-id=${state.commentId}
+></div>`;
