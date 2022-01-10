@@ -283,8 +283,8 @@ function processNotationKeyCommand(event) {
     return;
   }
 
-  const localState = yProvider.awareness.getLocalState();
-  if (localState.multiSelect) {
+  const localState = yProvider?.awareness.getLocalState();
+  if (localState?.multiSelect) {
     // Transposition for multi selected notes
     // FIX: If the global CursorNote is defined, and we then try to transpose a multi-selected area
     // the CursorNote is re-assigned to one of the multi-selected note elements

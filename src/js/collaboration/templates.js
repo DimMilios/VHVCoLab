@@ -145,7 +145,6 @@ let commentFormTemplate = (translateY) => {
     layoutService.send('SHOW_COMMENTS');
 
     comments.push({ commentId, value: textBox.value, translateY });
-
     localStorage.setItem('comments', JSON.stringify(comments));
     
     render(

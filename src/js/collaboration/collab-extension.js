@@ -138,10 +138,19 @@ export function updateHandler({ added, updated, removed }) {
     .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
   }`;
 
+  let output = document.querySelector('#output');
+  let renderBefore = document.querySelector('#output > svg');
+
+  let alreadyExist = false;
+  if (output.querySelector('.collab-container, .highlight-container')) {
+    alreadyExist = true;
+  }
+
   render(
     html`${collabLayer(multiSelects, singleSelects, userAwareness)}
     ${renderHighlightLayer(highlights)}`,
-    document.querySelector('#output')
+    output,
+    { renderBefore: alreadyExist ? null : renderBefore }
   );
 }
 
