@@ -22,8 +22,9 @@ export let uiCoords = {
   }
 };
 
-export let collabTemplate = (svgHeight, ...children) =>
-  html`<div class="collab-container" style="height: ${svgHeight}px">${children}</div>`;
+export let collabTemplate = (svgHeight, ...children) => {
+  return html`<div id="collab-container" style="height: ${svgHeight}px">${children}</div>`;
+}
 
 export let userAwarenessTemplate = (clientId, elemRefId, name) => {
   let el = document.getElementById(elemRefId);
@@ -126,7 +127,8 @@ let comments = [];
 let commentFormTemplate = (translateY) => {
   const handleCommentPost = event => {
     event.preventDefault();
-    let textBox = document.querySelector('#comment-text');
+
+    let textBox = event.target.querySelector('input[name="comment-text"]');
     console.log('You sent:', textBox.value);
 
     let commentId = `comment-${Math.random().toString(16).substring(2, 8)}`;
@@ -162,7 +164,7 @@ let commentFormTemplate = (translateY) => {
     <form id="post-comment-form" @submit=${handleCommentPost}>
       <div class="form-group">
         <label for="comment-text" class="col-form-label">Comment:</label>
-        <input type="text" class="form-control" id="comment-text" />
+        <input type="text" class="form-control" id="comment-text" name="comment-text" />
       </div>
       <div class="form-group float-right">
         <button type="button" class="btn btn-secondary" role="button" data-dismiss="modal">Close</button>

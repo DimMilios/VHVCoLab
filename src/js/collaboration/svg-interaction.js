@@ -230,8 +230,8 @@ function extractEditorPosition(element) {
 
   return { id, line, field, subfield };
 }
-window.collabLayer = {
-  createSVGCollabLayer,
-  copySVGElement,
-  bootstrap
-};
+// window.collabLayer = {
+//   createSVGCollabLayer,
+//   copySVGElement,
+//   bootstrap
+// };

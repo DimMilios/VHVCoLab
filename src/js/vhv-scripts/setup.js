@@ -37,7 +37,7 @@ let editor;
 let configureAce = true;
 
 export function getAceEditor() {
-  if (typeof editor === 'undefined') {
+  if (!editor) {
     // console.log(
     //   "ace wasn't initialized, setting ace up now",
     //   new Error().stack

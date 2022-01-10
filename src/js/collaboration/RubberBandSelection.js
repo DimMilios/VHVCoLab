@@ -86,7 +86,7 @@ export class RubberBandSelection {
     let offsetminY = Math.min(top, bottom);
     let offsetmaxY = Math.max(top, bottom);
 
-    let collabContainer = document.querySelector('.collab-container');
+    let collabContainer = document.querySelector('#collab-container');
     if (collabContainer) {
       render(
         selectAreaTemplate(
@@ -126,7 +126,7 @@ export class RubberBandSelection {
   }
 
   hide() {
-    let collabContainer = document.querySelector('.collab-container');
+    let collabContainer = document.querySelector('#collab-container');
     if (collabContainer) {
       render(selectAreaTemplate(0, 0, 0, 0, true), collabContainer);
     }

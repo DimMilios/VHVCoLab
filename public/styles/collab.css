@@ -2,7 +2,7 @@
   --collab-layer-zIndex: 900;
 }
 
-.collab-container, .comments {
+#collab-container, .comments {
   position: absolute;
   
   width: 100%;

@@ -142,7 +142,7 @@ export function updateHandler({ added, updated, removed }) {
   let renderBefore = document.querySelector('#output > svg');
 
   let alreadyExist = false;
-  if (output.querySelector('.collab-container, .highlight-container')) {
+  if (output.querySelector('#collab-container, #highlight-container')) {
     alreadyExist = true;
   }
 
@@ -214,7 +214,7 @@ export function renderHighlightLayer(...children) {
   let output = document.querySelector('#output');
   let svg = document.querySelector('#output > svg');
 
-  let collab = output.querySelector('.collab-container');
+  let collab = output.querySelector('#collab-container');
   let renderBefore = collab != null ? collab : svg;
   let svgHeight = svg?.height.baseVal.value ?? window.innerHeight;
 
@@ -237,9 +237,9 @@ function addListenersToOutput(outputTarget) {
     // Start selecting only when there isn't a note element on the cursor
     if (event.target.nodeName != 'svg') return;
 
-    if (!document.querySelector('.collab-container')) {
-      collabLayer();
-    }
+    // if (!document.querySelector('#collab-container')) {
+    //   collabLayer();
+    // }
     
     startTime = performance.now();
 
