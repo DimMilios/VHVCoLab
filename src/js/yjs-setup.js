@@ -1,5 +1,5 @@
 import * as Y from 'yjs';
-// import { WebsocketProvider } from 'y-websocket';
+import { WebsocketProvider } from 'y-websocket';
 import { WebrtcProvider } from 'y-webrtc';
 import { updateHandler } from './collaboration/collab-extension.js';
 import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
@@ -23,12 +23,12 @@ window.addEventListener('load', () => {
   const ydoc = new Y.Doc();
   
   if (typeof yProvider == 'undefined') {
-    // yProvider = new WebsocketProvider('ws://localhost:9000', 'ace-demo', ydoc); // local
-    // yProvider.on('status', event => {
-    //   console.log(event.status) // websocket logs "connected" or "disconnected"
-    // })
+    yProvider = new WebsocketProvider('ws://localhost:3001', 'ace-demo', ydoc); // local
+    yProvider.on('status', event => {
+      console.log(event.status) // websocket logs "connected" or "disconnected"
+    })
 
-    yProvider = new WebrtcProvider('ace-demo', ydoc);
+    // yProvider = new WebrtcProvider('ace-demo', ydoc);
   }
 
   const type = ydoc.getText('ace');
@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
   yProvider.awareness.setLocalStateField('user', userData);
 
   // Insert an initial song to the text editor
-  insertSplashMusic();
+  // insertSplashMusic();
   editor.renderer.setOption('maxLines', 50);
 
   editor.getSession().selection.on('changeCursor', function () {
@@ -65,7 +65,7 @@ window.addEventListener('load', () => {
     }
   });
 
-  yProvider.awareness.on('update', updateHandler);
+  // yProvider.awareness.on('update', updateHandler);
 
   window.example = { yProvider, ydoc, type };
 });
