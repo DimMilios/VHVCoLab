@@ -5,6 +5,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "serve-clean": "rm -rf dist && npm run build && npm run serve",
     "clean:build": "rm -rf dist && npm run build",
     "lint": "eslint src/**",
     "format": "prettier --write src/**",

@@ -25,12 +25,12 @@ window.addEventListener('load', () => {
   let params = (new URL(document.location)).searchParams;
   let roomname = params.has('roomname') ? params.get('roomname') : 'ace-demo';
   if (typeof yProvider == 'undefined') {
-    yProvider = new WebsocketProvider('ws://localhost:3001', roomname, ydoc); // local
-    yProvider.on('status', event => {
-      console.log(event.status) // websocket logs "connected" or "disconnected"
-    })
+    // yProvider = new WebsocketProvider('ws://localhost:3001', roomname, ydoc); // local
+    // yProvider.on('status', event => {
+    //   console.log(event.status) // websocket logs "connected" or "disconnected"
+    // })
 
-    // yProvider = new WebrtcProvider(roomname, ydoc);
+    yProvider = new WebrtcProvider(roomname, ydoc);
   }
 
   const type = ydoc.getText('ace');
