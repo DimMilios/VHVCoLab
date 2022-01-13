@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <link rel="stylesheet" href="/styles/bootstrap-4.6/bootstrap.min.css">
+  <script src="/styles/bootstrap-4.6/jquery-3.5.1.min.js"></script>
+  <script src="/styles/bootstrap-4.6/bootstrap.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="/styles/dashboard.css">
+  <script src="./index.js" type="module"></script>
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12" id="content">
+
+        <div class="d-flex flex-row justify-content-between mt-2">
+
+          <h1>Dashboard</h1>
+
+          <div class="d-flex">
+            <button class="btn btn-primary" id="new-btn" type="button" data-toggle="modal"
+              data-target="#new-document-modal">New</button>
+          </div>
+
+        </div>
+
+        <div class="modal fade" id="new-document-modal" tabindex="-1"
+          aria-labelledby="new-document-modalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="new-document-modalLabel">New Score</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">x</span></button>
+              </div>
+
+              <div class="modal-body">
+                <form id="new-document">
+                  <div class="form-group">
+                    <label class="col-form-label" for="document-title">Title</label>
+                    <input class="form-control" id="document-title" type="text"
+                      name="document-title" />
+                  </div>
+                  <div class="form-group float-right">
+                    <button class="btn btn-secondary" type="button" role="button"
+                      data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary ml-1" type="submit" role="button">Create
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

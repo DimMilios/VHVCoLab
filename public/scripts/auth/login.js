@@ -11,8 +11,16 @@ loginForm.addEventListener('submit', async (event) => {
     method: 'POST',
     body: JSON.stringify(entries),
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
   });
 
   let json = await response.json();
+
+  if (response.status === 200) {
+    console.log('ok');
+    window.location.href = 'http://localhost:3000/pages/dashboard/index.html';
+  } else if (response.status === 400) {
+    console.log('bad request');
+  }
   console.log(json);
 });
