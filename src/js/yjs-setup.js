@@ -27,12 +27,12 @@ window.addEventListener('load', () => {
   let docId = params.get('docId');
   let room = `docId=${docId}&roomname=${roomname}`
   if (typeof yProvider == 'undefined') {
-    yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
-    yProvider.on('status', event => {
-      console.log(event.status) // websocket logs "connected" or "disconnected"
-    })
+    // yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
+    // yProvider.on('status', event => {
+    //   console.log(event.status) // websocket logs "connected" or "disconnected"
+    // })
 
-    // yProvider = new WebrtcProvider(roomname, ydoc);
+    yProvider = new WebrtcProvider(roomname, ydoc);
   }
 
   const type = ydoc.getText('ace');

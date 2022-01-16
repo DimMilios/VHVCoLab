@@ -138,20 +138,19 @@ export function updateHandler({ added, updated, removed }) {
     .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
   }`;
 
-  let output = document.querySelector('#output');
-  let renderBefore = document.querySelector('#output > svg');
+  let collabContainer = document.querySelector('#output #collab');
 
-  let alreadyExist = false;
-  if (output.querySelector('#collab-container, #highlight-container')) {
-    alreadyExist = true;
+  if (collabContainer) {
+    render(
+      html`
+        ${collabLayer(multiSelects, singleSelects, userAwareness)}
+        ${renderHighlightLayer(highlights)}
+      `,
+      collabContainer,
+    );
+  } else {
+    console.log('Element div#collab is not found. Cannot render collaboration elements.');
   }
-
-  render(
-    html`${collabLayer(multiSelects, singleSelects, userAwareness)}
-    ${renderHighlightLayer(highlights)}`,
-    output,
-    { renderBefore: alreadyExist ? null : renderBefore }
-  );
 }
 
 window.addEventListener('DOMContentLoaded', () => {
