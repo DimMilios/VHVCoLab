@@ -22,6 +22,16 @@ export let uiCoords = {
   }
 };
 
+export let state = {}
+
+export let setState = (newState) => {
+  console.log('Old state', state);
+  // let clone = JSON.parse(JSON.stringify(state));
+  // let newStateClone = JSON.parse(JSON.stringify(newState));
+  state = Object.assign({}, state, newState);
+  console.log('New state', state);
+}
+
 export let collabTemplate = (svgHeight, ...children) => {
   return html`<div id="collab-container" style="height: ${svgHeight}px">${children}</div>`;
 }
@@ -149,6 +159,12 @@ let commentFormTemplate = (translateY) => {
     let createdComment = await response.json();
     if (response.status === 201) {
       console.log('Added comment', createdComment);
+      
+      let oldComments = state.comments;
+
+      setState({ 
+        comments: oldComments ? [...oldComments, createdComment] : [createdComment] 
+      });
 
       // let comments = localStorage.getItem('comments');
       // if (comments) {
