@@ -24,15 +24,15 @@ window.addEventListener('load', () => {
   
   let params = (new URL(document.location)).searchParams;
   let roomname = params.has('roomname') ? params.get('roomname') : 'ace-demo';
-  let docId = params.get('docId');
-  let room = `docId=${docId}&roomname=${roomname}`
+  let DOC_ID = params.get('docId');
+  let room = `docId=${DOC_ID}&roomname=${roomname}`
   if (typeof yProvider == 'undefined') {
-    // yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
-    // yProvider.on('status', event => {
-    //   console.log(event.status) // websocket logs "connected" or "disconnected"
-    // })
+    yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
+    yProvider.on('status', event => {
+      console.log(event.status) // websocket logs "connected" or "disconnected"
+    })
 
-    yProvider = new WebrtcProvider(roomname, ydoc);
+    // yProvider = new WebrtcProvider(roomname, ydoc);
   }
 
   const type = ydoc.getText('ace');
@@ -70,6 +70,34 @@ window.addEventListener('load', () => {
   });
 
   yProvider.awareness.on('update', updateHandler);
+
+  let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`);
+  
+  eventSource.addEventListener('open', () => 
+    console.log('Event source connection for comments open'));
+
+  eventSource.addEventListener('message', event => {
+    let comments = JSON.parse(event.data);
+    console.log('Message event', comments);
+    if (Array.isArray(comments)) {
+      localStorage.setItem('comments', JSON.stringify([{ documentId: DOC_ID, data: JSON.parse(event.data) }]));
+    } else {
+      let savedComments = localStorage.getItem('comments');
+      if (savedComments) {
+        savedComments = JSON.parse(savedComments);
+
+        let commentsOfId = savedComments.find(c => c.documentId === DOC_ID);
+        if (commentsOfId) {
+          let newComments = commentsOfId.data.concat(JSON.parse(event.data));
+          localStorage.setItem('comments', JSON.stringify([{ documentId: DOC_ID, data: newComments}, ...savedComments]));
+        }
+      }
+    }
+  })
+  
+  eventSource.addEventListener('error', error => {
+    console.log('Error', error);
+  })
 
   window.example = { yProvider, ydoc, type };
 });

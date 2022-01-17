@@ -125,40 +125,94 @@ let commentSectionTemplate = (height) => {
 
 let comments = [];
 let commentFormTemplate = (translateY) => {
-  const handleCommentPost = event => {
+  const handleCommentPost = async event => {
     event.preventDefault();
 
-    let textBox = event.target.querySelector('input[name="comment-text"]');
-    console.log('You sent:', textBox.value);
+    let content = event.target.querySelector('input[name="comment-text"]');
+    console.log('You sent:', content.value);
 
-    let commentId = `comment-${Math.random().toString(16).substring(2, 8)}`;
+    let params = (new URL(document.location)).searchParams;
+    let documentId = params.get('docId');
 
-    let notes = yProvider.awareness.getLocalState()?.multiSelect;
-    if (Array.isArray(notes) && notes.length > 0) {
-      let coords = multiSelectCoords(notes);
-      let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
-      yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
-        commentId,
-        ...coords,
-      }));
-      yProvider.awareness.setLocalStateField('multiSelect', null);
+    let response = await fetch('http://localhost:3001/api/comments', {
+      method: 'POST',
+      body: JSON.stringify({
+        "content": content.value,
+        "parentCommentId": null,
+        "documentId": documentId ? Number(documentId) : 1,
+        "clientId": yProvider.awareness.clientID
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .catch(console.log)
+
+    let createdComment = await response.json();
+    if (response.status === 201) {
+      console.log('Added comment', createdComment);
+
+      // let comments = localStorage.getItem('comments');
+      // if (comments) {
+      //   savedComments = JSON.parse(savedComments);
+      //   localStorage.setItem('comments', JSON.stringify(savedComments.concat(JSON.parse(createdComment))));
+      // }
+
+      let notes = yProvider.awareness.getLocalState()?.multiSelect;
+      if (Array.isArray(notes) && notes.length > 0) {
+        let coords = multiSelectCoords(notes);
+        let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
+        yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
+          commentId: createdComment.id,
+          ...coords,
+        }));
+        yProvider.awareness.setLocalStateField('multiSelect', null);
+      }
+
+      layoutService.send('SHOW_COMMENTS');
+      render(
+        html`${comments.map((c) =>
+          commentTemplate(c.commentId, 'Dimitris', c.value, c.translateY)
+        )}`,
+        document.querySelector('#comments-container')
+      );
     }
 
-    layoutService.send('SHOW_COMMENTS');
-
-    comments.push({ commentId, value: textBox.value, translateY });
-    localStorage.setItem('comments', JSON.stringify(comments));
-    
-    render(
-      html`${comments.map((c) =>
-        commentTemplate(c.commentId, 'Dimitris', c.value, c.translateY)
-      )}`,
-      document.querySelector('#comments-container')
-    );
-
-    textBox.value = '';
+    content.value = '';
     $('#post-comment').modal('hide');
   }
+  // const handleCommentPost = event => {
+  //   event.preventDefault();
+
+  //   let textBox = event.target.querySelector('input[name="comment-text"]');
+  //   console.log('You sent:', textBox.value);
+
+  //   let commentId = `comment-${Math.random().toString(16).substring(2, 8)}`;
+
+  //   let notes = yProvider.awareness.getLocalState()?.multiSelect;
+  //   if (Array.isArray(notes) && notes.length > 0) {
+  //     let coords = multiSelectCoords(notes);
+  //     let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
+  //     yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
+  //       commentId,
+  //       ...coords,
+  //     }));
+  //     yProvider.awareness.setLocalStateField('multiSelect', null);
+  //   }
+
+  //   layoutService.send('SHOW_COMMENTS');
+
+  //   comments.push({ commentId, value: textBox.value, translateY });
+  //   localStorage.setItem('comments', JSON.stringify(comments));
+    
+  //   render(
+  //     html`${comments.map((c) =>
+  //       commentTemplate(c.commentId, 'Dimitris', c.value, c.translateY)
+  //     )}`,
+  //     document.querySelector('#comments-container')
+  //   );
+
+  //   textBox.value = '';
+  //   $('#post-comment').modal('hide');
+  // }
 
   return html` <div class="modal-body">
     <form id="post-comment-form" @submit=${handleCommentPost}>
