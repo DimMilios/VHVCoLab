@@ -1,4 +1,5 @@
 import { html, render } from 'lit-html';
+import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { yProvider } from '../yjs-setup.js';
 import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
@@ -21,16 +22,6 @@ export let uiCoords = {
     return this.outputSVGHeight;
   }
 };
-
-export let state = {}
-
-export let setState = (newState) => {
-  console.log('Old state', state);
-  // let clone = JSON.parse(JSON.stringify(state));
-  // let newStateClone = JSON.parse(JSON.stringify(newState));
-  state = Object.assign({}, state, newState);
-  console.log('New state', state);
-}
 
 export let collabTemplate = (svgHeight, ...children) => {
   return html`<div id="collab-container" style="height: ${svgHeight}px">${children}</div>`;
@@ -161,23 +152,16 @@ let commentFormTemplate = (translateY) => {
       console.log('Added comment', createdComment);
       
       let oldComments = state.comments;
-
       setState({ 
         comments: oldComments ? [...oldComments, createdComment] : [createdComment] 
       });
-
-      // let comments = localStorage.getItem('comments');
-      // if (comments) {
-      //   savedComments = JSON.parse(savedComments);
-      //   localStorage.setItem('comments', JSON.stringify(savedComments.concat(JSON.parse(createdComment))));
-      // }
 
       let notes = yProvider.awareness.getLocalState()?.multiSelect;
       if (Array.isArray(notes) && notes.length > 0) {
         let coords = multiSelectCoords(notes);
         let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
         yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
-          commentId: createdComment.id,
+          commentId: 'comment-' + createdComment.id,
           ...coords,
         }));
         yProvider.awareness.setLocalStateField('multiSelect', null);

@@ -6,7 +6,7 @@ import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
 import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import { setState, state } from './collaboration/templates.js';
+import { setState, state } from './state/comments.js';
 
 export let yProvider;
 
@@ -74,22 +74,10 @@ window.addEventListener('load', () => {
 
   /*
     comments: [
-      { documentId: 1, 
-        data: [
-          { ...comment1 },
-          { ...comment2 },
-          { ...comment3 },
-        ]
-      }
+      { ...comment1 },
+      { ...comment2 },
+      { ...comment3 },
     ]
-    
-    comments: {
-      documentId: [
-        { ...comment1 },
-        { ...comment2 },
-        { ...comment3 },
-      ]
-    }
   */
 
   let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`);
@@ -100,46 +88,22 @@ window.addEventListener('load', () => {
   eventSource.addEventListener('message', event => {
     let payload = JSON.parse(event.data);
     console.log('Message event', payload);
+
     if (Array.isArray(payload)) {
-      // setState({ 
-      //   comments: { 
-      //     [DOC_ID]: payload
-      //   } 
-      // });
-      
       setState({ comments: payload });
-    } else {
-      let oldComments = state.comments;
-
-      setState({ 
-        comments: oldComments ? [...oldComments, payload] : [payload] 
-      });
-
-      // setState({ 
-      //   comments: { 
-      //     [DOC_ID]: oldComments ? [payload, ...oldComments] : [payload]
-      //   } 
-      // });
+      return;
     }
-  })
-  // eventSource.addEventListener('message', event => {
-  //   let comments = JSON.parse(event.data);
-  //   console.log('Message event', comments);
-  //   if (Array.isArray(comments)) {
-  //     localStorage.setItem('comments', JSON.stringify([{ documentId: DOC_ID, data: JSON.parse(event.data) }]));
-  //   } else {
-  //     let savedComments = localStorage.getItem('comments');
-  //     if (savedComments) {
-  //       savedComments = JSON.parse(savedComments);
 
-  //       let commentsOfId = savedComments.find(c => c.documentId === DOC_ID);
-  //       if (commentsOfId) {
-  //         let newComments = commentsOfId.data.concat(JSON.parse(event.data));
-  //         localStorage.setItem('comments', JSON.stringify([{ documentId: DOC_ID, data: newComments}, ...savedComments]));
-  //       }
-  //     }
-  //   }
-  // })
+    let oldComments = state.comments;
+
+    setState({ 
+      comments: oldComments ? [...oldComments, payload] : [payload] 
+    });
+    
+    // setState((old, next) => {
+    //   return old.concat(next); 
+    // });
+  })
   
   eventSource.addEventListener('error', error => {
     console.log('Error', error);
