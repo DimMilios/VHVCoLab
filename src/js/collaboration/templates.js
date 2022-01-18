@@ -124,7 +124,6 @@ let commentSectionTemplate = (height) => {
   `;
 }
 
-let comments = [];
 let commentFormTemplate = (translateY) => {
   const handleCommentPost = async event => {
     event.preventDefault();
@@ -132,33 +131,38 @@ let commentFormTemplate = (translateY) => {
     let content = event.target.querySelector('input[name="comment-text"]');
     console.log('You sent:', content.value);
 
-    let params = (new URL(document.location)).searchParams;
-    let documentId = params.get('docId');
+    let notes = yProvider.awareness.getLocalState()?.multiSelect;
+    if (Array.isArray(notes) && notes.length > 0) {
+      let coords = multiSelectCoords(notes);
 
-    let response = await fetch('http://localhost:3001/api/comments', {
-      method: 'POST',
-      body: JSON.stringify({
-        "content": content.value,
-        "parentCommentId": null,
-        "documentId": documentId ? Number(documentId) : 1,
-        "clientId": yProvider.awareness.clientID
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .catch(console.log)
+      let params = (new URL(document.location)).searchParams;
+      let documentId = params.get('docId');
+  
+      let response = await fetch('http://localhost:3001/api/comments', {
+        method: 'POST',
+        body: JSON.stringify({
+          "content": content.value,
+          "parentCommentId": null,
+          "documentId": documentId ? Number(documentId) : 1,
+          "clientId": yProvider.awareness.clientID,
+          "multiSelectElements": notes.join(',')
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .catch(console.log)
+  
+        
+      if (response.status === 201) {
+        let createdComment = await response.json();
+        console.log('Added comment', createdComment);
+        
+        let comments = state.comments;
+        comments = setState({ 
+          comments: comments ? [...comments, createdComment] : [createdComment] 
+        }).comments;
 
-    let createdComment = await response.json();
-    if (response.status === 201) {
-      console.log('Added comment', createdComment);
-      
-      let oldComments = state.comments;
-      setState({ 
-        comments: oldComments ? [...oldComments, createdComment] : [createdComment] 
-      });
-
-      let notes = yProvider.awareness.getLocalState()?.multiSelect;
-      if (Array.isArray(notes) && notes.length > 0) {
-        let coords = multiSelectCoords(notes);
+        renderComments(comments);
+  
         let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
         yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
           commentId: 'comment-' + createdComment.id,
@@ -166,14 +170,6 @@ let commentFormTemplate = (translateY) => {
         }));
         yProvider.awareness.setLocalStateField('multiSelect', null);
       }
-
-      layoutService.send('SHOW_COMMENTS');
-      render(
-        html`${comments.map((c) =>
-          commentTemplate(c.commentId, 'Dimitris', c.value, c.translateY)
-        )}`,
-        document.querySelector('#comments-container')
-      );
     }
 
     content.value = '';
@@ -226,6 +222,23 @@ let commentFormTemplate = (translateY) => {
       </div>
     </form>
   </div>`;
+}
+
+export let renderComments = (comments) => {
+  let container = document.querySelector('#comments-container');
+
+  if (container) {
+    layoutService.send('SHOW_COMMENTS');
+
+    render(
+      html`${comments.map((c) => {
+        let coords = multiSelectCoords(c.multiSelectElements.split(','));
+        return commentTemplate('comment-' + c.id, c.user.email, c.content, coords.top)
+      }
+      )}`,
+      container
+    );
+  }
 }
 
 let commentsButtonTemplate = (coords, translateY) => {

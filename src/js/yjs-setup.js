@@ -7,6 +7,7 @@ import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
+import { multiSelectCoords, renderComments } from './collaboration/templates.js';
 
 export let yProvider;
 
@@ -72,14 +73,6 @@ window.addEventListener('load', () => {
 
   yProvider.awareness.on('update', updateHandler);
 
-  /*
-    comments: [
-      { ...comment1 },
-      { ...comment2 },
-      { ...comment3 },
-    ]
-  */
-
   let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`);
   
   eventSource.addEventListener('open', () => 
@@ -90,19 +83,41 @@ window.addEventListener('load', () => {
     console.log('Message event', payload);
 
     if (Array.isArray(payload)) {
-      setState({ comments: payload });
+      let state = setState({ comments: payload });
+
+      // let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
+      // yProvider.awareness.setLocalStateField(
+      //   'highlights',
+      //   oldHighlights.concat(
+      //     ...state.comments.map((c) => ({
+      //       commentId: 'comment-' + c.id,
+      //       // SVG items haven't been rendered yet
+      //       // ...multiSelectCoords(c.multiSelectElements.split(','))
+      //     }))
+      //   )
+      // );
+      // renderComments(state.comments);
       return;
     }
 
     let oldComments = state.comments;
-
-    setState({ 
+    oldComments = setState({
       comments: oldComments ? [...oldComments, payload] : [payload] 
-    });
-    
-    // setState((old, next) => {
-    //   return old.concat(next); 
-    // });
+    }).comments;
+
+    // Maybe we should store comment highlights to the state object instead of the Yjs state.
+    // There isn't any point in sending each client's coordinate calculations to the other clients
+    let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
+    yProvider.awareness.setLocalStateField(
+      'highlights',
+      ...oldComments.map((c) => ({
+        commentId: 'comment-' + c.id,
+        ...multiSelectCoords(c.multiSelectElements.split(','))
+      }))
+    );
+
+
+    renderComments(oldComments);
   })
   
   eventSource.addEventListener('error', error => {

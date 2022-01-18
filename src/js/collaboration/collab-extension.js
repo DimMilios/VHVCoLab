@@ -133,11 +133,16 @@ export function updateHandler({ added, updated, removed }) {
     )}`;
 
   
+  // let highlights = html`${Array.from(yProvider.awareness.getStates().entries())
+  //   .filter(([_clientId, state]) => state?.highlights != null)
+  //   .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
+  // }`;
+  
   let highlights = html`${Array.from(yProvider.awareness.getStates().entries())
-    .filter(([_, state]) => state?.highlights != null)
+    .filter(([_clientId, state]) => state?.highlights != null)
     .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
   }`;
-
+  
   let collabContainer = document.querySelector('#output #collab');
 
   if (collabContainer) {
@@ -151,6 +156,14 @@ export function updateHandler({ added, updated, removed }) {
   } else {
     console.log('Element div#collab is not found. Cannot render collaboration elements.');
   }
+}
+
+function uniqBy(a, key) {
+  let seen = new Set();
+  return a.filter(item => {
+      let k = key(item);
+      return seen.has(k) ? false : seen.add(k);
+  });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -181,7 +194,6 @@ window.addEventListener('DOMContentLoaded', () => {
             addListenersToOutput(mutation.target);
             observer.disconnect();
           }
-          // renderHighlightLayer();
         }
       }
     }
