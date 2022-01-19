@@ -83,41 +83,32 @@ window.addEventListener('load', () => {
     console.log('Message event', payload);
 
     if (Array.isArray(payload)) {
-      let state = setState({ comments: payload });
-
-      // let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
-      // yProvider.awareness.setLocalStateField(
-      //   'highlights',
-      //   oldHighlights.concat(
-      //     ...state.comments.map((c) => ({
-      //       commentId: 'comment-' + c.id,
-      //       // SVG items haven't been rendered yet
-      //       // ...multiSelectCoords(c.multiSelectElements.split(','))
-      //     }))
-      //   )
-      // );
-      // renderComments(state.comments);
+      // The SVG music score element hasn't been rendered yet here.
+      // We can't calculate comment highlight coordinates yet.
+      setState({ comments: payload });
       return;
     }
 
-    let oldComments = state.comments;
-    oldComments = setState({
-      comments: oldComments ? [...oldComments, payload] : [payload] 
-    }).comments;
+    let comments = state?.comments ? [...state.comments, payload] : [payload];
+    
+    // Add the highlight coordinates for each comment
+    setState({
+      comments: comments.map((c) => {
+        return c.highlight == null
+          ? {
+              ...c,
+              highlight: Object.assign(
+                {},
+                multiSelectCoords(c.multiSelectElements.split(','))
+              ),
+            }
+          : c;
+      }),
+    });
 
-    // Maybe we should store comment highlights to the state object instead of the Yjs state.
-    // There isn't any point in sending each client's coordinate calculations to the other clients
-    let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
-    yProvider.awareness.setLocalStateField(
-      'highlights',
-      ...oldComments.map((c) => ({
-        commentId: 'comment-' + c.id,
-        ...multiSelectCoords(c.multiSelectElements.split(','))
-      }))
-    );
+    // console.log('Comments after calculating coords', state.comments)
 
-
-    renderComments(oldComments);
+    renderComments(state.comments);
   })
   
   eventSource.addEventListener('error', error => {

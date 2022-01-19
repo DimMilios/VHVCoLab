@@ -1,7 +1,8 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords } from './templates.js';
+import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords, highlightTemplate } from './templates.js';
+import { state } from '../state/comments.js';
 
 window.ui = uiCoords;
 
@@ -132,16 +133,10 @@ export function updateHandler({ added, updated, removed }) {
       userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
     )}`;
 
-  
-  // let highlights = html`${Array.from(yProvider.awareness.getStates().entries())
-  //   .filter(([_clientId, state]) => state?.highlights != null)
-  //   .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
-  // }`;
-  
-  let highlights = html`${Array.from(yProvider.awareness.getStates().entries())
-    .filter(([_clientId, state]) => state?.highlights != null)
-    .map(([clientId, state]) => highlightListTemplate(clientId, state.highlights))
-  }`;
+  let highlights =
+    html`${state.comments
+      ?.filter((c) => c?.highlight != null)
+      .map((c) => highlightTemplate(c.userId, c.id, c.highlight))}` ?? [];
   
   let collabContainer = document.querySelector('#output #collab');
 
@@ -156,14 +151,6 @@ export function updateHandler({ added, updated, removed }) {
   } else {
     console.log('Element div#collab is not found. Cannot render collaboration elements.');
   }
-}
-
-function uniqBy(a, key) {
-  let seen = new Set();
-  return a.filter(item => {
-      let k = key(item);
-      return seen.has(k) ? false : seen.add(k);
-  });
 }
 
 window.addEventListener('DOMContentLoaded', () => {

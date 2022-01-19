@@ -155,23 +155,32 @@ let commentFormTemplate = (translateY) => {
       if (response.status === 201) {
         let createdComment = await response.json();
         console.log('Added comment', createdComment);
-        
-        let comments = state.comments;
-        comments = setState({ 
-          comments: comments ? [...comments, createdComment] : [createdComment] 
-        }).comments;
 
-        renderComments(comments);
-  
-        let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
-        yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
-          commentId: 'comment-' + createdComment.id,
-          ...coords,
-        }));
-        yProvider.awareness.setLocalStateField('multiSelect', null);
+        createdComment.highlight = Object.assign({}, coords);
+
+        setState({
+          comments: state.comments
+            .map((c) => {
+              return c.highlight == null
+                ? {
+                    ...c,
+                    highlight: Object.assign(
+                      {},
+                      multiSelectCoords(c.multiSelectElements.split(','))
+                    ),
+                  }
+                : c;
+            })
+            .concat(createdComment),
+        });
+        
+        console.log('Comments after calculating coords', state.comments);
+    
+        renderComments(state.comments);
       }
     }
-
+    
+    yProvider.awareness.setLocalStateField('multiSelect', null);
     content.value = '';
     $('#post-comment').modal('hide');
   }
@@ -299,9 +308,9 @@ export let highlightListTemplate = (clientId, state) => {
   return html`${state.map((h) => highlightTemplate(clientId, h))}`;
 };
 
-let highlightTemplate = (clientId, state) => html`<div
+export let highlightTemplate = (userId, commentId, state) => html`<div
   class="highlight-area"
   style="transform: translate(${state.left}px, ${state.top}px); width: ${state.width}px; height:${state.height}px; background-color: rgba(0, 0, 255, 0.09);"
-  data-client-id=${clientId}
-  data-comment-id=${state.commentId}
+  data-user-id=${userId}
+  data-comment-id=${commentId}
 ></div>`;
