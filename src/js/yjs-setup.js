@@ -8,6 +8,7 @@ import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
 import { multiSelectCoords, renderComments } from './collaboration/templates.js';
+import Cookies from 'js-cookie';
 
 export let yProvider;
 
@@ -16,9 +17,12 @@ const colors = [ '#30bced','#6eeb83','#ffbc42','#ecd444','#ee6352','#9ac2c9','#8
 
 const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
 
-export let userData = {
-  name: oneOf(names),
-  color: oneOf(colors)
+let name = oneOf(names);
+let userData = {
+  name,
+  color: oneOf(colors),
+  email: name + '@test.com',
+  id: 1
 };
 
 window.addEventListener('load', () => {
@@ -27,7 +31,8 @@ window.addEventListener('load', () => {
   let params = (new URL(document.location)).searchParams;
   let roomname = params.has('roomname') ? params.get('roomname') : 'ace-demo';
   let DOC_ID = params.get('docId');
-  let room = `docId=${DOC_ID}&roomname=${roomname}`
+  let room = `docId=${DOC_ID}&roomname=${roomname}`;
+
   if (typeof yProvider == 'undefined') {
     yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
     yProvider.on('status', event => {
@@ -35,6 +40,17 @@ window.addEventListener('load', () => {
     })
 
     // yProvider = new WebrtcProvider(roomname, ydoc);
+  }
+
+  let appUser = Cookies.get('user');
+  if (appUser) {
+    let user = JSON.parse(appUser);
+    if (!user.name) {
+      user.name = user.email.split('@')[0]
+    }
+    yProvider.awareness.setLocalStateField('user', { ...user, color: oneOf(colors) });
+  } else {
+    yProvider.awareness.setLocalStateField('user', userData);
   }
 
   const type = ydoc.getText('ace');
@@ -49,7 +65,7 @@ window.addEventListener('load', () => {
     yUndoManager,
   });
 
-  yProvider.awareness.setLocalStateField('user', userData);
+  // yProvider.awareness.setLocalStateField('user', userData);
 
   // Insert an initial song to the text editor
   insertSplashMusic();
@@ -73,7 +89,7 @@ window.addEventListener('load', () => {
 
   yProvider.awareness.on('update', updateHandler);
 
-  let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`);
+  let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`, { withCredentials: true });
   
   eventSource.addEventListener('open', () => 
     console.log('Event source connection for comments open'));

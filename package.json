@@ -17,6 +17,7 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
+    "js-cookie": "^3.0.1",
     "lib0": "^0.2.42",
     "lit-html": "^2.0.2",
     "xstate": "^4.26.1",

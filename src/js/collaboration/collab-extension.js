@@ -136,7 +136,7 @@ export function updateHandler({ added, updated, removed }) {
   let highlights =
     html`${state.comments
       ?.filter((c) => c?.highlight != null)
-      .map((c) => highlightTemplate(c.userId, c.id, c.highlight))}` ?? [];
+      .map((c) => highlightTemplate(c.user, c.id, c.highlight))}` ?? [];
   
   let collabContainer = document.querySelector('#output #collab');
 

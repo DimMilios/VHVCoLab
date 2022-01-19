@@ -140,6 +140,7 @@ let commentFormTemplate = (translateY) => {
   
       let response = await fetch('http://localhost:3001/api/comments', {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify({
           "content": content.value,
           "parentCommentId": null,
@@ -308,9 +309,10 @@ export let highlightListTemplate = (clientId, state) => {
   return html`${state.map((h) => highlightTemplate(clientId, h))}`;
 };
 
-export let highlightTemplate = (userId, commentId, state) => html`<div
+export let highlightTemplate = (user, commentId, state) => html`<div
   class="highlight-area"
   style="transform: translate(${state.left}px, ${state.top}px); width: ${state.width}px; height:${state.height}px; background-color: rgba(0, 0, 255, 0.09);"
-  data-user-id=${userId}
+  data-user-name=${user.name}
+  data-user-email=${user.email}
   data-comment-id=${commentId}
 ></div>`;
