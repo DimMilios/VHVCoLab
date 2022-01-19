@@ -105,6 +105,36 @@ window.addEventListener('load', () => {
       return;
     }
 
+    // { type: 'resource:method', id: number }
+    // e.g { type: 'comment:delete', id: 1 }
+    if (payload.hasOwnProperty('type')) {
+      let [resource, method] = payload.type.split(':');
+
+      if (Object.keys(state).includes(resource)) {
+        switch (method) {
+          case 'delete':
+            if (resource === 'comments') {
+              setState({
+                comments: state.comments.filter(r => r.id !== payload.id)
+              })
+            }
+            renderComments(state.comments);
+            
+            updateHandler(); // Re-render collab layer
+            
+            // TODO: We could dynamically render a changed resource (e.g comments) 
+            // setState({
+            //   [resource]: state[resource].filter(r => r.id !== payload.id)
+            // })
+            break;
+          default:
+            console.log(`Unknown method: ${method}`);
+        }
+      }
+
+      return;
+    }
+
     let comments = state?.comments ? [...state.comments, payload] : [payload];
     
     // Add the highlight coordinates for each comment

@@ -113,7 +113,7 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
   };
 }
 
-export function updateHandler({ added, updated, removed }) {
+export function updateHandler() {
   // console.log(yProvider.awareness.getStates());
 
   let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
