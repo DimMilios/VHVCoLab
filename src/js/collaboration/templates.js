@@ -2,6 +2,7 @@ import { html, render } from 'lit-html';
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { yProvider } from '../yjs-setup.js';
+import { updateHandler } from './collab-extension.js';
 import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
 export let uiCoords = {
@@ -287,11 +288,14 @@ function remToPixels(rem) {
 let commentTemplate = (commentId, user, content, translateY) => {
   let userId = yProvider.awareness.getLocalState().user.id;
 
+  let params = (new URL(document.location)).searchParams;
+  let documentId = params.get('docId');
+
   const handleDelete = async event => {
     let res = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ userId, documentId, clientId: yProvider.awareness.clientID }),
       headers: { 'Content-Type': 'application/json' }
     });
 
@@ -301,6 +305,9 @@ let commentTemplate = (commentId, user, content, translateY) => {
         comments: state.comments.filter(c => c.id != commentId)
       });
       renderComments(state.comments);
+      updateHandler();
+    } else {
+      console.log(await res.json());
     }
   }
 
