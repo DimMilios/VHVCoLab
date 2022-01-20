@@ -3,7 +3,7 @@ import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { yProvider } from '../yjs-setup.js';
 import { updateHandler } from './collab-extension.js';
-import { getCoordinates, calculateMultiSelectCoords, hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
+import { hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
 export let uiCoords = {
   outputSVGHeight: 10,
@@ -33,7 +33,6 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
   if (!el)
     return html`<div class="users-div"></div>`;
 
-  // const { staffY, targetX } = getCoordinates(el);
   const { targetX, targetY } = getCoordinatesWithOffset(el, document.querySelector('#input'));
   return html`<div
     class="users-div"
@@ -48,11 +47,9 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
   if (!el)
     return html`<div class="single-select"></div>`;
 
-  // const { staffY, targetX, targetBounds } = getCoordinates(el);
   const { staffY, targetX, targetY, targetBounds } = 
     getCoordinatesWithOffset(el, document.querySelector('#input'));
 
-    // console.log({ staffY}, targetBounds)
   return html`<div
     class="single-select"
     style="transform: translate(${targetX}px, ${targetY}px);
@@ -75,20 +72,7 @@ export const multiSelectCoords = (selectedNotes) => {
   );
 }
 
-// If clientId === provider.awareness.clientID
-// include the comment button
 export let multiSelectTemplate = (clientId, isLocalUser = false, selectedNotes, color) => {
-  // const selector = selectedNotes.map((id) => '#' + id).join(',');
-  // // const coords = calculateMultiSelectCoords(
-  // //   Array.from(document.querySelectorAll(selector))
-  // // );
-  // let output = document.querySelector('#output');
-
-  // const coords = calculateMultiSelectCoordsWithOffset(
-  //   Array.from(document.querySelectorAll(selector)),
-  //   document.querySelector('#input'),
-  //   output.closest('[class*=output-container]').scrollTop
-  // );
   const coords = multiSelectCoords(selectedNotes);
 
   return html`<div
@@ -186,40 +170,6 @@ let commentFormTemplate = (translateY) => {
     content.value = '';
     $('#post-comment').modal('hide');
   }
-  // const handleCommentPost = event => {
-  //   event.preventDefault();
-
-  //   let textBox = event.target.querySelector('input[name="comment-text"]');
-  //   console.log('You sent:', textBox.value);
-
-  //   let commentId = `comment-${Math.random().toString(16).substring(2, 8)}`;
-
-  //   let notes = yProvider.awareness.getLocalState()?.multiSelect;
-  //   if (Array.isArray(notes) && notes.length > 0) {
-  //     let coords = multiSelectCoords(notes);
-  //     let oldHighlights = yProvider.awareness.getLocalState()?.highlights ?? [];
-  //     yProvider.awareness.setLocalStateField('highlights', oldHighlights.concat({
-  //       commentId,
-  //       ...coords,
-  //     }));
-  //     yProvider.awareness.setLocalStateField('multiSelect', null);
-  //   }
-
-  //   layoutService.send('SHOW_COMMENTS');
-
-  //   comments.push({ commentId, value: textBox.value, translateY });
-  //   localStorage.setItem('comments', JSON.stringify(comments));
-    
-  //   render(
-  //     html`${comments.map((c) =>
-  //       commentTemplate(c.commentId, 'Dimitris', c.value, c.translateY)
-  //     )}`,
-  //     document.querySelector('#comments-container')
-  //   );
-
-  //   textBox.value = '';
-  //   $('#post-comment').modal('hide');
-  // }
 
   return html` <div class="modal-body">
     <form id="post-comment-form" @submit=${handleCommentPost}>
@@ -281,17 +231,27 @@ function remToPixels(rem) {
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
 
-// A comment should have a reference (commentID) to a highlighted area that was multi selected
-// and the user added a comment for
-
 // Include a user profile icon (probably img URL) when we have persistence for users
 let commentTemplate = (commentId, user, content, translateY) => {
   let userId = yProvider.awareness.getLocalState().user.id;
 
+  const handleFocusHighlight = event => {
+    // Don't focus on the highlight when we click the delete button
+    if (event.target.nodeName == 'BUTTON') return;
+
+    let highlights = Array.from(document.querySelectorAll('.highlight-area'));
+    if (highlights.length != 0) {
+      let focused = highlights.find(elem => elem.dataset.commentId == commentId);
+      focused?.focus();
+      // focused?.classList.toggle('highlight-color-focus');
+
+    }
+  }
+
   let params = (new URL(document.location)).searchParams;
   let documentId = params.get('docId');
 
-  const handleDelete = async event => {
+  const handleDelete = async () => {
     let res = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
@@ -311,9 +271,9 @@ let commentTemplate = (commentId, user, content, translateY) => {
     }
   }
 
-  return html`<div id=${'comment-' + commentId} class="card ml-4" style="width: 18rem; transform: translateY(${translateY}px); position: absolute;">
+  return html`<div id=${'comment-' + commentId} class="card ml-4 comment" style="width: 18rem; transform: translateY(${translateY}px); position: absolute;" @click=${handleFocusHighlight}>
     <div class="p-3">
-      <button type="button" class="btn btn-danger" @click=${handleDelete}>X</button>
+      <button class="btn btn-danger" @click=${handleDelete}>X</button>
       <div class="d-inline-flex justfy-content-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">
           <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
@@ -337,9 +297,10 @@ export let highlightListTemplate = (clientId, state) => {
 };
 
 export let highlightTemplate = (user, commentId, state) => html`<div
-  class="highlight-area"
-  style="transform: translate(${state.left}px, ${state.top}px); width: ${state.width}px; height:${state.height}px; background-color: rgba(0, 0, 255, 0.09);"
+  class="highlight-area highlight-color"
+  style="left: ${state.left}px; top: ${state.top}px; width: ${state.width}px; height:${state.height}px;"
   data-user-name=${user.name}
   data-user-email=${user.email}
   data-comment-id=${commentId}
+  tabindex="0"
 ></div>`;

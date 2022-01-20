@@ -1,5 +1,6 @@
 :root {
   --collab-layer-zIndex: 900;
+  --collab-layer-bradius: 10px;
 }
 
 #collab-container, .comments {
@@ -19,8 +20,8 @@
   opacity: 0.2;
 
   pointer-events: none;
+  border-radius: var(--collab-layer-bradius);
 }
-
 
 .users-div {
   position: absolute;
@@ -67,6 +68,8 @@
   z-index: var(--collab-layer-zIndex);
   background-color: blue;
   pointer-events: none;
+
+  border-radius: var(--collab-layer-bradius);
 }
 
 #highlight-container {
@@ -81,6 +84,37 @@
   position: absolute;
   background-color: blue;
   pointer-events: none;
+  
+  transition: transform 300ms ease-out;
+
+  border-radius: var(--collab-layer-bradius);
+}
+
+.highlight-area:not(:focus) {
+  transform: scale(1);
+  background-color: rgba(0, 0, 255, 0.04) !important;
+}
+
+.highlight-area:focus, .highlight-area:focus-within {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 255, 0.3) !important;
+}
+
+.highlight-color {
+  background-color: rgba(0, 0, 255, 0.04);
+}
+
+/* .highlight-color-focus {
+  background-color: rgba(0, 0, 255, 0.3) !important;
+} */
+
+.comment {
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.comment:hover {
+  transform: scale(1.1);
 }
 
 /* Given to note elements when selected */
@@ -95,6 +129,7 @@
 
   /* cursor: pointer; */
   pointer-events: none;
+  border-radius: var(--collab-layer-bradius);
 }
 
 #output > svg {
