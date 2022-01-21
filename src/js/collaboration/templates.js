@@ -232,8 +232,8 @@ function remToPixels(rem) {
 }
 
 // Include a user profile icon (probably img URL) when we have persistence for users
-let commentTemplate = (commentId, user, content, translateY) => {
-  let userId = yProvider.awareness.getLocalState().user.id;
+let commentTemplate = (commentId, username, content, translateY) => {
+  let user = yProvider.awareness.getLocalState().user;
 
   const handleFocusHighlight = event => {
     // Don't focus on the highlight when we click the delete button
@@ -243,8 +243,6 @@ let commentTemplate = (commentId, user, content, translateY) => {
     if (highlights.length != 0) {
       let focused = highlights.find(elem => elem.dataset.commentId == commentId);
       focused?.focus();
-      // focused?.classList.toggle('highlight-color-focus');
-
     }
   }
 
@@ -255,7 +253,7 @@ let commentTemplate = (commentId, user, content, translateY) => {
     let res = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
-      body: JSON.stringify({ userId, documentId, clientId: yProvider.awareness.clientID }),
+      body: JSON.stringify({ userId: user.id, documentId, clientId: yProvider.awareness.clientID }),
       headers: { 'Content-Type': 'application/json' }
     });
 
@@ -271,15 +269,22 @@ let commentTemplate = (commentId, user, content, translateY) => {
     }
   }
 
-  return html`<div id=${'comment-' + commentId} class="card ml-4 comment" style="width: 18rem; transform: translateY(${translateY}px); position: absolute;" @click=${handleFocusHighlight}>
+  const deleteButton = () =>
+    username === user.email
+      ? html`<button class="btn btn-danger" @click=${handleDelete}>X</button>`
+      : null;
+
+  return html`<div id=${'comment-' + commentId} class="card ml-4 shadow comment" style="width: 18rem; top: ${translateY}px; position: absolute;" @click=${handleFocusHighlight}>
     <div class="p-3">
-      <button class="btn btn-danger" @click=${handleDelete}>X</button>
-      <div class="d-inline-flex justfy-content-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-        </svg>
-        <h5 class="card-title ml-2 align-self-end">
-          ${user}
+      ${deleteButton()}
+      <div class="d-inline-flex justify-content-center">
+        <div class="rounded-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+          </svg>
+        </div>
+        <h5 class="card-title ml-2 align-self-center">
+          ${username}
         </h5>
       </div>
       <p class="card-text">${content}</p>

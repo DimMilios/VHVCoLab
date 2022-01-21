@@ -95,12 +95,13 @@
   background-color: rgba(0, 0, 255, 0.04) !important;
 }
 
-.highlight-area:focus, .highlight-area:focus-within {
+.highlight-area:focus {
   transform: scale(1.1);
   background-color: rgba(0, 0, 255, 0.3) !important;
 }
 
 .highlight-color {
+  transform: scale(1);
   background-color: rgba(0, 0, 255, 0.04);
 }
 
@@ -111,10 +112,12 @@
 .comment {
   cursor: pointer;
   border-radius: 10px;
+
+  transition: transform 200ms ease-out;
 }
 
 .comment:hover {
-  transform: scale(1.1);
+  transform: translateY(10px) scale(1.05);
 }
 
 /* Given to note elements when selected */

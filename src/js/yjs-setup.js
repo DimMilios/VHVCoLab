@@ -75,7 +75,7 @@ window.addEventListener('load', () => {
     const { row, column } = editor.selection.getCursor();
     const item = humdrumDataNoteIntoView(row, column);
     // console.log('changeCursor event', { row, column, item })
-    if (item) {
+    if (item && item.classList.contains('note')) {
       markItem(item);
       const localState = yProvider.awareness.getLocalState();
 
