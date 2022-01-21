@@ -1,4 +1,4 @@
-let productionURL = new URL('http://test.com');
+let productionURL = new URL('http://localhost:3001/'); // Replace when we have a server
 let baseUrl = import.meta.env.DEV ? new URL('http://localhost:3001/') : productionURL;
 
 let noop = () => {};

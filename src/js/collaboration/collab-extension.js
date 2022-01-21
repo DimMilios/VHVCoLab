@@ -1,7 +1,7 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords, highlightTemplate } from './templates.js';
+import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords, highlightTemplate, userListTemplate } from './templates.js';
 import { state } from '../state/comments.js';
 
 window.ui = uiCoords;
@@ -115,32 +115,31 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
 
 export function updateHandler() {
   // console.log(yProvider.awareness.getStates());
-
-  let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
-    .filter(([_, state]) => state.multiSelect != null && state?.user?.color != null)
-    .map(([clientId, state]) => multiSelectTemplate(clientId, clientId === yProvider.awareness.clientID, state.multiSelect, state.user.color))
-  }`;
-
-  let singleSelects = html`${Array.from(yProvider.awareness.getStates().entries())
-    .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.color != null)
-    .map(([clientId, state]) =>
-      singleSelectTemplate(clientId, state.singleSelect.elemId, state.user.color)
-    )}`;
-  
-  let userAwareness = html`${Array.from(yProvider.awareness.getStates().entries())
-    .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.name != null)
-    .map(([clientId, state]) =>
-      userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
-    )}`;
-
-  let highlights =
-    html`${state.comments
-      ?.filter((c) => c?.highlight != null)
-      .map((c) => highlightTemplate(c.user, c.id, c.highlight))}` ?? [];
-  
   let collabContainer = document.querySelector('#output #collab');
 
   if (collabContainer) {
+    let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
+      .filter(([_, state]) => state.multiSelect != null && state?.user?.color != null)
+      .map(([clientId, state]) => multiSelectTemplate(clientId, clientId === yProvider.awareness.clientID, state.multiSelect, state.user.color))
+    }`;
+  
+    let singleSelects = html`${Array.from(yProvider.awareness.getStates().entries())
+      .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.color != null)
+      .map(([clientId, state]) =>
+        singleSelectTemplate(clientId, state.singleSelect.elemId, state.user.color)
+      )}`;
+    
+    let userAwareness = html`${Array.from(yProvider.awareness.getStates().entries())
+      .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.name != null)
+      .map(([clientId, state]) =>
+        userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
+      )}`;
+  
+    let highlights =
+      html`${state.comments
+        ?.filter((c) => c?.highlight != null)
+        .map((c) => highlightTemplate(c.user, c.id, c.highlight))}` ?? [];
+
     render(
       html`
         ${collabLayer(multiSelects, singleSelects, userAwareness)}
@@ -150,6 +149,17 @@ export function updateHandler() {
     );
   } else {
     console.log('Element div#collab is not found. Cannot render collaboration elements.');
+  }
+  
+  // Display users connected to this room with their colors
+  let onlineElem = document.querySelector('#online-users');
+  if (onlineElem) {
+    let users = Array.from(yProvider.awareness.getStates().entries())
+      .map(([clientId, { user } ]) => ({ clientId, ...user }));
+    
+    render(html`${userListTemplate(users)}`, onlineElem);
+  } else {
+    console.log('Element div#online-users is not found. Cannot display online user info.');
   }
 }
 
@@ -304,48 +314,3 @@ function addListenersToOutput(outputTarget) {
     };
   }
 }
-
-export function userListDisplay(users) {
-  if (!users || !Array.isArray(users)) return;
-  let userList = document.querySelector('.user-list');
-  const output = document.querySelector('#output');
-
-  if (!userList) {
-    userList = document.createElement('div');
-    userList.classList.add('user-list');
-    document.body.appendChild(userList);
-  }
-
-  userList.addEventListener('mouseenter', (e) => {
-    e.target.innerHTML = `${users.join(',\n')}`;
-    if (
-      output.hasAttribute('style') &&
-      !output.getAttribute('style').includes('transition')
-    ) {
-      // output.style.transition = 'opacity 0.4s ease-out';
-    }
-    // output.style.opacity = 0.1;
-  });
-
-  userList.addEventListener('mouseout', (e) => {
-    e.target.innerHTML = userIcon + users.length + ' users';
-    output.style.opacity = 1;
-  });
-
-  let userIcon = '👤 ';
-  let userText = ' user';
-  if (users.length > 1) {
-    userIcon = '👥 ';
-    userText = ' users';
-  }
-  userList.innerHTML = userIcon + users.length + userText;
-
-  const menubar = document.getElementById('menubar');
-  if (menubar) {
-    const menuBox = menubar.getBoundingClientRect();
-    userList.style.transform = `translate(${
-      menuBox.right - userList.getBoundingClientRect().width * 1.1
-    }px, ${menuBox.top * 3}px)`;
-  }
-}
-

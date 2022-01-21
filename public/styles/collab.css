@@ -147,6 +147,53 @@
   z-index: 1000;
 }
 
+.users-online {
+  list-style: none;
+}
+
+.online-status {
+  background-color: rgb(54, 146, 0);
+  color: rgb(142, 255, 76);
+  box-shadow: rgb(14, 15, 15) 0px 0px 0px 2px;
+  
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  
+  position: absolute;
+  box-sizing: border-box;
+  bottom: 14%;
+  right: 14%;
+
+  min-width: 8px;
+  padding: 0px;
+  height: 8px;
+  border-radius: 4px;
+
+  transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transform: scale(1) translate(50%, 50%);
+  transform-origin: 100% 100%;
+
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 5px rgba(0, 0, 0, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
+
 .dropdown-item:hover {
   filter: brightness(90%);
 }

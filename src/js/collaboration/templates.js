@@ -6,6 +6,7 @@ import { updateHandler } from './collab-extension.js';
 import { hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
 import * as commentService from '../api/comments.js';
+import userProfileImgUrl from '../../../images/user-profile.png';
 
 export let uiCoords = {
   outputSVGHeight: 10,
@@ -297,3 +298,64 @@ export let highlightTemplate = (user, commentId, state) => html`<div
   data-comment-id=${commentId}
   tabindex="0"
 ></div>`;
+
+export let userListTemplate = (users) => {
+  // console.log('user profile image path', { userProfileImgUrl })
+  return html`
+    <ul class="users-online m-0 p-0 d-flex justify-content-between">${users.map(user => onlineUserTemplate(userProfileImgUrl, user))}</ul>`;
+}
+
+let onlineUserTemplate = (url, data) => {
+  return html`<li class="">
+    <span class="position-relative d-inline-flex">
+      <div style="background-color: white; border-radius: 50%;">
+        <img src=${url} alt="user profile icon" width="40" height="40" />
+      </div>
+      <span class="online-status"></span>
+    </span>
+  </li>`;
+}
+
+export function userListDisplay(users) {
+  if (!users || !Array.isArray(users)) return;
+  let userList = document.querySelector('.user-list');
+  const output = document.querySelector('#output');
+
+  if (!userList) {
+    userList = document.createElement('div');
+    userList.classList.add('user-list');
+    document.body.appendChild(userList);
+  }
+
+  userList.addEventListener('mouseenter', (e) => {
+    e.target.innerHTML = `${users.join(',\n')}`;
+    if (
+      output.hasAttribute('style') &&
+      !output.getAttribute('style').includes('transition')
+    ) {
+      // output.style.transition = 'opacity 0.4s ease-out';
+    }
+    // output.style.opacity = 0.1;
+  });
+
+  userList.addEventListener('mouseout', (e) => {
+    e.target.innerHTML = userIcon + users.length + ' users';
+    output.style.opacity = 1;
+  });
+
+  let userIcon = '👤 ';
+  let userText = ' user';
+  if (users.length > 1) {
+    userIcon = '👥 ';
+    userText = ' users';
+  }
+  userList.innerHTML = userIcon + users.length + userText;
+
+  const menubar = document.getElementById('menubar');
+  if (menubar) {
+    const menuBox = menubar.getBoundingClientRect();
+    userList.style.transform = `translate(${
+      menuBox.right - userList.getBoundingClientRect().width * 1.1
+    }px, ${menuBox.top * 3}px)`;
+  }
+}
