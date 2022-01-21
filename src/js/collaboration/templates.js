@@ -5,6 +5,8 @@ import { yProvider } from '../yjs-setup.js';
 import { updateHandler } from './collab-extension.js';
 import { hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
+import * as commentService from '../api/comments.js';
+
 export let uiCoords = {
   outputSVGHeight: 10,
 
@@ -116,54 +118,46 @@ let commentFormTemplate = (translateY) => {
     let content = event.target.querySelector('input[name="comment-text"]');
     console.log('You sent:', content.value);
 
+    let params = (new URL(document.location)).searchParams;
+    let documentId = params.get('docId');
+    
     let notes = yProvider.awareness.getLocalState()?.multiSelect;
     if (Array.isArray(notes) && notes.length > 0) {
       let coords = multiSelectCoords(notes);
-
-      let params = (new URL(document.location)).searchParams;
-      let documentId = params.get('docId');
-  
-      let response = await fetch('http://localhost:3001/api/comments', {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify({
+      
+      await commentService.create({
+        data: {
           "content": content.value,
           "parentCommentId": null,
           "documentId": documentId ? Number(documentId) : 1,
           "clientId": yProvider.awareness.clientID,
           "multiSelectElements": notes.join(',')
-        }),
-        headers: { 'Content-Type': 'application/json' },
+        },
+        onSuccess: (createdComment) => {
+          console.log('Added comment', createdComment);
+          createdComment.highlight = Object.assign({}, coords);
+
+          setState({
+            comments: state.comments
+              .map((c) => {
+                return c.highlight == null
+                  ? {
+                      ...c,
+                      highlight: Object.assign(
+                        {},
+                        multiSelectCoords(c.multiSelectElements.split(','))
+                      ),
+                    }
+                  : c;
+              })
+              .concat(createdComment),
+          });
+          
+          console.log('Comments after calculating coords', state.comments);
+      
+          renderComments(state.comments);
+        }
       })
-        .catch(console.log)
-  
-        
-      if (response.status === 201) {
-        let createdComment = await response.json();
-        console.log('Added comment', createdComment);
-
-        createdComment.highlight = Object.assign({}, coords);
-
-        setState({
-          comments: state.comments
-            .map((c) => {
-              return c.highlight == null
-                ? {
-                    ...c,
-                    highlight: Object.assign(
-                      {},
-                      multiSelectCoords(c.multiSelectElements.split(','))
-                    ),
-                  }
-                : c;
-            })
-            .concat(createdComment),
-        });
-        
-        console.log('Comments after calculating coords', state.comments);
-    
-        renderComments(state.comments);
-      }
     }
     
     yProvider.awareness.setLocalStateField('multiSelect', null);
@@ -250,23 +244,17 @@ let commentTemplate = (commentId, username, content, translateY) => {
   let documentId = params.get('docId');
 
   const handleDelete = async () => {
-    let res = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
-      method: 'DELETE',
-      credentials: 'include',
-      body: JSON.stringify({ userId: user.id, documentId, clientId: yProvider.awareness.clientID }),
-      headers: { 'Content-Type': 'application/json' }
+    await commentService.removeById(commentId, {
+      data: { userId: user.id, documentId, clientId: yProvider.awareness.clientID },
+      onSuccess: () => {
+        console.log('Deleted comment with id: ', commentId);
+        setState({
+          comments: state.comments.filter(c => c.id != commentId)
+        });
+        renderComments(state.comments);
+        updateHandler();
+      }
     });
-
-    if (res.status === 200) {
-      console.log('Deleted comment with id: ', commentId);
-      setState({
-        comments: state.comments.filter(c => c.id != commentId)
-      });
-      renderComments(state.comments);
-      updateHandler();
-    } else {
-      console.log(await res.json());
-    }
   }
 
   const deleteButton = () =>
