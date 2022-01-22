@@ -1,5 +1,6 @@
 export let state = {
-  comments: []
+  comments: [],
+  users: []
 }
 
 export let setState = (newState = {}) => {

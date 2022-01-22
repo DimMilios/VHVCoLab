@@ -1,4 +1,5 @@
 import { html, render } from 'lit-html';
+import { classMap } from 'lit-html/directives/class-map.js';
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { yProvider } from '../yjs-setup.js';
@@ -189,7 +190,7 @@ export let renderComments = (comments) => {
     render(
       html`${comments.map((c) => {
         let coords = multiSelectCoords(c.multiSelectElements.split(','));
-        return commentTemplate(c.id, c.user.email, c.content, coords.top)
+        return commentTemplate(c.id, c.usersDocuments[0].user.email, c.content, coords.top)
       }
       )}`,
       container
@@ -290,11 +291,9 @@ export let highlightListTemplate = (clientId, state) => {
   return html`${state.map((h) => highlightTemplate(clientId, h))}`;
 };
 
-export let highlightTemplate = (user, commentId, state) => html`<div
+export let highlightTemplate = (commentId, state) => html`<div
   class="highlight-area highlight-color"
   style="left: ${state.left}px; top: ${state.top}px; width: ${state.width}px; height:${state.height}px;"
-  data-user-name=${user.name}
-  data-user-email=${user.email}
   data-comment-id=${commentId}
   tabindex="0"
 ></div>`;
@@ -302,16 +301,19 @@ export let highlightTemplate = (user, commentId, state) => html`<div
 export let userListTemplate = (users) => {
   // console.log('user profile image path', { userProfileImgUrl })
   return html`
-    <ul class="users-online m-0 p-0 d-flex justify-content-between">${users.map(user => onlineUserTemplate(userProfileImgUrl, user))}</ul>`;
+    <ul class="users-online m-0 p-0 d-flex justify-content-between">
+      ${users.map(user => onlineUserTemplate(userProfileImgUrl, user))}
+    </ul>`;
 }
 
-let onlineUserTemplate = (url, data) => {
+let onlineUserTemplate = (url, user) => {
+  let classes = { 'online-status': user.online, 'offline-status': !user.online };
   return html`<li class="">
     <span class="position-relative d-inline-flex">
       <div style="background-color: white; border-radius: 50%;">
         <img src=${url} alt="user profile icon" width="40" height="40" />
       </div>
-      <span class="online-status"></span>
+      <span class=${classMap(classes)}></span>
     </span>
   </li>`;
 }

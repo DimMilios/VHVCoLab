@@ -2,7 +2,7 @@ import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
 import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords, highlightTemplate, userListTemplate } from './templates.js';
-import { state } from '../state/comments.js';
+import { setState, state } from '../state/comments.js';
 
 window.ui = uiCoords;
 
@@ -138,7 +138,7 @@ export function updateHandler() {
     let highlights =
       html`${state.comments
         ?.filter((c) => c?.highlight != null)
-        .map((c) => highlightTemplate(c.user, c.id, c.highlight))}` ?? [];
+        .map((c) => highlightTemplate(c.id, c.highlight))}` ?? [];
 
     render(
       html`
@@ -151,13 +151,17 @@ export function updateHandler() {
     console.log('Element div#collab is not found. Cannot render collaboration elements.');
   }
   
-  // Display users connected to this room with their colors
+  // Display connection status (online/offline) for the users sharing the current document
   let onlineElem = document.querySelector('#online-users');
   if (onlineElem) {
-    let users = Array.from(yProvider.awareness.getStates().entries())
-      .map(([clientId, { user } ]) => ({ clientId, ...user }));
-    
-    render(html`${userListTemplate(users)}`, onlineElem);
+    let connectedIds = [...yProvider.awareness.getStates().values()].map(s => s.user.id);
+    let copy = [...state.users];
+    setState({
+      users: copy
+        .map((u) => ({ ...u, online: connectedIds.includes(u.id) }))
+        .sort((a, b) => b.online - a.online),
+    });
+    render(html`${userListTemplate(state.users)}`, onlineElem);
   } else {
     console.log('Element div#online-users is not found. Cannot display online user info.');
   }

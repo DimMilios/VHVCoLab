@@ -7,8 +7,9 @@ import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
-import { multiSelectCoords, renderComments } from './collaboration/templates.js';
+import { multiSelectCoords, renderComments, userListTemplate } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
+import { render, html } from 'lit-html';
 
 export let yProvider;
 
@@ -91,8 +92,24 @@ window.addEventListener('load', () => {
 
   let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`, { withCredentials: true });
   
-  eventSource.addEventListener('open', () => 
-    console.log('Event source connection for comments open'));
+  eventSource.addEventListener('open', async () => {
+    console.log('Event source connection for comments open');
+
+    let response = await fetch(`http://localhost:3001/api/users?docId=${DOC_ID}`, { credentials: 'include'});
+
+    let usersJSON = await response.json();
+
+    // let onlineElem = document.querySelector('#online-users');
+      let connectedIds = [...yProvider.awareness.getStates().values()].map(s => s.user.id);
+      let users = [];
+      for (let user of usersJSON) {
+        user.online = connectedIds.includes(user.id);
+        users.push(user);
+      }
+
+      setState({ users });
+      // render(html`${userListTemplate(users)}`, onlineElem);
+  });
 
   eventSource.addEventListener('message', event => {
     let payload = JSON.parse(event.data);
