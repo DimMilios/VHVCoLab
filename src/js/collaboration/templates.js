@@ -142,7 +142,7 @@ let commentFormTemplate = (translateY) => {
           setState({
             comments: state.comments
               .map((c) => {
-                return c.highlight == null
+                return c.highlight == null && typeof c?.multiSelectElements == 'string'
                   ? {
                       ...c,
                       highlight: Object.assign(
@@ -181,23 +181,6 @@ let commentFormTemplate = (translateY) => {
   </div>`;
 }
 
-export let renderComments = (comments) => {
-  let container = document.querySelector('#comments-container');
-
-  if (container) {
-    layoutService.send('SHOW_COMMENTS');
-
-    render(
-      html`${comments.map((c) => {
-        let coords = multiSelectCoords(c.multiSelectElements.split(','));
-        return commentTemplate(c.id, c.usersDocuments[0].user.email, c.content, coords.top)
-      }
-      )}`,
-      container
-    );
-  }
-}
-
 let commentsButtonTemplate = (coords, translateY) => {
   let commentWidth = 2.5;
   let commentHeight = 2.5;
@@ -227,21 +210,121 @@ function remToPixels(rem) {
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
 
+
+export let renderComments = (comments) => {
+  let container = document.querySelector('#comments-container');
+
+  if (container) {
+    layoutService.send('SHOW_COMMENTS');
+
+    let commentsWithReplies = [];
+    for (let c of comments) {
+      if (!c?.parentCommentId ) {
+        commentsWithReplies.push({ ...c, children: [] });
+        continue;
+      }
+
+      let parent = commentsWithReplies.find(p => p.id == c.parentCommentId);
+      if (!parent) continue;
+      parent.children = [ ... parent.children, c ];
+    }
+
+    console.log('commentsWithReplies', commentsWithReplies);
+    render(
+      html`${commentsWithReplies.map(p => commentReplyContainerTemplate(p))}`,
+      container
+    );
+  }
+}
+
+// Used to hold parent comments, their replies and a form to add a new reply
+let commentReplyContainerTemplate = (parent) => {
+  let collapseId = `reply-collapse-${parent.id}`;
+  const handleClick = () => {
+    $(`.collapse.reply-form-container:not(#${collapseId})`).collapse('hide');
+    $(`#${collapseId}`).collapse('show');
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    let content = new FormData(event.target).get('content');
+    console.log({ content })
+    let { docId: documentId } = getURLParams(['docId']);
+    
+    await commentService.create({
+      data: {
+        content,
+        parentCommentId: parent.id,
+        documentId,
+        clientId: yProvider.awareness.clientID,
+      },
+      onSuccess: (createdComment) => {
+        console.log('Added comment reply', createdComment);
+
+        setState({
+          comments: state.comments.concat(createdComment),
+        });
+        
+        console.log('Comments after adding comment reply', state.comments);
+        $(`#${collapseId}`).collapse('hide');
+    
+        renderComments(state.comments);
+      }
+    })
+  }
+
+  const handleCancel = () => $(`#${collapseId}`).collapse('hide');
+
+  // data-toggle="collapse" data-target=${`#reply-collapse-${parent.id}`}
+  return html`
+    <div aria-expanded="false" aria-controls=${collapseId} style="width: 18rem; top: ${parent.highlight.top}px; position: absolute;" class="card shadow comment-with-replies ml-2" @click=${handleClick}>
+
+      <div class="card-body p-0">
+        
+        ${html`${commentTemplate(parent.id, parent.usersDocuments[0].user.email, parent.content)}`}
+        
+        ${parent.children.length > 0 ? 
+          html`${parent.children
+            .map(child => commentTemplate(child.id, child.usersDocuments[0].user.email, child.content, child.parentCommentId))}`
+            : null
+        }
+
+        <div class="collapse p-2 reply-form-container" id=${collapseId}>
+          <form class="reply-form" @submit=${handleSubmit}>
+              <div class="form-group">
+                <textarea class="form-control" placeholder="Reply" name="content"></textarea>
+              </div>
+              <div class="form-group m-0">
+                <button class="btn btn-primary" type="submit">Reply</button>
+                <button class="btn btn-light" type="button" @click=${handleCancel}>Cancel</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 // Include a user profile icon (probably img URL) when we have persistence for users
-let commentTemplate = (commentId, username, content, translateY) => {
+let commentTemplate = (commentId, username, content, parentId) => {
   let user = yProvider.awareness.getLocalState().user;
 
-  const handleFocusHighlight = event => {
+  const findById = (highlights, id) => highlights.find(elem => elem.dataset.commentId == id);
+
+  const handleClick = event => {
     // Don't focus on the highlight when we click the delete button
     if (event.target.nodeName == 'BUTTON') return;
 
+    // Highlight the corresponding selection on the music score
     let highlights = Array.from(document.querySelectorAll('.highlight-area'));
     if (highlights.length != 0) {
-      let focused = highlights.find(elem => elem.dataset.commentId == commentId);
-      focused?.focus();
+      let toFocus = parentId ? findById(highlights, parentId) : findById(highlights, commentId);
+      if (toFocus) {
+        highlights.forEach(h => h.classList.remove('highlight-area-focus'));
+        toFocus.classList.add('highlight-area-focus');
+      }
     }
   }
-
   let { docId: documentId } = getURLParams(['docId']);
 
   const handleDelete = async () => {
@@ -263,8 +346,9 @@ let commentTemplate = (commentId, username, content, translateY) => {
       ? html`<button class="btn btn-danger" @click=${handleDelete}>X</button>`
       : null;
 
-  return html`<div id=${'comment-' + commentId} class="card ml-4 shadow comment" style="width: 18rem; top: ${translateY}px; position: absolute;" @click=${handleFocusHighlight}>
-    <div class="p-3">
+      // style="width: 18rem; top: ${translateY}px; position: absolute;"
+  return html`<div id=${'comment-' + commentId} @click=${handleClick} class="p-2 mb-2 border-bottom" data-parent-id=${parentId}>
+    <div>
       ${deleteButton()}
       <div class="d-inline-flex justify-content-center">
         <div class="rounded-circle">

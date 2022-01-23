@@ -155,7 +155,7 @@ window.addEventListener('load', () => {
     // Add the highlight coordinates for each comment
     setState({
       comments: comments.map((c) => {
-        return c.highlight == null
+        return c.highlight == null && typeof c?.multiSelectElements == 'string'
           ? {
               ...c,
               highlight: Object.assign(

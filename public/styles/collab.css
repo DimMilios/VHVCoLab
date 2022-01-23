@@ -90,7 +90,17 @@
   border-radius: var(--collab-layer-bradius);
 }
 
-.highlight-area:not(:focus) {
+.highlight-color {
+  transform: scale(1);
+  background-color: rgba(0, 0, 255, 0.04);
+}
+
+.highlight-area-focus {
+  transform: scale(1.1) !important;
+  background-color: rgba(0, 0, 255, 0.3) !important;
+}
+
+/* .highlight-area:not(:focus) {
   transform: scale(1);
   background-color: rgba(0, 0, 255, 0.04) !important;
 }
@@ -98,25 +108,21 @@
 .highlight-area:focus {
   transform: scale(1.1);
   background-color: rgba(0, 0, 255, 0.3) !important;
-}
+} */
 
-.highlight-color {
-  transform: scale(1);
-  background-color: rgba(0, 0, 255, 0.04);
-}
 
 /* .highlight-color-focus {
   background-color: rgba(0, 0, 255, 0.3) !important;
 } */
 
-.comment {
+.comment-with-replies {
   cursor: pointer;
   border-radius: 10px;
 
   transition: transform 200ms ease-out;
 }
 
-.comment:hover {
+.comment-with-replies:hover {
   transform: translateY(10px) scale(1.05);
 }
 
