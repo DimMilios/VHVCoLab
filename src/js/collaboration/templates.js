@@ -8,6 +8,7 @@ import { hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMulti
 
 import * as commentService from '../api/comments.js';
 import userProfileImgUrl from '../../../images/user-profile.png';
+import { getURLParams } from '../api/util.js';
 
 export let uiCoords = {
   outputSVGHeight: 10,
@@ -120,8 +121,7 @@ let commentFormTemplate = (translateY) => {
     let content = event.target.querySelector('input[name="comment-text"]');
     console.log('You sent:', content.value);
 
-    let params = (new URL(document.location)).searchParams;
-    let documentId = params.get('docId');
+    let { docId: documentId } = getURLParams(['docId']);
     
     let notes = yProvider.awareness.getLocalState()?.multiSelect;
     if (Array.isArray(notes) && notes.length > 0) {
@@ -242,8 +242,7 @@ let commentTemplate = (commentId, username, content, translateY) => {
     }
   }
 
-  let params = (new URL(document.location)).searchParams;
-  let documentId = params.get('docId');
+  let { docId: documentId } = getURLParams(['docId']);
 
   const handleDelete = async () => {
     await commentService.removeById(commentId, {

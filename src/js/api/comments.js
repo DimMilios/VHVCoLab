@@ -1,7 +1,4 @@
-let productionURL = new URL('http://localhost:3001/'); // Replace when we have a server
-let baseUrl = import.meta.env.DEV ? new URL('http://localhost:3001/') : productionURL;
-
-let noop = () => {};
+import { noop, baseUrl } from './util.js';
 
 const create = async ({ data, onSuccess = noop, onError = noop }) => {
   let url = baseUrl + 'api/comments';
@@ -15,7 +12,7 @@ const create = async ({ data, onSuccess = noop, onError = noop }) => {
     })
   
     let json = await response.json();
-    if (response.status >= 200 && response.status < 300) {
+    if (response.ok) {
       onSuccess(json);
     }
   } catch(error) {
@@ -35,7 +32,7 @@ const removeById = async (id, { data, onSuccess = noop, onError = noop }) => {
     })
   
     let json = await response.json();
-    if (response.status >= 200 && response.status < 300) {
+    if (response.ok) {
       onSuccess(json);
     }
   } catch(error) {

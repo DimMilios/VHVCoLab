@@ -12,9 +12,9 @@ export let setState = (newState = {}) => {
   //   throw new Error('The state object provided violates the state structure');
   // }
   
-  console.log('Old state', state);
+  // console.log('Old state', state);
   state = Object.assign({}, state, newState);
-  console.log('New state', state);
+  // console.log('New state', state);
   return state;
 }
 

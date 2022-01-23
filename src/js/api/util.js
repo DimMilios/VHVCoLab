@@ -1,9 +1,14 @@
-export function getParams() {
-  let params = (new URL(document.location)).searchParams;
+export function getURLParams(keys = []) {
+  let params = new URL(document.location).searchParams;
 
-  const documentId = (documentId = 'docId') => params.get(documentId);
-
-  return {
-    documentId
-  }
+  return keys
+    .map((key) => ({ [key]: params.get(key) }))
+    .reduce((prev, curr) => Object.assign({}, prev, curr), {});
 }
+
+export let noop = () => {};
+
+let productionURL = new URL('http://localhost:3001/'); // Replace when we have a server
+export let baseUrl = import.meta.env.DEV
+  ? new URL('http://localhost:3001/')
+  : productionURL;

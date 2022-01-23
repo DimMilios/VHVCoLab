@@ -9,7 +9,9 @@ import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
 import { multiSelectCoords, renderComments, userListTemplate } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
-import { render, html } from 'lit-html';
+
+import * as userService from './api/users.js';
+import { getURLParams } from './api/util.js';
 
 export let yProvider;
 
@@ -29,9 +31,7 @@ let userData = {
 window.addEventListener('load', () => {
   const ydoc = new Y.Doc();
   
-  let params = (new URL(document.location)).searchParams;
-  let roomname = params.has('roomname') ? params.get('roomname') : 'ace-demo';
-  let DOC_ID = params.get('docId');
+  let { docId: DOC_ID, roomname } = getURLParams(['docId', 'roomname'])
   let room = `docId=${DOC_ID}&roomname=${roomname}`;
 
   if (typeof yProvider == 'undefined') {
@@ -95,20 +95,18 @@ window.addEventListener('load', () => {
   eventSource.addEventListener('open', async () => {
     console.log('Event source connection for comments open');
 
-    let response = await fetch(`http://localhost:3001/api/users?docId=${DOC_ID}`, { credentials: 'include'});
+    userService.getByDocumentId(DOC_ID, {
+      onSuccess: (usersJSON) => {
+        let connectedIds = [...yProvider.awareness.getStates().values()].map(s => s.user.id);
+        let users = [];
+        for (let user of usersJSON) {
+          user.online = connectedIds.includes(user.id);
+          users.push(user);
+        }
 
-    let usersJSON = await response.json();
-
-    // let onlineElem = document.querySelector('#online-users');
-      let connectedIds = [...yProvider.awareness.getStates().values()].map(s => s.user.id);
-      let users = [];
-      for (let user of usersJSON) {
-        user.online = connectedIds.includes(user.id);
-        users.push(user);
+        setState({ users });
       }
-
-      setState({ users });
-      // render(html`${userListTemplate(users)}`, onlineElem);
+    })
   });
 
   eventSource.addEventListener('message', event => {
@@ -179,4 +177,5 @@ window.addEventListener('load', () => {
   })
 
   window.example = { yProvider, ydoc, type };
+  window.awareness = yProvider.awareness;
 });
