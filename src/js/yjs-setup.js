@@ -11,7 +11,7 @@ import { multiSelectCoords, renderComments, userListTemplate } from './collabora
 import Cookies from 'js-cookie';
 
 import * as userService from './api/users.js';
-import { getURLParams } from './api/util.js';
+import { baseUrl, getURLParams } from './api/util.js';
 
 export let yProvider;
 
@@ -90,7 +90,10 @@ window.addEventListener('load', () => {
 
   yProvider.awareness.on('update', updateHandler);
 
-  let eventSource = new EventSource(`http://localhost:3001/events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`, { withCredentials: true });
+  let eventSource = new EventSource(
+    `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
+    { withCredentials: true }
+  );
   
   eventSource.addEventListener('open', async () => {
     console.log('Event source connection for comments open');

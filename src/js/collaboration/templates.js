@@ -215,7 +215,7 @@ export let renderComments = (comments) => {
   let container = document.querySelector('#comments-container');
 
   if (container) {
-    layoutService.send('SHOW_COMMENTS');
+    layoutService.send('SHOW_COMMENTS_HIDE_TEXT');
 
     let commentsWithReplies = [];
     for (let c of comments) {
@@ -229,16 +229,17 @@ export let renderComments = (comments) => {
       parent.children = [ ... parent.children, c ];
     }
 
+    let width = container.offsetWidth;
     console.log('commentsWithReplies', commentsWithReplies);
     render(
-      html`${commentsWithReplies.map(p => commentReplyContainerTemplate(p))}`,
+      html`${commentsWithReplies.map(p => commentReplyContainerTemplate(p, width))}`,
       container
     );
   }
 }
 
 // Used to hold parent comments, their replies and a form to add a new reply
-let commentReplyContainerTemplate = (parent) => {
+let commentReplyContainerTemplate = (parent, parentElemWidth) => {
   let collapseId = `reply-collapse-${parent.id}`;
   const handleClick = () => {
     $(`.collapse.reply-form-container:not(#${collapseId})`).collapse('hide');
@@ -275,9 +276,8 @@ let commentReplyContainerTemplate = (parent) => {
 
   const handleCancel = () => $(`#${collapseId}`).collapse('hide');
 
-  // data-toggle="collapse" data-target=${`#reply-collapse-${parent.id}`}
   return html`
-    <div aria-expanded="false" aria-controls=${collapseId} style="width: 18rem; top: ${parent.highlight.top}px; position: absolute;" class="card shadow comment-with-replies ml-2" @click=${handleClick}>
+    <div aria-expanded="false" aria-controls=${collapseId} style="width: 18rem; top: ${parent.highlight.top}px; left:${parentElemWidth / 2 - remToPixels(18) / 2}px; position: absolute;" class="card shadow comment-with-replies" @click=${handleClick}>
 
       <div class="card-body p-0">
         

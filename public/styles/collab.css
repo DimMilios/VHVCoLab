@@ -1,6 +1,6 @@
 :root {
   --collab-layer-zIndex: 900;
-  --collab-layer-bradius: 10px;
+  --collab-layer-bradius: 5px;
 }
 
 #collab-container, .comments {
@@ -100,20 +100,7 @@
   background-color: rgba(0, 0, 255, 0.3) !important;
 }
 
-/* .highlight-area:not(:focus) {
-  transform: scale(1);
-  background-color: rgba(0, 0, 255, 0.04) !important;
-}
 
-.highlight-area:focus {
-  transform: scale(1.1);
-  background-color: rgba(0, 0, 255, 0.3) !important;
-} */
-
-
-/* .highlight-color-focus {
-  background-color: rgba(0, 0, 255, 0.3) !important;
-} */
 
 .comment-with-replies {
   cursor: pointer;

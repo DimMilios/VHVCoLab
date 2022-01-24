@@ -127,6 +127,18 @@ export const layoutMachine = createMachine({
               resize(inputCol, outputCol, commentsCol)(),
           ],
         },
+        SHOW_COMMENTS_HIDE_TEXT: {
+          target: 'notationAndCommentsVisible',
+          actions: [
+            assign({
+              inputCol: 0,
+              outputCol: 8,
+              commentsCol: 4,
+            }),
+            ({ inputCol, outputCol, commentsCol }) =>
+              resize(inputCol, outputCol, commentsCol)(),
+          ],
+        }
       },
     },
     notationAndCommentsVisible: {
