@@ -8,6 +8,7 @@ import { hexToRgbA, MULTI_SELECT_ALPHA, getCoordinatesWithOffset, calculateMulti
 
 import * as commentService from '../api/comments.js';
 import userProfileImgUrl from '../../../images/user-profile.png';
+import personImgUrl from '../../../images/person.svg';
 import { getURLParams } from '../api/util.js';
 
 export let uiCoords = {
@@ -276,21 +277,23 @@ export let renderComments = (comments, overlaps = []) => {
       let overlaps = overlappingElements.map(arr => [...new Set(arr)]);
       let test = [];
       if (overlaps.length > 0) {
+        let lasthighestTop = 0;
         overlaps.forEach(arr => {
           let groupById = commentsWithReplies.filter(cwr => arr.includes(cwr.id));
-          console.log({a: groupById})
-
+          groupById[0].highlight.top += lasthighestTop + 10;
           for (let i = 1; i < groupById.length; i++) {
             let curr = groupById[i];
             let prev = groupById[i - 1];
 
+            // TODO: We're not considering comment replies right now
             curr.highlight = { ...curr.highlight, top: prev.highlight.top + prev.highlight.height };
+            lasthighestTop = curr.highlight.top;
           }
           test.push(groupById);
         })
       }
 
-      console.log('overlapping comments', test)
+      // console.log('overlapping comments', test)
     }
   }
 }
@@ -338,11 +341,11 @@ let commentReplyContainerTemplate = (parent, parentElemWidth) => {
 
       <div class="card-body p-0">
         
-        ${html`${commentTemplate(parent.id, parent.usersDocuments[0].user.email, parent.content)}`}
+        ${html`${commentTemplate(parent.id, parent.usersDocuments[0].user.email, parent.content, personImgUrl)}`}
         
         ${parent.children.length > 0 ? 
           html`${parent.children
-            .map(child => commentTemplate(child.id, child.usersDocuments[0].user.email, child.content, child.parentCommentId))}`
+            .map(child => commentTemplate(child.id, child.usersDocuments[0].user.email, child.content, personImgUrl, child.parentCommentId))}`
             : null
         }
 
@@ -363,7 +366,7 @@ let commentReplyContainerTemplate = (parent, parentElemWidth) => {
 }
 
 // Include a user profile icon (probably img URL) when we have persistence for users
-let commentTemplate = (commentId, username, content, parentId) => {
+let commentTemplate = (commentId, username, content, imgUrl, parentId) => {
   let user = yProvider.awareness.getLocalState().user;
 
   const findById = (highlights, id) => highlights.find(elem => elem.dataset.commentId == id);
@@ -400,22 +403,21 @@ let commentTemplate = (commentId, username, content, parentId) => {
 
   const deleteButton = () =>
     username === user.email
-      ? html`<button class="btn btn-danger" @click=${handleDelete}>X</button>`
+      ? html`<button type="button" class="btn btn-danger" @click=${handleDelete}>X</button>`
       : null;
 
-      // style="width: 18rem; top: ${translateY}px; position: absolute;"
   return html`<div id=${'comment-' + commentId} @click=${handleClick} class="p-2 mb-2 border-bottom" data-parent-id=${parentId}>
     <div>
-      ${deleteButton()}
-      <div class="d-inline-flex justify-content-center">
-        <div class="rounded-circle">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"class="bi bi-person mr-auto" viewBox="0 0 16 16">
-            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-          </svg>
+      <div class="d-inline-flex justify-content-between w-100">
+        <div class="d-flex">
+          <div style="background-color: white; border-radius: 50%;">
+            <img src=${imgUrl} alt="user profile icon" width="24" height="24" />
+          </div>
+          <h5 class="card-title ml-2 align-self-center">
+            ${username}
+          </h5>
         </div>
-        <h5 class="card-title ml-2 align-self-center">
-          ${username}
-        </h5>
+        <div>${deleteButton()}</div>
       </div>
       <p class="card-text">${content}</p>
     </div>
@@ -427,9 +429,9 @@ export let highlightLayerTemplate = (height, ...children) => {
   return html`<div id="highlight-container" style="height: ${height}px">${children}</div>`;
 }
 
-export let highlightListTemplate = (clientId, state) => {
-  return html`${state.map((h) => highlightTemplate(clientId, h))}`;
-};
+// export let highlightListTemplate = (clientId, state) => {
+//   return html`${state.map((h) => highlightTemplate(clientId, h))}`;
+// };
 
 export let highlightTemplate = (commentId, state) => html`<div
   class="highlight-area highlight-color"
@@ -439,7 +441,6 @@ export let highlightTemplate = (commentId, state) => html`<div
 ></div>`;
 
 export let userListTemplate = (users) => {
-  // console.log('user profile image path', { userProfileImgUrl })
   return html`
     <ul class="users-online m-0 p-0 d-flex justify-content-between">
       ${users.map(user => onlineUserTemplate(userProfileImgUrl, user))}
@@ -448,7 +449,7 @@ export let userListTemplate = (users) => {
 
 let onlineUserTemplate = (url, user) => {
   let classes = { 'online-status': user.online, 'offline-status': !user.online };
-  return html`<li class="">
+  return html`<li data-toggle="tooltip" title=${user.name}>
     <span class="position-relative d-inline-flex">
       <div style="background-color: white; border-radius: 50%;">
         <img src=${url} alt="user profile icon" width="40" height="40" />
@@ -456,48 +457,4 @@ let onlineUserTemplate = (url, user) => {
       <span class=${classMap(classes)}></span>
     </span>
   </li>`;
-}
-
-export function userListDisplay(users) {
-  if (!users || !Array.isArray(users)) return;
-  let userList = document.querySelector('.user-list');
-  const output = document.querySelector('#output');
-
-  if (!userList) {
-    userList = document.createElement('div');
-    userList.classList.add('user-list');
-    document.body.appendChild(userList);
-  }
-
-  userList.addEventListener('mouseenter', (e) => {
-    e.target.innerHTML = `${users.join(',\n')}`;
-    if (
-      output.hasAttribute('style') &&
-      !output.getAttribute('style').includes('transition')
-    ) {
-      // output.style.transition = 'opacity 0.4s ease-out';
-    }
-    // output.style.opacity = 0.1;
-  });
-
-  userList.addEventListener('mouseout', (e) => {
-    e.target.innerHTML = userIcon + users.length + ' users';
-    output.style.opacity = 1;
-  });
-
-  let userIcon = '👤 ';
-  let userText = ' user';
-  if (users.length > 1) {
-    userIcon = '👥 ';
-    userText = ' users';
-  }
-  userList.innerHTML = userIcon + users.length + userText;
-
-  const menubar = document.getElementById('menubar');
-  if (menubar) {
-    const menuBox = menubar.getBoundingClientRect();
-    userList.style.transform = `translate(${
-      menuBox.right - userList.getBoundingClientRect().width * 1.1
-    }px, ${menuBox.top * 3}px)`;
-  }
 }

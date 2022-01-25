@@ -1,7 +1,7 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightListTemplate, highlightLayerTemplate, multiSelectCoords, highlightTemplate, userListTemplate } from './templates.js';
+import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightLayerTemplate, highlightTemplate, userListTemplate } from './templates.js';
 import { setState, state } from '../state/comments.js';
 
 window.ui = uiCoords;
@@ -164,6 +164,8 @@ export function updateHandler() {
         .sort((a, b) => b.online - a.online),
     });
     render(html`${userListTemplate(state.users)}`, onlineElem);
+    // Initialize bootstrap tooltips
+    $('[data-toggle="tooltip"]').tooltip();
   } else {
     console.log('Element div#online-users is not found. Cannot display online user info.');
   }

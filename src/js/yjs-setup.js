@@ -7,7 +7,7 @@ import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
-import { multiSelectCoords, renderComments, userListTemplate } from './collaboration/templates.js';
+import { multiSelectCoords, renderComments } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
 import * as userService from './api/users.js';
@@ -69,7 +69,7 @@ window.addEventListener('load', () => {
   // yProvider.awareness.setLocalStateField('user', userData);
 
   // Insert an initial song to the text editor
-  insertSplashMusic();
+  // insertSplashMusic();
   editor.renderer.setOption('maxLines', 50);
 
   editor.getSession().selection.on('changeCursor', function () {

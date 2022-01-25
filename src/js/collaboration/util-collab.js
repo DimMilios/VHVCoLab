@@ -81,17 +81,17 @@ export function calculateMultiSelectCoords(selectedNotes) {
 
 export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem, scrollTop = 0) {
   if (!selectedNotes || !Array.isArray(selectedNotes) || selectedNotes.length == 0) {
-    console.error('Argument "selectedNotes" must be an array of elements');
+    console.log('Argument "selectedNotes" must be an array of elements', selectedNotes);
     return;
   }
   
   if (!offsetElem || !(offsetElem instanceof HTMLElement)) {
-    console.error('Argument "offsetElem" must be an HTMLElement');
+    console.log('Argument "offsetElem" must be an HTMLElement');
     return;
   }
   
   if (typeof scrollTop != 'number') {
-    console.error('Argument "scrollTop" must be a number');
+    console.log('Argument "scrollTop" must be a number');
     return;
   }
 

@@ -193,9 +193,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   observeSvgContent();
 
-  // PDFLISTINTERVAL = setInterval(function () {
-  //   buildPdfIconListInMenu();
-  // }, 3000);
 });
 
 function extractEditorPosition(element) {
