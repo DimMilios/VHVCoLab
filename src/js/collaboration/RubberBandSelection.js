@@ -1,5 +1,5 @@
 import { render } from "lit-html";
-import { selectAreaTemplate } from "./templates";
+import { selectAreaTemplate } from "../templates/multiSelect.js";
 
 export class RubberBandSelection {
   coords = {

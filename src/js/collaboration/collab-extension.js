@@ -1,7 +1,11 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from "./RubberBandSelection";
 import { html, render } from 'lit-html';
-import { multiSelectTemplate, singleSelectTemplate, userAwarenessTemplate, collabTemplate, uiCoords, highlightLayerTemplate, highlightTemplate, userListTemplate } from './templates.js';
+import { collabTemplate, uiCoords } from './templates.js';
+import { multiSelectTemplate } from "../templates/multiSelect";
+import { singleSelectTemplate, userAwarenessTemplate } from "../templates/userAwareness";
+import { userListTemplate } from "../templates/userList.js";
+import { highlightLayerTemplate, highlightTemplate } from "../templates/highlights.js";
 import { setState, state } from '../state/comments.js';
 
 window.ui = uiCoords;
