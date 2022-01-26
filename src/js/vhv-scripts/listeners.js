@@ -174,11 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   selectService.start();
   body.addEventListener('click', function (event) {
-
     // turnOffAllHighlights();
     // console.log("SINGLE CLICK");
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
+      $('[data-toggle="popover"]').popover('dispose');
       if (target?.id && target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)) {
         selectService.send({ type: 'SELECT', elemId: target.id });
       } else {

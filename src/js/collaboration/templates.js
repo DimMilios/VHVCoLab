@@ -86,60 +86,61 @@ export let renderComments = (comments, overlaps = []) => {
       container
       );
     
-    let commentElements = Array.from(document.querySelectorAll('.comment-with-replies'));
-    let overlappingElements = [];
-    for (let i = 0; i < commentElements.length; i++) {
-      for (let j = i + 1; j < commentElements.length; j++) {
-        let box1 = commentElements[i].getBoundingClientRect();
-        let box2 = commentElements[j].getBoundingClientRect();
+    // let commentElements = Array.from(document.querySelectorAll('.comment-with-replies'));
+    // let overlappingElements = [];
+    // for (let i = 0; i < commentElements.length; i++) {
+    //   for (let j = i + 1; j < commentElements.length; j++) {
+    //     let box1 = commentElements[i].getBoundingClientRect();
+    //     let box2 = commentElements[j].getBoundingClientRect();
         
-        // Calculations problematic in some browsers (way more "sensitive" on MS Edge)
-        if (box2.y > box1.y && box2.y < box1.y + box1.height
-          || box1.y > box2.y && box1.y < box2.y + box2.height) {
-          // console.log('Overlapping elements', commentElements[i], commentElements[j]);
-          let id1 = +commentElements[i].id.match(/(\d+)/)[0];
-          let id2 = +commentElements[j].id.match(/(\d+)/)[0];
+    //     // Calculations problematic in some browsers (way more "sensitive" on MS Edge)
+    //     if (box2.y > box1.y && box2.y < box1.y + box1.height
+    //       || box1.y > box2.y && box1.y < box2.y + box2.height) {
+    //       // console.log('Overlapping elements', commentElements[i], commentElements[j]);
+    //       let id1 = +commentElements[i].id.match(/(\d+)/)[0];
+    //       let id2 = +commentElements[j].id.match(/(\d+)/)[0];
 
-          let hasId1 = overlappingElements.find(arr => arr.includes(id1));
-          let hasId2 = overlappingElements.find(arr => arr.includes(id2));
+    //       let hasId1 = overlappingElements.find(arr => arr.includes(id1));
+    //       let hasId2 = overlappingElements.find(arr => arr.includes(id2));
           
-          if (hasId1) {
-            // hasId1 = [...new Set([...hasId1, id2])]
-            hasId1.push(id2);
-          }
-          else if (hasId2) {
-            // hasId2 = [...new Set([...hasId2, id1])]
-            hasId2.push(id1);
-          } else {
-            overlappingElements.push([ id1, id2 ]);
-          }
-        }
-      }
-    }
-    // console.log(overlappingElements);
+    //       if (hasId1) {
+    //         // hasId1 = [...new Set([...hasId1, id2])]
+    //         hasId1.push(id2);
+    //       }
+    //       else if (hasId2) {
+    //         // hasId2 = [...new Set([...hasId2, id1])]
+    //         hasId2.push(id1);
+    //       } else {
+    //         overlappingElements.push([ id1, id2 ]);
+    //       }
+    //     }
+    //   }
+    // }
+    // // console.log(overlappingElements);
 
-    if (overlappingElements.length > 0) {
-      // renderComments(state.comments, overlappingElements.map(arr => [...new Set(arr)]));
-      let overlaps = overlappingElements.map(arr => [...new Set(arr)]);
-      let test = [];
-      if (overlaps.length > 0) {
-        let lasthighestTop = 0;
-        overlaps.forEach(arr => {
-          let groupById = commentsWithReplies.filter(cwr => arr.includes(cwr.id));
-          groupById[0].highlight.top += lasthighestTop + 10;
-          for (let i = 1; i < groupById.length; i++) {
-            let curr = groupById[i];
-            let prev = groupById[i - 1];
+    // if (overlappingElements.length > 0) {
+    //   // renderComments(state.comments, overlappingElements.map(arr => [...new Set(arr)]));
+    //   let overlaps = overlappingElements.map(arr => [...new Set(arr)]);
+    //   let test = [];
+    //   if (overlaps.length > 0) {
+    //     let lasthighestTop = 0;
+    //     overlaps.forEach(arr => {
+    //       let groupById = commentsWithReplies.filter(cwr => arr.includes(cwr.id));
+    //       groupById[0].highlight.top += lasthighestTop + 10;
+    //       for (let i = 1; i < groupById.length; i++) {
+    //         let curr = groupById[i];
+    //         let prev = groupById[i - 1];
 
-            // TODO: We're not considering comment replies right now
-            curr.highlight = { ...curr.highlight, top: prev.highlight.top + prev.highlight.height };
-            lasthighestTop = curr.highlight.top;
-          }
-          test.push(groupById);
-        })
-      }
+    //         // TODO: We're not considering comment replies right now
+    //         curr.highlight = { ...curr.highlight, top: prev.highlight.top + prev.highlight.height };
+    //         lasthighestTop = curr.highlight.top;
+    //       }
+    //       test.push(groupById);
+    //     })
+    //   }
 
       // console.log('overlapping comments', test)
-    }
+    // }
+    
   }
 }

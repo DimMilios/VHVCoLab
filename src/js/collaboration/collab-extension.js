@@ -8,8 +8,6 @@ import { userListTemplate } from "../templates/userList.js";
 import { highlightLayerTemplate, highlightTemplate } from "../templates/highlights.js";
 import { setState, state } from '../state/comments.js';
 
-window.ui = uiCoords;
-
 let DEBUG = false;
 function log(text) {
   if (DEBUG) {
@@ -17,7 +15,7 @@ function log(text) {
   }
 }
 
-function formatUserElem(elem) {
+export function formatUserElem(elem) {
   const [, qOn, qOff, pitchName, accidental, octave] = elem.classList;
   const formattedElem = {};
   // prettier-ignore
@@ -218,34 +216,14 @@ function collabLayer(...children) {
   return collabTemplate(uiCoords.svgHeight, ...children);
 }
 
-// function renderCollabLayer(...children) {
-//   let output = document.querySelector('#output');
-//   let renderBefore = document.querySelector('#output > svg');
-//   uiCoords.svgHeight = renderBefore?.height.baseVal.value ?? window.innerHeight;
-
-//   render(
-//     collabTemplate(uiCoords.svgHeight, ...children),
-//     output,
-//     { renderBefore }
-//   );
-// }
-
 export function renderHighlightLayer(...children) {
   let output = document.querySelector('#output');
   let svg = document.querySelector('#output > svg');
 
   let collab = output.querySelector('#collab-container');
-  let renderBefore = collab != null ? collab : svg;
   let svgHeight = svg?.height.baseVal.value ?? window.innerHeight;
 
-  // console.log('Rendering highlight layer', {svgHeight, output, renderBefore});
-
-  return highlightLayerTemplate(svgHeight, ...children)
-  // render(
-  //   highlightLayerTemplate(svgHeight, ...children),
-  //   output,
-  //   { renderBefore }
-  // );
+  return highlightLayerTemplate(svgHeight, ...children);
 }
 
 function addListenersToOutput(outputTarget) {

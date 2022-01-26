@@ -27,6 +27,7 @@
   position: absolute;
   z-index: var(--collab-layer-zIndex);
   cursor: pointer;
+  pointer-events: bounding-box;
   
   font-size: 0.7em;
   font-weight: bold;
