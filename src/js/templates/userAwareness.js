@@ -1,7 +1,67 @@
-import { html } from 'lit-html';
+import { html, render } from 'lit-html';
+import { getURLParams } from '../api/util.js';
 import { formatUserElem } from '../collaboration/collab-extension.js';
+import {
+  multiSelectCoords,
+  renderComments,
+} from '../collaboration/templates.js';
 import { getCoordinatesWithOffset } from '../collaboration/util-collab.js';
 import { yProvider } from '../yjs-setup.js';
+import { commentFormTemplate } from './commentForm.js';
+import * as commentService from '../api/comments.js';
+import { cache } from 'lit-html/directives/cache.js';
+
+let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
+  html`
+    <div class="dropup btn-group" style="pointer-events: bounding-box">
+      <div
+        id=${'dropdownMenuButton-' + elemRefId}
+        class="users-div btn dropdown-toggle p-0"
+        data-toggle="dropdown"
+        aria-expanded="false"
+        style="transform: translate(${targetX}px, ${targetY - 30}px)"
+        data-client-id=${clientId}
+        data-ref-id=${elemRefId}
+      >
+        You
+      </div>
+
+      <div
+        class="dropdown-menu"
+        aria-labelledby=${'dropdownMenuButton-' + elemRefId}
+        @click=${handleClick}
+      >
+        <a
+          id=${'add-comment-' + elemRefId}
+          class="dropdown-item"
+          href="#"
+          data-toggle="modal"
+          data-target="#post-comment"
+          >Add Comment</a
+        >
+        <a
+          class="dropdown-item"
+          id=${'details-' + elemRefId}
+          href="#"
+          data-toggle="popover"
+          >Element details</a
+        >
+      </div>
+    </div>
+  `;
+let simpleIndicator = (clientId, elemRefId, targetX, targetY, name) =>
+  html`<div
+    class="users-div"
+    style="transform: translate(${targetX}px, ${document.querySelector(
+      '.dropup.btn-group'
+    )
+      ? targetY - 50
+      : targetY - 25}px)"
+    data-client-id=${clientId}
+    data-ref-id=${elemRefId}
+  >
+    ${name}
+  </div> `;
 
 export let userAwarenessTemplate = (clientId, elemRefId, name) => {
   let el = document.getElementById(elemRefId);
@@ -27,6 +87,13 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
         $(`#${id}`).popover('show');
         console.log({ details: JSON.parse(details) });
       }
+    } else if (/^add-comment/.test(id)) {
+      const coords = multiSelectCoords([elemRefId]);
+      console.log(coords);
+      render(
+        commentFormTemplate(handleSingleComment([elemRefId], coords)),
+        document.querySelector('#post-comment .modal-content')
+      );
     } else {
       console.log('Element does not have id');
     }
@@ -36,46 +103,9 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
     document.querySelector('#input')
   );
 
-  return clientId == yProvider.awareness.clientID
-    ? html`
-        <div class="dropup btn-group" style="pointer-events: bounding-box">
-          <div
-            id=${'dropdownMenuButton-' + elemRefId}
-            class="users-div btn dropdown-toggle p-0"
-            data-toggle="dropdown"
-            aria-expanded="false"
-            style="transform: translate(${targetX}px, ${targetY - 30}px)"
-            data-client-id=${clientId}
-            data-ref-id=${elemRefId}
-          >
-            You
-          </div>
-
-          <div
-            class="dropdown-menu"
-            aria-labelledby=${'dropdownMenuButton-' + elemRefId}
-            @click=${handleClick}
-          >
-            <a
-              class="dropdown-item"
-              id=${'details-' + elemRefId}
-              href="#"
-              data-toggle="popover"
-              >Element details</a
-            >
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </div>
-      `
-    : html`<div
-        class="users-div"
-        style="transform: translate(${targetX}px, ${document.querySelector('.dropup.btn-group') ?targetY - 50 : targetY - 25}px)"
-        data-client-id=${clientId}
-        data-ref-id=${elemRefId}
-      >
-        ${name}
-      </div> `;
+  return html`${cache(clientId == yProvider.awareness.clientID
+    ? contextMenu(clientId, elemRefId, targetX, targetY, handleClick)
+    : simpleIndicator(clientId, elemRefId, targetX, targetY, name))}`;
 };
 
 export let singleSelectTemplate = (clientId, elemRefId, color) => {
@@ -96,4 +126,54 @@ export let singleSelectTemplate = (clientId, elemRefId, color) => {
     data-client-id=${clientId}
     data-ref-id=${elemRefId}
   ></div>`;
+};
+
+export const handleSingleComment = (notes, coords) => async (event) => {
+  event.preventDefault();
+
+  let content = event.target.querySelector('input[name="comment-text"]');
+  console.log('You sent:', content.value);
+
+  let { docId: documentId } = getURLParams(['docId']);
+
+  if (Array.isArray(notes) && notes.length > 0) {
+    await commentService.create({
+      data: {
+        content: content.value,
+        parentCommentId: null,
+        documentId: documentId ? Number(documentId) : 1,
+        clientId: yProvider.awareness.clientID,
+        multiSelectElements: notes.join(','),
+      },
+      onSuccess: (createdComment) => {
+        console.log('Added comment', createdComment);
+        createdComment.highlight = Object.assign({}, coords);
+
+        setState({
+          comments: state.comments
+            .map((c) => {
+              return c.highlight == null &&
+                typeof c?.multiSelectElements == 'string'
+                ? {
+                    ...c,
+                    highlight: Object.assign(
+                      {},
+                      multiSelectCoords(c.multiSelectElements.split(','))
+                    ),
+                  }
+                : c;
+            })
+            .concat(createdComment),
+        });
+
+        console.log('Comments after calculating coords', state.comments);
+
+        renderComments(state.comments);
+      },
+    });
+  }
+
+  yProvider.awareness.setLocalStateField('multiSelect', null);
+  content.value = '';
+  $('#post-comment').modal('hide');
 };

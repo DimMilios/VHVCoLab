@@ -1,5 +1,5 @@
 import { html, render } from 'lit-html';
-import { commentFormTemplate } from './commentForm';
+import { commentFormTemplate, handleCommentPost } from './commentForm';
 import { remToPixels } from '../collaboration/templates';
 
 
@@ -8,7 +8,7 @@ export let commentsButtonTemplate = (coords, translateY) => {
   let commentHeight = 2.5;
 
   const clickHandler = () => {
-    render(commentFormTemplate(translateY), document.querySelector('#post-comment .modal-content'));
+    render(commentFormTemplate(handleCommentPost), document.querySelector('#post-comment .modal-content'));
   };
 
   return html`<div
