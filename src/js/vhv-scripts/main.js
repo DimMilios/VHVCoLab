@@ -81,3 +81,5 @@ export * from './convertToMusicXmlAndSave.js';
 
 // Extensions for collaboration
 // export * from './collab-extension.js';
+
+export * from '../collaboration/svg-interaction.js';

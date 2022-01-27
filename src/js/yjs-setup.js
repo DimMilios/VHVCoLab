@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 
 import * as userService from './api/users.js';
 import { baseUrl, getURLParams } from './api/util.js';
+import { createDraggableContainer } from './collaboration/svg-interaction.js';
 
 export let yProvider;
 
@@ -78,6 +79,7 @@ window.addEventListener('load', () => {
     // console.log('changeCursor event', { row, column, item })
     if (item && item.classList.contains('note')) {
       markItem(item);
+      createDraggableContainer(item);
       const localState = yProvider.awareness.getLocalState();
 
       yProvider.awareness.setLocalState({
@@ -88,8 +90,9 @@ window.addEventListener('load', () => {
     }
   });
 
-  yProvider.awareness.on('update', updateHandler);
-
+  // yProvider.awareness.on('update', updateHandler);
+  yProvider.awareness.on('change', updateHandler);
+  
   let eventSource = new EventSource(
     `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
     { withCredentials: true }
@@ -177,6 +180,11 @@ window.addEventListener('load', () => {
   
   eventSource.addEventListener('error', error => {
     console.log('Error', error);
+    eventSource.close();
+  })
+
+  window.addEventListener('beforeunload', () => {
+    eventSource.close();
   })
 
   window.example = { yProvider, ydoc, type };

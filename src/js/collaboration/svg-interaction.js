@@ -68,7 +68,7 @@ function createSVGCollabLayer(parentElem) {
     svg.setAttributeNS(null, 'viewBox', `${Object.values(fromSVGRect(viewBox.baseVal)).join(' ')}`);
   }
 
-  svg.id = 'collab-container';
+  svg.id = 'collab-container-svg';
   svg.setAttribute('fill', 'blue');
 
   // const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -76,21 +76,28 @@ function createSVGCollabLayer(parentElem) {
   container.classList.add('draggable-group-svg');
   svg.appendChild(container);
 
-  return parentElem.firstElementChild.appendChild(svg);
+  // return parentElem.firstElementChild.appendChild(svg);
+  return parentElem.querySelector('svg').appendChild(svg);
 }
-function bootstrap() {
-  const collabLayer = createSVGCollabLayer(document.getElementById('output'));
-  // collabLayer.firstElementChild.appendChild(copySVGElement(global_cursor.CursorNote, true));
-  collabLayer.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
-  makeDraggable(collabLayer);
+// function bootstrap() {
+//   const collabLayer = createSVGCollabLayer(document.getElementById('output'));
+//   collabLayer.firstElementChild.appendChild(copySVGElement(global_cursor.CursorNote, true));
+//   // collabLayer.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
+//   makeDraggable(collabLayer);
 
-  // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  // rect.setAttributeNS(null, 'width', '100');
-  // rect.setAttributeNS(null, 'height', '100');
-  // rect.setAttributeNS(null, 'fill', 'green');
-  // rect.classList.add('draggable-svg');
-  // clc.appendChild(rect);
+//   // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+//   // rect.setAttributeNS(null, 'width', '100');
+//   // rect.setAttributeNS(null, 'height', '100');
+//   // rect.setAttributeNS(null, 'fill', 'green');
+//   // rect.classList.add('draggable-svg');
+//   // clc.appendChild(rect);
+
+export function createDraggableContainer(noteElem) {
+  const collabLayer = createSVGCollabLayer(document.getElementById('output'));
+  collabLayer.firstElementChild.appendChild(copySVGElement(noteElem, true));
+  makeDraggable(collabLayer);
 }
+
 // https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
 function makeDraggable(svgElem) {
   svgElem.addEventListener('mousedown', startDrag);
@@ -115,8 +122,11 @@ function makeDraggable(svgElem) {
   let selectedElem = null;
   let offset, transform;
 
+  let startTime = null;
+
   function initialiseDragging(event) {
     offset = getMousePosition(event);
+    startTime = performance.now();
     // Make sure the first transform on the element is a translate transform
     const transforms = selectedElem.transform.baseVal;
     if (transforms.length === 0 || transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE) {
@@ -153,26 +163,30 @@ function makeDraggable(svgElem) {
   function drag(event) {
     if (selectedElem) {
       event.preventDefault();
+      let timePassed = performance.now() - startTime;
 
-      const coords = getMousePosition(event);
-      // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
-      movementY = coords.y - offset.y;
-
-      const noteElem = selectedElem?.querySelector('.note');
-      if (noteElem) {
-        position = extractEditorPosition(noteElem);
-        if (prevPositionY > movementY) {
-          transposeAmount += 0.3;
-        } else if (prevPositionY < movementY) {
-          transposeAmount -= 0.3;
+      if (timePassed >= 200) {
+        const coords = getMousePosition(event);
+        // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
+        movementY = coords.y - offset.y;
+  
+        const noteElem = selectedElem?.querySelector('.note');
+        if (noteElem) {
+          position = extractEditorPosition(noteElem);
+          if (prevPositionY > movementY) {
+            transposeAmount += 0.3;
+          } else if (prevPositionY < movementY) {
+            transposeAmount -= 0.3;
+          }
+          // console.log(position, {transposeAmount});
+          document.querySelector(`#${noteElem.dataset.refElem}`).style.opacity = 0;
         }
-        // console.log(position, {transposeAmount});
-        document.querySelector(`#${noteElem.dataset.refElem}`).style.opacity = 0;
+  
+        // Allow vertical movement only
+        transform.setTranslate(transform.matrix.e, movementY);
+        prevPositionY = movementY;
       }
 
-      // Allow vertical movement only
-      transform.setTranslate(transform.matrix.e, movementY);
-      prevPositionY = movementY;
     }
   }
 
@@ -186,6 +200,7 @@ function makeDraggable(svgElem) {
       // moving below the note's current position)
       transposeNote(position.id, position.line, position.field, position.subfield, Math.floor(transposeAmount) % 44);
     }
+    startTime = null;
     selectedElem = null;
   }
 }
@@ -230,8 +245,8 @@ function extractEditorPosition(element) {
 
   return { id, line, field, subfield };
 }
-// window.collabLayer = {
-//   createSVGCollabLayer,
-//   copySVGElement,
-//   bootstrap
-// };
+window.collabLayer = {
+  createSVGCollabLayer,
+  copySVGElement,
+  bootstrap
+};

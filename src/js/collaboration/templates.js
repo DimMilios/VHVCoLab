@@ -3,6 +3,8 @@ import { layoutService } from '../state/layoutStateMachine.js';
 import { calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
 import { commentReplyContainerTemplate } from '../templates/commentReplyContainer';
+import { updateHandler } from './collab-extension.js';
+import { yProvider } from '../yjs-setup.js';
 
 export let uiCoords = {
   outputSVGHeight: 10,
@@ -85,6 +87,8 @@ export let renderComments = (comments, overlaps = []) => {
       html`${commentsWithReplies.map(p => commentReplyContainerTemplate(p, width))}`,
       container
       );
+
+    updateHandler({ added: [...yProvider.awareness.getStates().keys()] });
     
     // let commentElements = Array.from(document.querySelectorAll('.comment-with-replies'));
     // let overlappingElements = [];

@@ -3,7 +3,7 @@
   --collab-layer-bradius: 5px;
 }
 
-#collab-container, .comments {
+#collab-container, .comments{
   position: absolute;
   
   width: 100%;
@@ -12,6 +12,11 @@
 
   z-index: var(--collab-layer-zIndex);
   border: 1px solid red;
+}
+
+#collab-container-svg {
+  z-index: var(--collab-layer-zIndex);
+  opacity: 0.2;
 }
 
 .single-select {
