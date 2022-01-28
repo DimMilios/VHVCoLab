@@ -10,6 +10,7 @@ import { yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
 import * as commentService from '../api/comments.js';
 import { cache } from 'lit-html/directives/cache.js';
+import { setState, state } from '../state/comments.js';
 
 let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
   html`
@@ -146,8 +147,8 @@ export const handleSingleComment = (notes, coords) => async (event) => {
         multiSelectElements: notes.join(','),
       },
       onSuccess: (createdComment) => {
-        console.log('Added comment', createdComment);
         createdComment.highlight = Object.assign({}, coords);
+        console.log('Added comment', createdComment);
 
         setState({
           comments: state.comments
@@ -170,6 +171,7 @@ export const handleSingleComment = (notes, coords) => async (event) => {
 
         renderComments(state.comments);
       },
+      onError: console.log
     });
   }
 
