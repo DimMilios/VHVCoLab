@@ -3,7 +3,7 @@ import { setState, state } from '../state/comments.js';
 import { yProvider } from '../yjs-setup.js';
 import * as commentService from '../api/comments.js';
 import { getURLParams } from '../api/util.js';
-import { multiSelectCoords, renderComments } from '../collaboration/templates';
+import { multiSelectCoords } from '../collaboration/templates';
 
 export const handleCommentPost = async (event) => {
   event.preventDefault();
@@ -46,8 +46,6 @@ export const handleCommentPost = async (event) => {
         });
 
         console.log('Comments after calculating coords', state.comments);
-
-        renderComments(state.comments);
       }
     });
   }

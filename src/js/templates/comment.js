@@ -38,7 +38,6 @@ export let commentTemplate = (commentId, username, content, createdAt, imgUrl, p
         setState({
           comments: state.comments.filter(c => c.id != commentId)
         });
-        renderComments(state.comments);
         updateHandler();
       }
     });

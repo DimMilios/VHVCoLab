@@ -170,8 +170,6 @@ export const handleSingleComment = (notes, coords) => async (event) => {
         });
 
         console.log('Comments after calculating coords', state.comments);
-
-        renderComments(state.comments);
       },
       onError: console.log
     });

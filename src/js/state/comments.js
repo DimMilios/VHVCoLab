@@ -1,9 +1,13 @@
+import { renderComments } from "../collaboration/templates";
+
 export let state = {
   comments: [],
   users: []
 }
 
-export let setState = (newState = {}) => {
+let defaultOptions = () => ({ reRender: true })
+
+export let setState = (newState = {}, options = defaultOptions()) => {
   if (!typeof newState === 'object') {
     throw new Error('State argument has to be an object');
   }
@@ -15,6 +19,11 @@ export let setState = (newState = {}) => {
   // console.log('Old state', state);
   state = Object.assign({}, state, newState);
   // console.log('New state', state);
+
+  if (options.reRender && Object.keys(newState).includes('comments')) {
+    renderComments(state.comments);
+  }
+
   return state;
 }
 

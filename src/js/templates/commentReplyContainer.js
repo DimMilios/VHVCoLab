@@ -5,7 +5,7 @@ import * as commentService from '../api/comments.js';
 import personImgUrl from '../../../images/person.svg';
 import { getURLParams } from '../api/util.js';
 import { commentTemplate } from './comment';
-import { renderComments, remToPixels } from '../collaboration/templates';
+import { remToPixels } from '../collaboration/templates';
 
 // Used to hold parent comments, their replies and a form to add a new reply
 export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
@@ -38,8 +38,6 @@ export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
         console.log('Comments after adding comment reply', state.comments);
         $(`#${collapseId}`).collapse('hide');
         event.target.reset();
-
-        renderComments(state.comments);
       }
     });
   };

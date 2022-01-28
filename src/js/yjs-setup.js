@@ -7,7 +7,7 @@ import { markItem } from './vhv-scripts/utility-svg.js';
 import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
-import { multiSelectCoords, renderComments } from './collaboration/templates.js';
+import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
 import * as userService from './api/users.js';
@@ -122,7 +122,7 @@ window.addEventListener('load', () => {
     if (Array.isArray(payload)) {
       // The SVG music score element hasn't been rendered yet here.
       // We can't calculate comment highlight coordinates yet.
-      setState({ comments: payload });
+      setState({ comments: payload }, { reRender: false });
       return;
     }
 
@@ -139,7 +139,6 @@ window.addEventListener('load', () => {
                 comments: state.comments.filter(r => r.id !== payload.id)
               })
             }
-            renderComments(state.comments);
             
             updateHandler(); // Re-render collab layer
             
@@ -173,9 +172,6 @@ window.addEventListener('load', () => {
       }),
     });
 
-    // console.log('Comments after calculating coords', state.comments)
-
-    renderComments(state.comments);
   })
   
   eventSource.addEventListener('error', error => {

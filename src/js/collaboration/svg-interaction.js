@@ -81,12 +81,13 @@ function createSVGCollabLayer(parentElem) {
   const container = copySVGElement(defScale.firstElementChild);
   container.classList.add('draggable-group-svg');
   svg.appendChild(container);
-
+  
   // return parentElem.firstElementChild.appendChild(svg);
   return parentElem.querySelector('svg').appendChild(svg);
 }
 
 export function createDraggableContainer(noteElem) {
+  // noteElem = document.querySelector('#note-L25F4');
   console.log('Creating draggable container for', {id: noteElem.id});
   const collabLayer = createSVGCollabLayer(document.getElementById('output'));
   collabLayer.firstElementChild.appendChild(copySVGElement(noteElem, true));
@@ -94,6 +95,8 @@ export function createDraggableContainer(noteElem) {
 }
 
 // https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+// if an element has attributes of (x,y),
+// then it will have coordinates on screen of (ax + e, dy + f)
 function makeDraggable(svgElem) {
   svgElem.addEventListener('mousedown', startDrag);
   svgElem.addEventListener('mousemove', drag);
@@ -240,8 +243,8 @@ function extractEditorPosition(element) {
 
   return { id, line, field, subfield };
 }
-window.collabLayer = {
-  createSVGCollabLayer,
-  copySVGElement,
-  bootstrap
-};
+
+window.svgCollab = {
+  makeDraggable,
+  createDraggableContainer
+}
