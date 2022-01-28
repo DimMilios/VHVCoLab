@@ -28,25 +28,27 @@ let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
       </div>
 
       <div
-        class="dropdown-menu"
+        class="dropdown-menu p-0 border border-rounded shadow"
         aria-labelledby=${'dropdownMenuButton-' + elemRefId}
         @click=${handleClick}
       >
-        <a
-          id=${'add-comment-' + elemRefId}
-          class="dropdown-item"
-          href="#"
-          data-toggle="modal"
-          data-target="#post-comment"
-          >Add Comment</a
-        >
-        <a
-          class="dropdown-item"
-          id=${'details-' + elemRefId}
-          href="#"
-          data-toggle="popover"
-          >Element details</a
-        >
+        <div class="w-100 d-flex flex-column">
+          <a
+            id=${'add-comment-' + elemRefId}
+            class="context-menu-dropdown-item text-decoration-none text-reset p-1 border-bottom border-secondary"
+            href="#"
+            data-toggle="modal"
+            data-target="#post-comment"
+            >Add Comment</a
+          >
+          <a
+            class="context-menu-dropdown-item text-decoration-none text-reset p-1"
+            id=${'details-' + elemRefId}
+            href="#"
+            data-toggle="popover"
+            >Element details</a
+          >
+        </div>
       </div>
     </div>
   `;

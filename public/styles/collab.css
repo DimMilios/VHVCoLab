@@ -44,6 +44,17 @@
   padding-inline-end: 0.1rem;
 }
 
+.context-menu-dropdown-item {
+  background-color: var(--light);
+  color: var(--dark) !important;
+  font-size: small;
+}
+
+.context-menu-dropdown-item:hover {
+  background-color: var(--primary);
+  color: var(--light) !important;
+}
+
 .note-info {
   position: absolute;
   right: 50px;
