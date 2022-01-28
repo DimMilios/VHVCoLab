@@ -1,11 +1,17 @@
 import { yProvider } from '../yjs-setup.js';
-import { RubberBandSelection } from "./RubberBandSelection";
+import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
 import { collabTemplate, uiCoords } from './templates.js';
-import { multiSelectTemplate } from "../templates/multiSelect";
-import { singleSelectTemplate, userAwarenessTemplate } from "../templates/userAwareness";
-import { userListTemplate } from "../templates/userList.js";
-import { highlightLayerTemplate, highlightTemplate } from "../templates/highlights.js";
+import { multiSelectTemplate } from '../templates/multiSelect';
+import {
+  singleSelectTemplate,
+  userAwarenessTemplate,
+} from '../templates/userAwareness';
+import { userListTemplate } from '../templates/userList.js';
+import {
+  highlightLayerTemplate,
+  highlightTemplate,
+} from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
 
 let DEBUG = false;
@@ -115,58 +121,87 @@ function handleSingleNoteSelectClick(singleNoteSelects) {
   };
 }
 
-function defaultClients () {
-  return { 
-    added: [], updated: [], removed: []
+function defaultClients() {
+  return {
+    added: [],
+    updated: [],
+    removed: [],
   };
 }
 
 // f([x, y] = [1, 2], {z: z} = {z: 3})
 export function updateHandler(clients = defaultClients()) {
+  const awStates = Array.from(yProvider.awareness.getStates().entries());
   // console.log(yProvider.awareness.getStates());
   const f = () => {
     let collabContainer = document.querySelector('#output #collab');
     if (!collabContainer) {
-      console.log('Element div#collab is not found. Cannot render collaboration elements.');
+      console.log(
+        'Element div#collab is not found. Cannot render collaboration elements.'
+      );
       collabContainer = document.createElement('div');
       collabContainer.id = 'collab';
       document.querySelector('#output')?.prepend(collabContainer);
     }
-  
-    let multiSelects = html`${Array.from(yProvider.awareness.getStates().entries())
-      .filter(([_, state]) => state.multiSelect != null && state?.user?.color != null)
-      .map(([clientId, state]) => multiSelectTemplate(clientId, clientId === yProvider.awareness.clientID, state.multiSelect, state.user.color))
-    }`;
-  
-    let singleSelects = html`${Array.from(yProvider.awareness.getStates().entries())
-      .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.color != null)
+
+    let multiSelects = html`${awStates
+      .filter(
+        ([_, state]) => state.multiSelect != null && state?.user?.color != null
+      )
       .map(([clientId, state]) =>
-        singleSelectTemplate(clientId, state.singleSelect.elemId, state.user.color)
+        multiSelectTemplate(
+          clientId,
+          clientId === yProvider.awareness.clientID,
+          state.multiSelect,
+          state.user.color
+        )
       )}`;
-    
-    let userAwareness = html`${Array.from(yProvider.awareness.getStates().entries())
-      .filter(([_, state]) => state?.singleSelect?.elemId != null && state?.user?.name != null)
+
+    let singleSelects = html`${awStates
+      .filter(
+        ([_, state]) =>
+          state?.singleSelect?.elemId != null && state?.user?.color != null
+      )
       .map(([clientId, state]) =>
-        userAwarenessTemplate(clientId, state.singleSelect.elemId, state.user.name)
+        singleSelectTemplate(
+          clientId,
+          state.singleSelect.elemId,
+          state.user.color
+        )
       )}`;
-  
+
+    let userAwareness = html`${awStates
+      .filter(
+        ([_, state]) =>
+          state?.singleSelect?.elemId != null && state?.user?.name != null
+      )
+      .map(([clientId, state]) =>
+        userAwarenessTemplate(
+          clientId,
+          state.singleSelect.elemId,
+          state.user.name
+        )
+      )}`;
+
     let highlights =
       html`${state.comments
         ?.filter((c) => c?.highlight != null)
         .map((c) => highlightTemplate(c.id, c.highlight))}` ?? [];
-  
+
     render(
       html`
         ${collabLayer(multiSelects, singleSelects, userAwareness)}
         ${renderHighlightLayer(highlights)}
       `,
-      collabContainer,
+      collabContainer
     );
-    
+
     // Display connection status (online/offline) for the users sharing the current document
     let onlineElem = document.querySelector('#online-users');
     if (onlineElem) {
-      let connectedIds = [...yProvider.awareness.getStates().values()].map(s => s.user.id);
+      let connectedIds = [...yProvider.awareness.getStates().values()].map(
+        (s) => s.user.id
+      );
       let copy = [...state.users];
       setState({
         users: copy
@@ -177,9 +212,11 @@ export function updateHandler(clients = defaultClients()) {
       // Initialize bootstrap tooltips
       $('[data-toggle="tooltip"]').tooltip();
     } else {
-      console.log('Element div#online-users is not found. Cannot display online user info.');
+      console.log(
+        'Element div#online-users is not found. Cannot display online user info.'
+      );
     }
-  }
+  };
 
   clients?.added?.forEach(f);
   clients?.updated?.forEach(f);
@@ -251,7 +288,7 @@ function addListenersToOutput(outputTarget) {
     // if (!document.querySelector('#collab-container')) {
     //   collabLayer();
     // }
-    
+
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
@@ -301,7 +338,9 @@ function addListenersToOutput(outputTarget) {
         const notes = Array.from(document.querySelectorAll('.note, .beam'));
         const selectedNotes = rbSelection.selectNoteElements(notes);
 
-        const multiSelectedNotes = selectedNotes.map((note) => note.id).filter((id) => /^note/g.test(id))
+        const multiSelectedNotes = selectedNotes
+          .map((note) => note.id)
+          .filter((id) => /^note/g.test(id));
 
         if (multiSelectedNotes.length > 0) {
           awareness?.setLocalStateField('multiSelect', multiSelectedNotes);

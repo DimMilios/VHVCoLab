@@ -5,9 +5,10 @@ import { updateHandler } from '../collaboration/collab-extension.js';
 import * as commentService from '../api/comments.js';
 import { getURLParams } from '../api/util.js';
 import { renderComments } from '../collaboration/templates.js';
+import { timeSince } from '../collaboration/util-collab.js';
 
 // Include a user profile icon (probably img URL) when we have persistence for users
-export let commentTemplate = (commentId, username, content, imgUrl, parentId) => {
+export let commentTemplate = (commentId, username, content, createdAt, imgUrl, parentId) => {
   let user = yProvider.awareness.getLocalState().user;
 
   const findById = (highlights, id) => highlights.find(elem => elem.dataset.commentId == id);
@@ -47,16 +48,19 @@ export let commentTemplate = (commentId, username, content, imgUrl, parentId) =>
     ? html`<button type="button" class="btn btn-danger" @click=${handleDelete}>X</button>`
     : null;
 
+  let time = timeSince(new Date(createdAt));
+
   return html`<div id=${'comment-' + commentId} @click=${handleClick} class="p-2 mb-2 border-bottom" data-parent-id=${parentId}>
     <div>
-      <div class="d-inline-flex justify-content-between w-100">
+      <div class="d-inline-flex justify-content-between w-100 mb-3">
         <div class="d-flex">
           <div style="background-color: white; border-radius: 50%;">
             <img src=${imgUrl} alt="user profile icon" width="24" height="24" />
           </div>
-          <h5 class="card-title ml-2 align-self-center">
-            ${username}
-          </h5>
+          <div class="d-inline-flex flex-column ml-2">
+            <h5 class="m-0">${username}</h5>
+            <small class="text-muted font-italic">${time.charAt(0) === '0' ? 'Now' : time + ' ago'}</small>
+          </div>
         </div>
         <div>${deleteButton()}</div>
       </div>

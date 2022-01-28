@@ -59,19 +59,25 @@ function createSVGCollabLayer(parentElem) {
   const defScale = document.querySelector('.definition-scale');
   const viewBox = defScale?.viewBox;
 
-  // We need to set the viewBox property of the parent SVG element.
-  // SVG transforms can be then applied to the CHILDREN elements.
-  // Consider adding another SVG element inside the container created below that
-  // can be styled and transformed when needed.
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  if (viewBox) {
-    svg.setAttributeNS(null, 'viewBox', `${Object.values(fromSVGRect(viewBox.baseVal)).join(' ')}`);
+  let svg = document.querySelector('#collab-container-svg');
+
+  if (!svg) {
+    // We need to set the viewBox property of the parent SVG element.
+    // SVG transforms can be then applied to the CHILDREN elements.
+    // Consider adding another SVG element inside the container created below that
+    // can be styled and transformed when needed.
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    if (viewBox) {
+      svg.setAttributeNS(null, 'viewBox', `${Object.values(fromSVGRect(viewBox.baseVal)).join(' ')}`);
+    }
+    svg.id = 'collab-container-svg';
+    svg.setAttribute('fill', 'blue');
   }
 
-  svg.id = 'collab-container-svg';
-  svg.setAttribute('fill', 'blue');
+  while (svg.firstChild) {
+    svg.removeChild(svg.firstChild);
+  }
 
-  // const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const container = copySVGElement(defScale.firstElementChild);
   container.classList.add('draggable-group-svg');
   svg.appendChild(container);
@@ -79,20 +85,9 @@ function createSVGCollabLayer(parentElem) {
   // return parentElem.firstElementChild.appendChild(svg);
   return parentElem.querySelector('svg').appendChild(svg);
 }
-// function bootstrap() {
-//   const collabLayer = createSVGCollabLayer(document.getElementById('output'));
-//   collabLayer.firstElementChild.appendChild(copySVGElement(global_cursor.CursorNote, true));
-//   // collabLayer.firstElementChild.appendChild(copySVGElement(document.querySelector('#output > svg g.note'), true));
-//   makeDraggable(collabLayer);
-
-//   // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-//   // rect.setAttributeNS(null, 'width', '100');
-//   // rect.setAttributeNS(null, 'height', '100');
-//   // rect.setAttributeNS(null, 'fill', 'green');
-//   // rect.classList.add('draggable-svg');
-//   // clc.appendChild(rect);
 
 export function createDraggableContainer(noteElem) {
+  console.log('Creating draggable container for', {id: noteElem.id});
   const collabLayer = createSVGCollabLayer(document.getElementById('output'));
   collabLayer.firstElementChild.appendChild(copySVGElement(noteElem, true));
   makeDraggable(collabLayer);

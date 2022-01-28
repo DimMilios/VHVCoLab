@@ -37,6 +37,7 @@ export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
 
         console.log('Comments after adding comment reply', state.comments);
         $(`#${collapseId}`).collapse('hide');
+        event.target.reset();
 
         renderComments(state.comments);
       }
@@ -50,17 +51,17 @@ export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
 
       <div class="card-body p-0">
         
-        ${html`${commentTemplate(parent.id, parent.usersDocuments[0].user.email, parent.content, personImgUrl)}`}
+        ${html`${commentTemplate(parent.id, parent.usersDocuments[0].user.email, parent.content, parent.createdAt, personImgUrl)}`}
         
         ${parent.children.length > 0 ?
       html`${parent.children
-        .map(child => commentTemplate(child.id, child.usersDocuments[0].user.email, child.content, personImgUrl, child.parentCommentId))}`
+        .map(child => commentTemplate(child.id, child.usersDocuments[0].user.email, child.content, child.createdAt, personImgUrl, child.parentCommentId))}`
       : null}
 
         <div class="collapse p-2 reply-form-container" id=${collapseId}>
           <form class="reply-form" @submit=${handleSubmit}>
               <div class="form-group">
-                <textarea class="form-control" placeholder="Reply" name="content"></textarea>
+                <input class="form-control" placeholder="Reply" name="content" type="text" />
               </div>
               <div class="form-group m-0">
                 <button class="btn btn-primary" type="submit">Reply</button>

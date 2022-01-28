@@ -68,7 +68,7 @@ export let renderComments = (comments, overlaps = []) => {
 
     let commentsWithReplies = [];
     for (let c of comments) {
-      if (!c?.parentCommentId ) {
+      if (!c?.parentCommentId) {
         commentsWithReplies.push({ ...c, children: [] });
         continue;
       }
