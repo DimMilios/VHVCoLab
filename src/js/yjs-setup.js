@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 
 import * as userService from './api/users.js';
 import { baseUrl, getURLParams } from './api/util.js';
-import { createDraggableContainer } from './collaboration/svg-interaction.js';
+import { createDraggableContainer, createNewEditorSession } from './collaboration/svg-interaction.js';
 
 export let yProvider;
 
@@ -79,6 +79,8 @@ window.addEventListener('load', () => {
     // console.log('changeCursor event', { row, column, item })
     if (item && item.classList.contains('note')) {
       markItem(item);
+
+      // createNewEditorSession({ item, row, column });
       createDraggableContainer(item);
       const localState = yProvider.awareness.getLocalState();
 
@@ -89,6 +91,10 @@ window.addEventListener('load', () => {
       });
     }
   });
+
+  editor.on('changeSession', event => {
+    console.log(event);
+  })
 
   // yProvider.awareness.on('update', updateHandler);
   yProvider.awareness.on('change', updateHandler);

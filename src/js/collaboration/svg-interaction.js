@@ -1,4 +1,7 @@
+import { number } from 'lib0';
 import { transposeNote } from '../vhv-scripts/editor.js';
+import { configureAceEditor, getAceEditor } from '../vhv-scripts/setup.js';
+import { SELECT_OPACITY } from './util-collab.js';
 
 // Alternatively, we can use an SVG 'use' element to copy the element we want:
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use
@@ -34,9 +37,9 @@ function copySVGElement(elem, deep = false) {
 function clearAttributes(elem, attrs) {
   if (elem.removeAttribute) {
     attrs.forEach(attr => {
-      // if (attr === 'id') {
-      //   elem.dataset.refElem = elem.id;
-      // }
+      if (attr === 'id') {
+        elem.dataset.refElem = elem.id;
+      }
       elem.removeAttribute(attr);
     });
   }
@@ -71,7 +74,7 @@ function createSVGCollabLayer(parentElem) {
       svg.setAttributeNS(null, 'viewBox', `${Object.values(fromSVGRect(viewBox.baseVal)).join(' ')}`);
     }
     svg.id = 'collab-container-svg';
-    svg.setAttribute('fill', 'blue');
+    // svg.setAttribute('fill', 'blue');
   }
 
   while (svg.firstChild) {
@@ -86,18 +89,45 @@ function createSVGCollabLayer(parentElem) {
   return parentElem.querySelector('svg').appendChild(svg);
 }
 
+let editor;
+let oldSession;
+/**
+ * 
+ * @param {{ item: Element, row: number, column: number }} sessionOptions
+ */
+export function createNewEditorSession ({ item, row, column }) {
+  editor =  getAceEditor();
+  oldSession = editor.getSession();
+
+  let newSession = ace.createEditSession(oldSession.getValue(), 'ace/mode/humdrum');
+
+  // editor.setSession(newSession);
+  // configureAceEditor();
+}
+
 export function createDraggableContainer(noteElem) {
+
   // noteElem = document.querySelector('#note-L25F4');
   console.log('Creating draggable container for', {id: noteElem.id});
   const collabLayer = createSVGCollabLayer(document.getElementById('output'));
-  collabLayer.firstElementChild.appendChild(copySVGElement(noteElem, true));
-  makeDraggable(collabLayer);
+
+  // collabLayer.firstElementChild.appendChild(copySVGElement(noteElem, true));
+  let noteCopy = copySVGElement(noteElem, true);
+  
+  // Copy parent layer instead
+  let layer = noteElem.closest('.layer');
+  if (layer) {
+    console.log(`Parent layer for: ${noteElem.id} is ${layer.id}`);
+    collabLayer.firstElementChild.appendChild(copySVGElement(layer, true));
+  }
+  
+  makeDraggable(collabLayer, noteCopy);
 }
 
 // https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
 // if an element has attributes of (x,y),
 // then it will have coordinates on screen of (ax + e, dy + f)
-function makeDraggable(svgElem) {
+function makeDraggable(svgElem, noteElem) {
   svgElem.addEventListener('mousedown', startDrag);
   svgElem.addEventListener('mousemove', drag);
   svgElem.addEventListener('mouseup', endDrag);
@@ -120,11 +150,8 @@ function makeDraggable(svgElem) {
   let selectedElem = null;
   let offset, transform;
 
-  let startTime = null;
-
   function initialiseDragging(event) {
     offset = getMousePosition(event);
-    startTime = performance.now();
     // Make sure the first transform on the element is a translate transform
     const transforms = selectedElem.transform.baseVal;
     if (transforms.length === 0 || transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE) {
@@ -150,41 +177,42 @@ function makeDraggable(svgElem) {
 
       transposeAmount = 0;
     }
+
+    for(let div of document.querySelectorAll(`.users-div[data-ref-id="${noteElem.dataset.refElem}"], .single-select[data-ref-id="${noteElem.dataset.refElem}"]`)) {
+      div.style.opacity = 0;
+    }
+
   }
 
   let prevPositionY;
   let movementY;
   let transposeAmount;
-  let position = {};
+  /** @type {{ id: string, line: number, field: number, subfield: number } | {}} */
+  let editorPosition = {};
 
-  // TODO: use requestAnimationFrame
   function drag(event) {
     if (selectedElem) {
       event.preventDefault();
-      let timePassed = performance.now() - startTime;
-
-      if (timePassed >= 200) {
+      // if (timePassed >= 200) {
         const coords = getMousePosition(event);
         // transform.setTranslate(coords.x - offset.x, coords.y - offset.y);
         movementY = coords.y - offset.y;
   
-        const noteElem = selectedElem?.querySelector('.note');
+        if (prevPositionY > movementY) {
+          transposeAmount += 0.3;
+        } else if (prevPositionY < movementY) {
+          transposeAmount -= 0.3;
+        }
+        // const noteElem = selectedElem?.querySelector('.note');
         if (noteElem) {
-          position = extractEditorPosition(noteElem);
-          if (prevPositionY > movementY) {
-            transposeAmount += 0.3;
-          } else if (prevPositionY < movementY) {
-            transposeAmount -= 0.3;
-          }
+          editorPosition = extractEditorPosition(noteElem);
           // console.log(position, {transposeAmount});
-          document.querySelector(`#${noteElem.dataset.refElem}`).style.opacity = 0;
+          // document.querySelector(`#${noteElem.dataset.refElem}`).style.opacity = 0;
         }
   
         // Allow vertical movement only
         transform.setTranslate(transform.matrix.e, movementY);
         prevPositionY = movementY;
-      }
-
     }
   }
 
@@ -192,17 +220,35 @@ function makeDraggable(svgElem) {
   // Lowest note: AAAA
   function endDrag(event) {
     if (transposeAmount != 0) {
-      console.log(position, { transposeAmount });
+      // console.log(editorPosition, { transposeAmount });
       // All notes for a piano: 88
       // module the transposition amount with 44 (factor in negative values -
       // moving below the note's current position)
-      transposeNote(position.id, position.line, position.field, position.subfield, Math.floor(transposeAmount) % 44);
+      transposeNote(editorPosition.id, editorPosition.line, editorPosition.field, editorPosition.subfield, Math.floor(transposeAmount) % 44);
     }
-    startTime = null;
     selectedElem = null;
+
+    let usersDiv = document.querySelector(`.users-div[data-ref-id="${noteElem.dataset.refElem}"]`)
+    let singleSelect = document.querySelector(`.single-select[data-ref-id="${noteElem.dataset.refElem}"]`);
+
+    if (usersDiv) {
+      usersDiv.style.opacity = 1;
+    }
+
+    if (singleSelect) {
+      singleSelect.style.opacity = SELECT_OPACITY;
+    }
+
   }
 }
+
+/**
+ * 
+ * @param {*} element 
+ * @returns {{ id: string, line: number, field: number, subfield: number }}
+ */
 function extractEditorPosition(element) {
+  // console.log('Element passed to extractEditorPosition', element);
   let noteElem = document.querySelector(`#${element.dataset.refElem}`);
   var id = noteElem.id;
   var matches;

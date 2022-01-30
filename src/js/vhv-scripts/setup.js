@@ -33,6 +33,7 @@ if (!vrvWorker) {
 /* global ace, require */
 
 import { setEditorModeAndKeyboard } from './utility-ace.js';
+/** @type {AceAjax.Editor | undefined} */
 let editor;
 let configureAce = true;
 

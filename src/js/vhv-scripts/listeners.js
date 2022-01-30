@@ -172,7 +172,8 @@ document.addEventListener('DOMContentLoaded', function () {
     yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
   });
 
-  selectService.start();
+  // selectService.start();
+
   body.addEventListener('click', function (event) {
     // turnOffAllHighlights();
     // console.log("SINGLE CLICK");

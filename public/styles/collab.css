@@ -1,6 +1,7 @@
 :root {
   --collab-layer-zIndex: 900;
   --collab-layer-bradius: 5px;
+  --select-opacity: 0.2;
 }
 
 #collab-container, .comments{
@@ -14,15 +15,10 @@
   border: 1px solid red;
 }
 
-#collab-container-svg {
-  z-index: var(--collab-layer-zIndex);
-  opacity: 0.2;
-}
-
 .single-select {
   position: absolute;
   z-index: var(--collab-layer-zIndex);
-  opacity: 0.2;
+  opacity: var(--select-opacity);
 
   pointer-events: none;
   border-radius: var(--collab-layer-bradius);
@@ -67,7 +63,7 @@
   background-color: white;
   border: 1px solid rgba(0, 0, 0, .5);
   border-radius: 10px;
-  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, .2);
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, var(--select-opacity));
 
   padding: .5rem;
   z-index: var(--collab-layer-zIndex);
@@ -75,7 +71,7 @@
 
 #select-area {
   border: 1px dotted black;
-  background-color: rgba(0, 140, 220, 0.2);
+  background-color: rgba(0, 140, 220, var(--select-opacity));
   position: absolute;
   z-index: var(--collab-layer-zIndex);
 }
@@ -145,7 +141,7 @@
 .single-note-select {
   position: absolute;
   z-index: var(--collab-layer-zIndex);
-  opacity: 0.2;
+  opacity: var(--select-opacity);
 
   /* cursor: pointer; */
   pointer-events: none;
@@ -273,6 +269,11 @@
 
 
 /* Draggable SVG items */
+#collab-container-svg {
+  z-index: var(--collab-layer-zIndex);
+  fill-opacity: var(--select-opacity);
+}
+
 .static-svg {
   cursor: default;
 }

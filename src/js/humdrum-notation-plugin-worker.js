@@ -929,6 +929,7 @@ vrvInterface.prototype.post = function (method, args) {
 //
 
 vrvInterface.prototype.postDeferredMessage = function (method, args, deferred) {
+  // console.log('Posting deferred message to Verovio worker', { method, args });
   this.worker.postMessage({
     idx: this.promiseIdx,
     method: method,

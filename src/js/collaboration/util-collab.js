@@ -1,4 +1,5 @@
 export const MULTI_SELECT_ALPHA = 0.3;
+export const SELECT_OPACITY = 0.3;
 
 export function getCoordinates(target) {
   const targetBounds = target.getBoundingClientRect();

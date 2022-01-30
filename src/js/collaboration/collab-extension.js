@@ -129,7 +129,6 @@ function defaultClients() {
   };
 }
 
-// f([x, y] = [1, 2], {z: z} = {z: 3})
 export function updateHandler(clients = defaultClients()) {
   const awStates = Array.from(yProvider.awareness.getStates().entries());
   // console.log(yProvider.awareness.getStates());

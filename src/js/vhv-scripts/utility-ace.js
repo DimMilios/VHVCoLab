@@ -204,7 +204,7 @@ export function humdrumDataNoteIntoView(row, column) {
       query += 'S' + subspine;
     }
   }
-  var item = 0;
+  var item;
   // if (splitter.rightContent) {
     // see: https://www.w3.org/TR/selectors
     // var items = splitter.rightContent.querySelectorAll(

@@ -1032,6 +1032,7 @@ function getTextFromEditorWithGlobalFilter(data) {
 //
 
 function showMei(meidata) {
+  // console.log('showMei', meidata);
   if (global_interface.ShowingIndex) {
     return;
   }
