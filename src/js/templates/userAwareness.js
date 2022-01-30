@@ -11,6 +11,7 @@ import { commentFormTemplate } from './commentForm.js';
 import * as commentService from '../api/comments.js';
 import { cache } from 'lit-html/directives/cache.js';
 import { setState, state } from '../state/comments.js';
+import { getAceEditor } from '../vhv-scripts/setup.js';
 
 let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
   html`
@@ -42,11 +43,18 @@ let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
             >Add Comment</a
           >
           <a
-            class="context-menu-dropdown-item text-decoration-none text-reset p-1"
+            class="context-menu-dropdown-item text-decoration-none text-reset p-1 border-bottom border-secondary"
             id=${'details-' + elemRefId}
             href="#"
             data-toggle="popover"
             >Element details</a
+          >
+          <a
+            class="context-menu-dropdown-item text-decoration-none text-reset p-1"
+            id=${'history-' + elemRefId}
+            href="#"
+            data-toggle="popover"
+            >History</a
           >
         </div>
       </div>
@@ -97,6 +105,23 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
         commentFormTemplate(handleSingleComment([elemRefId], coords)),
         document.querySelector('#post-comment .modal-content')
       );
+    } else if (/^history/.test(id)) {
+      let editor = getAceEditor();
+      let undoManager = editor.getSession().getUndoManager();
+
+      console.log(undoManager.$undoStack);
+      console.log({ elemRefId })
+      let [ ,line, field, subfield ] = elemRefId.match(/-.*L(\d+)F(\d+)S?(\d+)?/);
+
+      line = parseInt(line, 10) - 1;
+
+      for (let item of undoManager.$undoStack) {
+        if (item[0].start.row == line && item[0].end.row == line) {
+          console.log('change for element line', item);
+          // editor.getSession().redoChanges(item, true);
+        }
+      }
+      
     } else {
       console.log('Element does not have id');
     }

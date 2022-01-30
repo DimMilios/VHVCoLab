@@ -1,3 +1,25 @@
+* {
+  --theme-color1: rgb(241, 246, 237);
+  --theme-color2: rgb(137, 129, 65);
+  --theme-color3: rgb(230, 135, 21);
+  --theme-color4: rgb(208, 164, 100);
+  --theme-color5: rgb(237, 212, 167);
+  --theme-color6: rgb(101, 159, 129);
+  --theme-color7: rgb(129, 163, 145);
+  --theme-color8: rgb(184, 212, 198);
+  --theme-color9: rgb(142, 185, 163);
+
+  --nyanza: #d8f3dcff;
+  --turquoise-green: #b7e4c7ff;
+  --turquoise-green-2: #95d5b2ff;
+  --ocean-green: #74c69dff;
+  --ocean-green-2: #52b788ff;
+  --illuminating-emerald: #40916cff;
+  --bottle-green: #2d6a4fff;
+  --brunswick-green: #1b4332ff;
+  --dark-jungle-green: #081c15ff;
+}
+
 :root {
   --collab-layer-zIndex: 900;
   --collab-layer-bradius: 5px;

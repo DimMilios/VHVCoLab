@@ -43,12 +43,12 @@
 	vertical-align:    center;
 }
 
-#midiPlayer_div a.icon: hover {
+#midiPlayer_div a.icon:hover {
 	color: green !important;
 
 }
 
-#midiPlayer_div a.play : hover {
+#midiPlayer_div a.play:hover {
 	color: hotpink !important;
 }
 

@@ -108,7 +108,7 @@ export function createNewEditorSession ({ item, row, column }) {
 export function createDraggableContainer(noteElem) {
 
   // noteElem = document.querySelector('#note-L25F4');
-  console.log('Creating draggable container for', {id: noteElem.id});
+  // console.log('Creating draggable container for', {id: noteElem.id});
   const collabLayer = createSVGCollabLayer(document.getElementById('output'));
 
   // collabLayer.firstElementChild.appendChild(copySVGElement(noteElem, true));
@@ -117,7 +117,7 @@ export function createDraggableContainer(noteElem) {
   // Copy parent layer instead
   let layer = noteElem.closest('.layer');
   if (layer) {
-    console.log(`Parent layer for: ${noteElem.id} is ${layer.id}`);
+    // console.log(`Parent layer for: ${noteElem.id} is ${layer.id}`);
     collabLayer.firstElementChild.appendChild(copySVGElement(layer, true));
   }
   

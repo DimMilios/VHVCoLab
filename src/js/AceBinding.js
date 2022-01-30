@@ -39,8 +39,8 @@ export default class AceBinding {
         exec: editorRedo,
       });
 
-      // yUndoManager.on('stack-item-added', this._onStackItemAdded)
-      // yUndoManager.on('stack-item-popped', this._onStackItemPopped)
+      yUndoManager.on('stack-item-added', this._onStackItemAdded)
+      yUndoManager.on('stack-item-popped', this._onStackItemPopped)
     }
 
     this.awareness = awareness;
@@ -192,6 +192,13 @@ export default class AceBinding {
     if (this.awareness) {
       this.awareness.on('change', this._awarenessChange);
     }
+  }
+  _onStackItemPopped(event) {
+    // console.log('stackItem added to UndoManager', event);
+    // event.stackItem.meta.set('replacedValue',);
+  }
+  _onStackItemAdded(event) {
+    // console.log('stackItem removed from UndoManager', event);
   }
 
   destroy() {
