@@ -1,6 +1,7 @@
 import { assign, createMachine, interpret } from 'xstate';
-import { uiCoords } from '../collaboration/templates';
+import { renderComments, uiCoords } from '../collaboration/templates';
 import { displayNotation } from '../vhv-scripts/misc';
+import { state as commentState } from './comments';
 
 let inputElem = document.querySelector('#input');
 let outputElem = document.querySelector('#output');
@@ -95,8 +96,10 @@ export const layoutMachine = createMachine({
               outputCol: 8,
               commentsCol: 4,
             }),
-            ({ inputCol, outputCol, commentsCol }) =>
-              resize(inputCol, outputCol, commentsCol)(),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)();
+              renderComments(commentState.comments)
+            }
           ],
         },
       },
@@ -111,8 +114,10 @@ export const layoutMachine = createMachine({
               outputCol: 10,
               commentsCol: 2,
             }),
-            ({ inputCol, outputCol, commentsCol }) =>
-              resize(inputCol, outputCol, commentsCol)(),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)();
+              renderComments(commentState.comments)
+            }
           ],
         },
         HIDE_TEXT: {
@@ -135,8 +140,10 @@ export const layoutMachine = createMachine({
               outputCol: 8,
               commentsCol: 4,
             }),
-            ({ inputCol, outputCol, commentsCol }) =>
-              resize(inputCol, outputCol, commentsCol)(),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)();
+              renderComments(commentState.comments)
+            },
           ],
         }
       },
@@ -151,8 +158,10 @@ export const layoutMachine = createMachine({
               outputCol: 10,
               commentsCol: 2,
             }),
-            ({ inputCol, outputCol, commentsCol }) =>
-              resize(inputCol, outputCol, commentsCol)(),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)();
+              renderComments(commentState.comments)
+            },
           ],
         },
         HIDE_COMMENTS: {
@@ -163,8 +172,9 @@ export const layoutMachine = createMachine({
               outputCol: 12,
               commentsCol: 0,
             }),
-            ({ inputCol, outputCol, commentsCol }) =>
-              resize(inputCol, outputCol, commentsCol)(),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)()
+            },
           ],
         },
       },

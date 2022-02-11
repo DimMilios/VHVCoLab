@@ -4,7 +4,6 @@ import { yProvider } from '../yjs-setup.js';
 import { updateHandler } from '../collaboration/collab-extension.js';
 import * as commentService from '../api/comments.js';
 import { getURLParams } from '../api/util.js';
-import { renderComments } from '../collaboration/templates.js';
 import { timeSince } from '../collaboration/util-collab.js';
 
 // Include a user profile icon (probably img URL) when we have persistence for users

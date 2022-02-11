@@ -48,6 +48,57 @@ export function play_midi(starttime) {
 
 // window.play_midi = play_midi;
 
+function downloadFile(base64Song, fileName = '') {
+  let element = document.createElement('a');
+  element.setAttribute('href', base64Song);
+  element.setAttribute('download', fileName + '.mid');
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+// window.play_midi = function play_midi(starttime) {
+//   starttime = starttime ? starttime : 0;
+//   if (starttime == 0) {
+//     DELAY = 600;
+//   } else {
+//     DELAY = 600;
+//   }
+
+//   vrvWorker
+//     .renderToMidi()
+//     .then(function (base64midi) {
+//       var song = 'data:audio/midi;base64,' + base64midi;
+//       console.log('Midi song', song);
+//       $('#play-button').hide();
+//       $('#midiPlayer_play').show();
+//       $('#midiPlayer_stop').show();
+//       $('#midiPlayer_pause').show();
+//       $('#player').show();
+//       $('#player').midiPlayer.play(song, starttime);
+//       PLAY = true;
+//       LASTLINE = -1;
+
+//       (function downloadFile(base64Song, fileName = '') {
+//         let element = document.createElement('a');
+//         element.setAttribute('href', base64Song);
+//         element.setAttribute('download', fileName + '.mid');
+      
+//         element.style.display = 'none';
+//         document.body.appendChild(element);
+      
+//         element.click();
+      
+//         document.body.removeChild(element);
+//       })(song, 'testFile');
+//     })
+//     .catch((err) => console.log('Error when trying to play midi', err));
+// }
+
 //////////////////////////////
 //
 // midiUpdate --

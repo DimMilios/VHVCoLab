@@ -61,11 +61,12 @@ export function remToPixels(rem) {
 
 
 export let renderComments = (comments, overlaps = []) => {
-  let container = document.querySelector('#comments-container');
+  let container =  /** @type HTMLElement */ (document.querySelector('#comments-container'));
+  
+  // Render comments only if user chooses to show them
+  let commentsVisible = layoutService.state.toStrings().some(name => name.toLowerCase().includes('comment'));
 
-  if (container) {
-    layoutService.send('SHOW_COMMENTS_HIDE_TEXT');
-
+  if (container && commentsVisible) {
     let commentsWithReplies = [];
     for (let c of comments) {
       if (!c?.parentCommentId) {
@@ -80,15 +81,12 @@ export let renderComments = (comments, overlaps = []) => {
 
     let width = container.offsetWidth;
     console.log('commentsWithReplies', commentsWithReplies);
-
-    
-    
     render(
       html`${commentsWithReplies.map(p => commentReplyContainerTemplate(p, width))}`,
       container
       );
 
-    updateHandler({ added: [...yProvider.awareness.getStates().keys()] });
+    updateHandler({ added: [...yProvider.awareness.getStates().keys()], updated: [], removed: [] });
     
     // let commentElements = Array.from(document.querySelectorAll('.comment-with-replies'));
     // let overlappingElements = [];
