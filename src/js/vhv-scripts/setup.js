@@ -80,27 +80,10 @@ export function configureAceEditor() {
   editor.$blockScrolling = Infinity;
   editor.setAutoScrollEditorIntoView(true);
   editor.setBehavioursEnabled(false); // no auto-close of parentheses, quotes, etc.
-  //editor.cursorStyle: 'ace', // "ace"|"slim"|"smooth"|"wide"
-
-  // See this webpage to turn of certain ace editor shortcuts:
-  // https:github.com//ajaxorg/ace/blob/master/lib/ace/commands/default_commands.js
 
   // These eat alt-l and alt-shift-l keyboard shortcuts on linux:
   editor.commands.removeCommand('fold', true);
   editor.commands.removeCommand('unfold', true);
-  // best themes:
-  // kr_theme == black background, gray highlight, muted colorizing
-  // solarized_dark == blue background, light blue hilight, relaxing colorizing
-  // vibrant_ink == black background, gray highlight, nice colorizing
-  // solarized_light == yellowish background, gray highlight, nice colorizing
-
-  //editor.setKeyboardHandler("ace/keyboard/vim");
-
-  // keybinding = ace | vim | emacs | custom
-  // fontsize   = 10px, etc
-  // theme = "ace/theme/solarize_light"
-
-  //editor.getSession().setMode("ace/mode/javascript");
 
   editor.getSession().setTabSize(global_editorOptions.TABSIZE);
   editor.getSession().setUseSoftTabs(false);
@@ -119,17 +102,10 @@ export function configureAceEditor() {
   editor.renderer.$cursorLayer.smoothBlinking = true;
   editor.renderer.$cursorLayer.setBlinking(true);
 
-  //EDITOR.commands.addCommand({
-  //	name: 'saveFile',
-  //	bindKey: {
-  //			win: 'Alt-G',
-  //			mac: 'Alt-G',
-  //			sender: 'editor|cli'
-  //		},
-  //	exec: function(env, argc, request) {
-  //		alert("HI!", env, argc, request);
-  //	}
-  //});
+  // editor.renderer.setOption('maxLines', 50);
+  editor.renderer.setOption('minLines', 50);
+  editor.renderer.setOption('hScrollBarAlwaysVisible', true);
+  editor.renderer.setOption('vScrollBarAlwaysVisible', true);
 
   var cursor = document.querySelector('.ace_content .ace_cursor-layer');
   if (cursor) {
@@ -138,17 +114,7 @@ export function configureAceEditor() {
   }
 
   editor.setTheme('ace/theme/humdrum_light');
-  // editor.session.setMode('ace/mode/humdrum');
-
-  // setEditorModeAndKeyboard();
-  // insertSplashMusic();
-  // editor._dispatchEvent('ready');
 }
-
-(function () {
-  // setupAceEditor('input');
-  // editor._dispatchEvent('ready');
-})();
 
 //////////////////////////////
 //
