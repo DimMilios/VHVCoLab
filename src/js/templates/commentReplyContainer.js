@@ -6,6 +6,7 @@ import personImgUrl from '../../../images/person.svg';
 import { getURLParams } from '../api/util.js';
 import { commentTemplate } from './comment';
 import { remToPixels } from '../collaboration/templates';
+import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 
 // Used to hold parent comments, their replies and a form to add a new reply
 export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
@@ -42,7 +43,10 @@ export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
     });
   };
 
-  const handleCancel = () => $(`#${collapseId}`).collapse('hide');
+  const handleCancel = () => { 
+    unfocusCommentHighlights();
+    return $(`#${collapseId}`).collapse('hide'); 
+  }
 
   return html`
     <div id=${'comment-with-replies-' + parent.id} aria-expanded="false" aria-controls=${collapseId} style="width: 18rem; top: ${parent.highlight.top}px; left:${parentElemWidth / 2 - remToPixels(18) / 2}px; position: absolute;" class="card shadow comment-with-replies" @click=${handleClick}>

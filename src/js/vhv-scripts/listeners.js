@@ -111,6 +111,7 @@ import { inSvgImage } from './utility-svg.js';
 
 import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
+import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -176,6 +177,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   body.addEventListener('click', function (event) {
     // turnOffAllHighlights();
+    if (!event.target.closest('.comment-with-replies')) {
+      unfocusCommentHighlights();
+    }
+
     // console.log("SINGLE CLICK");
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
@@ -184,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectService.send({ type: 'SELECT', elemId: target.id });
       } else {
         selectService.send({ type: 'RESET' });
+        yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
       }
       dataIntoView(event);
     }

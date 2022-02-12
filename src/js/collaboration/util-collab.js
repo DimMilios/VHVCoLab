@@ -142,3 +142,7 @@ export function timeSince(date) {
   }
   return Math.floor(seconds) + " seconds";
 }
+
+export function unfocusCommentHighlights() {
+  document.querySelectorAll('.highlight-area').forEach(h => h.classList.remove('highlight-area-focus'));
+}
