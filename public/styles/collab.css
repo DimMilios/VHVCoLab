@@ -34,7 +34,7 @@
   pointer-events: none;
 
   z-index: var(--collab-layer-zIndex);
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 .single-select {
@@ -111,7 +111,7 @@
   position: absolute;
   width: 100%;
   z-index: calc(var(--collab-layer-zIndex) + 20);
-  background-color: rgba(0, 140, 220, 0.05);
+  /* background-color: rgba(0, 140, 220, 0.05); */
   pointer-events: none;
 }
 

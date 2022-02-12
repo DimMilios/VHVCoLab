@@ -137,7 +137,7 @@ editor.getSession().selection.on('changeCursor', function () {
     markItem(item);
 
     // createNewEditorSession({ item, row, column });
-    createDraggableContainer(item);
+    // createDraggableContainer(item);
     const localState = yProvider.awareness.getLocalState();
 
     yProvider.awareness.setLocalState({

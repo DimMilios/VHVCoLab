@@ -13,6 +13,7 @@ import {
   highlightTemplate,
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
+import { layoutService } from '../state/layoutStateMachine.js';
 
 let DEBUG = false;
 function log(text) {
@@ -182,10 +183,13 @@ export function updateHandler(clients = defaultClients()) {
         )
       )}`;
 
-    let highlights =
-      html`${state.comments
-        ?.filter((c) => c?.highlight != null)
-        .map((c) => highlightTemplate(c.id, c.highlight))}` ?? [];
+    let highlights = layoutService.state
+      .toStrings()
+      .some((name) => name.toLowerCase().includes('comment'))
+      ? html`${state.comments
+          ?.filter((c) => c?.highlight != null)
+          .map((c) => highlightTemplate(c.id, c.highlight))}`
+      : [];
 
     render(
       html`

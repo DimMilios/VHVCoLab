@@ -1,10 +1,7 @@
 import { html, render } from 'lit-html';
 import { getURLParams } from '../api/util.js';
 import { formatUserElem } from '../collaboration/collab-extension.js';
-import {
-  multiSelectCoords,
-  renderComments,
-} from '../collaboration/templates.js';
+import { multiSelectCoords } from '../collaboration/templates.js';
 import { getCoordinatesWithOffset } from '../collaboration/util-collab.js';
 import { yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
@@ -49,13 +46,13 @@ let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
             data-toggle="popover"
             >Element details</a
           >
-          <a
+          <!-- <a
             class="context-menu-dropdown-item text-decoration-none text-reset p-1"
             id=${'history-' + elemRefId}
             href="#"
             data-toggle="popover"
             >History</a
-          >
+          > -->
         </div>
       </div>
     </div>
@@ -131,9 +128,9 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
     document.querySelector('#input')
   );
 
-  return html`${cache(clientId == yProvider.awareness.clientID
+  return html`${clientId == yProvider.awareness.clientID
     ? contextMenu(clientId, elemRefId, targetX, targetY, handleClick)
-    : simpleIndicator(clientId, elemRefId, targetX, targetY, name))}`;
+    : simpleIndicator(clientId, elemRefId, targetX, targetY, name)}`;
 };
 
 export let singleSelectTemplate = (clientId, elemRefId, color) => {
