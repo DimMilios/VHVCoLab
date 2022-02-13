@@ -14,6 +14,7 @@ import {
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
+import { toggleCommentsShow } from '../templates/toggleCommentSection.js';
 
 let DEBUG = false;
 function log(text) {
@@ -183,13 +184,16 @@ export function updateHandler(clients = defaultClients()) {
         )
       )}`;
 
-    let highlights = layoutService.state
+    let commentsVisible = layoutService.state
       .toStrings()
-      .some((name) => name.toLowerCase().includes('comment'))
-      ? html`${state.comments
-          ?.filter((c) => c?.highlight != null)
-          .map((c) => highlightTemplate(c.id, c.highlight))}`
-      : [];
+      .some((name) => name.toLowerCase().includes('comment'));
+
+    let highlights = html`${commentsVisible ? 
+      html`${state.comments
+            ?.filter((c) => c?.highlight != null)
+            .map((c) => highlightTemplate(c.id, c.highlight))}`
+      : null
+    }`
 
     render(
       html`

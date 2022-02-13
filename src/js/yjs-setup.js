@@ -179,48 +179,56 @@ eventSource.addEventListener('open', async () => {
   });
 });
 
-eventSource.addEventListener('message', (event) => {
-  let payload = JSON.parse(event.data);
-  console.log('Message event', payload);
-
-  if (Array.isArray(payload)) {
-    // The SVG music score element hasn't been rendered yet here.
-    // We can't calculate comment highlight coordinates yet.
-    setState({ comments: payload }, { reRender: false });
-    return;
-  }
-
-  // { type: 'resource:method', id: number }
-  // e.g { type: 'comment:delete', id: 1 }
-  if (payload.hasOwnProperty('type')) {
-    let [resource, method] = payload.type.split(':');
-
-    if (Object.keys(state).includes(resource)) {
-      switch (method) {
-        case 'delete':
-          if (resource === 'comments') {
-            setState({
-              comments: state.comments.filter((r) => r.id !== payload.id),
-            });
-          }
-
-          updateHandler(); // Re-render collab layer
-
-          // TODO: We could dynamically render a changed resource (e.g comments)
-          // setState({
-          //   [resource]: state[resource].filter(r => r.id !== payload.id)
-          // })
-          break;
-        default:
-          console.log(`Unknown method: ${method}`);
+export function handleCommentsMessage (event) {
+    let payload = JSON.parse(event.data);
+    console.log('Message event', payload);
+  
+    if (Array.isArray(payload)) {
+      let shouldCompute = payload.some(p => p.highlight == null);
+      
+      if (document.querySelector('#output > svg') && shouldCompute) {
+        computeCommentHighlights(payload);
+      } else {
+        // The SVG music score element hasn't been rendered yet here.
+        // We can't calculate comment highlight coordinates yet.
+        setState({ comments: payload }, { reRender: false });
       }
+      return;
     }
+  
+    // { type: 'resource:method', id: number }
+    // e.g { type: 'comment:delete', id: 1 }
+    if (payload.hasOwnProperty('type')) {
+      let [resource, method] = payload.type.split(':');
+  
+      if (Object.keys(state).includes(resource)) {
+        switch (method) {
+          case 'delete':
+            if (resource === 'comments') {
+              setState({
+                comments: state.comments.filter((r) => r.id !== payload.id),
+              });
+            }
+  
+            updateHandler(); // Re-render collab layer
+  
+            // TODO: We could dynamically render a changed resource (e.g comments)
+            // setState({
+            //   [resource]: state[resource].filter(r => r.id !== payload.id)
+            // })
+            break;
+          default:
+            console.log(`Unknown method: ${method}`);
+        }
+      }
+  
+      return;
+    }
+  
+    // let comments = state?.comments ? [...state.comments, payload] : [payload];
+}
 
-    return;
-  }
-
-  let comments = state?.comments ? [...state.comments, payload] : [payload];
-
+function computeCommentHighlights(comments) {
   // Add the highlight coordinates for each comment
   setState({
     comments: comments.map((c) => {
@@ -235,7 +243,9 @@ eventSource.addEventListener('message', (event) => {
         : c;
     }),
   });
-});
+}
+
+eventSource.addEventListener('message', handleCommentsMessage);
 
 eventSource.addEventListener('error', (error) => {
   console.log('Error', error);

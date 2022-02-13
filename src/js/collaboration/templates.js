@@ -49,7 +49,7 @@ let commentSectionTemplate = (height) => {
     >
       <div
         id="comments-container"
-        style="height: ${height}px; background-color: rgba(216, 215, 215, 0.8);"
+        style="height: 100vh; background-color: rgba(216, 215, 215, 0.8);"
       ></div>
     </div>
   `;

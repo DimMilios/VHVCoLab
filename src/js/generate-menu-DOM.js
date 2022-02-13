@@ -71,12 +71,12 @@ function createSubmenuItem(entry) {
   li.id = `${defaultText?.split(/\W/).join('-')}__submenu-item`.toLowerCase();
   li.setAttribute(
     'class',
-    'dropdown-item d-flex justify-content-between text-white'
+    'dropdown-item d-flex justify-content-between text-dark'
   );
 
   const item = document.createElement('a');
   // item.setAttribute('class', 'dropdown-item');
-  item.setAttribute('class', 'text-decoration-none');
+  item.setAttribute('class', 'text-decoration-none text-dark');
   item.href = '#';
 
   const isFunctionOf = (func, obj) => typeof obj[func] === 'function';

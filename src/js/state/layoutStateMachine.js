@@ -1,6 +1,8 @@
 import { assign, createMachine, interpret } from 'xstate';
+import { updateHandler } from '../collaboration/collab-extension';
 import { renderComments, uiCoords } from '../collaboration/templates';
 import { displayNotation } from '../vhv-scripts/misc';
+import { yProvider } from '../yjs-setup';
 import { state as commentState } from './comments';
 
 let inputElem = document.querySelector('#input');
@@ -102,6 +104,20 @@ export const layoutMachine = createMachine({
             }
           ],
         },
+        SHOW_COMMENTS_HIDE_TEXT: {
+          target: 'notationAndCommentsVisible',
+          actions: [
+            assign({
+              inputCol: 0,
+              outputCol: 8,
+              commentsCol: 4,
+            }),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)();
+              renderComments(commentState.comments)
+            }
+          ],
+        }
       },
     },
     notationAndTextVisible: {
@@ -174,6 +190,7 @@ export const layoutMachine = createMachine({
             }),
             ({ inputCol, outputCol, commentsCol }) => {
               resize(inputCol, outputCol, commentsCol)()
+              updateHandler({ updated: [...yProvider.awareness.getStates().keys()], added: [], removed: [] });
             },
           ],
         },
@@ -201,8 +218,10 @@ export const layoutMachine = createMachine({
               outputCol: 12,
               commentsCol: 0,
             }),
-            ({ inputCol, outputCol, commentsCol }) =>
-              resize(inputCol, outputCol, commentsCol)(),
+            ({ inputCol, outputCol, commentsCol }) => {
+              resize(inputCol, outputCol, commentsCol)()
+              updateHandler({ updated: [...yProvider.awareness.getStates().keys()], added: [], removed: [] });
+            },
           ],
         },
         HIDE_ALL: {

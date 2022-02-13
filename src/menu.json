@@ -2526,6 +2526,25 @@
           }
         ]
       }
+    },
+    {
+      "TEXT": { "DEFAULT": "Comments" },
+      "SUBMENU": {
+        "ENTRY": [
+          {
+            "TEXT": {
+              "DEFAULT": "Show Comments",
+              "ACTION": "MENU.showComments()"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Hide Comments",
+              "ACTION": "MENU.hideComments()"
+            }
+          }
+        ]
+      }
     }
   ],
   "DICTIONARY": {

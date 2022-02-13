@@ -272,6 +272,8 @@ export const midiStop = function () {
       element.setAttribute('class', outclass);
     }
   });
+
+  document.querySelectorAll('.highlight').forEach(note => note.classList.remove('highlight'));
   $('#player').hide();
   $('#play-button').show();
   global_cursor.CursorNote = null;

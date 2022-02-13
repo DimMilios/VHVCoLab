@@ -35,6 +35,8 @@ import {
   global_editorOptions,
   global_verovioOptions,
 } from './vhv-scripts/global-variables.js';
+import { layoutService } from './state/layoutStateMachine.js';
+import { hideCommentSection, showCommentSection } from './collaboration/util-collab.js';
 
 class MenuInterface {
   constructor() {
@@ -83,6 +85,14 @@ class MenuInterface {
     var name = matches[1];
     name = name.charAt(0).toUpperCase() + name.slice(1);
     this.showContextualMenu(name);
+  }
+
+  showComments() {
+    showCommentSection();
+  }
+  
+  hideComments() {
+    hideCommentSection();
   }
 
   getContextualMenus() {

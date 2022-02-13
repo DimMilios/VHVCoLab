@@ -649,6 +649,12 @@ document
 document
   .querySelector('#polyrhythm-project__submenu-item')
   .addEventListener('click', () => menu.loadRepertory('poly'));
+document
+  .querySelector('#show-comments__submenu-item')
+  .addEventListener('click', () => menu.showComments());
+document
+  .querySelector('#hide-comments__submenu-item')
+  .addEventListener('click', () => menu.hideComments());
 
 document.querySelectorAll('li.dropdown').forEach(
   (item) =>

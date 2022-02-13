@@ -1,3 +1,8 @@
+import { state } from "../state/comments";
+import { layoutService } from "../state/layoutStateMachine";
+import { global_cursor } from "../vhv-scripts/global-variables";
+import { handleCommentsMessage } from "../yjs-setup";
+
 export const MULTI_SELECT_ALPHA = 0.3;
 export const SELECT_OPACITY = 0.3;
 
@@ -145,4 +150,37 @@ export function timeSince(date) {
 
 export function unfocusCommentHighlights() {
   document.querySelectorAll('.highlight-area').forEach(h => h.classList.remove('highlight-area-focus'));
+}
+
+export function clearCursorHighlight() {
+  if (global_cursor.CursorNote) {
+    var classes = global_cursor.CursorNote.getAttribute('class');
+    var classlist = classes.split(' ');
+    var outclass = '';
+    for (var i = 0; i < classlist.length; i++) {
+      if (classlist[i] == 'highlight') {
+        continue;
+      }
+      outclass += ' ' + classlist[i];
+    }
+    outclass = outclass.replace(/^\s+/, '');
+    global_cursor.CursorNote.setAttribute('class', outclass);
+    global_cursor.CursorNote = '';
+  }
+}
+
+export function showCommentSection() {
+  // Check if comment highlights are computed
+  let highlightsComputed = state.comments.some(c => c.highlight == null);
+
+  if (highlightsComputed) {
+    handleCommentsMessage(new MessageEvent('message', { data: JSON.stringify(state.comments) }));
+    console.log('Comments after highlight', state.comments);
+  }
+
+  layoutService.send('SHOW_COMMENTS_HIDE_TEXT');
+}
+export function hideCommentSection() {
+  layoutService.send('HIDE_COMMENTS');
+  layoutService.send('SHOW_TEXT');
 }

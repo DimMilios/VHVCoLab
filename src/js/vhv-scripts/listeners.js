@@ -27,6 +27,7 @@ import {
   updateEditorMode,
   setTextInEditor,
   redrawInputArea,
+  setCursorNote,
 } from './misc.js';
 import { observeSvgContent } from './utility-svg.js';
 import { HnpMarkup } from './highlight.js';
@@ -111,7 +112,7 @@ import { inSvgImage } from './utility-svg.js';
 
 import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
-import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
+import { clearCursorHighlight, unfocusCommentHighlights } from '../collaboration/util-collab.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -190,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         selectService.send({ type: 'RESET' });
         yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
+        clearCursorHighlight();
       }
       dataIntoView(event);
     }

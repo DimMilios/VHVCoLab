@@ -155,6 +155,11 @@
   transform: translateY(10px) scale(1.05);
 }
 
+.toggle-comments {
+  position: absolute;
+  z-index: calc(var(--collab-layer-zIndex) + 40);
+}
+
 /* Given to note elements when selected */
 .selected {
   filter: url(#highlight-shadow);
@@ -265,7 +270,7 @@
 }
 
 .dropdown-item {
-  background-color: #02C6FC;
+  background-color: var(--theme-color1);
 }
 
 /* Bootstrap nested Dropdown menu */
