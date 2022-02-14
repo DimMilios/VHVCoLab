@@ -589,10 +589,12 @@ function displayFileTitle(contents) {
 //
 import { loadKernScoresFile } from './loading.js';
 
-export function displayWork(file) {
+export async function displayWork(file) {
   if (!file) {
     return;
   }
+
+  console.log(file)
   moveToTopOfNotation();
   vrvWorker.page = 1;
   $('html').css('cursor', 'wait');
@@ -602,6 +604,10 @@ export function displayWork(file) {
     previous: true,
     next: true,
   });
+
+  let { docId } = getURLParams(['docId']);
+
+  await removeByDocumentId(docId, { data: { clientId: yProvider.awareness.clientID }, onSuccess: console.log, onError: console.error })
 }
 
 window.displayWork = displayWork;
@@ -1800,6 +1806,9 @@ import { getAceEditor } from './setup.js';
 import { getMenu } from '../menu.js';
 import splitter from './splitter.js';
 import { layoutService } from '../state/layoutStateMachine.js';
+import { removeByDocumentId } from '../api/comments.js';
+import { getURLParams } from '../api/util.js';
+import { yProvider } from '../yjs-setup.js';
 
 export function updateEditorMode() {
   if (!editor) {

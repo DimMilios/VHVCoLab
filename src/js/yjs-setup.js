@@ -203,19 +203,21 @@ export function handleCommentsMessage (event) {
   
       if (Object.keys(state).includes(resource)) {
         switch (method) {
+          case 'create':
+            if (resource === 'comments') {
+              computeCommentHighlights(state.comments.concat(payload.createdComment))
+              updateHandler();
+            }
+            break;
           case 'delete':
             if (resource === 'comments') {
-              setState({
-                comments: state.comments.filter((r) => r.id !== payload.id),
-              });
+              if (Array.isArray(payload.ids)) {
+                setState({
+                  comments: state.comments.filter((r) => !payload.ids.includes(r.id)),
+                });
+              }
             }
-  
             updateHandler(); // Re-render collab layer
-  
-            // TODO: We could dynamically render a changed resource (e.g comments)
-            // setState({
-            //   [resource]: state[resource].filter(r => r.id !== payload.id)
-            // })
             break;
           default:
             console.log(`Unknown method: ${method}`);

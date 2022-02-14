@@ -14,7 +14,6 @@ import {
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
-import { toggleCommentsShow } from '../templates/toggleCommentSection.js';
 
 let DEBUG = false;
 function log(text) {
