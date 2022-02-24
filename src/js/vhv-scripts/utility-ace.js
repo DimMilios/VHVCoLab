@@ -231,7 +231,7 @@ export function humdrumDataNoteIntoView(row, column) {
       item = items[items.length - 2];
     }
   // }
-  // markItem(item);
+  markItem(item);
   return item;
   // sendTarget(item);
 }
