@@ -19,6 +19,7 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
+    "@jitsi/web-sdk": "^0.2.0",
     "js-cookie": "^3.0.1",
     "lib0": "^0.2.42",
     "lit-html": "^2.0.2",
