@@ -26,10 +26,6 @@
   --select-opacity: 0.2;
 }
 
-#output {
-  min-height: 30vh;
-}
-
 #collab-container, .comments{
   position: absolute;
   
