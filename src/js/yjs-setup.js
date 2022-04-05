@@ -89,7 +89,7 @@ let { docId: DOC_ID, roomname } = getURLParams(['docId', 'roomname']);
 let room = `docId=${DOC_ID}&roomname=${roomname}`;
 
 if (typeof yProvider == 'undefined') {
-  yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
+  yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc, { connect: false }); // local
   yProvider.on('status', (event) => {
     console.log(event.status); // websocket logs "connected" or "disconnected"
   });
