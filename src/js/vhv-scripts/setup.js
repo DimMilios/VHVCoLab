@@ -1,4 +1,4 @@
-import { displayNotation } from './misc.js';
+import { displayNotation, hideInputArea, toggleTextVisibility } from './misc.js';
 
 //////////////////////////////
 //

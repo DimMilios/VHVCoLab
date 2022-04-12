@@ -230,6 +230,11 @@ export function toggleTextVisibility(suppressZoom) {
   editor.resize();
   // matchToolbarVisibilityIconToState();
 }
+
+window.toggleTextVisibility = toggleTextVisibility;
+
+
+
 // export function toggleTextVisibility(suppressZoom) {
 //   global_interface.InputVisible = !global_interface.InputVisible;
 //   let input = document.querySelector('#input');
@@ -277,7 +282,7 @@ export function redrawInputArea(suppressZoom) {
 // hideInputArea --
 //
 
-function hideInputArea(suppressZoom) {
+export function hideInputArea(suppressZoom) {
   global_interface.InputVisible = false;
   let input = document.querySelector('#input');
   global_interface.LastInputWidth = parseInt(input.style.width);

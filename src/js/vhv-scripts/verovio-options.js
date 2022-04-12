@@ -1385,6 +1385,8 @@ export function humdrumToSvgOptions() {
   output.spacingSystem = global_verovioOptions.SPACING_SYSTEM;
   output.staffLineWidth = 0.12;
   output.outputIndent = 1;
+
+  // output.svgViewBox = 1;
   // output.svgRemoveXlink       = true; // enable to remove xlink: from href use element property
 
   // if (window.PAGED) {

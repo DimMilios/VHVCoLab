@@ -1,7 +1,14 @@
+.nav-play-button {
+  color: white;
+  opacity: 0.6;
+  /* background: #01313f; */
+	background-color: var(--theme-color7);
+  margin-top: 2px;
+}
 
 #midiPlayer_div  {
 	height:     36px;
-	background: #999;
+	background: var(--theme-color7);
 	opacity:    0.70;
 }
 
@@ -14,7 +21,7 @@
 }
 
 #midiPlayer_progress {
-	background:        #555;
+	background:        var(--theme-color1);
 	margin:            0;
 	width:             0;
 	height:            100%;
@@ -38,12 +45,13 @@
 	display:           inline-block;
 }
 
-#midiPlayer_div a.icon {
+#midiPlayer_div a {
 	cursor:            pointer;
 	vertical-align:    center;
+	color: #fff;
 }
 
-#midiPlayer_div a.icon:hover {
+#midiPlayer_div a:hover {
 	color: green !important;
 
 }
