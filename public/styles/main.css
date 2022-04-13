@@ -233,6 +233,23 @@ div#index {
 }
 
 @font-face {
+	font-family: "Roots_Slashes";
+	
+	src: url("/Rootslashbarsrepeats-Regular.otf");
+	font-style: normal;
+	font-weight: normal
+}
+
+
+@font-face {
+	font-family: "Variations";
+	
+	src: url("/Chord_types-Regular.otf");
+	font-style: normal;
+	font-weight: normal
+}
+
+@font-face {
   font-family: 'Times';
   /* src: url("../scripts/pdfkit/EBGaramond-Regular.ttf"); */
   src: url('/scripts/pdfkit/EBGaramond-Regular.ttf');

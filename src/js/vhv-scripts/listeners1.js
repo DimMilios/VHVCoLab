@@ -13,6 +13,7 @@
 //
 
 import {
+  editorMode,
   FILEINFO,
   global_cursor,
   global_editorOptions,
@@ -130,6 +131,7 @@ import { inSvgImage } from './utility-svg.js';
 import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { clearCursorHighlight, unfocusCommentHighlights } from '../collaboration/util-collab.js';
+import { addEventListener, addEventListeners, querySelector } from 'lib0/dom';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -177,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var body = document.querySelector('body');
 
+
   selectService.onTransition((state) => {
     // console.log('State changed:', state.value, state.context);
 
@@ -197,9 +200,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // turnOffAllHighlights();
     if (!event.target.closest('.comment-with-replies')) {
       unfocusCommentHighlights();
+      document.getElementById('edit').style.visibility = 'hidden';
     }
 
-    // console.log("SINGLE CLICK");
+    
+    // ;console.log("SINGLE CLICK")
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
 
@@ -210,19 +215,18 @@ document.addEventListener('DOMContentLoaded', function () {
       if (event.target.parentElement.parentElement.parentElement.id.includes('harm')){
         chordLocation.line = event.target.parentElement.parentElement.parentElement.id.split('L')[1].split('F')[0];
         chordLocation.column = event.target.parentElement.parentElement.parentElement.id.split('L')[1].split('F')[1];
+        
 
-        console.log(chordLocation, chord);
         
-        let editBtn = document.getElementById('edit');
-        
-        editBtn.style.visibility = 'visible';
+        document.getElementById('edit').style.visibility = 'visible';
         let pgx = event.clientX + 10;
         let pgy = event.clientY + 10;
-        editBtn.style.top = `${pgy}px`;
-        editBtn.style.left = `${pgx}px`;;
+        document.getElementById("edit").style.top = `${pgy}px`;
+        document.getElementById("edit").style.left = `${pgx}px`;;
        
       }
       //alx_
+      
 
       $('[data-toggle="popover"]').popover('dispose');
       if (target?.id && target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)) {
@@ -232,10 +236,10 @@ document.addEventListener('DOMContentLoaded', function () {
         yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
         clearCursorHighlight();
       }
-      
       //alx:prosthiki chord argument sto dataIntoView
-      dataIntoView(event, chord);
-    }
+        dataIntoView(event, chord);
+      //alx_
+      }
   });
 
   window.addEventListener('keydown', processNotationKeyCommand, true);
@@ -1089,6 +1093,7 @@ export function verovioCallback(data) {
   markup.loadSvg('svg');
 }
 
+
 ////alx
 //adding classes to td elements of chord editor table (psiloakyro sto listeners.js)
 Array.from(document.getElementsByClassName("Chords")).forEach( (body, index) => {
@@ -1103,6 +1108,7 @@ Array.from(document.getElementsByClassName("Chords")).forEach( (body, index) => 
     }
   })
 } );
+
 
 //coloring selection and decoloring previous selections
 for (let td of document.getElementsByTagName("td")) {

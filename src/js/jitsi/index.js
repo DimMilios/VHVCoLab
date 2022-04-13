@@ -5,10 +5,12 @@ window.addEventListener('load', () => {
     resizeWidth: false,
   });
 
-  const api = new JitsiMeetExternalAPI('meet.jit.si', {
-    roomName: 'MusiCoLab Demo',
-    width: '100%',
-    height: '100%',
-    parentNode,
-  });
+  if (parentNode) {
+    const api = new JitsiMeetExternalAPI('meet.jit.si', {
+      roomName: 'MusiCoLab Demo',
+      width: '100%',
+      height: '100%',
+      parentNode,
+    });
+  }
 });

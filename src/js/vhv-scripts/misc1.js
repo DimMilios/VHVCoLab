@@ -230,11 +230,6 @@ export function toggleTextVisibility(suppressZoom) {
   editor.resize();
   // matchToolbarVisibilityIconToState();
 }
-
-window.toggleTextVisibility = toggleTextVisibility;
-
-
-
 // export function toggleTextVisibility(suppressZoom) {
 //   global_interface.InputVisible = !global_interface.InputVisible;
 //   let input = document.querySelector('#input');
@@ -282,7 +277,7 @@ export function redrawInputArea(suppressZoom) {
 // hideInputArea --
 //
 
-export function hideInputArea(suppressZoom) {
+function hideInputArea(suppressZoom) {
   global_interface.InputVisible = false;
   let input = document.querySelector('#input');
   global_interface.LastInputWidth = parseInt(input.style.width);
@@ -1544,23 +1539,14 @@ function initializeWildWebMidi() {
 //      go to the corresponding line in the editor.
 //
 
-// export function dataIntoView(event) {
-//   // if (EditorMode == 'xml') {
-//   if (editorMode() == 'xml') {
-//     xmlDataIntoView(event);
-//   } else {
-//     humdrumDataIntoView(event);
-//   }
-// }
-
 //alx: prosthiki chord argument (psaxe: edw)
 export function dataIntoView(event, chord) { //edw
-  // if (EditorMode == 'xml') {
-if (editorMode() == 'xml') {
-  xmlDataIntoView(event);
-} else {
-  humdrumDataIntoView(event, chord); //edw
-}
+    // if (EditorMode == 'xml') {
+  if (editorMode() == 'xml') {
+    xmlDataIntoView(event);
+  } else {
+    humdrumDataIntoView(event, chord); //edw
+  }
 }
 //alx_
 
@@ -1621,30 +1607,6 @@ export function xmlDataIntoView(event) {
 //      SVG images later), make the text line in the Humdrum data visible
 //      in the text area.
 //
-// export function humdrumDataIntoView(event) {
-//   let target;
-//   if (typeof event === 'string') {
-//     target = document.querySelector('#' + event);
-//   } else {
-//     target = event.target;
-//   }
-//   let matches;
-//   while (target) {
-//     if (!target.id) {
-//       target = target.parentNode;
-//       continue;
-//     }
-//     matches = target.id.match(/-[^-]*L(\d+)F(\d+)/);
-//     if (!matches) {
-//       target = target.parentNode;
-//       continue;
-//     }
-
-//     global_cursor.HIGHLIGHTQUERY = target.id;
-//     highlightIdInEditor(target.id, 'humdrumDataIntoView');
-//     break;
-//   }
-// }
 
 //alx: chord argument (psaxe:edw)
 export function humdrumDataIntoView(event, chord) { //edw
@@ -1804,11 +1766,6 @@ export function clearContent() {
 // playCurrentMidi -- If a note is selected start playing from that note;
 //     otherwise, start from the start of the music.
 //
-// document.querySelector('#play-button').addEventListener('click', () => {
-//   console.log('Calling playCurrentMidi')
-
-//   playCurrentMidi();
-// })
 
 import { midiStop, midiUpdate, play_midi } from '../midifunctions.js';
 export function playCurrentMidi() {
