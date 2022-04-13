@@ -261,12 +261,13 @@
 }
 
 .dropdown-item:hover {
-  filter: brightness(90%);
+  background-color: var(--theme-color6);
+  color: var(--theme-color1) !important;
 }
 
-.dropdown-item > a:hover {
+.dropdown-item a:hover {
   text-decoration: none;
-  background-color: initial;
+  color: var(--theme-color1) !important;
 }
 
 .dropdown-item {

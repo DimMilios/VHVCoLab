@@ -1,27 +1,25 @@
 .nav-play-button {
-  color: white;
-  opacity: 0.6;
-  /* background: #01313f; */
-	background-color: var(--theme-color7);
+  color: var(--theme-color3);
+	background-color: var(--theme-color1);
   margin-top: 2px;
 }
 
 #midiPlayer_div  {
 	height:     36px;
-	background: var(--theme-color7);
+	background: var(--theme-color1);
 	opacity:    0.70;
 }
 
 #midiPlayer_bar  {
 	height:            12px;
 	width:             250px;
-	background:        #ccc;
+	background-color: var(--theme-color4);
 	cursor:            pointer;
 	display:           inline-block;
 }
 
 #midiPlayer_progress {
-	background:        var(--theme-color1);
+	background:        var(--theme-color3);
 	margin:            0;
 	width:             0;
 	height:            100%;
@@ -34,6 +32,7 @@
 	text-align:        right;
 	font-family:       arial;
 	display:           inline-block;
+	color: black;
 }
 
 #midiPlayer_totalTime {
@@ -43,21 +42,25 @@
 	font-size:         16px;
 	font-family:       arial;
 	display:           inline-block;
+	color: black;
 }
 
 #midiPlayer_div a {
 	cursor:            pointer;
 	vertical-align:    center;
-	color: #fff;
+	color: var(--theme-color3);
 }
 
-#midiPlayer_div a:hover {
-	color: green !important;
-
+.mbutton:hover, #play-button:hover {
+	transform: scale(1.4);
 }
 
-#midiPlayer_div a.play:hover {
-	color: hotpink !important;
+.mbutton {
+  margin-right: 10px;
+  margin-left: 10px;
+	transition: transform 250ms ease-out;
 }
 
-
+#play-button {
+	transition: transform 250ms ease-out;
+}

@@ -105,9 +105,9 @@ svg:not(:root) {
 /* Song title */
 #title-info {
   width: 100%;
-  color: #f8f5f0;
+  color: rgba(0,0,0,.6);
   font-family: Palatino, Times-Roman, serif;
-  font-size: 132%;
+  font-size: 145%;
   white-space: nowrap;
 }
 
@@ -146,16 +146,20 @@ div#dropArea {
 }
 
 .topnav {
-  background-color: var(--theme-color7);
+  background-color: var(--theme-color1);
 
 	/* background-color: #01313f;
 	color: #30edf7; */
 }
 
+.nav-link {
+  color: black !important;
+}
+
 #actions-nav {
 	/* background-color: #01313f; */
 
-	background-color: var(--theme-color7);
+	background-color: var(--theme-color1);
 	margin-left: 10px;
 }
 
@@ -288,20 +292,6 @@ body.invalid #output,
 body.invalid #splitter,
 body.invalid {
   background: #ffe0e0;
-}
-
-.mbutton {
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.mbutton:hover {
-  background: #999 !important;
-  stroke: yellow;
-}
-
-.mbutton span.fas:hover {
-  color: white;
 }
 
 .fas-play :hover {
