@@ -203,13 +203,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
 
+      let harmonyElem = event.target.closest('.harm');
       //alx         
-      if (!event.target.parentElement.parentElement.parentElement){
-        throw new Error('Parent element does not exist');
-      }      
-      if (event.target.parentElement.parentElement.parentElement.id.includes('harm')){
-        chordLocation.line = event.target.parentElement.parentElement.parentElement.id.split('L')[1].split('F')[0];
-        chordLocation.column = event.target.parentElement.parentElement.parentElement.id.split('L')[1].split('F')[1];
+      if (harmonyElem){
+        chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
+        chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
 
         console.log(chordLocation, chord);
         
@@ -220,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let pgy = event.clientY + 10;
         editBtn.style.top = `${pgy}px`;
         editBtn.style.left = `${pgx}px`;;
-       
       }
       //alx_
 
@@ -1091,111 +1088,132 @@ export function verovioCallback(data) {
 
 ////alx
 //adding classes to td elements of chord editor table (psiloakyro sto listeners.js)
-Array.from(document.getElementsByClassName("Chords")).forEach( (body, index) => {
-  let classID;
-  if (index==0) classID = "root";
-  else if (index==1) classID = "accidental";
-  else if (index==2) classID = "variation";
-  Array.from(body.children).forEach((row) => {
-    let cells = row.children;
-    for (let cell of cells) {
-      cell.className = classID;
-    }
-  })
-} );
+Array.from(document.getElementsByClassName('Chords')).forEach(
+  (body, index) => {
+    let classID;
+    if (index == 0) classID = 'root';
+    else if (index == 1) classID = 'accidental';
+    else if (index == 2) classID = 'variation';
+    Array.from(body.children).forEach((row) => {
+      let cells = row.children;
+      for (let cell of cells) {
+        cell.className = classID;
+      }
+    });
+  }
+);
 
 //coloring selection and decoloring previous selections
-for (let td of document.getElementsByTagName("td")) {
-  if (td.parentElement.parentElement.parentElement.parentElement.id === "chord-editor") {
-    td.addEventListener ("click", function(event) {
-      event.target.style.color = "tomato";
+for (let td of document.getElementsByTagName('td')) {
+  if (
+    td.parentElement.parentElement.parentElement.parentElement.id ===
+    'chord-editor'
+  ) {
+    td.addEventListener('click', function (event) {
+      event.target.style.color = 'tomato';
 
-      let otherCells = document.getElementsByClassName(event.target.className);      
-      for (let other of otherCells){
-        if (! (other == event.target) )     other.style.color = "white";
-      }  
-      
-      switch(event.target.className){
-        case "root": chord.new.root = event.target.innerHTML; 
-                     chordSelected.root = event.target;
-                     break;
-        case "accidental": chord.new.accidental = event.target.innerHTML; 
-                           chordSelected.accidental = event.target;
-                           break;
-        case "variation": chord.new.variation = event.target.innerHTML; 
-                          chordSelected.variation = event.target;
-                          break;
-      }      
+      let otherCells = document.getElementsByClassName(
+        event.target.className
+      );
+      for (let other of otherCells) {
+        if (!(other == event.target)) other.style.color = 'white';
+      }
+
+      switch (event.target.className) {
+        case 'root':
+          chord.new.root = event.target.innerHTML;
+          chordSelected.root = event.target;
+          break;
+        case 'accidental':
+          chord.new.accidental = event.target.innerHTML;
+          chordSelected.accidental = event.target;
+          break;
+        case 'variation':
+          chord.new.variation = event.target.innerHTML;
+          chordSelected.variation = event.target;
+          break;
+      }
 
       if (chord.new.root && chord.new.variation) {
         document.getElementById('send').style.display = 'block';
-        
-      }  
-    })    
+      }
+    });
   }
 }
 
-
 //back click
-document.getElementById('back').addEventListener('click', function (event){
-  if(chordSelected.root)  chordSelected.root.style.color = 'white';
-  if(chordSelected.accidental)  chordSelected.accidental.style.color = 'white';
-  if(chordSelected.variation) chordSelected.variation.style.color = 'white';
+document.getElementById('back').addEventListener('click', function (event) {
+  if (chordSelected.root) chordSelected.root.style.color = 'white';
+  if (chordSelected.accidental)
+    chordSelected.accidental.style.color = 'white';
+  if (chordSelected.variation) chordSelected.variation.style.color = 'white';
 
-  Object.keys(chordSelected).forEach( (i) => chordSelected[i] = null);
-  Object.keys(chord.new).forEach ( (i) => chord.new[i] = null);
+  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
+  Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
 
   document.getElementById('chord-editor').style.display = 'none';
-  document.getElementById('cover').style.visibility = 'hidden';
+  // document.getElementById('cover').style.visibility = 'hidden';
+});
 
-
-})
 //edit click
 document.getElementById('edit').addEventListener('click', (event) => {
-  document.getElementById('chord-editor').style.display = 'block';
-  document.getElementById('edit').style.visibility  = 'hidden'
+  console.log('Edit button clicked');
 
-  document.getElementById('cover').style.visibility = 'visible';
-})
+  let chordEditor = document.getElementById('chord-editor');
+  // let cover = document.getElementById('cover');
+
+  document.getElementById('chord-editor').style.display = 'block';
+  document.getElementById('edit').style.visibility = 'hidden';
+
+  // document.getElementById('cover').style.visibility = 'visible';
+
+  let editorTables = chordEditor.querySelectorAll('table');
+  let tableDimensions = Array.from(editorTables).map((t) => ({
+    id: t.id,
+    dims: t.getBoundingClientRect(),
+  }));
+
+  console.log({ editorTables, tableDimensions });
+  console.log({ chord, chordLocation, chordSelected });
+});
 
 //edit hidden when scrolling
-document.querySelector("#output").parentElement.addEventListener('scroll', function() {
- document.querySelector('#edit').style.visibility = 'hidden';  
-})
+document.querySelector('#output').parentElement.addEventListener('scroll', function () {
+  document.querySelector('#edit').style.visibility = 'hidden';
+});
 
 //send click
-document.getElementById('send').addEventListener('click', function (event){
- 
-  document.getElementById('chord-editor').style.display = 'none'
-  document.getElementById('cover').style.visibility = 'hidden';
+document.getElementById('send').addEventListener('click', function (event) {
+  document.getElementById('chord-editor').style.display = 'none';
+  // document.getElementById('cover').style.visibility = 'hidden';
 
   chordSelected.root.style.color = 'white';
-  if (chordSelected.accidental)  chordSelected.accidental.style.color = 'white';
+  if (chordSelected.accidental)
+    chordSelected.accidental.style.color = 'white';
   chordSelected.variation.style.color = 'white';
-  Object.keys(chordSelected).forEach( (i) => chordSelected[i] = null);
+  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
 
-  let edtr = getAceEditor(); 
-    if (!edtr) {
+  let edtr = getAceEditor();
+  if (!edtr) {
     throw new Error('Ace Editor is undefined');
-    }   
-  let kernfile = edtr.session.doc.getAllLines().join('\n');  
+  }
+  let kernfile = edtr.session.doc.getAllLines().join('\n');
 
   let jsonRequest = {
     kernfile,
     chordLocation,
-    chord
+    chord,
   };
-  let xhttp = new XMLHttpRequest;
+  let xhttp = new XMLHttpRequest();
   xhttp.onload = function () {
-    let jsonResponse = JSON.parse(xhttp.response);//to response einai json?mporei kai sketo string
+    let jsonResponse = JSON.parse(xhttp.response); //to response einai json?mporei kai sketo string
     let newKern = jsonResponse[0];
-    edtr.setValue(newKern);       
-  }
+    edtr.setValue(newKern);
+  };
   //xhttp.open("POST", url)
   //xhttp.setRequestHeader('Content-Type', 'application/json');
   //xhttp.send(jsonRequest);
-  Object.keys(chord.new).forEach( (i) => chord.new[i] = null);
+  Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
   document.getElementById('send').style.display = 'none';
-
-})
- //alx_
+});
+//alx_

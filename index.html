@@ -54,6 +54,8 @@
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/midiplayer.css" />
   <link rel="stylesheet" href="/styles/collab.css" />
+  
+  <link rel="stylesheet" href="/styles/chord-player.css" />
 
 
   <link href="/styles/fontawesome/all.css" rel="stylesheet">
@@ -67,8 +69,147 @@
 
 <body>
 
-  <div id="cover" style="position:fixed;width:100vw;height:100vh;z-index:10;top:0;
-  left:0;background-color: rgba(0,0,0,0.6);visibility: hidden;"></div>
+  <div class="modal" id="show-chord-editor" tabindex="-1" aria-labelledby="showCordEditorLabel"
+    aria-hidden="true">
+    <div class="modal-content bg-transparent">
+
+      <div class="modal-body">
+        <div class="container">
+  
+          <div id="chord-editor" style="display:none;z-index:15;position:relative;">
+  
+            <div class="row">
+              <table id="roots" class="table table-bordered table-dark col-md-8">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center" colspan="7">Roots</th>
+                  </tr>
+                </thead>
+                <tbody class="Chords">
+                  <tr>
+                    <td class="root">A</td>
+                    <td class="text-center">B</td>
+                    <td class="text-center">C</td>
+                    <td class="text-center">D</td>
+                    <td class="text-center">E</td>
+                    <td class="text-center">F</td>
+                    <td class="text-center">G</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table id="accidentals" class="table table-bordered table-dark col-md-2 ml-auto">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center" colspan="2">Accidentals</th>
+                  </tr>
+                </thead>
+                <tbody class="Chords">
+                  <tr>
+                    <td>+</td>
+                    <td>&</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+  
+            <div class="row">
+              <table id="variations" class="table table-bordered table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center" colspan="16">Variations</th>
+                  </tr>
+                </thead>
+                <tbody style="font-family:Variations;font-size:250%;" class="Chords">
+                  <tr>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>9</td>
+                    <td>Q</td>
+                    <td>U</td>
+                    <td>S</td>
+                    <td>s</td>
+                    <td>t</td>
+                    <td>p</td>
+                    <td>q</td>
+                    <td>r</td>
+                    <td>T</td>
+                    <td>n</td>
+                    <td>2</td>
+                    <td id="test">M</td>
+                  </tr>
+                  <tr>
+                    <td>O</td>
+                    <td>N</td>
+                    <td>P</td>
+                    <td>L</td>
+                    <td>J</td>
+                    <td>K</td>
+                    <td>I</td>
+                    <td>F</td>
+                    <td>l</td>
+                    <td>u</td>
+                    <td>o</td>
+                    <td>a</td>
+                    <td>b</td>
+                    <td>h</td>
+                    <td>i</td>
+                    <td>W</td>
+                  </tr>
+                  <tr>
+                    <td>Y</td>
+                    <td>X</td>
+                    <td>f</td>
+                    <td>g</td>
+                    <td>8</td>
+                    <td>E</td>
+                    <td>j</td>
+                    <td>Z</td>
+                    <td>R</td>
+                    <td>3</td>
+                    <td>V</td>
+                    <td>D</td>
+                    <td>k</td>
+                    <td>c</td>
+                    <td>d</td>
+                    <td>x</td>
+                  </tr>
+                  <tr>
+                    <td>z</td>
+                    <td>y</td>
+                    <td>1</td>
+                    <td>e</td>
+                    <td>m</td>
+                    <td>0</td>
+                    <td>%</td>
+                    <td>4</td>
+                    <td>v</td>
+                    <td>H</td>
+                    <td>B</td>
+                    <td>C</td>
+                    <td>w</td>
+                    <td>A</td>
+                    <td>G</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+            <button id="send" class="btn btn-secondary btn-lg close" data-dismiss="modal"
+              style="display:none;z-index:15;">Done</button>
+            <button id="back" class="btn btn-secondary btn-lg close" data-dismiss="modal"
+              style="z-index:15;">Back</button>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  <!-- <div id="cover" style="position:fixed;width:100vw;height:100vh;z-index:10;top:0;
+    left:0;background-color: rgba(0,0,0,0.6);visibility: hidden;"></div> -->
 
   <!-- <div id="jitsi-meeting-container"></div> -->
 
@@ -85,50 +226,10 @@
           <span id="composer"></span>&nbsp;<span id="title"></span>
         </div>
 
+        <!-- Edit button toggle Chord editor display -->
         <div id="edit" style="position:absolute;visibility:hidden;z-index:15;">
-          <button class="btn btn-secondary ">Edit</button>
+          <button class="btn btn-secondary" data-toggle="modal" data-target="#show-chord-editor">Edit</button>
         </div>
-        <div id="chord-editor" style="display:none;z-index:15;position:relative;">
-          <table id="roots" style="position:absolute;top:130px;left:-100px" class="table table-bordered table-dark">
-            <thead><tr><th scope="col" class="text-center" colspan="7">Roots</th>
-              </tr></thead>
-            <tbody class="Chords">
-              <tr><td class="root">A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td></tr>
-            </tbody>                    
-          </table>
-          <table id="accidentals" style="position:absolute;top:120px;left:200px" class="table table-bordered table-dark">
-            <thead><tr><th scope="col" class="text-center" colspan="2">Accidentals</th>
-            </tr></thead>
-            <tbody style="font-family:Roots_Slashes;font-size:300%;" class="Chords">
-              <tr><td>+</td><td>&</td></tr>
-            </tbody>                    
-          </table>
-          <table id="variations" style="position:absolute;left:-200px;top:250px;" class="table table-bordered table-dark">
-            <thead><tr><th scope="col" class="text-center" colspan="16">Variations</th>
-            </tr></thead>
-            <tbody style="font-family:Variations;font-size:250%;" class="Chords">
-                <tr><td >5</td><td>6</td><td>7</td><td>9</td>
-                <td>Q</td><td>U</td><td>S</td><td>s</td>
-                <td>t</td><td>p</td><td>q</td><td>r</td>
-                <td>T</td><td>n</td><td>2</td><td id="test">M</td></tr>
-              <tr><td>O</td><td>N</td><td>P</td><td>L</td>
-                <td>J</td><td>K</td><td>I</td><td>F</td>
-                <td>l</td><td>u</td><td>o</td><td>a</td>
-                <td>b</td><td>h</td><td>i</td><td>W</td></tr>
-              <tr><td>Y</td><td>X</td><td>f</td><td>g</td>
-                <td>8</td><td>E</td><td>j</td><td>Z</td>
-                <td>R</td><td>3</td><td>V</td><td>D</td>
-                <td>k</td><td>c</td><td>d</td><td>x</td></tr>
-              <tr><td>z</td><td>y</td><td>1</td><td>e</td>
-                <td>m</td><td>0</td><td>%</td><td>4</td>
-                <td>v</td><td>H</td><td>B</td><td>C</td>
-                <td>w</td><td>A</td><td>G</td><td></td></tr>
-            </tbody>                    
-          </table>
-          <button id="send" class="btn btn-secondary btn-lg" style="display:none;
-          position:absolute;top:200px;left:350px;z-index:15;">Done</button>
-           <button id="back" class="btn btn-secondary btn-lg" style="position:absolute;top:130px;left:350px;z-index:15;">Back</button>
-       </div>
 
         <div xmlns="http://www.w3.org/1999/xhtml" class="nav-play-button mr-5">
           <div style="cursor:pointer;" title="Play music" id="play-button">
