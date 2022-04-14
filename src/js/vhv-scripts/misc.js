@@ -1554,12 +1554,12 @@ function initializeWildWebMidi() {
 // }
 
 //alx: prosthiki chord argument (psaxe: edw)
-export function dataIntoView(event, chord) { //edw
+export function dataIntoView(event) { //edw
   // if (EditorMode == 'xml') {
 if (editorMode() == 'xml') {
   xmlDataIntoView(event);
 } else {
-  humdrumDataIntoView(event, chord); //edw
+  humdrumDataIntoView(event); //edw
 }
 }
 //alx_
@@ -1646,8 +1646,7 @@ export function xmlDataIntoView(event) {
 //   }
 // }
 
-//alx: chord argument (psaxe:edw)
-export function humdrumDataIntoView(event, chord) { //edw
+export function humdrumDataIntoView(event) {
   let target;
   if (typeof event === 'string') {
     target = document.querySelector('#' + event);
@@ -1666,7 +1665,7 @@ export function humdrumDataIntoView(event, chord) { //edw
       continue;
     }
 
-
+    // TODO: Check this part
     if (target.id.match(/^harm-L(\d+)F(\d+)/)) {
       let line = parseInt(matches[1], 10);
       let field = parseInt(matches[2], 10);
@@ -1678,7 +1677,7 @@ export function humdrumDataIntoView(event, chord) { //edw
     }
 
     global_cursor.HIGHLIGHTQUERY = target.id;
-    highlightIdInEditor(target.id, 'humdrumDataIntoView', chord); //edw
+    highlightIdInEditor(target.id, 'humdrumDataIntoView');
     break;
   }
 }

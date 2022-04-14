@@ -478,6 +478,7 @@ function getOnClassElements(onclass) {
 //
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 import { getMenu } from '../menu.js';
+import { chord } from './chords.js';
 import { global_cursor, global_editorOptions } from './global-variables.js';
 
 let vrvWorker = getVrvWorker();
@@ -889,8 +890,7 @@ import { centerCursorHorizontallyInEditor } from './utility-ace.js';
 //   centerCursorHorizontallyInEditor();
 // }
 
-//alx: prosthiki chord argument (psaxe: edw)
-export function highlightIdInEditor(id, source, chord) { //edw
+export function highlightIdInEditor(id, source) {
   //alx_
   unhighlightAllElements(id);
 

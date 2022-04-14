@@ -99,23 +99,6 @@ if (localStorage.FONT) {
 
 const markup = new HnpMarkup();
 
-////alx
-var chord = {
-  current: null,
-  new: {
-    root: null,
-    accidental: null,
-    variation: null
-  }
-};
-var chordLocation = {};
-var chordSelected = {
-  root:null,
-  accidental:null,
-  variation:null
-}
-//alx_
-
 //////////////////////////////
 //
 // DomContentLoaded event listener -- Display the sample data.
@@ -130,6 +113,7 @@ import { inSvgImage } from './utility-svg.js';
 import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { clearCursorHighlight, unfocusCommentHighlights } from '../collaboration/util-collab.js';
+import { chordLocation } from './chords.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -209,13 +193,20 @@ document.addEventListener('DOMContentLoaded', function () {
         chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
         chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
 
-        console.log(chordLocation, chord);
-        
         let editBtn = document.getElementById('edit');
-        
         editBtn.style.visibility = 'visible';
-        let pgx = event.clientX + 10;
-        let pgy = event.clientY + 10;
+
+                // let pgx = event.clientX + 10;
+        // let pgy = event.clientY + 10;
+        let harmonyBox = harmonyElem.getBoundingClientRect();
+        let pgx = harmonyBox.x + 25;
+        let pgy = harmonyBox.y + 25;
+
+        let jitsiContainer = document.getElementById('jitsi-meeting-container');
+        if (jitsiContainer) {
+          editBtn.style.transform = `translateY(-${jitsiContainer.getBoundingClientRect().height}px)`;
+        }
+
         editBtn.style.top = `${pgy}px`;
         editBtn.style.left = `${pgx}px`;;
       }
@@ -231,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       
       //alx:prosthiki chord argument sto dataIntoView
-      dataIntoView(event, chord);
+      dataIntoView(event);
     }
   });
 
@@ -1085,135 +1076,3 @@ export function verovioCallback(data) {
   }
   markup.loadSvg('svg');
 }
-
-////alx
-//adding classes to td elements of chord editor table (psiloakyro sto listeners.js)
-Array.from(document.getElementsByClassName('Chords')).forEach(
-  (body, index) => {
-    let classID;
-    if (index == 0) classID = 'root';
-    else if (index == 1) classID = 'accidental';
-    else if (index == 2) classID = 'variation';
-    Array.from(body.children).forEach((row) => {
-      let cells = row.children;
-      for (let cell of cells) {
-        cell.className = classID;
-      }
-    });
-  }
-);
-
-//coloring selection and decoloring previous selections
-for (let td of document.getElementsByTagName('td')) {
-  if (
-    td.parentElement.parentElement.parentElement.parentElement.id ===
-    'chord-editor'
-  ) {
-    td.addEventListener('click', function (event) {
-      event.target.style.color = 'tomato';
-
-      let otherCells = document.getElementsByClassName(
-        event.target.className
-      );
-      for (let other of otherCells) {
-        if (!(other == event.target)) other.style.color = 'white';
-      }
-
-      switch (event.target.className) {
-        case 'root':
-          chord.new.root = event.target.innerHTML;
-          chordSelected.root = event.target;
-          break;
-        case 'accidental':
-          chord.new.accidental = event.target.innerHTML;
-          chordSelected.accidental = event.target;
-          break;
-        case 'variation':
-          chord.new.variation = event.target.innerHTML;
-          chordSelected.variation = event.target;
-          break;
-      }
-
-      if (chord.new.root && chord.new.variation) {
-        document.getElementById('send').style.display = 'block';
-      }
-    });
-  }
-}
-
-//back click
-document.getElementById('back').addEventListener('click', function (event) {
-  if (chordSelected.root) chordSelected.root.style.color = 'white';
-  if (chordSelected.accidental)
-    chordSelected.accidental.style.color = 'white';
-  if (chordSelected.variation) chordSelected.variation.style.color = 'white';
-
-  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
-  Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
-
-  document.getElementById('chord-editor').style.display = 'none';
-  // document.getElementById('cover').style.visibility = 'hidden';
-});
-
-//edit click
-document.getElementById('edit').addEventListener('click', (event) => {
-  console.log('Edit button clicked');
-
-  let chordEditor = document.getElementById('chord-editor');
-  // let cover = document.getElementById('cover');
-
-  document.getElementById('chord-editor').style.display = 'block';
-  document.getElementById('edit').style.visibility = 'hidden';
-
-  // document.getElementById('cover').style.visibility = 'visible';
-
-  let editorTables = chordEditor.querySelectorAll('table');
-  let tableDimensions = Array.from(editorTables).map((t) => ({
-    id: t.id,
-    dims: t.getBoundingClientRect(),
-  }));
-
-  console.log({ editorTables, tableDimensions });
-  console.log({ chord, chordLocation, chordSelected });
-});
-
-//edit hidden when scrolling
-document.querySelector('#output').parentElement.addEventListener('scroll', function () {
-  document.querySelector('#edit').style.visibility = 'hidden';
-});
-
-//send click
-document.getElementById('send').addEventListener('click', function (event) {
-  document.getElementById('chord-editor').style.display = 'none';
-  // document.getElementById('cover').style.visibility = 'hidden';
-
-  chordSelected.root.style.color = 'white';
-  if (chordSelected.accidental)
-    chordSelected.accidental.style.color = 'white';
-  chordSelected.variation.style.color = 'white';
-  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
-
-  let edtr = getAceEditor();
-  if (!edtr) {
-    throw new Error('Ace Editor is undefined');
-  }
-  let kernfile = edtr.session.doc.getAllLines().join('\n');
-
-  let jsonRequest = {
-    kernfile,
-    chordLocation,
-    chord,
-  };
-  let xhttp = new XMLHttpRequest();
-  xhttp.onload = function () {
-    let jsonResponse = JSON.parse(xhttp.response); //to response einai json?mporei kai sketo string
-    let newKern = jsonResponse[0];
-    edtr.setValue(newKern);
-  };
-  //xhttp.open("POST", url)
-  //xhttp.setRequestHeader('Content-Type', 'application/json');
-  //xhttp.send(jsonRequest);
-  Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
-  document.getElementById('send').style.display = 'none';
-});
-//alx_
