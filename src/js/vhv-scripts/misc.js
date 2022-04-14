@@ -1544,25 +1544,13 @@ function initializeWildWebMidi() {
 //      go to the corresponding line in the editor.
 //
 
-// export function dataIntoView(event) {
-//   // if (EditorMode == 'xml') {
-//   if (editorMode() == 'xml') {
-//     xmlDataIntoView(event);
-//   } else {
-//     humdrumDataIntoView(event);
-//   }
-// }
-
-//alx: prosthiki chord argument (psaxe: edw)
-export function dataIntoView(event) { //edw
-  // if (EditorMode == 'xml') {
-if (editorMode() == 'xml') {
-  xmlDataIntoView(event);
-} else {
-  humdrumDataIntoView(event); //edw
+export function dataIntoView(event) {
+  if (editorMode() == 'xml') {
+    xmlDataIntoView(event);
+  } else {
+    humdrumDataIntoView(event);
+  }
 }
-}
-//alx_
 
 //////////////////////////////
 //
@@ -1614,37 +1602,6 @@ export function xmlDataIntoView(event) {
     break; // assume that the first formatted id found is valid.
   }
 }
-
-//////////////////////////////
-//
-// humdrumDataIntoView -- When clicking on a note (or other items in
-//      SVG images later), make the text line in the Humdrum data visible
-//      in the text area.
-//
-// export function humdrumDataIntoView(event) {
-//   let target;
-//   if (typeof event === 'string') {
-//     target = document.querySelector('#' + event);
-//   } else {
-//     target = event.target;
-//   }
-//   let matches;
-//   while (target) {
-//     if (!target.id) {
-//       target = target.parentNode;
-//       continue;
-//     }
-//     matches = target.id.match(/-[^-]*L(\d+)F(\d+)/);
-//     if (!matches) {
-//       target = target.parentNode;
-//       continue;
-//     }
-
-//     global_cursor.HIGHLIGHTQUERY = target.id;
-//     highlightIdInEditor(target.id, 'humdrumDataIntoView');
-//     break;
-//   }
-// }
 
 export function humdrumDataIntoView(event) {
   let target;
