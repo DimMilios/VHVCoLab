@@ -1,11 +1,20 @@
 /* Chord composition tables */
-#roots {}
+#roots {
+}
 
-#accidentals {}
+#accidentals {
+}
+
+#roots-container {
+}
 
 .Chords {
 	font-family: Roots_Slashes;
 	font-size: 300%;
+	cursor: pointer;
 }
 
-#variations {}
+#variations tbody {
+	font-family: Variations;
+	font-size: 300%;
+}

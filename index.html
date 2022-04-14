@@ -74,133 +74,135 @@
     <div class="modal-content bg-transparent">
 
       <div class="modal-body">
+       
         <div class="container">
   
-          <div id="chord-editor" style="display:none;z-index:15;position:relative;">
+          <div id="chord-editor" style="display: block; z-index: 15; position: relative;">
   
-            <div class="row">
-              <table id="roots" class="table table-bordered table-dark col-md-8">
+            <!-- BEGIN: Root and accidentals container -->
+            <div class="row justify-content-around my-5">
+              <table id="roots" class="table table-bordered table-dark col-4">
                 <thead>
-                  <tr>
-                    <th scope="col" class="text-center" colspan="7">Roots</th>
-                  </tr>
-                </thead>
-                <tbody class="Chords">
-                  <tr>
-                    <td class="root">A</td>
-                    <td class="text-center">B</td>
-                    <td class="text-center">C</td>
-                    <td class="text-center">D</td>
-                    <td class="text-center">E</td>
-                    <td class="text-center">F</td>
-                    <td class="text-center">G</td>
-                  </tr>
-                </tbody>
-              </table>
-              <table id="accidentals" class="table table-bordered table-dark col-md-2 ml-auto">
-                <thead>
-                  <tr>
-                    <th scope="col" class="text-center" colspan="2">Accidentals</th>
-                  </tr>
-                </thead>
-                <tbody class="Chords">
-                  <tr>
-                    <td>+</td>
-                    <td>&</td>
-                  </tr>
-                </tbody>
-              </table>
+                    <tr>
+                      <th scope="col" class="text-center" colspan="7">Roots</th>
+                    </tr>
+                  </thead>
+                  <tbody class="Chords">
+                    <tr>
+                      <td class="root">A</td>
+                      <td class="root">B</td>
+                      <td class="root">C</td>
+                      <td class="root">D</td>
+                      <td class="root">E</td>
+                      <td class="root">F</td>
+                      <td class="root">G</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table id="accidentals" class="table table-bordered table-dark col-2">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="text-center" colspan="2">Accidentals</th>
+                    </tr>
+                  </thead>
+                  <tbody class="Chords">
+                    <tr>
+                      <td class="accidental">+</td>
+                      <td class="accidental">&amp;</td>
+                    </tr>
+                  </tbody>
+                </table>
             </div>
+            <!-- END: Root and accidentals container -->
   
-  
-            <div class="row">
-              <table id="variations" class="table table-bordered table-dark">
+            <!-- BEGIN: Variations container -->
+            <div class="row justify-content-center">
+              <table id="variations" class="col-8 table table-bordered table-dark">
                 <thead>
                   <tr>
                     <th scope="col" class="text-center" colspan="16">Variations</th>
                   </tr>
                 </thead>
-                <tbody style="font-family:Variations;font-size:250%;" class="Chords">
+                <tbody class="Chords">
                   <tr>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>9</td>
-                    <td>Q</td>
-                    <td>U</td>
-                    <td>S</td>
-                    <td>s</td>
-                    <td>t</td>
-                    <td>p</td>
-                    <td>q</td>
-                    <td>r</td>
-                    <td>T</td>
-                    <td>n</td>
-                    <td>2</td>
-                    <td id="test">M</td>
+                    <td class="variation">5</td>
+                    <td class="variation">6</td>
+                    <td class="variation">7</td>
+                    <td class="variation">9</td>
+                    <td class="variation">Q</td>
+                    <td class="variation">U</td>
+                    <td class="variation">S</td>
+                    <td class="variation">s</td>
+                    <td class="variation">t</td>
+                    <td class="variation">p</td>
+                    <td class="variation">q</td>
+                    <td class="variation">r</td>
+                    <td class="variation">T</td>
+                    <td class="variation">n</td>
+                    <td class="variation">2</td>
+                    <td id="test" class="variation">M</td>
                   </tr>
                   <tr>
-                    <td>O</td>
-                    <td>N</td>
-                    <td>P</td>
-                    <td>L</td>
-                    <td>J</td>
-                    <td>K</td>
-                    <td>I</td>
-                    <td>F</td>
-                    <td>l</td>
-                    <td>u</td>
-                    <td>o</td>
-                    <td>a</td>
-                    <td>b</td>
-                    <td>h</td>
-                    <td>i</td>
-                    <td>W</td>
+                    <td class="variation">O</td>
+                    <td class="variation">N</td>
+                    <td class="variation">P</td>
+                    <td class="variation">L</td>
+                    <td class="variation">J</td>
+                    <td class="variation">K</td>
+                    <td class="variation">I</td>
+                    <td class="variation">F</td>
+                    <td class="variation">l</td>
+                    <td class="variation">u</td>
+                    <td class="variation">o</td>
+                    <td class="variation">a</td>
+                    <td class="variation">b</td>
+                    <td class="variation">h</td>
+                    <td class="variation">i</td>
+                    <td class="variation">W</td>
                   </tr>
                   <tr>
-                    <td>Y</td>
-                    <td>X</td>
-                    <td>f</td>
-                    <td>g</td>
-                    <td>8</td>
-                    <td>E</td>
-                    <td>j</td>
-                    <td>Z</td>
-                    <td>R</td>
-                    <td>3</td>
-                    <td>V</td>
-                    <td>D</td>
-                    <td>k</td>
-                    <td>c</td>
-                    <td>d</td>
-                    <td>x</td>
+                    <td class="variation">Y</td>
+                    <td class="variation">X</td>
+                    <td class="variation">f</td>
+                    <td class="variation">g</td>
+                    <td class="variation">8</td>
+                    <td class="variation">E</td>
+                    <td class="variation">j</td>
+                    <td class="variation">Z</td>
+                    <td class="variation">R</td>
+                    <td class="variation">3</td>
+                    <td class="variation">V</td>
+                    <td class="variation">D</td>
+                    <td class="variation">k</td>
+                    <td class="variation">c</td>
+                    <td class="variation">d</td>
+                    <td class="variation">x</td>
                   </tr>
                   <tr>
-                    <td>z</td>
-                    <td>y</td>
-                    <td>1</td>
-                    <td>e</td>
-                    <td>m</td>
-                    <td>0</td>
-                    <td>%</td>
-                    <td>4</td>
-                    <td>v</td>
-                    <td>H</td>
-                    <td>B</td>
-                    <td>C</td>
-                    <td>w</td>
-                    <td>A</td>
-                    <td>G</td>
-                    <td></td>
+                    <td class="variation">z</td>
+                    <td class="variation">y</td>
+                    <td class="variation">1</td>
+                    <td class="variation">e</td>
+                    <td class="variation">m</td>
+                    <td class="variation">0</td>
+                    <td class="variation">%</td>
+                    <td class="variation">4</td>
+                    <td class="variation">v</td>
+                    <td class="variation">H</td>
+                    <td class="variation">B</td>
+                    <td class="variation">C</td>
+                    <td class="variation">w</td>
+                    <td class="variation">A</td>
+                    <td class="variation">G</td>
+                    <td class="variation"></td>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <!-- END: Variations container -->
   
-            <button id="send" class="btn btn-secondary btn-lg close" data-dismiss="modal"
-              style="display:none;z-index:15;">Done</button>
-            <button id="back" class="btn btn-secondary btn-lg close" data-dismiss="modal"
-              style="z-index:15;">Back</button>
+            <button id="send" class="btn btn-secondary btn-lg close" data-dismiss="modal" style="display:none;z-index:15;">Done</button>
+            <button id="back" class="btn btn-secondary btn-lg close" data-dismiss="modal" style="z-index:15;">Back</button>
           </div>
         </div>
   
