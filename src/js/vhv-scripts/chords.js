@@ -1,8 +1,8 @@
 import { getAceEditor } from "./setup";
 
 let chordEditor = document.getElementById('chord-editor');
-let editBtn = document.getElementById('edit');
-let sendBtn = document.getElementById('send');
+let editBtn = document.getElementById('show-chord-editor-btn');
+let sendBtn = document.getElementById('send-chord-btn');
 
 export let chord = {
   current: null,
@@ -54,7 +54,7 @@ for (let td of document.querySelectorAll('.Chords td')) {
 }
 
 //back click
-document.getElementById('back').addEventListener('click', function (event) {
+document.getElementById('close-chord-btn').addEventListener('click', function (event) {
   if (chordSelected.root) chordSelected.root.style.color = 'white';
   if (chordSelected.accidental)
     chordSelected.accidental.style.color = 'white';

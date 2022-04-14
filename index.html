@@ -7,12 +7,6 @@
 
   <link rel="stylesheet" href="/styles/bootstrap-4.6/bootstrap.min.css">
 
-  <style>
-    table td:hover {
-    background-color: rgba(255,255,255,.075);
-  }
-  </style>
-
   <script src="/styles/bootstrap-4.6/jquery-3.5.1.min.js"></script>
   <script src="/styles/bootstrap-4.6/bootstrap.bundle.min.js"></script>
   <script src="/styles/bootstrap-4.6/jquery-resizable.min.js"></script>
@@ -72,13 +66,13 @@
 
   <div class="modal" id="show-chord-editor" tabindex="-1" aria-labelledby="showCordEditorLabel"
     aria-hidden="true">
-    <div class="modal-content bg-transparent">
+    <div class="modal-content bg-transparent border-0">
 
       <div class="modal-body">
        
         <div class="container">
   
-          <div id="chord-editor" style="display: block; z-index: 15; position: relative;">
+          <div id="chord-editor">
   
             <!-- BEGIN: Root and accidentals container -->
             <div class="row justify-content-around my-5">
@@ -202,8 +196,11 @@
             </div>
             <!-- END: Variations container -->
   
-            <button id="send" class="btn btn-secondary btn-lg close" data-dismiss="modal" style="display:none;z-index:15;">Done</button>
-            <button id="back" class="btn btn-secondary btn-lg close" data-dismiss="modal" style="z-index:15;">Back</button>
+            <div class="d-flex justify-content-end">
+              <button id="close-chord-btn" class="btn btn-light btn-lg mx-3" data-dismiss="modal">Back</button>
+              <button id="send-chord-btn" class="btn btn-primary btn-lg" data-dismiss="modal">Done</button>
+            </div>
+
           </div>
         </div>
   
@@ -230,7 +227,7 @@
         </div>
 
         <!-- Edit button toggle Chord editor display -->
-        <div id="edit" style="position:absolute;visibility:hidden;z-index:15;">
+        <div id="show-chord-editor-btn">
           <button class="btn btn-secondary" data-toggle="modal" data-target="#show-chord-editor">Edit</button>
         </div>
 

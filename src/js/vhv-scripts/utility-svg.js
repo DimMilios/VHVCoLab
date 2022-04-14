@@ -974,7 +974,7 @@ export function highlightIdInEditor(id, source) {
   if (elmnt.classList.contains("harm") && elmnt.classList.contains("highlight")) {
     let line = editor.session.doc.getLine(row-1);
     let stopIndex = col;
-    while(!line[stopIndex] == '\t') stopIndex++;
+    // while(!line[stopIndex] == '\t') stopIndex++;
     chord.current = line.substring(col, stopIndex);
 
     console.log({ chord, line: line.substring(col, stopIndex), elmnt });

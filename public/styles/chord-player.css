@@ -14,7 +14,31 @@
 	cursor: pointer;
 }
 
+.Chords td:hover {
+	background-color: rgba(255,255,255,.075);
+}
+
 #variations tbody {
 	font-family: Variations;
 	font-size: 300%;
+}
+
+#chord-editor {
+	display: block;
+	z-index: 15;
+	position: relative;
+}
+
+#show-chord-editor-btn {
+	position: absolute;
+	visibility: hidden;
+	z-index: 15;
+}
+#send-chord-btn {
+	display: none;
+	z-index: 15;
+}
+
+#close-chord-btn{
+	z-index: 15;
 }

@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
         chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
 
-        let editBtn = document.getElementById('edit');
+        let editBtn = document.getElementById('show-chord-editor-btn');
         editBtn.style.visibility = 'visible';
 
                 // let pgx = event.clientX + 10;
