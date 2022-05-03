@@ -14,7 +14,7 @@
 export * from './global-variables.js';
 
 // // Initialization functions:
-export * as setup from './setup.js';
+export * from './setup.js';
 
 // Functions related to graphical editing:
 export * from './editor.js';
@@ -82,4 +82,4 @@ export * from './convertToMusicXmlAndSave.js';
 // Extensions for collaboration
 // export * from './collab-extension.js';
 
-export * from '../collaboration/svg-interaction.js';
+// export * from '../collaboration/svg-interaction.js';

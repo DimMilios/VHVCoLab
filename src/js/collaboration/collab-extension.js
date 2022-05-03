@@ -91,37 +91,6 @@ function parseQuarterTime(quarterTime) {
   return quarterTime.includes('_') ? qTimeValue / divisor : qTimeValue;
 }
 
-function handleSingleNoteSelectClick(singleNoteSelects) {
-  return (event) => {
-    const elem = event.target;
-    const noteInfo = document.querySelector('.note-info');
-
-    if (elem.classList.contains('expanded') && noteInfo) {
-      elem.classList.remove('expanded');
-      document.body.removeChild(noteInfo);
-      return;
-    }
-
-    singleNoteSelects.forEach((div) => div.classList.remove('expanded'));
-    const noteElem = document.querySelector(`#${elem?.dataset?.noteId}`);
-
-    if (!noteInfo) {
-      const noteInfo = document.createElement('div');
-      noteInfo.classList.add('note-info');
-      const pre = document.createElement('pre');
-      if (noteElem) {
-        pre.textContent = formatUserElem(noteElem);
-      }
-      noteInfo.appendChild(pre);
-      document.body.appendChild(noteInfo);
-    } else {
-      noteInfo.firstChild.textContent = formatUserElem(noteElem);
-    }
-
-    elem.classList.add('expanded');
-  };
-}
-
 function defaultClients() {
   return {
     added: [],
@@ -230,18 +199,6 @@ export function updateHandler(clients = defaultClients()) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  // const styleSheet = document.createElement('style');
-  // styleSheet.id = 'multi-select-sheet';
-  // styleSheet.innerHTML = `
-  // .multi-select-area {
-  //   position: absolute;
-  //   z-index: var(--collab-layer-zIndex);
-  //   background-color: blue;
-  //   pointer-events: none;
-  // }
-  // `.trim();
-  // document.head.appendChild(styleSheet);
-
   // Use a MutationObserver to find out when the score output SVG
   // is added to the DOM and attach mouse event listeners to it.
   // Then, disconnect the observer.
@@ -291,17 +248,10 @@ function addListenersToOutput(outputTarget) {
     // Start selecting only when there isn't a note element on the cursor
     if (event.target.nodeName != 'svg') return;
 
-    // if (!document.querySelector('#collab-container')) {
-    //   collabLayer();
-    // }
-
     startTime = performance.now();
 
     rbSelection.isSelecting = true;
     rbSelection.setUpperCoords(event);
-    // rbSelection.coords.left = event.clientX;
-    // rbSelection.coords.top = event.clientY;
-
     const selectedAreas = document.querySelectorAll('.multi-select-area');
 
     const selectToRemove = [...selectedAreas].find(
@@ -319,13 +269,9 @@ function addListenersToOutput(outputTarget) {
       let timePassed = endTime - startTime;
 
       if (timePassed >= 300) {
-        // rbSelection.coords.right = event.clientX;
-        // rbSelection.coords.bottom = event.clientY;
         rbSelection.setLowerCoords(event);
 
-        // rbSelection.selectAreaElem.hidden = false;
         rbSelection.show();
-        // rbSelection.updateElemPosition();
 
         shouldMultiSelect = true;
       }

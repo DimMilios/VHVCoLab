@@ -6,7 +6,6 @@ import { getCoordinatesWithOffset } from '../collaboration/util-collab.js';
 import { yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
 import * as commentService from '../api/comments.js';
-import { cache } from 'lit-html/directives/cache.js';
 import { setState, state } from '../state/comments.js';
 import { getAceEditor } from '../vhv-scripts/setup.js';
 
