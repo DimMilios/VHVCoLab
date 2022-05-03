@@ -1,14 +1,14 @@
 import { yProvider } from "../yjs-setup";
 
 let api = null;
-window.addEventListener('load', () => {
+export function setupJitsi() {
   let parentNode = document.getElementById('jitsi-meeting-container');
 
-  $('#jitsi-meeting-container').resizable({
-    resizeWidth: false,
-  });
-
   if (parentNode) {
+    $('#jitsi-meeting-container').resizable({
+      resizeWidth: false,
+    });
+
     api = new JitsiMeetExternalAPI('meet.jit.si', {
       roomName: 'MusiCoLab Demo',
       width: '100%',
@@ -32,7 +32,8 @@ window.addEventListener('load', () => {
     });
     window.JitsiAPI = api;
   }
-});
+};
+setupJitsi();
 
 export function getJitsiApiInstance() {
   if (api === null) {

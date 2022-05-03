@@ -1,7 +1,7 @@
 import { state } from "../state/comments";
 import { layoutService } from "../state/layoutStateMachine";
 import { global_cursor } from "../vhv-scripts/global-variables";
-import { handleCommentsMessage } from "../yjs-setup";
+// import { handleCommentsMessage } from "../yjs-setup";
 
 export const MULTI_SELECT_ALPHA = 0.3;
 export const SELECT_OPACITY = 0.3;
@@ -173,10 +173,10 @@ export function showCommentSection() {
   // Check if comment highlights are computed
   let highlightsComputed = state.comments.some(c => c.highlight == null);
 
-  if (highlightsComputed) {
-    handleCommentsMessage(new MessageEvent('message', { data: JSON.stringify(state.comments) }));
-    console.log('Comments after highlight', state.comments);
-  }
+  // if (highlightsComputed) {
+  //   handleCommentsMessage(new MessageEvent('message', { data: JSON.stringify(state.comments) }));
+  //   console.log('Comments after highlight', state.comments);
+  // }
 
   layoutService.send('SHOW_COMMENTS_HIDE_TEXT');
 }
