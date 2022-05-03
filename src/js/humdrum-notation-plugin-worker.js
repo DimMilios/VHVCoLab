@@ -51,6 +51,7 @@
 
 'use strict';
 
+import { featureIsEnabled } from './boostrap.js';
 //////////////////////////////
 //
 // DOMContentLoaded event listener --
@@ -69,6 +70,9 @@ import {
   applyZoom,
 } from './vhv-scripts/misc.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
+import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
+import { markItem } from './vhv-scripts/utility-svg.js';
+import { yProvider } from './yjs-setup.js';
 
 let vrvWorker;
 
@@ -104,6 +108,30 @@ function initializeVerovioToolkit() {
     editor.session.on('change', function (e) {
       // console.log("EDITOR content changed", e);
       monitorNotationUpdating();
+    });
+
+    editor.getSession().selection.on('changeCursor', function () {
+      const { row, column } = editor.selection.getCursor();
+      const item = humdrumDataNoteIntoView(row, column);
+      // console.log('changeCursor event', { row, column, item })
+      if (item && item.classList.contains('note')) {
+        markItem(item);
+    
+        // createNewEditorSession({ item, row, column });
+        // createDraggableContainer(item);
+  
+        if (featureIsEnabled('collaboration')) {
+          if (yProvider) {
+            const localState = yProvider.awareness.getLocalState();
+        
+            yProvider.awareness.setLocalState({
+              ...localState,
+              singleSelect: { elemId: item.id },
+              multiSelect: null,
+            });
+          }
+        }
+      }
     });
   } else {
     console.log('Warning: Editor not setup yet');

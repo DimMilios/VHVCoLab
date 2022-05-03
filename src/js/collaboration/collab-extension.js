@@ -14,6 +14,7 @@ import {
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
+import { featureIsEnabled } from '../boostrap.js';
 
 let DEBUG = false;
 function log(text) {
@@ -199,26 +200,28 @@ export function updateHandler(clients = defaultClients()) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Use a MutationObserver to find out when the score output SVG
-  // is added to the DOM and attach mouse event listeners to it.
-  // Then, disconnect the observer.
-  const mutationObserver = new MutationObserver((mutationsList, observer) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        if (mutation.target.id === 'output') {
-          if (
-            !mutation.target.onmousedown &&
-            !mutation.target.onmousemove &&
-            !mutation.target.onmouseup
-          ) {
-            addListenersToOutput(mutation.target);
-            observer.disconnect();
+  if (featureIsEnabled('collaboration')) {
+    // Use a MutationObserver to find out when the score output SVG
+    // is added to the DOM and attach mouse event listeners to it.
+    // Then, disconnect the observer.
+    const mutationObserver = new MutationObserver((mutationsList, observer) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          if (mutation.target.id === 'output') {
+            if (
+              !mutation.target.onmousedown &&
+              !mutation.target.onmousemove &&
+              !mutation.target.onmouseup
+            ) {
+              addListenersToOutput(mutation.target);
+              observer.disconnect();
+            }
           }
         }
       }
-    }
-  });
-  mutationObserver.observe(document.body, { childList: true, subtree: true });
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+  }
 });
 
 function collabLayer(...children) {

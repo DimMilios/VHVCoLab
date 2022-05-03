@@ -1,10 +1,8 @@
 import * as Y from 'yjs';
-import { WebsocketProvider } from 'y-websocket';
-// import { WebrtcProvider } from 'y-webrtc';
+// import { WebsocketProvider } from 'y-websocket';
+import { WebrtcProvider } from 'y-webrtc';
 import { updateHandler } from './collaboration/collab-extension.js';
-import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
-import { markItem } from './vhv-scripts/utility-svg.js';
-import { getAceEditor, insertSplashMusic } from './vhv-scripts/setup.js';
+import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
 import { multiSelectCoords } from './collaboration/templates.js';
@@ -53,12 +51,12 @@ export function setupCollaboration() {
   let room = `docId=${DOC_ID}&roomname=${roomname}`;
   
   if (typeof yProvider == 'undefined') {
-    yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
-    yProvider.on('status', (event) => {
-      console.log(event.status); // websocket logs "connected" or "disconnected"
-    });
+    // yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
+    // yProvider.on('status', (event) => {
+    //   console.log(event.status); // websocket logs "connected" or "disconnected"
+    // });
   
-    // yProvider = new WebrtcProvider(roomname, ydoc);
+    yProvider = new WebrtcProvider(roomname, ydoc);
   }
   
   let appUser = Cookies.get('user');
@@ -86,34 +84,6 @@ export function setupCollaboration() {
   
   const binding = new AceBinding(type, editor, yProvider.awareness, {
     yUndoManager,
-  });
-  
-  // yProvider.awareness.setLocalStateField('user', userData);
-  
-  // Insert an initial song to the text editor
-  // insertSplashMusic();
-  
-  editor.getSession().selection.on('changeCursor', function () {
-    const { row, column } = editor.selection.getCursor();
-    const item = humdrumDataNoteIntoView(row, column);
-    // console.log('changeCursor event', { row, column, item })
-    if (item && item.classList.contains('note')) {
-      markItem(item);
-  
-      // createNewEditorSession({ item, row, column });
-      // createDraggableContainer(item);
-      const localState = yProvider.awareness.getLocalState();
-  
-      yProvider.awareness.setLocalState({
-        ...localState,
-        singleSelect: { elemId: item.id },
-        multiSelect: null,
-      });
-    }
-  });
-  
-  editor.on('changeSession', (event) => {
-    console.log(event);
   });
   
   // yProvider.awareness.on('update', updateHandler);

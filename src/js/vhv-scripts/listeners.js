@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectService.send({ type: 'SELECT', elemId: target.id });
       } else {
         selectService.send({ type: 'RESET' });
-        yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
+        yProvider?.awareness?.setLocalStateField('singleSelect', { elemId: null });
         clearCursorHighlight();
       }
       

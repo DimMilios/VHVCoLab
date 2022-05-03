@@ -1,45 +1,71 @@
-/** @type {{ [x: string]: boolean }} */
-const featureConfig = {
-  score: false,
-  collaboration: false,
+import { setupCollaboration } from './yjs-setup.js';
+
+/** @typedef {'score' | 'collaboration' | 'videoConference' | 'waveSurfer'} FeatureKey */
+/** @param {{FeatureKey: boolean }} FeatureConfig*/
+const FeatureConfig = {
+  score: true,
+  collaboration: true,
   videoConference: false,
   waveSurfer: false,
 };
 
 /**
- * @param {{ [x: string]: boolean; }} config
- * @param {string} key
- * @param {boolean} val
+ * Based on https://www.martinfowler.com/articles/feature-toggles.html
+ * 
+ * @param {FeatureConfig} featureConfig 
+ * @returns 
  */
-function setConfig(config, key, val) {
-  if (!(key in config))
-    throw new Error(
-      `Key ${key} not found on object ${JSON.stringify(config, null, 2)}`
-    );
-  if (typeof val !== 'boolean') throw new Error('Value must be boolean');
+function createFeatureToggler(featureConfig) {
+  return {
+    /**
+     * 
+     * @param {FeatureKey} featureName 
+     * @param {boolean} isEnabled 
+     */
+    setFeature(featureName, isEnabled) {
+      if (!(featureName in featureConfig)) {
+        throw new Error(`Feature ${featureName} not found on feature config ${JSON.stringify(featureConfig, null, 2 )}`);
+      }
+      if (typeof isEnabled !== 'boolean') throw new Error('Value must be boolean');
+      featureConfig[featureName] = isEnabled;
+    },
+    /**
+     * 
+     * @param {FeatureKey} featureName 
+     * @returns {boolean}
+     */
+    featureIsEnabled(featureName) {
+      return featureConfig[featureName];
+    },
+  };
+}
 
-  return { ...config, [key]: val };
+const featureToggler = createFeatureToggler(FeatureConfig);
+/**
+ * 
+ * @param {FeatureKey} featureName
+ * @returns {boolean}
+ */
+export function featureIsEnabled(featureName) {
+  return featureToggler.featureIsEnabled(featureName);
 }
 
 async function bootstrap() {
-  for (const [ k, v ] of Object.entries(featureConfig)) {
-    switch (k) {
-      case 'score':
-        break;
-      case 'collaboration':
-        break;
-      case 'videoConference':
-        if (v) {
-          let module = await import('../js/jitsi/index.js');
-          console.log('Module was loaded', module);
-        }
-        break;
-      case 'waveSurfer':
-        break;
-      default:
-        break;
-    }
+  
+  if (featureToggler.featureIsEnabled('score')) {
+
+  }
+  if (featureToggler.featureIsEnabled('collaboration')) {
+    setupCollaboration();
+  }
+  if (featureToggler.featureIsEnabled('videoConference')) {
+    let module = await import('../js/jitsi/index.js');
+    console.log('Module was loaded', module);
+  }
+  if (featureToggler.featureIsEnabled('waveSurfer')) {
+
   }
 }
 
 window.bts = bootstrap;
+window.FeatureConfig = FeatureConfig;
