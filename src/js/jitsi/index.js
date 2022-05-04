@@ -33,7 +33,6 @@ export function setupJitsi() {
     window.JitsiAPI = api;
   }
 };
-setupJitsi();
 
 export function getJitsiApiInstance() {
   if (api === null) {
