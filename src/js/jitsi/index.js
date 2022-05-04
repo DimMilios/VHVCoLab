@@ -1,42 +1,55 @@
-import { yProvider } from "../yjs-setup";
+import { yProvider } from '../yjs-setup';
 
-let api = null;
-export function setupJitsi() {
-  let parentNode = document.getElementById('jitsi-meeting-container');
+class JitsiAPI {
+  setup() {
+    let parentNode = document.getElementById('jitsi-meeting-container');
+    if (!parentNode) {
+      throw new Error('Failed to initialize Jitsi. ParentNode was not found.');
+    }
 
-  if (parentNode) {
     $('#jitsi-meeting-container').resizable({
       resizeWidth: false,
     });
 
-    api = new JitsiMeetExternalAPI('meet.jit.si', {
-      roomName: 'MusiCoLab Demo',
-      width: '100%',
-      height: '100%',
-      parentNode,
-    });
+    if (!this.api) {
+      this.api = new JitsiMeetExternalAPI('meet.jit.si', {
+        roomName: 'MusiCoLab Demo',
+        width: '100%',
+        height: '100%',
+        parentNode,
+      });
 
-    api.addListener('videoConferenceJoined', (localUser) => {
-      console.log(localUser);
-      if (localUser?.displayName.length > 0) {
-        let user = yProvider.awareness.getLocalState().user;
-
-        if (user) {
-          yProvider.awareness.setLocalStateField('user', {
-            ...user,
-            name: localUser.displayName,
-          });
-          console.log({ awarenessUser: yProvider.awareness.getLocalState()})
+      this.api.addListener('videoConferenceJoined', (localUser) => {
+        console.log(localUser);
+        if (localUser?.displayName.length > 0) {
+          let user = yProvider.awareness.getLocalState().user;
+  
+          if (user) {
+            yProvider.awareness.setLocalStateField('user', {
+              ...user,
+              name: localUser.displayName,
+            });
+            console.log({ awarenessUser: yProvider.awareness.getLocalState() });
+          }
         }
-      }
-    });
-    window.JitsiAPI = api;
+      });
+      // window.JitsiAPI = this.api;
+    }
   }
-};
 
-export function getJitsiApiInstance() {
-  if (api === null) {
-    console.warn("JitsiMeetExternalApi isn't initialized yet.");
+  destroy() {
+    console.log('Destroying Jitsi');
+    // console.log(this.api.dispose, typeof this.api);
+    this.api.dispose();
+    this.api = null;
   }
-  return api;
 }
+
+export default new JitsiAPI();
+
+// export function getJitsiApiInstance() {
+//   if (api === null) {
+//     console.warn("JitsiMeetExternalApi isn't initialized yet.");
+//   }
+//   return api;
+// }

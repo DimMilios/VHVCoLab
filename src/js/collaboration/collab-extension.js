@@ -242,7 +242,7 @@ export function renderHighlightLayer(...children) {
   return highlightLayerTemplate(svgHeight, ...children);
 }
 
-function addListenersToOutput(outputTarget) {
+export function addListenersToOutput(outputTarget) {
   let startTime, endTime;
   let shouldMultiSelect = false;
   const rbSelection = new RubberBandSelection();

@@ -347,3 +347,16 @@ div#index {
   padding-right: 0 !important;
   padding-left: 0 !important;
 } */
+
+/* FEATURE TOGGLE FOR DEBUGGING */
+#feature-toggle {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 1rem;
+  right: 45vw;
+
+  background-color: #ddd8d0;
+  width: 10vw;
+  height: 20vh;
+  z-index: 999;
+}

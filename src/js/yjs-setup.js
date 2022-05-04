@@ -52,11 +52,11 @@ export function setupCollaboration() {
   
   if (typeof yProvider == 'undefined') {
     // yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
-    // yProvider.on('status', (event) => {
-    //   console.log(event.status); // websocket logs "connected" or "disconnected"
-    // });
-  
-    yProvider = new WebrtcProvider(roomname, ydoc);
+    
+    yProvider = new WebrtcProvider(room, ydoc);
+    yProvider.on('status', (event) => {
+      console.log(event.status); // websocket logs "connected" or "disconnected"
+    });
   }
   
   let appUser = Cookies.get('user');

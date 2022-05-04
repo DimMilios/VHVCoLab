@@ -1,3 +1,4 @@
+import { addListenersToOutput } from './collaboration/collab-extension.js';
 import { setupCollaboration } from './yjs-setup.js';
 
 /** @typedef {'score' | 'collaboration' | 'videoConference' | 'waveSurfer'} FeatureKey */
@@ -41,8 +42,12 @@ function createFeatureToggler(initialConfig) {
           reject(error);
         }
 
+        let oldValue = config[featureName];
         config[featureName] = isEnabled;
-        resolve({ config, changed: { [featureName]: isEnabled } });
+        resolve({
+          config,
+          changed: oldValue != isEnabled ? { [featureName]: isEnabled } : null,
+        });
       })
     },
     /**
@@ -84,6 +89,60 @@ async function bootstrap() {
 
   }
 }
+
+function initForm() {
+  let featureForm = document.getElementById('feature-form');
+
+  let options = featureForm.querySelectorAll('input[type="checkbox"]');
+  options.forEach(opt => {
+    opt.checked = FeatureConfig[opt.name];
+  })
+
+  featureForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    const asFeatures = Array.from(options).map(o => ({ name: o.name, checked: o.checked }));
+    console.log(asFeatures);
+
+    asFeatures.forEach(async feat => {
+      let res = await featureToggler.setFeature(feat.name, feat.checked);
+      
+      switch (feat.name) {
+        case 'collaboration':
+          if (res.changed != null) {
+            if (res.changed[feat.name]) {
+              console.log(`Toggled feature: ${feat.name}`, JSON.stringify(res.changed, null, 2));
+              setupCollaboration();
+              addListenersToOutput();
+            } else {
+              // TODO: disconnect from Yjs provider
+              // TODO: destroy Yjs document
+            }
+          }
+          break;
+        case 'videoConference':
+          if (res.changed != null) {
+            console.log(`Toggled feature: ${feat.name}`, JSON.stringify(res.changed, null, 2));
+            // FIX: we're reloading Jitsi Meet every time
+            let { default: jitsi } = await import('../js/jitsi/index.js');
+            window.JitsiAPI = jitsi.api;
+            if (res.changed[feat.name]) {
+              jitsi.setup();
+            } else {
+              console.log(jitsi.api.dispose, typeof jitsi.api);
+              jitsi.destroy();
+            }
+          }
+          break;
+        default:
+          break;
+      }
+
+    })
+  });
+}
+document.addEventListener('DOMContentLoaded', initForm);
+
 
 async function enableVideoConference() {
   let { config, changed } = await featureToggler.setFeature('videoConference', true);
