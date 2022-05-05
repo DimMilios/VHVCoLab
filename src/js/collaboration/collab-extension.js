@@ -199,30 +199,30 @@ export function updateHandler(clients = defaultClients()) {
   clients?.removed?.forEach(f);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  if (featureIsEnabled('collaboration')) {
-    // Use a MutationObserver to find out when the score output SVG
-    // is added to the DOM and attach mouse event listeners to it.
-    // Then, disconnect the observer.
-    const mutationObserver = new MutationObserver((mutationsList, observer) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          if (mutation.target.id === 'output') {
-            if (
-              !mutation.target.onmousedown &&
-              !mutation.target.onmousemove &&
-              !mutation.target.onmouseup
-            ) {
-              addListenersToOutput(mutation.target);
-              observer.disconnect();
-            }
-          }
-        }
-      }
-    });
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
-  }
-});
+// window.addEventListener('DOMContentLoaded', () => {
+//   if (featureIsEnabled('collaboration')) {
+//     // Use a MutationObserver to find out when the score output SVG
+//     // is added to the DOM and attach mouse event listeners to it.
+//     // Then, disconnect the observer.
+//     const mutationObserver = new MutationObserver((mutationsList, observer) => {
+//       for (const mutation of mutationsList) {
+//         if (mutation.type === 'childList') {
+//           if (mutation.target.id === 'output') {
+//             if (
+//               !mutation.target.onmousedown &&
+//               !mutation.target.onmousemove &&
+//               !mutation.target.onmouseup
+//             ) {
+//               addListenersToOutput(mutation.target);
+//               observer.disconnect();
+//             }
+//           }
+//         }
+//       }
+//     });
+//     mutationObserver.observe(document.body, { childList: true, subtree: true });
+//   }
+// });
 
 function collabLayer(...children) {
   let output = document.querySelector('#output');
@@ -246,6 +246,8 @@ export function addListenersToOutput(outputTarget) {
   let startTime, endTime;
   let shouldMultiSelect = false;
   const rbSelection = new RubberBandSelection();
+
+  console.log('>>>Adding listeners to output')
 
   document.addEventListener('mousedown', (event) => {
     // Start selecting only when there isn't a note element on the cursor

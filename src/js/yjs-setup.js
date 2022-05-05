@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
-// import { WebsocketProvider } from 'y-websocket';
-import { WebrtcProvider } from 'y-webrtc';
-import { updateHandler } from './collaboration/collab-extension.js';
+import { WebsocketProvider } from 'y-websocket';
+// import { WebrtcProvider } from 'y-webrtc';
+import { addListenersToOutput, updateHandler } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
@@ -51,12 +51,13 @@ export function setupCollaboration() {
   let room = `docId=${DOC_ID}&roomname=${roomname}`;
   
   if (typeof yProvider == 'undefined') {
-    // yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
-    
-    yProvider = new WebrtcProvider(room, ydoc);
+    yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
+      addListenersToOutput();
     });
+    
+    // yProvider = new WebrtcProvider(room, ydoc);
   }
   
   let appUser = Cookies.get('user');
@@ -91,9 +92,11 @@ export function setupCollaboration() {
 
   window.example = { yProvider, ydoc, type };
   window.awareness = yProvider.awareness;
+
+  setupSSE(DOC_ID);
 }
 
-function setupSSE() {
+function setupSSE(DOC_ID) {
   let eventSource = new EventSource(
     `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
     { withCredentials: true }
@@ -125,7 +128,7 @@ function setupSSE() {
       if (Array.isArray(payload)) {
         let shouldCompute = payload.some(p => p.highlight == null);
         
-        if (document.querySelector('#output > svg') && shouldCompute) {
+        if (document.querySelector('#output svg') && shouldCompute) {
           computeCommentHighlights(payload);
         } else {
           // The SVG music score element hasn't been rendered yet here.
