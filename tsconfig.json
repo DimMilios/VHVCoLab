@@ -7,7 +7,8 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
-    "strict": false
+    "strict": false,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.js"],
   "exclude": ["node_modules"]

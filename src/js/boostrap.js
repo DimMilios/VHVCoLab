@@ -1,4 +1,7 @@
+import CONFIG from '../features.json';
+
 import { addListenersToOutput } from './collaboration/collab-extension.js';
+import { keysEqual } from './util';
 import { setupCollaboration } from './yjs-setup.js';
 
 /** @typedef {'score' | 'collaboration' | 'videoConference' | 'waveSurfer'} FeatureKey */
@@ -10,6 +13,13 @@ const FeatureConfig = {
   waveSurfer: false,
 };
 
+if (import.meta.env.DEV) {
+  document.getElementById('feature-toggle').style.display = 'block';
+}
+
+let featureForm = document.getElementById('feature-form');
+let options = featureForm.querySelectorAll('input[type="checkbox"]');
+
 // TODO: How should we handle dependencies for features?
 // E.g. enabling collaboration while score is disabled doesn't make sense
 // In other words, collaboration depends on score.
@@ -20,7 +30,7 @@ const FeatureConfig = {
  * @param {FeatureConfig} initialConfig 
  * @returns 
  */
-function createFeatureToggler(initialConfig) {
+function createFeatureToggler(initialConfig = FeatureConfig) {
   let config = Object.assign({}, initialConfig);
 
   return {
@@ -61,7 +71,11 @@ function createFeatureToggler(initialConfig) {
   };
 }
 
-const featureToggler = createFeatureToggler(FeatureConfig);
+let useConfigFile = keysEqual(CONFIG, FeatureConfig);
+const featureToggler = createFeatureToggler(useConfigFile ? CONFIG : FeatureConfig);
+if (useConfigFile) {
+  bootstrap().then(() => console.log('Loaded features from file configuration'));
+}
 /**
  * 
  * @param {FeatureKey} featureName
@@ -73,16 +87,18 @@ export function featureIsEnabled(featureName) {
 
 async function bootstrap() {
   if (featureToggler.featureIsEnabled('score')) {
-
+    handleScore();
+    disableOption('score', options);
   }
-
+  
   if (featureToggler.featureIsEnabled('collaboration')) {
-    setupCollaboration();
+    handleCollabSetup();
+    disableOption('collaboration', options);
   }
 
   if (featureToggler.featureIsEnabled('videoConference')) {
-    let module = await import('../js/jitsi/index.js');
-    console.log('Module was loaded', module);
+    let { default: jitsi } = await import('../js/jitsi/index.js');
+    handleVideoConfSetup(jitsi);
   }
 
   if (featureToggler.featureIsEnabled('waveSurfer')) {
@@ -90,97 +106,108 @@ async function bootstrap() {
   }
 }
 
-function initForm() {
-  let featureForm = document.getElementById('feature-form');
+function disableOption(featureName, options) {
+  console.log(`Disabling ${featureName}`);
+  let optToDisable = [...options].find((o) => o.name === featureName);
+  if (!optToDisable) {
+    console.error('Option to disable was not found.');
+    return;
+  }
+  optToDisable.disabled = true;
+}
 
-  let options = featureForm.querySelectorAll('input[type="checkbox"]');
-  options.forEach((opt) => {
-    opt.checked = FeatureConfig[opt.name];
-  });
+function handleScore() {
+  let scoreElem = document.getElementById('score-editor');
+  if (!scoreElem) {
+    console.error('Score editor element was not found. Check index.html');
+    return;
+  }
+  scoreElem.style.display = 'block';
+}
 
-  featureForm?.addEventListener('submit', handleSubmit);
+function handleCollabSetup() {
+  setupCollaboration();
+  addListenersToOutput();
+}
 
-  function handleSubmit(e) {
-    e.preventDefault();
+function handleCollabTearDown() {
+  // TODO: disconnect from Yjs provider
+  // TODO: destroy Yjs document
+}
 
-    const asFeatures = Array.from(options).map((o) => ({
-      name: o.name,
-      checked: o.checked,
-    }));
-    console.log(asFeatures);
+function handleVideoConfSetup(jitsi) {
+  let jitsiContainer = document.getElementById('jitsi-meeting-container');
+  if (!jitsiContainer) {
+    console.error('Jitsi container element was not found. Check index.html');
+    return;
+  }
+  
+  jitsiContainer.style.display = 'block';
+  jitsi.setup();
+}
 
-    asFeatures.forEach(async (feat) => {
-      let res = await featureToggler.setFeature(feat.name, feat.checked);
+function handleVideoConfTearDown(jitsi) {
+  let jitsiContainer = document.getElementById('jitsi-meeting-container');
+  if (!jitsiContainer) {
+    console.error('Jitsi container element was not found. Check index.html');
+    return;
+  }
+  jitsiContainer.style.display = 'none';
+  jitsi.destroy();
+}
 
-      // This option was unchanged, check the next option
-      if (res.changed === null) return;
-
-      switch (feat.name) {
-        case 'score':
-          let scoreElem = document.getElementById('score-editor');
-          if (!scoreElem) {
-            console.error(
-              'Score editor element was not found. Check index.html'
-            );
-            return;
-          }
-          scoreElem.style.display = 'block';
-          break;
-        case 'collaboration':
-          if (res.changed[feat.name] && res.config['score']) {
-            console.log(
-              `Toggled feature: ${feat.name}`,
-              JSON.stringify(res.changed, null, 2)
-            );
-            setupCollaboration();
-            addListenersToOutput();
-          } else {
-            // TODO: disconnect from Yjs provider
-            // TODO: destroy Yjs document
-          }
-          break;
-        case 'videoConference':
-          console.log(
-            `Toggled feature: ${feat.name}`,
-            JSON.stringify(res.changed, null, 2)
-          );
-          // FIX: we're reloading Jitsi Meet every time
-          let { default: jitsi } = await import('../js/jitsi/index.js');
-          window.JitsiAPI = jitsi.api;
-          if (res.changed[feat.name]) {
-            document.getElementById('jitsi-meeting-container').style.display =
-              'block';
-            jitsi.setup();
-          } else {
-            console.log(jitsi.api.dispose, typeof jitsi.api);
-            jitsi.destroy();
-            document.getElementById('jitsi-meeting-container').style.display =
-              'none';
-          }
-          return;
-        default:
-          break;
-      }
-
-      let optToDisable = [...options].find((o) => o.name === feat.name);
-      if (optToDisable) {
-        optToDisable.disabled = true;
-      }
+function initForm(config) {
+  return function() {
+    options.forEach((opt) => {
+      opt.checked = config[opt.name];
     });
+  
+    featureForm?.addEventListener('submit', handleSubmit);
+  
+    function handleSubmit(e) {
+      e.preventDefault();
+  
+      const asFeatures = Array.from(options).map((o) => ({ name: o.name, checked: o.checked }));
+      console.log(asFeatures);
+  
+      asFeatures.forEach(async (feat) => {
+        let res = await featureToggler.setFeature(feat.name, feat.checked);
+  
+        // This option was unchanged, check the next option
+        if (res.changed === null) return;
+  
+        switch (feat.name) {
+          case 'score':
+            if (res.changed[feat.name]) {
+              handleScore();
+              disableOption('score', options);
+            }
+            break;
+          case 'collaboration':
+            if (res.changed[feat.name] && res.config['score']) {
+              handleCollabSetup();
+              disableOption('collaboration', options);
+            } else {
+              handleCollabTearDown();
+            }
+            break;
+          case 'videoConference':
+            // FIX: we're reloading Jitsi Meet every time
+            let { default: jitsi } = await import('../js/jitsi/index.js');
+            if (res.changed[feat.name]) {
+              handleVideoConfSetup(jitsi);
+            } else {
+              handleVideoConfTearDown(jitsi);
+            }
+            return;
+          default:
+            break;
+        }
+      });
+    }
   }
 }
-window.addEventListener('load', initForm);
-
-
-async function enableVideoConference() {
-  let { config, changed } = await featureToggler.setFeature('videoConference', true);
-  console.log(config, changed);
-  if (changed['videoConference']) {
-    let { setupJitsi } = await import('../js/jitsi/index.js');
-    setupJitsi();
-  } 
-}
-window.enableVideoConference = enableVideoConference;
+window.addEventListener('load', initForm(useConfigFile ? CONFIG : FeatureConfig));
 
 window.bts = bootstrap;
 window.FeatureConfig = FeatureConfig;
