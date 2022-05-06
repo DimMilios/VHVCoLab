@@ -355,8 +355,8 @@ div#index {
   bottom: 1rem;
   right: 45vw;
 
+  max-width: 40ch;
+
   background-color: #ddd8d0;
-  width: 10vw;
-  height: 20vh;
   z-index: 999;
 }
