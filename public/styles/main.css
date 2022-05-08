@@ -360,3 +360,8 @@ div#index {
   background-color: #ddd8d0;
   z-index: 999;
 }
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}

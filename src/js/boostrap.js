@@ -116,6 +116,10 @@ function disableOption(featureName, options) {
   optToDisable.disabled = true;
 }
 
+function showCommentsInNav() {
+  document.getElementById('comments__menu-item')?.classList.remove('hidden');
+}
+
 function handleScore() {
   let scoreElem = document.getElementById('score-editor');
   if (!scoreElem) {
@@ -128,6 +132,7 @@ function handleScore() {
 function handleCollabSetup() {
   setupCollaboration();
   addListenersToOutput();
+  showCommentsInNav();
 }
 
 function handleCollabTearDown() {

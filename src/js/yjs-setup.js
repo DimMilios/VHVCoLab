@@ -54,7 +54,6 @@ export function setupCollaboration() {
     yProvider = new WebsocketProvider('ws://localhost:3001', room, ydoc); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
-      addListenersToOutput();
     });
     
     // yProvider = new WebrtcProvider(room, ydoc);
@@ -97,8 +96,13 @@ export function setupCollaboration() {
 }
 
 function setupSSE(DOC_ID) {
+  // let eventSource = new EventSource(
+  //   `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
+  //   { withCredentials: true }
+  // );
+  
   let eventSource = new EventSource(
-    `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
+    `${baseUrl}events/comments/documents/${DOC_ID}`,
     { withCredentials: true }
   );
   
