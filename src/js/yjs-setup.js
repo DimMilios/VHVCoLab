@@ -96,13 +96,8 @@ export function setupCollaboration() {
 }
 
 function setupSSE(DOC_ID) {
-  // let eventSource = new EventSource(
-  //   `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
-  //   { withCredentials: true }
-  // );
-  
   let eventSource = new EventSource(
-    `${baseUrl}events/comments/documents/${DOC_ID}`,
+    `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
     { withCredentials: true }
   );
   
