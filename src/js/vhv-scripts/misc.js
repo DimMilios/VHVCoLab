@@ -21,7 +21,7 @@ import { verovioCallback } from './listeners.js';
 import { convertDataToCsv, convertDataToTsv } from './utility.js';
 import { loadIndexFile } from './loading.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
-import { InterfaceSingleNumber } from './editor.js';
+import { getEditorContents, InterfaceSingleNumber } from './editor.js';
 
 let vrvWorker = getVrvWorker();
 if (!vrvWorker) {
@@ -230,6 +230,11 @@ export function toggleTextVisibility(suppressZoom) {
   editor.resize();
   // matchToolbarVisibilityIconToState();
 }
+
+window.toggleTextVisibility = toggleTextVisibility;
+
+
+
 // export function toggleTextVisibility(suppressZoom) {
 //   global_interface.InputVisible = !global_interface.InputVisible;
 //   let input = document.querySelector('#input');
@@ -277,7 +282,7 @@ export function redrawInputArea(suppressZoom) {
 // hideInputArea --
 //
 
-function hideInputArea(suppressZoom) {
+export function hideInputArea(suppressZoom) {
   global_interface.InputVisible = false;
   let input = document.querySelector('#input');
   global_interface.LastInputWidth = parseInt(input.style.width);
@@ -1540,7 +1545,6 @@ function initializeWildWebMidi() {
 //
 
 export function dataIntoView(event) {
-  // if (EditorMode == 'xml') {
   if (editorMode() == 'xml') {
     xmlDataIntoView(event);
   } else {
@@ -1599,12 +1603,6 @@ export function xmlDataIntoView(event) {
   }
 }
 
-//////////////////////////////
-//
-// humdrumDataIntoView -- When clicking on a note (or other items in
-//      SVG images later), make the text line in the Humdrum data visible
-//      in the text area.
-//
 export function humdrumDataIntoView(event) {
   let target;
   if (typeof event === 'string') {
@@ -1624,11 +1622,23 @@ export function humdrumDataIntoView(event) {
       continue;
     }
 
+    // TODO: Check this part
+    if (target.id.match(/^harm-L(\d+)F(\d+)/)) {
+      let line = parseInt(matches[1], 10);
+      let field = parseInt(matches[2], 10);
+
+      if (Number.isInteger(line) && Number.isInteger(field)) {
+        let inputChord = getEditorContents(line, field);
+        document.getElementById('chord-editor').value = inputChord;
+      }
+    }
+
     global_cursor.HIGHLIGHTQUERY = target.id;
     highlightIdInEditor(target.id, 'humdrumDataIntoView');
     break;
   }
 }
+//alx_
 
 //////////////////////////////
 //

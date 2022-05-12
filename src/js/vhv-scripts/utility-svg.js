@@ -478,6 +478,7 @@ function getOnClassElements(onclass) {
 //
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 import { getMenu } from '../menu.js';
+import { chord } from './chords.js';
 import { global_cursor, global_editorOptions } from './global-variables.js';
 
 let vrvWorker = getVrvWorker();
@@ -810,6 +811,7 @@ function unhighlightAllElements() {
 import { centerCursorHorizontallyInEditor } from './utility-ace.js';
 
 export function highlightIdInEditor(id, source) {
+  //alx_
   unhighlightAllElements(id);
 
   if (!id) {
@@ -883,6 +885,21 @@ export function highlightIdInEditor(id, source) {
   // window.MENU.showCursorNoteMenu(global_cursor.CursorNote);
   getMenu().showCursorNoteMenu(global_cursor.CursorNote);
   editor.gotoLine(row, col);
+    
+
+
+  //alx     
+  let elmnt = document.getElementById(id);
+
+  if (elmnt.classList.contains("harm") && elmnt.classList.contains("highlight")) {
+    let line = editor.session.doc.getLine(row-1);
+    let stopIndex = col;
+    // while(!line[stopIndex] == '\t') stopIndex++;
+    chord.current = line.substring(col, stopIndex);
+
+    console.log({ chord, line: line.substring(col, stopIndex), elmnt });
+  }
+  //alx_
 
   // 0.5 = center the cursor vertically:
   editor.renderer.scrollCursorIntoView({ row: row - 1, column: col }, 0.5);

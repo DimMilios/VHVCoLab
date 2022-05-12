@@ -113,6 +113,7 @@ import { inSvgImage } from './utility-svg.js';
 import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { clearCursorHighlight, unfocusCommentHighlights } from '../collaboration/util-collab.js';
+import { chordLocation } from './chords.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -185,14 +186,42 @@ document.addEventListener('DOMContentLoaded', function () {
     // console.log("SINGLE CLICK");
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
+
+      let harmonyElem = event.target.closest('.harm');
+      //alx         
+      if (harmonyElem){
+        chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
+        chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
+
+        let editBtn = document.getElementById('show-chord-editor-btn');
+        editBtn.style.visibility = 'visible';
+
+                // let pgx = event.clientX + 10;
+        // let pgy = event.clientY + 10;
+        let harmonyBox = harmonyElem.getBoundingClientRect();
+        let pgx = harmonyBox.x + 25;
+        let pgy = harmonyBox.y + 25;
+
+        let jitsiContainer = document.getElementById('jitsi-meeting-container');
+        if (jitsiContainer) {
+          editBtn.style.transform = `translateY(-${jitsiContainer.getBoundingClientRect().height}px)`;
+        }
+
+        editBtn.style.top = `${pgy}px`;
+        editBtn.style.left = `${pgx}px`;;
+      }
+      //alx_
+
       $('[data-toggle="popover"]').popover('dispose');
       if (target?.id && target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)) {
         selectService.send({ type: 'SELECT', elemId: target.id });
       } else {
         selectService.send({ type: 'RESET' });
-        yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
+        yProvider?.awareness?.setLocalStateField('singleSelect', { elemId: null });
         clearCursorHighlight();
       }
+      
+      //alx:prosthiki chord argument sto dataIntoView
       dataIntoView(event);
     }
   });

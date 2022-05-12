@@ -51,6 +51,7 @@
 
 'use strict';
 
+import { featureIsEnabled } from './boostrap.js';
 //////////////////////////////
 //
 // DOMContentLoaded event listener --
@@ -69,6 +70,9 @@ import {
   applyZoom,
 } from './vhv-scripts/misc.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
+import { humdrumDataNoteIntoView } from './vhv-scripts/utility-ace.js';
+import { markItem } from './vhv-scripts/utility-svg.js';
+import { yProvider } from './yjs-setup.js';
 
 let vrvWorker;
 
@@ -104,6 +108,30 @@ function initializeVerovioToolkit() {
     editor.session.on('change', function (e) {
       // console.log("EDITOR content changed", e);
       monitorNotationUpdating();
+    });
+
+    editor.getSession().selection.on('changeCursor', function () {
+      const { row, column } = editor.selection.getCursor();
+      const item = humdrumDataNoteIntoView(row, column);
+      // console.log('changeCursor event', { row, column, item })
+      if (item && item.classList.contains('note')) {
+        markItem(item);
+    
+        // createNewEditorSession({ item, row, column });
+        // createDraggableContainer(item);
+  
+        if (featureIsEnabled('collaboration')) {
+          if (yProvider) {
+            const localState = yProvider.awareness.getLocalState();
+        
+            yProvider.awareness.setLocalState({
+              ...localState,
+              singleSelect: { elemId: item.id },
+              multiSelect: null,
+            });
+          }
+        }
+      }
     });
   } else {
     console.log('Warning: Editor not setup yet');
@@ -159,400 +187,6 @@ function initializeWildWebMidi() {
     window.pause();
   });
 }
-
-//////////////////////////////
-//
-// convertMusicXmlToHumdrum --
-//
-
-// function convertMusicXmlToHumdrum(targetElement, sourcetext, vrvOptions, pluginOptions) {
-// 	// var toolkit = pluginOptions.renderer;
-// 	if (typeof vrvWorker !== "undefined") {
-// 		toolkit = vrvWorker;
-// 	}
-
-// 	if (!toolkit) {
-// 		console.log("Error: Cannot find verovio toolkit!");
-// 		return;
-// 	}
-// 	// inputFrom = input data type
-// 	vrvOptions.inputFrom = "musicxml-hum";
-
-// 	vrvWorker.filterData(vrvOptions, sourcetext, "humdrum")
-// 	.then(function(content) {
-// 		targetElement.textContent = content;
-// 		targetElement.style.display = "block";
-// 	});
-
-// }
-
-//////////////////////////////
-//
-// getHumdrum -- Return the Humdrum data used to render the last
-//    SVG image(s).  This Humdrum data is the potentially
-//    filtered input Humdrum data (otherwise the last raw
-//    Humdrum input data).
-//
-
-// function getHumdrum(pluginOptions) {
-// 	var toolkit = pluginOptions.renderer;
-// 	if (typeof vrvWorker !== "undefined") {
-// 		toolkit = vrvWorker;
-// 	}
-
-// 	if (!toolkit) {
-// 		console.log("Error: Cannot find verovio toolkit!");
-// 		return;
-// 	}
-
-// 	vrvWorker.getHumdrum()
-// 	.then(function(content) {
-// 		return content;
-// 	});
-
-// }
-
-//////////////////////////////
-//
-// convertMeiToHumdrum --
-//
-
-// function convertMeiToHumdrum(targetElement, sourcetext, vrvOptions, pluginOptions) {
-// 	var toolkit = pluginOptions.renderer;
-// 	if (typeof vrvWorker !== "undefined") {
-// 		toolkit = vrvWorker;
-// 	}
-
-// 	if (!toolkit) {
-// 		console.log("Error: Cannot find verovio toolkit!");
-// 		return;
-// 	}
-// 	// inputFrom = input data type
-// 	vrvOptions.inputFrom = "mei-hum";
-
-// 	vrvWorker.filterData(vrvOptions, sourcetext, "humdrum")
-// 	.then(function(content) {
-// 		targetElement.textContent = content;
-// 		targetElement.style.display = "block";
-// 	});
-
-// }
-
-//////////////////////////////
-//
-// getFilters -- Extract filters from the options and format for insertion
-//    onto the end of the Humdrum data inpt to verovio.
-//
-
-// function getFilters(options) {
-// 	var filters = options.filter;
-// 	if (!filters) {
-// 		filters = options.filters;
-// 	}
-// 	if (!filters) {
-// 		return "";
-// 	}
-// 	if (Object.prototype.toString.call(filters) === "[object String]") {
-// 		filters = [filters];
-// 	} else if (!Array.isArray(filters)) {
-// 		// expected to be a string or array, so giving up
-// 		return "";
-// 	}
-// 	var output = "";
-// 	for (var i=0; i<filters.length; i++) {
-// 		output += "!!!filter: " + filters[i] + "\n";
-// 	}
-
-// 	return output;
-// }
-
-//////////////////////////////
-//
-// executeFunctionByName -- Also allow variable names that store functions.
-//
-
-// function executeFunctionByName(functionName, context /*, args */) {
-// 	if (typeof functionName === "function") {
-// 		return
-// 	}
-// 	var args = Array.prototype.slice.call(arguments, 2);
-// 	var namespaces = functionName.split(".");
-// 	var func = namespaces.pop();
-// 	for (var i = 0; i < namespaces.length; i++) {
-// 		context = context[namespaces[i]];
-// 		if (context && context[func]) {
-// 			break;
-// 		}
-// 	}
-// 	return context[func].apply(context, args);
-// }
-
-//////////////////////////////
-//
-// functionName --
-//
-
-// function functionName(fun) {
-//   var ret = fun.toString();
-//   ret = ret.substr('function '.length);
-//   ret = ret.substr(0, ret.indexOf('('));
-//   return ret;
-// }
-
-//////////////////////////////
-//
-// saveHumdrumSvg -- Save the specified Hudrum SVG images to the hard disk.  The input
-// can be any of:
-//    * A Humdrum script ID
-//    * An array of Humdrum script IDs
-//    * Empty (in which case all images will be saved)
-//    * An SVG element
-//
-
-// function saveHumdrumSvg(tags, savename) {
-// 	if ((tags instanceof Element) && (tags.nodeName === "svg")) {
-// 		// Save a single SVG element's contents to the hard disk.
-// 		var sid = "";
-// 		sid = tags.id;
-// 		if (!sid) {
-// 			sid = tags.parentNode.id;
-// 		}
-// 		var filename = savename;
-// 		if (!filename) {
-// 			filename = sid.replace(/-svg$/, "") + ".svg";
-// 		}
-// 		var text = tags.outerHTML.replace(/&nbsp;/g, " ").replace(/&#160;/g, " ");
-// 		blob = new Blob([text], { type: 'image/svg+xml' }),
-// 		anchor = document.createElement('a');
-// 		anchor.download = filename;
-// 		anchor.href = window.URL.createObjectURL(blob);
-// 		anchor.dataset.downloadurl = ['image/svg+xml', anchor.download, anchor.href].join(':');
-// 		(function (anch, blobby, fn) {
-// 			setTimeout(function() {
-// 				anch.click();
-// 				window.URL.revokeObjectURL(anch.href);
-//       		blobby = null;
-// 			}, 0)
-// 		})(anchor, blob, filename);
-// 		return;
-// 	}
-
-// 	var i;
-// 	if (!tags) {
-// 		// var selector = 'script[type="text/x-humdrum"]';
-// 		var selector = '.humdrum-text[id$="-humdrum"]';
-// 		var items = document.querySelectorAll(selector);
-// 		tags = [];
-// 		for (i=0; i<items.length; i++) {
-// 			var id = items[i].id.replace(/-humdrum$/, "");
-// 			if (!id) {
-// 				continue;
-// 			}
-// 			var ss = "#" + id + "-svg svg";
-// 			var item = document.querySelector(ss);
-// 			if (item) {
-// 				tags.push(item);
-// 			}
-// 		}
-// 	}
-// 	if (tags.constructor !== Array) {
-// 		tags = [tags];
-// 	}
-
-// 	(function (i, sname) {
-// 		(function j () {
-// 			var tag = tags[i++];
-// 			if (typeof tag  === "string" || tag instanceof String) {
-// 				var s = tag
-// 				if (!tag.match(/-svg$/)) {
-// 					s += "-svg";
-// 				}
-// 				var thing = document.querySelector("#" + s + " svg");
-// 				if (thing) {
-// 					saveHumdrumSvg(thing, sname);
-// 				}
-// 			} else if (tag instanceof Element) {
-// 				(function(elem) {
-// 					saveHumdrumSvg(elem, sname);
-// 				})(tag);
-// 			}
-// 			if (i < tags.length) {
-// 				// 100 ms delay time is necessary for saving all SVG images to
-// 				// files on the hard disk.  If the time is too small, then some
-// 				// of the files will not be saved.  This could be relate to
-// 				// deleting the temporary <a> element that is used to download
-// 				// the file.  100 ms is allowing 250 small SVG images to all
-// 				// be saved correctly (may need to increase for larger files, or
-// 				// perhaps it is possible to lower the wait time between image
-// 				// saves).  Also this timeout (even if 0) will allow better
-// 				// conrol of the UI vesus the file saving.
-// 				setTimeout(j, 100);
-// 			}
-// 		})();
-// 	})(0, savename);
-// }
-
-// //////////////////////////////
-// //
-// // saveHumdrumText -- Save the specified Hudrum text to the hard disk.  The input
-// // can be any of:
-// //    * A Humdrum script ID
-// //    * An array of Humdrum script IDs
-// //    * Empty (in which case all Humdrum texts will be saved)
-// //    * If the third parameter is present, then the first parameter will be ignored
-// //      and the text content of the third parameter will be stored in the filename
-// //      of the second parameter (with a default of "humdrum.txt").
-// //
-
-// function saveHumdrumText(tags, savename, savetext) {
-
-// 	if (savetext) {
-// 		// Saving literal text content to a file.
-// 		if (!savename) {
-// 			savename = "humdrum.txt";
-// 		}
-// 		// Unescaping < and >, which may cause problems in certain conditions, but not many:
-// 		var stext = savetext.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-// 		blob = new Blob([stext], { type: 'text/plain' }),
-// 		anchor = document.createElement('a');
-// 		anchor.download = savename;
-// 		anchor.href = window.URL.createObjectURL(blob);
-// 		anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
-// 		(function (anch, blobby) {
-// 			setTimeout(function() {
-// 				anch.click();
-// 				window.URL.revokeObjectURL(anch.href);
-// 					blobby = null;
-// 			}, 0)
-// 		})(anchor, blob);
-// 		return;
-// 	}
-
-// 	if ((tags instanceof Element) && (tags.className.match(/humdrum-text/))) {
-// 		// Save the text from a single element.
-// 		var sid = "";
-// 		sid = tags.id;
-// 		if (!sid) {
-// 			sid = tags.parentNode.id;
-// 		}
-// 		var filename = savename;
-// 		if (!filename) {
-// 			filename = sid.replace(/-humdrum$/, "") + ".txt";
-// 		}
-// 		var text = tags.textContent.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-// 		blob = new Blob([text], { type: 'text/plain' }),
-// 		anchor = document.createElement('a');
-// 		anchor.download = filename;
-// 		anchor.href = window.URL.createObjectURL(blob);
-// 		anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
-// 		anchor.click();
-// 		window.URL.revokeObjectURL(anchor.href);
-//       blob = null;
-// 		return;
-// 	}
-
-// 	if (typeof tags  === "string" || tags instanceof String) {
-// 		// Convert a Humdrum ID into an element and save contents in that element.
-// 		var myid = tags.replace(/-humdrum$/, "");
-// 		var myelement = document.querySelector("#" + myid + "-humdrum");
-// 		if (!myelement) {
-// 			myelement = document.querySelector("#" + myid);
-// 		}
-// 		saveHumdrumText(myelement);
-// 		return;
-// 	}
-
-// 	if (!tags) {
-// 		// If tags is empty, then create a list of all elements that
-// 		// should contain Humdrum content.
-// 		var selector = '.humdrum-text[id$="-humdrum"]';
-// 		tags = document.querySelectorAll(selector);
-// 	}
-// 	if (tags.constructor !== NodeList) {
-// 		if (tags.constructor !== Array) {
-// 			// Force tags to be in an array-like structure (not that necessary).
-// 			tags = [tags];
-// 		}
-// 	}
-// 	if (tags.length == 0) {
-// 		// Nothing to do, so give up.
-// 		return;
-// 	}
-// 	if (tags.length == 1) {
-// 		// Just one element on the page with interesting content, so save that
-// 		// to a filename based on the element ID.
-// 		saveHumdrumText(tags[0]);
-// 		return;
-// 	}
-
-// 	// At this point, there are multiple elements with Humdrum content that should
-// 	// be saved to the hard-disk.  Combine all of the content into a single data
-// 	// stream, and then save (with a default filename of "humdrum.txt").
-
-// 	var i;
-// 	var outputtext = "";
-// 	var humtext = "";
-// 	for (i=0; i<tags.length; i++) {
-// 		if (!tags[i]) {
-// 			continue;
-// 		}
-// 		if (typeof tags[i]  === "string" || tags[i] instanceof String) {
-// 			saveHumdrumText(tags[i]);
-// 			// convert a tag to an element:
-// 			var s = tags[i];
-// 			if (!tags[i].match(/-humdrum$/)) {
-// 				s += "-humdrum";
-// 			}
-// 			var thing = document.querySelector("#" + s);
-// 			if (thing) {
-// 				tags[i] = thing;
-// 			} else {
-// 				continue;
-// 			}
-// 		}
-// 		// Collect the Humdrum file text of the element.
-// 		if (tags[i] instanceof Element) {
-// 			var segmentname = tags[i].id.replace(/-humdrum$/, "");
-// 			if (!segmentname.match(/\.[.]*$/)) {
-// 				segmentname += ".krn";
-// 			}
-// 			humtext = tags[i].textContent.trim()
-// 					// remove any pre-existing SEGMENT marker:
-// 					.replace(/^!!!!SEGMENT\s*:[^\n]*\n/m, "");
-// 			if (humtext.match(/^\s*$/)) {
-// 				// Ignore empty elements.
-// 				continue;
-// 			}
-// 			outputtext += "!!!!SEGMENT: " + segmentname + "\n";
-// 			outputtext += humtext + "\n";
-// 		}
-// 	}
-// 	// save all extracted Humdrum content in a single file:
-// 	saveHumdrumText(null, null, outputtext);
-// }
-
-// //////////////////////////////
-// //
-// // cloneObject -- Make a deep copy of an object, preserving arrays.
-// //
-
-// function cloneObject(obj) {
-// 	var output, v, key;
-// 	output = Array.isArray(obj) ? [] : {};
-// 	for (key in obj) {
-// 		v = obj[key];
-// 		if (v instanceof HTMLElement) {
-// 			continue;
-// 		}
-// 		output[key] = (typeof v === "object") ? cloneObject(v) : v;
-// 	}
-// 	return output;
-// }
-
-// This is the Web Worker interface for the verovio toolkit.  These functions are
-// interfaced through the verovio-calls.js functions.
-//
-
 //////////////////////////////
 //
 // vrvInterface::vrvInterface --
@@ -677,53 +311,6 @@ function createWorkerFallback(workerUrl) {
   }
   return worker;
 }
-
-//////////////////////////////
-//
-// vrvInterface::createDefaultInterface --
-//
-
-vrvInterface.prototype.createDefaultInterface = function (onReady) {
-  /*  No longer needed?
-
-
-	var url = 'https://verovio-script.humdrum.org/scripts/verovio-toolkit.js';
-
-
-	console.log("create default interface")
-	var vrv = this;
-	this.verovio = new verovioCalls();
-
-	var script = document.createEleent('script');
-	script.onload = function () {
-		vrv.verovio.vrvToolkit = new verovio.toolkit();
-		vrv.initialized = true;
-		onReady();
-	};
-	script.src = url;
-	document.head.appendChild(script);
-
-/* verovio toolkit is larger than allowed by localStorage (5 MB limit), so 
- * using basket to store it between sessions is not useful to use:
-
-	basket
-	.require(
-		{url: url, expire: 500, unique: BasketVersion}
-		// loaded as an include:
-		// {url: "scripts/ace/humdrumValidator.js", skipCache: true}
-	)
-	.then(
-		function () {
-			vrv.verovio.vrvToolkit = new verovio.toolkit();
-			vrv.initialized = true;
-			onReady();
-		},
-		function () {
-			console.log("There was an error loading script", url);
-		}
-	);
-*/
-};
 
 //////////////////////////////
 //

@@ -52,7 +52,7 @@ const resize = (inputCol, outputCol, commentsCol) => {
 // };
 
 export const layoutMachine = createMachine({
-  initial: 'notationAndTextVisible',
+  initial: 'notationVisible',
   context: {
     inputCol: 0,
     outputCol: 0,

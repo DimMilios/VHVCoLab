@@ -9,15 +9,11 @@
   --theme-color8: rgb(184, 212, 198);
   --theme-color9: rgb(142, 185, 163);
 
-  --nyanza: #d8f3dcff;
-  --turquoise-green: #b7e4c7ff;
-  --turquoise-green-2: #95d5b2ff;
-  --ocean-green: #74c69dff;
-  --ocean-green-2: #52b788ff;
-  --illuminating-emerald: #40916cff;
-  --bottle-green: #2d6a4fff;
-  --brunswick-green: #1b4332ff;
-  --dark-jungle-green: #081c15ff;
+  --score-color: #fffdf3;
+  --score-color2: #fafdfc;
+
+
+  --old-theme-1: #01313f;
 }
 
 :root {
@@ -261,12 +257,13 @@
 }
 
 .dropdown-item:hover {
-  filter: brightness(90%);
+  background-color: var(--theme-color6);
+  color: var(--theme-color1) !important;
 }
 
-.dropdown-item > a:hover {
+.dropdown-item a:hover {
   text-decoration: none;
-  background-color: initial;
+  color: var(--theme-color1) !important;
 }
 
 .dropdown-item {

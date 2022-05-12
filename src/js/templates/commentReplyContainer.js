@@ -48,6 +48,8 @@ export let commentReplyContainerTemplate = (parent, parentElemWidth) => {
     return $(`#${collapseId}`).collapse('hide'); 
   }
 
+  console.log('Comment parent: ', parent);
+
   return html`
     <div id=${'comment-with-replies-' + parent.id} aria-expanded="false" aria-controls=${collapseId} style="width: 18rem; top: ${parent.highlight.top}px; left:${parentElemWidth / 2 - remToPixels(18) / 2}px; position: absolute;" class="card shadow comment-with-replies" @click=${handleClick}>
 

@@ -265,7 +265,7 @@ export const global_playerOptions = {
 
 export const global_interface = {
   // State variables for interface:
-  InputVisible: true,
+  InputVisible: false,
   LastInputWidth: 0,
   OriginalClef: false,
   UndoHide: false,

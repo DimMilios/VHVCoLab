@@ -1,3 +1,4 @@
+import * as Y from 'yjs';
 import { createMutex } from 'lib0/mutex';
 import { simpleDiffString } from 'lib0/diff';
 
