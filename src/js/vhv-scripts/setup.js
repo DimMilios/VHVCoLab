@@ -23,10 +23,13 @@ export function setupAceEditor(idtag) {
     }
   });
 
-  ace.config.set("basePath", "/scripts/ace");
-  ace.config.set('modePath', '/scripts/ace');
-  ace.config.set('workerPath', '/scripts/ace');
-  ace.config.set('themePath', '/scripts/ace');
+  let configPath = `${import.meta.env.BASE_URL}scripts/ace`;
+  console.log({ configPath, meta: import.meta.url })
+
+  ace.config.set("basePath", configPath);
+  ace.config.set('modePath', configPath);
+  ace.config.set('workerPath', configPath);
+  ace.config.set('themePath', configPath);
 
   if (configureAce) {
     configureAceEditor();

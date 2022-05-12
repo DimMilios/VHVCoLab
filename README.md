@@ -1,3 +1,6 @@
+## Deployment
+Current deployment @netlify: https://vite-scaffold.netlify.app/
+
 ## Προαπαιτούμενα
 Πρέπει να είναι εγκατεστημένα:
 - `node.js` ([download](https://nodejs.dev/download))

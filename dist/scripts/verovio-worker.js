@@ -74,6 +74,7 @@ function reject(data, result) {
 
 addEventListener("message", function(oEvent) {
 	try {
+		console.log(oEvent.data)
 		resolve(oEvent.data, methods[oEvent.data.method].apply(methods, oEvent.data.args));
 	} catch(err) {
 		reject(oEvent.data, err);
