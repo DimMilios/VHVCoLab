@@ -6,3 +6,4 @@
 - Starting multi selecting via **Rubber Banding** no longer resets the global `CursorNote` element
   - `src/js/vhv-scripts/listeners.js`, line 220
 - Work in progress: GitHub [Issue](https://github.com/DimMilios/vite-scaffold/issues/5)
+    - GitHub branch: (https://github.com/DimMilios/vite-scaffold/tree/multi-select-playback)
