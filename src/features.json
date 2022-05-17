@@ -1,6 +1,6 @@
 {
   "score": true,
-  "collaboration": false,
+  "collaboration": true,
   "videoConference": false,
-  "waveSurfer": false
+  "soundEditor": false
 }

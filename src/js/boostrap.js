@@ -4,13 +4,13 @@ import { addListenersToOutput } from './collaboration/collab-extension.js';
 import { keysEqual } from './util';
 import { setupCollaboration } from './yjs-setup.js';
 
-/** @typedef {'score' | 'collaboration' | 'videoConference' | 'waveSurfer'} FeatureKey */
+/** @typedef {'score' | 'collaboration' | 'videoConference' | 'soundEditor'} FeatureKey */
 /** @param {{FeatureKey: boolean }} FeatureConfig*/
 const FeatureConfig = {
   score: false,
   collaboration: false,
   videoConference: false,
-  waveSurfer: false,
+  soundEditor: false,
 };
 
 if (import.meta.env.DEV) {
@@ -101,7 +101,7 @@ async function bootstrap() {
     handleVideoConfSetup(jitsi);
   }
 
-  if (featureToggler.featureIsEnabled('waveSurfer')) {
+  if (featureToggler.featureIsEnabled('soundEditor')) {
 
   }
 }
