@@ -16,7 +16,6 @@ import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { featureIsEnabled } from '../boostrap.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
-import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 
 let DEBUG = false;
 function log(text) {
@@ -328,24 +327,33 @@ function setLeftMostNote(selectedElements) {
       return elem.classList.contains('beam') ? elem.querySelector('.note') : elem
     });
 
-    let leftMostNote = selectedNotes.slice(1).reduce((prev, curr) => {
-      return curr?.getBoundingClientRect().left < prev?.getBoundingClientRect().left ? curr : prev;
-    }, selectedNotes[0]);
-    
-    let rightMostNote = selectedNotes.slice(1).reduce((prev, curr) => {
-      return curr?.getBoundingClientRect().left > prev?.getBoundingClientRect().left ? curr : prev;
-    }, selectedNotes[0]);
+    let { leftMost, rightMost } = findLeftMostAndRightMost(selectedNotes);
 
-    let vrvWorker = getVrvWorker();
-    if (vrvWorker) {
-      vrvWorker.getTimeForElement(leftMostNote.id).then(val => console.log('Starting time for Multiple selection:', val));
-      
-      vrvWorker.getTimeForElement(rightMostNote.id).then(val => console.log('Ending time for Multiple selection:', val));
+    if (leftMost && rightMost) {
+      // TODO: Move objects to a proper state location
+      window.leftMost = leftMost;
+      window.rightMost = rightMost;
     }
 
-    console.log({ leftMostNote, rightMostNote });
-    if (leftMostNote) {
-      global_cursor.CursorNote = leftMostNote;
+    console.log({ leftMost, rightMost });
+    if (leftMost) {
+      global_cursor.CursorNote = leftMost;
     }
   }
+}
+
+function findLeftMostAndRightMost(selectedNotes) {
+  let leftMost = selectedNotes[0];
+  let rightMost = selectedNotes[0];
+  for (let note of selectedNotes.slice(1)) {
+    let noteBox = note.getBoundingClientRect();
+    if (noteBox.left < leftMost?.getBoundingClientRect().left) {
+      leftMost = note;
+    }
+
+    if (noteBox.left > rightMost?.getBoundingClientRect().left) {
+      rightMost = note;
+    }
+  }
+  return { leftMost, rightMost };
 }

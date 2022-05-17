@@ -140,6 +140,13 @@ export const midiUpdate = function (time) {
           }
         });
         ids = elementsattime.notes;
+
+        if (ids.includes(window?.rightMost?.id)) {
+          console.log('Stopping MIDI player');
+          window.midiPlayerStop();
+          midiStop();
+          return;
+        }
         // for (var i=0; i<ids.length; i++) {
         // 	if (matches = ids[i].match(/-L(\d+)/)) {
         // 		var line = matches[1];
