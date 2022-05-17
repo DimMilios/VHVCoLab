@@ -84,9 +84,8 @@ import { yProvider } from '../yjs-setup.js';
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
 
-document
-  .getElementById('play-button')
-  ?.addEventListener('click', () => playCurrentMidi());
+document.getElementById('play-button')
+  ?.addEventListener('click', () => playCurrentMidi(global_cursor.CursorNote));
 
 if (localStorage.FONT) {
   global_verovioOptions.FONT = cleanFont(localStorage.FONT);
@@ -218,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         selectService.send({ type: 'RESET' });
         yProvider?.awareness?.setLocalStateField('singleSelect', { elemId: null });
-        clearCursorHighlight();
+        // clearCursorHighlight();
       }
       
       //alx:prosthiki chord argument sto dataIntoView
@@ -945,7 +944,7 @@ export function processInterfaceKeyCommand(event) {
           global_playerOptions.PLAY = true;
           global_playerOptions.PAUSE = false;
         } else {
-          playCurrentMidi();
+          playCurrentMidi(global_cursor.CursorNote);
           global_playerOptions.PLAY = true;
           global_playerOptions.PAUSE = false;
         }

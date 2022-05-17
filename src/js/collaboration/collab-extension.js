@@ -15,6 +15,8 @@ import {
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { featureIsEnabled } from '../boostrap.js';
+import { global_cursor } from '../vhv-scripts/global-variables.js';
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 
 let DEBUG = false;
 function log(text) {
@@ -293,9 +295,11 @@ export function addListenersToOutput(outputTarget) {
       if (shouldMultiSelect) {
         // TODO: extremely inefficient, selecting every single note element
         const notes = Array.from(document.querySelectorAll('.note, .beam'));
-        const selectedNotes = rbSelection.selectNoteElements(notes);
+        const selectedElements = rbSelection.selectNoteElements(notes);
 
-        const multiSelectedNotes = selectedNotes
+        setLeftMostNote(selectedElements);
+
+        const multiSelectedNotes = selectedElements
           .map((note) => note.id)
           .filter((id) => /^note/g.test(id));
 
@@ -311,5 +315,37 @@ export function addListenersToOutput(outputTarget) {
       rbSelection.hide();
       startTime = endTime = undefined;
     };
+  }
+}
+
+/**
+ * 
+ * @param {HTMLElement[]} selectedElements 
+ */
+function setLeftMostNote(selectedElements) {
+  if (selectedElements.length > 0) {
+    let selectedNotes = [...selectedElements].map(elem => {
+      return elem.classList.contains('beam') ? elem.querySelector('.note') : elem
+    });
+
+    let leftMostNote = selectedNotes.slice(1).reduce((prev, curr) => {
+      return curr?.getBoundingClientRect().left < prev?.getBoundingClientRect().left ? curr : prev;
+    }, selectedNotes[0]);
+    
+    let rightMostNote = selectedNotes.slice(1).reduce((prev, curr) => {
+      return curr?.getBoundingClientRect().left > prev?.getBoundingClientRect().left ? curr : prev;
+    }, selectedNotes[0]);
+
+    let vrvWorker = getVrvWorker();
+    if (vrvWorker) {
+      vrvWorker.getTimeForElement(leftMostNote.id).then(val => console.log('Starting time for Multiple selection:', val));
+      
+      vrvWorker.getTimeForElement(rightMostNote.id).then(val => console.log('Ending time for Multiple selection:', val));
+    }
+
+    console.log({ leftMostNote, rightMostNote });
+    if (leftMostNote) {
+      global_cursor.CursorNote = leftMostNote;
+    }
   }
 }

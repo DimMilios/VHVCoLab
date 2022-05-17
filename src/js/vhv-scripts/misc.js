@@ -1760,22 +1760,17 @@ export function clearContent() {
 // playCurrentMidi -- If a note is selected start playing from that note;
 //     otherwise, start from the start of the music.
 //
-// document.querySelector('#play-button').addEventListener('click', () => {
-//   console.log('Calling playCurrentMidi')
-
-//   playCurrentMidi();
-// })
 
 import { midiStop, midiUpdate, play_midi } from '../midifunctions.js';
-export function playCurrentMidi() {
-  if (global_cursor.CursorNote && global_cursor.CursorNote.id) {
-    let id = global_cursor.CursorNote.id;
-    vrvWorker.getTimeForElement(id).then(function (time) {
-      play_midi(time);
-    });
-  } else {
+export function playCurrentMidi(noteElem) {
+  if (!noteElem?.id) {
     play_midi();
+    return;
   }
+
+  vrvWorker.getTimeForElement(noteElem.id).then(function (time) {
+    play_midi(time);
+  });
 }
 
 //////////////////////////////
