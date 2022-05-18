@@ -16,6 +16,7 @@ import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { featureIsEnabled } from '../boostrap.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
+import { get } from 'lib0/indexeddb';
 
 let DEBUG = false;
 function log(text) {
@@ -296,7 +297,7 @@ export function addListenersToOutput(outputTarget) {
         const notes = Array.from(document.querySelectorAll('.note, .beam'));
         const selectedElements = rbSelection.selectNoteElements(notes);
 
-        setLeftMostNote(selectedElements);
+        setNoteBounds(selectedElements);
 
         const multiSelectedNotes = selectedElements
           .map((note) => note.id)
@@ -317,22 +318,47 @@ export function addListenersToOutput(outputTarget) {
   }
 }
 
+function createNoteBounds() {
+  /** @type {HTMLElement | null} */ let leftMost = null;
+  /** @type {HTMLElement | null} */ let rightMost = null;
+
+  return {
+    /**
+     * 
+     * @param {HTMLElement | null} left 
+     * @param {HTMLElement | null} right 
+     */
+    setBounds(left, right) {
+      if (left) {
+        leftMost = left;
+      }
+
+      if (right) {
+        rightMost = right;
+      }
+    },
+    /**
+     * 
+     * @returns {{ leftMost: HTMLElement | null, rightMost: HTMLElement | null}}
+     */
+    getBounds() { return { leftMost, rightMost }}
+  }
+}
+
+export let noteBounds = createNoteBounds();
 /**
  * 
  * @param {HTMLElement[]} selectedElements 
  */
-function setLeftMostNote(selectedElements) {
+function setNoteBounds(selectedElements) {
   if (selectedElements.length > 0) {
     let selectedNotes = [...selectedElements].map(elem => {
       return elem.classList.contains('beam') ? elem.querySelector('.note') : elem
     });
 
     let { leftMost, rightMost } = findLeftMostAndRightMost(selectedNotes);
-
     if (leftMost && rightMost) {
-      // TODO: Move objects to a proper state location
-      window.leftMost = leftMost;
-      window.rightMost = rightMost;
+      noteBounds.setBounds(leftMost, rightMost);
     }
 
     console.log({ leftMost, rightMost });

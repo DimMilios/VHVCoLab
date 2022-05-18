@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2022/05/18
+- Move note bound variables calculated after a note multi selection to a more appropriate store
+- Use elements of this store to stop the MIDI player when it reaches the right most note bound
+
 ### 2022/05/17
 - `Git` now tracks `dist` directory to handle deployment of the app's static version
 - Rename toggling options about the feature previously named `WaveSurfer` to `Sound Editor`

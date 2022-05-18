@@ -109,6 +109,7 @@ import {
   global_cursor,
   global_playerOptions,
 } from './vhv-scripts/global-variables.js';
+import { noteBounds } from './collaboration/collab-extension.js';
 
 var ids = [];
 export const midiUpdate = function (time) {
@@ -141,7 +142,7 @@ export const midiUpdate = function (time) {
         });
         ids = elementsattime.notes;
 
-        if (ids.includes(window?.rightMost?.id)) {
+        if (ids.includes(noteBounds.getBounds()?.rightMost?.id)) {
           console.log('Stopping MIDI player');
           window.midiPlayerStop();
           midiStop();
