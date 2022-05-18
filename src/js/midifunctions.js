@@ -109,6 +109,7 @@ import {
   global_cursor,
   global_playerOptions,
 } from './vhv-scripts/global-variables.js';
+import { noteBounds } from './collaboration/collab-extension.js';
 
 var ids = [];
 export const midiUpdate = function (time) {
@@ -140,6 +141,13 @@ export const midiUpdate = function (time) {
           }
         });
         ids = elementsattime.notes;
+
+        if (ids.includes(noteBounds.getBounds()?.rightMost?.id)) {
+          console.log('Stopping MIDI player');
+          window.midiPlayerStop();
+          midiStop();
+          return;
+        }
         // for (var i=0; i<ids.length; i++) {
         // 	if (matches = ids[i].match(/-L(\d+)/)) {
         // 		var line = matches[1];

@@ -165,7 +165,7 @@ export function clearCursorHighlight() {
     }
     outclass = outclass.replace(/^\s+/, '');
     global_cursor.CursorNote.setAttribute('class', outclass);
-    global_cursor.CursorNote = '';
+    global_cursor.CursorNote = null;
   }
 }
 

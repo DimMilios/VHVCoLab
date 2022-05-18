@@ -1485,61 +1485,6 @@ export function monitorNotationUpdating() {
 
 //////////////////////////////
 //
-// downloadWildWebMidi --
-//
-// Increment BasketVersion when the verovio toolkit is updated, or
-// the Midi player software or soundfont is updated.
-const basketVersion = 531;
-
-function downloadWildWebMidi(url) {
-  let url3 = 'scripts/midiplayer/midiplayer.js';
-
-  basket
-    .require(
-      { url: url, expire: 26, unique: basketVersion },
-      { url: url3, expire: 17, unique: basketVersion }
-    )
-    .then(
-      function () {
-        initializeWildWebMidi();
-      },
-      function () {
-        console.log('There was an error loading script', url);
-      }
-    );
-}
-
-//////////////////////////////
-//
-// initializeWildWebMidi --
-//
-
-function initializeWildWebMidi() {
-  $('#player').midiPlayer({
-    color: null,
-    // color: "#c00",
-    onUnpdate: midiUpdate,
-    onStop: midiStop,
-    width: 250,
-    locateFile: function () {
-      return 'wildwebmidi.data';
-    },
-  });
-  console.log('Initialized WildWebMidi', $('#player').midiPlayer);
-
-  $('#input').keydown(function () {
-    stop();
-  });
-
-  // window blur event listener -- Stop MIDI playback.  It is very computaionally
-  //    expensive, and is not useful if the window is not in focus.
-  window.addEventListener('blur', function () {
-    window.pause();
-  });
-}
-
-//////////////////////////////
-//
 // dataIntoView -- When clicking on a note (or other itmes in SVG images later),
 //      go to the corresponding line in the editor.
 //
@@ -1760,22 +1705,17 @@ export function clearContent() {
 // playCurrentMidi -- If a note is selected start playing from that note;
 //     otherwise, start from the start of the music.
 //
-// document.querySelector('#play-button').addEventListener('click', () => {
-//   console.log('Calling playCurrentMidi')
-
-//   playCurrentMidi();
-// })
 
 import { midiStop, midiUpdate, play_midi } from '../midifunctions.js';
-export function playCurrentMidi() {
-  if (global_cursor.CursorNote && global_cursor.CursorNote.id) {
-    let id = global_cursor.CursorNote.id;
-    vrvWorker.getTimeForElement(id).then(function (time) {
-      play_midi(time);
-    });
-  } else {
+export function playCurrentMidi(noteElem) {
+  if (!noteElem?.id) {
     play_midi();
+    return;
   }
+
+  vrvWorker.getTimeForElement(noteElem.id).then(function (time) {
+    play_midi(time);
+  });
 }
 
 //////////////////////////////

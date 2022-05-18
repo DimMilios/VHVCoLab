@@ -276,7 +276,7 @@ function pause() {
 	midiPlayer_pause.style.display = 'none';
 }
 
-window.pause = pause;
+window.midiPlayerPause = pause;
 
 function play(millisec) {
 	if (!millisec) {
@@ -319,7 +319,7 @@ function play(millisec) {
 	runConversion();
 }
 
-window.play = play;
+window.midiPlayerPlay = play;
 
 function stop() {
 	_EM_signalStop = 1;
@@ -341,7 +341,7 @@ function stop() {
 	if (midiPlayer_onStop != null) midiPlayer_onStop();
 }
 
-window.stop = stop;
+window.midiPlayerStop = stop;
 
 function runConversion() {
 	midiPlayer_convertionJob = {

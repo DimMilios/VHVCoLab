@@ -15,6 +15,8 @@ import {
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { featureIsEnabled } from '../boostrap.js';
+import { global_cursor } from '../vhv-scripts/global-variables.js';
+import { get } from 'lib0/indexeddb';
 
 let DEBUG = false;
 function log(text) {
@@ -293,9 +295,11 @@ export function addListenersToOutput(outputTarget) {
       if (shouldMultiSelect) {
         // TODO: extremely inefficient, selecting every single note element
         const notes = Array.from(document.querySelectorAll('.note, .beam'));
-        const selectedNotes = rbSelection.selectNoteElements(notes);
+        const selectedElements = rbSelection.selectNoteElements(notes);
 
-        const multiSelectedNotes = selectedNotes
+        setNoteBounds(selectedElements);
+
+        const multiSelectedNotes = selectedElements
           .map((note) => note.id)
           .filter((id) => /^note/g.test(id));
 
@@ -312,4 +316,70 @@ export function addListenersToOutput(outputTarget) {
       startTime = endTime = undefined;
     };
   }
+}
+
+function createNoteBounds() {
+  /** @type {HTMLElement | null} */ let leftMost = null;
+  /** @type {HTMLElement | null} */ let rightMost = null;
+
+  return {
+    /**
+     * 
+     * @param {HTMLElement | null} left 
+     * @param {HTMLElement | null} right 
+     */
+    setBounds(left, right) {
+      if (left) {
+        leftMost = left;
+      }
+
+      if (right) {
+        rightMost = right;
+      }
+    },
+    /**
+     * 
+     * @returns {{ leftMost: HTMLElement | null, rightMost: HTMLElement | null}}
+     */
+    getBounds() { return { leftMost, rightMost }}
+  }
+}
+
+export let noteBounds = createNoteBounds();
+/**
+ * 
+ * @param {HTMLElement[]} selectedElements 
+ */
+function setNoteBounds(selectedElements) {
+  if (selectedElements.length > 0) {
+    let selectedNotes = [...selectedElements].map(elem => {
+      return elem.classList.contains('beam') ? elem.querySelector('.note') : elem
+    });
+
+    let { leftMost, rightMost } = findLeftMostAndRightMost(selectedNotes);
+    if (leftMost && rightMost) {
+      noteBounds.setBounds(leftMost, rightMost);
+    }
+
+    console.log({ leftMost, rightMost });
+    if (leftMost) {
+      global_cursor.CursorNote = leftMost;
+    }
+  }
+}
+
+function findLeftMostAndRightMost(selectedNotes) {
+  let leftMost = selectedNotes[0];
+  let rightMost = selectedNotes[0];
+  for (let note of selectedNotes.slice(1)) {
+    let noteBox = note.getBoundingClientRect();
+    if (noteBox.left < leftMost?.getBoundingClientRect().left) {
+      leftMost = note;
+    }
+
+    if (noteBox.left > rightMost?.getBoundingClientRect().left) {
+      rightMost = note;
+    }
+  }
+  return { leftMost, rightMost };
 }
