@@ -24,6 +24,9 @@ self.Module = {
 //////////////////////////////
 
 
+// import("./verovio-toolkit-wasm.js");
+// import("./humdrumValidator.js");
+// import("./verovio-calls.js");
 
 importScripts("/scripts/local/verovio-toolkit-wasm.js");
 importScripts("/scripts/local/humdrumValidator.js");
