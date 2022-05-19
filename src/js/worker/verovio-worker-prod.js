@@ -24,9 +24,13 @@ self.Module = {
 //////////////////////////////
 
 // Replace with your own scripts hosted on your server/CDN
-importScripts("http://localhost:5000/vhv/scripts/local/verovio-toolkit-wasm.js");
-importScripts("http://localhost:5000/vhv/scripts/local/humdrumValidator.js");
-importScripts("http://localhost:5000/vhv/scripts/local/verovio-calls.js");
+// importScripts("http://localhost:5000/vite-scaffold/scripts/local/verovio-toolkit-wasm.js");
+// importScripts("http://localhost:5000/vite-scaffold/scripts/local/humdrumValidator.js");
+// importScripts("http://localhost:5000/vite-scaffold/scripts/local/verovio-calls.js");
+
+importScripts("https://cdn.jsdelivr.net/gh/DimMilios/vite-scaffold/public/scripts/local/verovio-toolkit-wasm.js");
+importScripts("https://cdn.jsdelivr.net/gh/DimMilios/vite-scaffold/public/scripts/local/humdrumValidator.js");
+importScripts("https://cdn.jsdelivr.net/gh/DimMilios/vite-scaffold/public/scripts/local/verovio-calls.js");
 
 
 //////////////////////////////
