@@ -1,5 +1,12 @@
 ## Change Log
 
+### 2022/05/19
+- Cleaned up useless files
+- Relocated `CSS` stylesheet from `public` directory to `src/css` so that **Vite** has access to them,
+includes them in the `CSS` bundle and its configuration can be applied to these stylesheets
+- Load production Verovio worker scripts from *JSDelivr*
+- Add GitHub Pages deployment script
+
 ### 2022/05/18
 - Move note bound variables calculated after a note multi selection to a more appropriate store
 - Use elements of this store to stop the MIDI player when it reaches the right most note bound

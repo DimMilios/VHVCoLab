@@ -213,8 +213,6 @@ function vrvInterface(use_worker, onReady) {
 //
 // vrvInterface::createWorkerInterface --
 //
-// import Worker from './verovio-worker.js?worker&inline';
-
 vrvInterface.prototype.createWorkerInterface = function (onReady) {
   var vrv = this;
 
@@ -260,57 +258,27 @@ vrvInterface.prototype.createWorkerInterface = function (onReady) {
   // 	var workerUrl = "https://verovio-script.humdrum.org/scripts/verovio-worker.js";
   //
 
-  console.log('LOADING /scripts/verovio-worker.js');
-  var workerUrl = '/scripts/verovio-worker.js';
-
   this.worker = null;
   var that = this;
   try {
-    that.worker = new Worker(workerUrl);
+    // Worker script location need to be static, otherwise Vite won't transform them
+    if (import.meta.env.DEV) {
+      console.log('Loading development Verovio Worker');
+      that.worker = new Worker(new URL('./worker/verovio-worker-dev.js', import.meta.url));
+    } else {
+      console.log('Loading production Verovio Worker');
+      that.worker = new Worker(new URL('./worker/verovio-worker-prod.js', import.meta.url));
+    }
     that.worker.addEventListener('message', handleEvent);
 
     that.worker.onerror = function (event) {
       event.preventDefault();
-      that.worker = createWorkerFallback(workerUrl);
-      that.worker.addEventListener('message', handleEvent);
+      console.log(event);
     };
   } catch (e) {
-    that.worker = createWorkerFallback(workerUrl);
-    that.worker.addEventListener('message', handleEvent);
+    console.log(e);
   }
 };
-
-//////////////////////////////
-//
-// createWorkerFallback -- Cross-origin worker
-//
-
-function createWorkerFallback(workerUrl) {
-  console.log('Getting cross-origin worker');
-  var worker = null;
-  try {
-    var blob;
-    try {
-      console.log('humdrum plugin createWorkerFallback URL', workerUrl);
-      blob = new Blob(["importScripts('" + workerUrl + "');"], {
-        type: 'application/javascript',
-      });
-    } catch (e) {
-      var blobBuilder = new (window.BlobBuilder ||
-        window.WebKitBlobBuilder ||
-        window.MozBlobBuilder)();
-      console.log('createWorkerFallback BlobBuilder URL', workerUrl);
-      blobBuilder.append("importScripts('" + workerUrl + "');");
-      blob = blobBuilder.getBlob('application/javascript');
-    }
-    var url = window.URL || window.webkitURL;
-    var blobUrl = url.createObjectURL(blob);
-    worker = new Worker(blobUrl);
-  } catch (e1) {
-    //if it still fails, there is nothing much we can do
-  }
-  return worker;
-}
 
 //////////////////////////////
 //
@@ -318,7 +286,6 @@ function createWorkerFallback(workerUrl) {
 //
 
 vrvInterface.prototype.checkInitialized = function () {
-  console.log(new Error().stack);
   if (!this.initialized) throw 'Verovio toolkit not (yet) initialized';
 };
 
