@@ -1,8 +1,0 @@
-.document-item {
-  cursor: pointer;
-}
-
-.document-item:hover {
-  background-color: var(--secondary);
-  color: #fff;
-}

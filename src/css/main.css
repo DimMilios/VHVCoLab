@@ -1,0 +1,367 @@
+body.waiting * {
+  cursor: progress;
+}
+
+body {
+  /* prevent accidentally leaving page in chrome */
+  overscroll-behavior-x: none;
+	overflow: hidden;
+}
+
+body {
+  background: #fffcf1;
+  margin: 0;
+  padding: 0;
+  /* overflow: scroll; */
+  z-index: 1 !important;
+}
+
+/* needed to see scroll bar in help menu */
+::-webkit-scrollbar {
+	-webkit-appearance: none;
+	width: 7px;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background-color: rgba(0,0,0,.5);
+	box-shadow: 0 0 1px rgba(255,255,255,.5);
+	-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+g[id^='clef-']:hover,
+g[id^='ksig-']:hover,
+g[id^='msig-']:hover,
+g[id^='note-']:hover,
+g[id^='hairpin-']:hover,
+g[id^='accid-']:hover,
+g[id^='trill-']:hover,
+g[id^='artic-']:hover,
+g[id^='slur-']:hover,
+g[id^='tie-']:hover,
+g[id^='slur-']:hover,
+g[id^='fermata-']:hover,
+g[id^='rest-']:hover {
+  fill: orange;
+  stroke: orange;
+  filter: url(#hover-shadow);
+}
+
+/* Highlight barlines:
+g[id^="bline-"] path:hover
+*/
+g[id^='slur-'] path:hover {
+  stroke: orange;
+}
+
+table.index-list {
+	padding-left: 40px;
+	margin-left: 40px;
+	padding-top: 40px;
+	margin-top: 40px;
+	margin-bottom: 100px;
+}
+
+.index-list td {
+	font-family: Palatino;
+	font-size: 18pt;
+}
+
+
+td.igroup {
+	color: #333333;
+	font-size: 2.0rem;
+}
+
+.ilink {
+	cursor: pointer;
+	color: #333388;
+}
+
+.ilink:hover {
+	cursor: pointer;
+	color: #883333;
+}
+
+svg:not(:root) {
+  overflow: inherit;
+}
+
+#work-navigator,
+#title-info {
+  padding-bottom: 5px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+#work-navigator {
+  opacity: 0.6;
+  color: white;
+}
+
+#work-navigator span:hover {
+  color: white;
+}
+
+/* Song title */
+#title-info {
+  width: 100%;
+  color: rgba(0,0,0,.6);
+  font-family: Palatino, Times-Roman, serif;
+  font-size: 145%;
+  white-space: nowrap;
+}
+
+/* App header (MusiCoLab) */
+/* #vhv {
+  color: #f9f9f9;
+  font-size: 110%;
+  margin-top: 2px;
+  white-space: nowrap;
+  word-spacing: -3px;
+  letter-spacing: -1px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+} */
+
+html {
+  font-size: 12pt;
+}
+
+div#dropArea {
+  background: gray;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  opacity: 0.6;
+  visibility: hidden;
+}
+
+#composer {
+  letter-spacing: -0.5px;
+}
+
+.topnav {
+  background-color: var(--theme-color1);
+
+	/* background-color: #01313f;
+	color: #30edf7; */
+}
+
+.nav-link {
+  color: black !important;
+}
+
+#actions-nav {
+	/* background-color: #01313f; */
+
+	background-color: var(--theme-color1);
+	margin-left: 10px;
+}
+
+/* For index headings */
+font b {
+  font-size: 22pt;
+}
+
+.marked {
+  background: red;
+  color: red;
+  position: absolute;
+}
+
+div#splitter {
+  position: fixed;
+  top: 65px;
+  left: 400px;
+  background: #fffcf1;
+  width: 4px;
+  height: 100%;
+  border-left: 1px solid #ddd8d0;
+  cursor: ew-resize;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  /* this needs to be high enough to click on */
+  z-index: 2;
+}
+
+div#index {
+  position: fixed;
+  visibility: hidden;
+  color: #888;
+  display: none;
+  top: 10px;
+  left: 100px;
+  width: 100%;
+  overflow: scroll;
+  background: #f8f8f8;
+  z-index: 300;
+  min-height: 100vh;
+  max-height: 100vh;
+}
+
+#output {
+  /* background: #fffcf1; */
+
+	background-color: var(--score-color);
+}
+
+.output-with-comments {
+	background-color: var(--score-color);
+}
+
+.output-container {
+  overflow-y: scroll !important;
+}
+
+/* Menu stylings */
+.highlight {
+  color: #c00;
+  fill: #c00;
+  stroke: #c00;
+  filter: url(#highlight-shadow);
+}
+.highlight [stroke] {
+  stroke: #c00;
+  stroke-width: 50px;
+}
+
+@font-face {
+	font-family: "Roots_Slashes";
+	
+	src: url("/styles/Rootslashbarsrepeats-Regular.otf");
+	font-style: normal;
+	font-weight: normal
+}
+
+
+@font-face {
+	font-family: "Variations";
+	
+	src: url("/styles/Chord_types-Regular.otf");
+	font-style: normal;
+	font-weight: normal
+}
+
+@font-face {
+  font-family: 'Times';
+  /* src: url("../scripts/pdfkit/EBGaramond-Regular.ttf"); */
+  src: url('/scripts/pdfkit/EBGaramond-Regular.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Times';
+  /* src: url("../scripts/pdfkit/EBGaramond-Italic.ttf"); */
+  src: url('/scripts/pdfkit/EBGaramond-Italic.ttf');
+  font-style: italic;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Times';
+  /* src: url("../scripts/pdfkit/EBGaramond-Bold.ttf"); */
+  src: url('/scripts/pdfkit/EBGaramond-Bold.ttf');
+  font-style: normal;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Times';
+  /* src: url("../scripts/pdfkit/EBGaramond-BoldItalic.ttf"); */
+  src: url('/scripts/pdfkit/EBGaramond-BoldItalic.ttf');
+  font-style: italic;
+  font-weight: bold;
+}
+
+.ace_gutter,
+.ace-scroller {
+  z-index: 100;
+}
+
+.ace_dialog,
+.ace_dialog_bottom {
+  z-index: 200 !important;
+}
+
+svg {
+  z-index: 3;
+}
+
+.ace_tooltip {
+  z-index: 400 !important;
+}
+
+body.frozen #output,
+body.frozen #splitter,
+body.frozen {
+  background: #ffffff;
+}
+
+body.invalid #output,
+body.invalid #splitter,
+body.invalid {
+  background: #ffe0e0;
+}
+
+.fas-play :hover {
+  color: white !important;
+}
+
+div#index {
+  width: 80%;
+  min-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  background: cornsilk;
+  opacity: 0.95;
+  border: 1px solid #000;
+  z-index: 9999;
+  padding-top: 20px;
+  margin-top: -20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  overflow: scroll;
+}
+
+#output svg g.dir.problem tspan.rend tspan.text tspan.text.p {
+  font-family: 'FontAwesome';
+}
+
+#output svg g.dir.sic tspan.rend tspan.text tspan.text.s {
+  font-family: 'FontAwesome';
+}
+
+#output svg g.dir.sic tspan.rend tspan.text tspan.text.s {
+  font-family: 'FontAwesome';
+}
+
+/* .nav-link {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+} */
+
+/* FEATURE TOGGLE FOR DEBUGGING */
+#feature-toggle {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 1rem;
+  right: 45vw;
+
+  max-width: 40ch;
+
+  background-color: #ddd8d0;
+  z-index: 999;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
