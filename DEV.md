@@ -1,5 +1,8 @@
 ## Change Log
 
+### 2022/05/20
+- Fix scrolling issue when rendering scores that are larger than viewport
+
 ### 2022/05/19
 - Cleaned up useless files
 - Relocated `CSS` stylesheet from `public` directory to `src/css` so that **Vite** has access to them,
