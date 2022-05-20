@@ -5,14 +5,13 @@ body.waiting * {
 body {
   /* prevent accidentally leaving page in chrome */
   overscroll-behavior-x: none;
-	overflow: hidden;
+  overflow-y: scroll !important;
 }
 
 body {
   background: #fffcf1;
   margin: 0;
   padding: 0;
-  /* overflow: scroll; */
   z-index: 1 !important;
 }
 

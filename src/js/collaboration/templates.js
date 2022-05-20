@@ -31,12 +31,9 @@ export let collabTemplate = (svgHeight, ...children) => {
 
 export const multiSelectCoords = (selectedNotes) => {
   const selector = selectedNotes.map((id) => '#' + id).join(',');
-  let output = document.querySelector('#output');
-
   return calculateMultiSelectCoordsWithOffset(
     Array.from(document.querySelectorAll(selector)),
     document.querySelector('#input'),
-    output.closest('[class*=output-container]').scrollTop
   );
 }
 

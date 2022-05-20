@@ -85,7 +85,7 @@ export function calculateMultiSelectCoords(selectedNotes) {
   };
 }
 
-export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem, scrollTop = 0) {
+export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem) {
   if (!selectedNotes || !Array.isArray(selectedNotes) || selectedNotes.length == 0) {
     console.log('Argument "selectedNotes" must be an array of elements', selectedNotes);
     return;
@@ -96,11 +96,6 @@ export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem, 
     return;
   }
   
-  if (typeof scrollTop != 'number') {
-    console.log('Argument "scrollTop" must be a number');
-    return;
-  }
-
   const coords = selectedNotes.reduce(
     (oldBox, note) => {
       const box = note.getBoundingClientRect();
@@ -111,12 +106,21 @@ export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem, 
         bottom: Math.max(oldBox.bottom, box.bottom),
       };
     },
-    { left: Infinity, top: Infinity, right: Number.NEGATIVE_INFINITY, bottom: Number.NEGATIVE_INFINITY }
+    {
+      left: Infinity,
+      top: Infinity,
+      right: Number.NEGATIVE_INFINITY,
+      bottom: Number.NEGATIVE_INFINITY,
+    }
   );
 
+  return withScrollingAndOffset(coords, offsetElem);
+}
+
+function withScrollingAndOffset(coords, offsetElem) {
   return {
     left: coords.left - offsetElem.offsetWidth,
-    top: coords.top - offsetElem.offsetTop + scrollTop,
+    top: coords.top + window.scrollY - document.getElementById('topnav').getBoundingClientRect().height,
     width: coords.right - coords.left,
     height: coords.bottom - coords.top,
   };
