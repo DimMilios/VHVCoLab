@@ -1,5 +1,5 @@
 ## Deployment
-Current deployment @netlify: https://vite-scaffold.netlify.app/
+Current deployment @GitHub Pages: https://dimmilios.github.io/vite-scaffold/
 
 ## Προαπαιτούμενα
 Πρέπει να είναι εγκατεστημένα:
