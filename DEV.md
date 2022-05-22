@@ -3,6 +3,7 @@
 ### 2022/05/22
 - Implemented open file from disk functionality for supported file formats (`.krn`, `.xml`, `.musicxml`, `.mei`).
 - Implemented save current song as MIDI functionality
+- Enable parsing of URL filter parameters (e.g. starting VHV by specifying a `.krn` file hosted in a remote repository, `?file=file_name_from_github.krn`)
 
 ### 2022/05/20
 - Fix scrolling issue when rendering scores that are larger than viewport
