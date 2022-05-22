@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2022/05/22
+- Implemented open file from disk functionality for supported file formats (`.krn`, `.xml`, `.musicxml`, `.mei`).
+- Implemented save current song as MIDI functionality
+
 ### 2022/05/20
 - Fix scrolling issue when rendering scores that are larger than viewport
 

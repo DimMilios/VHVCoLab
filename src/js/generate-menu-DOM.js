@@ -4,14 +4,14 @@ import * as menuJSON from '/src/menu.json';
 const menuBar = document.querySelector('#menubar');
 
 const navBarTemplate = `
-    <nav id="actions-nav" class="navbar navbar-expand-lg navbar-dark p-0" style="background-color: #01313f; margin-left: 10px;">
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto"></ul>
-      </div>
-  
-    </nav>
-  `;
+  <nav id="actions-nav" class="navbar navbar-expand-lg navbar-dark p-0">
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto"></ul>
+    </div>
+
+  </nav>
+`
 
 menuBar.innerHTML = navBarTemplate;
 

@@ -6,12 +6,28 @@
         "ENTRY": [
           {
             "TEXT": {
+              "DEFAULT": "Open",
+              "ACTION": "MENU.openScoreFileFromDisk()"
+            },
+            "RIGHT_TEXT": {
+              "TYPE": "shortcut",
+              "DEFAULT": "ctrl-o"
+            }
+          },
+          {
+            "TEXT": {
               "DEFAULT": "Save editor contents",
               "ACTION": "MENU.saveTextEditorContents()"
             },
             "RIGHT_TEXT": {
               "TYPE": "shortcut",
               "DEFAULT": "alt-s"
+            }
+          },
+          {
+            "TEXT": {
+              "DEFAULT": "Save as MIDI",
+              "ACTION": "MENU.saveAsMIDI()"
             }
           },
           {

@@ -5,8 +5,14 @@ import { ClassWatcher } from './collaboration/ClassWatcher.js';
 const menu = getMenu();
 
 document
+  .querySelector('#open__submenu-item')
+  .addEventListener('click', () => menu.openScoreFileFromDisk());
+document
   .querySelector('#save-editor-contents__submenu-item')
   .addEventListener('click', () => menu.saveTextEditorContents());
+document
+  .querySelector('#save-as-midi__submenu-item')
+  .addEventListener('click', () => menu.saveAsMIDI());
 document
   .querySelector('#save-as-pdf__submenu-item')
   .addEventListener('click', () => menu.createPdf());

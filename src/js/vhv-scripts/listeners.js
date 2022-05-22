@@ -28,6 +28,7 @@ import {
   setTextInEditor,
   redrawInputArea,
   setCursorNote,
+  getTextFromEditor,
 } from './misc.js';
 import { observeSvgContent } from './utility-svg.js';
 import { HnpMarkup } from './highlight.js';
@@ -58,6 +59,7 @@ import {
   addInterpretationLineAboveCurrentPosition,
   addLocalCommentLineAboveCurrentPosition,
   processNotationKey,
+  setEditorContents,
   setEditorContentsMany,
   setInterfaceSingleNumber,
   transposeNotes,
@@ -106,13 +108,13 @@ import { setEditorMode } from './global-variables.js';
 import { getTextFromEditorRaw, dataIntoView } from './misc.js';
 import { loadEditorFontSizes } from './verovio-options.js';
 import { setupDropArea } from '../drop.js';
-import { buildPdfIconListInMenu } from './menu.js';
 import { inSvgImage } from './utility-svg.js';
 
 import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
-import { clearCursorHighlight, unfocusCommentHighlights } from '../collaboration/util-collab.js';
+import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 import { chordLocation } from './chords.js';
+import { openFileFromDisk } from './file-operations.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -634,7 +636,7 @@ export function processInterfaceKeyCommand(event) {
     event.preventDefault = function () {};
   }
 
-  if (!event.altKey && event.target.nodeName == 'TEXTAREA') {
+  if ((!event.altKey || !event.ctrlKey) && event.target?.nodeName == 'TEXTAREA') {
     // needed to prevent key commands when editing text
     return;
   }
@@ -794,6 +796,11 @@ export function processInterfaceKeyCommand(event) {
       break;
 
     case OKey: // toggle display of *oclef data
+      if (event.ctrlKey) {
+        event.preventDefault();
+        openFileFromDisk();
+      }
+
       if (event.altKey) {
         global_interface.OriginalClef = !global_interface.OriginalClef;
         console.log('Original clef changed to:', global_interface.OriginalClef);

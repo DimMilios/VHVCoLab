@@ -24,7 +24,6 @@ export function setupAceEditor(idtag) {
   });
 
   let configPath = `${import.meta.env.BASE_URL}scripts/ace`;
-  console.log({ configPath, meta: import.meta.url })
 
   ace.config.set("basePath", configPath);
   ace.config.set('modePath', configPath);

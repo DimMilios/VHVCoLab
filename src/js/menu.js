@@ -37,6 +37,7 @@ import {
 } from './vhv-scripts/global-variables.js';
 import { layoutService } from './state/layoutStateMachine.js';
 import { hideCommentSection, showCommentSection } from './collaboration/util-collab.js';
+import { saveContentAsMIDI } from './vhv-scripts/file-operations.js';
 
 class MenuInterface {
   constructor() {
@@ -148,6 +149,17 @@ class MenuInterface {
       options.filter = filter;
     }
     loadKernScoresFile(options);
+  }
+
+  openScoreFileFromDisk() {
+    var event = {};
+    event.code = OKey;
+    event.ctrlKey = true;
+    processInterfaceKeyCommand(event);
+  }
+
+  saveAsMIDI() {
+    saveContentAsMIDI();
   }
 
   saveTextEditorContents() {
