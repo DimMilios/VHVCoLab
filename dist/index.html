@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Verovio Humdrum Viewer </title>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="/vhv/styles/bootstrap-4.6/bootstrap.min.css">
+
+  <script src="/vhv/styles/bootstrap-4.6/jquery-3.5.1.min.js"></script>
+  <script src="/vhv/styles/bootstrap-4.6/bootstrap.bundle.min.js"></script>
+  <script src="/vhv/styles/bootstrap-4.6/jquery-resizable.min.js"></script>
+
+
+  <script src="/vhv/scripts/FileSaver.js"></script>
+
+  <script src="/vhv/scripts/basket.full.min.js"></script>
+
+  <!-- Midi Player -->
+  <script src="/vhv/scripts/midiplayer/wildwebmidi.js"></script>
+  <script src="/vhv/scripts/midiplayer/midiplayer.js"></script>
+
+
+  <script src="/vhv/scripts/basket-session.js"></script>
+  
+
+  <!-- Uncomment to generate menu DOM with JavaScript -->
+  <!-- <script src="/src/js/generate-menu-DOM.js" type="module"></script> -->
+  
+  
+
+
+  
+
+  <!-- <script src="/src/js/vhv-scripts/main.js" type="module"></script> -->
+
+  
+  <script src="/vhv/scripts/ace/ace.js"></script>
+
+  <!-- Javascript needed for PDF creation -->
+  <script src="/vhv/scripts/pdfkit/blobstream.js" type="text/javascript"></script>
+  <script src="/vhv/scripts/pdfkit/pdfkit.js" type="text/javascript"></script>
+  <script src="/vhv/scripts/pdfkit/source.js" type="text/javascript"></script>
+
+  
+  
+  
+
+  
+
+
+  
+  <link rel="stylesheet" href="/vhv/styles/fontawesome/font-awesome.min.css">
+
+  
+  <script src="https://meet.jit.si/external_api.js"></script>
+  <!-- <script type="module" src="/src/js/jitsi/index.js"></script> -->
+
+  
+
+  <!-- <script src="/src/js/generate-menu-DOM.js" type="module"></script> -->
+  <script type="module" crossorigin src="/vhv/assets/index.ed02c6b1.js"></script>
+  <link rel="modulepreload" href="/vhv/assets/vendor.7a9baf1f.js">
+  <link rel="stylesheet" href="/vhv/assets/index.f0d82904.css">
+</head>
+
+<body>
+
+  <div id="feature-toggle" style="display: none;">
+    <form id="feature-form" class="px-4 mt-1">
+      <div class="form-group form-check">
+        <input class="form-check-input" type="checkbox" name="score" id="score-option">
+        <label class="form-check-label" for="score">
+          Score Editor
+          <span class="badge badge-danger">Select only</span>
+        </label>
+      </div>
+
+      <div class="form-group form-check">
+        <input class="form-check-input" type="checkbox" name="collaboration"
+          id="collaboration-option">
+        <label class="form-check-label" for="collaboration">
+          Collaboration
+          <span class="badge badge-danger">Select only</span>
+        </label>
+      </div>
+
+      <div class="form-group form-check">
+        <input class="form-check-input" type="checkbox" name="videoConference"
+          id="videoConference-option">
+        <label class="form-check-label" for="videoConference">
+          VideoConference
+          <span class="badge badge-success">Unselect</span>
+        </label>
+      </div>
+
+      <div class="form-group form-check">
+        <input class="form-check-input" type="checkbox" name="soundEditor" id="soundEditor-option"
+          disabled>
+        <label class="form-check-label" for="soundEditor">Sound Editor</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary float-right">Apply</button>
+    </form>
+  </div>
+
+  <div class="modal" id="show-chord-editor" tabindex="-1" aria-labelledby="showCordEditorLabel"
+    aria-hidden="true">
+    <div class="modal-content bg-transparent border-0">
+
+      <div class="modal-body">
+
+        <div class="container">
+
+          <div id="chord-editor">
+
+            <!-- BEGIN: Root and accidentals container -->
+            <div class="row justify-content-around my-5">
+              <table id="roots" class="table table-bordered table-dark col-4">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center" colspan="7">Roots</th>
+                  </tr>
+                </thead>
+                <tbody class="Chords">
+                  <tr>
+                    <td class="root">A</td>
+                    <td class="root">B</td>
+                    <td class="root">C</td>
+                    <td class="root">D</td>
+                    <td class="root">E</td>
+                    <td class="root">F</td>
+                    <td class="root">G</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table id="accidentals" class="table table-bordered table-dark col-2">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center" colspan="2">Accidentals</th>
+                  </tr>
+                </thead>
+                <tbody class="Chords">
+                  <tr>
+                    <td class="accidental">+</td>
+                    <td class="accidental">&amp;</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- END: Root and accidentals container -->
+
+            <!-- BEGIN: Variations container -->
+            <div class="row justify-content-center">
+              <table id="variations" class="col-8 table table-bordered table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center" colspan="16">Variations</th>
+                  </tr>
+                </thead>
+                <tbody class="Chords">
+                  <tr>
+                    <td class="variation">5</td>
+                    <td class="variation">6</td>
+                    <td class="variation">7</td>
+                    <td class="variation">9</td>
+                    <td class="variation">Q</td>
+                    <td class="variation">U</td>
+                    <td class="variation">S</td>
+                    <td class="variation">s</td>
+                    <td class="variation">t</td>
+                    <td class="variation">p</td>
+                    <td class="variation">q</td>
+                    <td class="variation">r</td>
+                    <td class="variation">T</td>
+                    <td class="variation">n</td>
+                    <td class="variation">2</td>
+                    <td id="test" class="variation">M</td>
+                  </tr>
+                  <tr>
+                    <td class="variation">O</td>
+                    <td class="variation">N</td>
+                    <td class="variation">P</td>
+                    <td class="variation">L</td>
+                    <td class="variation">J</td>
+                    <td class="variation">K</td>
+                    <td class="variation">I</td>
+                    <td class="variation">F</td>
+                    <td class="variation">l</td>
+                    <td class="variation">u</td>
+                    <td class="variation">o</td>
+                    <td class="variation">a</td>
+                    <td class="variation">b</td>
+                    <td class="variation">h</td>
+                    <td class="variation">i</td>
+                    <td class="variation">W</td>
+                  </tr>
+                  <tr>
+                    <td class="variation">Y</td>
+                    <td class="variation">X</td>
+                    <td class="variation">f</td>
+                    <td class="variation">g</td>
+                    <td class="variation">8</td>
+                    <td class="variation">E</td>
+                    <td class="variation">j</td>
+                    <td class="variation">Z</td>
+                    <td class="variation">R</td>
+                    <td class="variation">3</td>
+                    <td class="variation">V</td>
+                    <td class="variation">D</td>
+                    <td class="variation">k</td>
+                    <td class="variation">c</td>
+                    <td class="variation">d</td>
+                    <td class="variation">x</td>
+                  </tr>
+                  <tr>
+                    <td class="variation">z</td>
+                    <td class="variation">y</td>
+                    <td class="variation">1</td>
+                    <td class="variation">e</td>
+                    <td class="variation">m</td>
+                    <td class="variation">0</td>
+                    <td class="variation">%</td>
+                    <td class="variation">4</td>
+                    <td class="variation">v</td>
+                    <td class="variation">H</td>
+                    <td class="variation">B</td>
+                    <td class="variation">C</td>
+                    <td class="variation">w</td>
+                    <td class="variation">A</td>
+                    <td class="variation">G</td>
+                    <td class="variation"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- END: Variations container -->
+
+            <div class="d-flex justify-content-end">
+              <button id="close-chord-btn" class="btn btn-light btn-lg mx-3"
+                data-dismiss="modal">Back</button>
+              <button id="send-chord-btn" class="btn btn-primary btn-lg"
+                data-dismiss="modal">Done</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- <div id="cover" style="position:fixed;width:100vw;height:100vh;z-index:10;top:0;
+    left:0;background-color: rgba(0,0,0,0.6);visibility: hidden;"></div> -->
+
+  <div id="jitsi-meeting-container" style="display: none;"></div>
+
+  <div id="score-editor" style="display: none;">
+    <div class="topnav col-12 d-flex flex-column" id="topnav">
+      <div>
+        <div class="d-inline-flex w-100 ml-2 align-items-center"
+          style="white-space:nowrap; overflow: hidden;">
+
+          <img class="p-1" src="/vhv/styles/MCL_fullLogo.png" alt="project logo" width="200" height="28">
+
+          <span id="work-navigator" class="ml-3"></span>
+
+          <div id="title-info" class="ml-3">
+            <span id="composer"></span>&nbsp;<span id="title"></span>
+          </div>
+
+          <!-- Edit button toggle Chord editor display -->
+          <div id="show-chord-editor-btn">
+            <button class="btn btn-secondary" data-toggle="modal"
+              data-target="#show-chord-editor">Edit</button>
+          </div>
+
+          <div xmlns="http://www.w3.org/1999/xhtml" class="nav-play-button mr-5">
+            <div style="cursor:pointer;" title="Play music" id="play-button">
+              <span class="fas fa-play"></span>
+            </div>
+          </div>
+
+          <div id="player" style="display: none; color:white;">
+          </div>
+        </div>
+      </div>
+
+      <div id="menubar" class="topnav d-flex align-items-center justify-content-between">
+
+        <nav id="actions-nav" class="navbar navbar-expand-lg navbar-dark p-0">
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li id="file__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">File</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="open__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Open </a><small
+                      class="ml-3 text-nowrap"><strong>ctrl-o</strong></small></li>
+                  <li id="save-editor-contents__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save editor contents </a><small
+                      class="ml-3 text-nowrap"><strong>alt-s</strong></small></li>
+                  <li id="save-as-midi__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save as MIDI </a></li>
+                  <li id="save-as-pdf__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save as PDF </a><small
+                      class="ml-3 text-nowrap"><strong>alt-t</strong></small></li>
+                  <li id="save-view-as-pdf__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save view as PDF </a><small
+                      class="ml-3 text-nowrap"><strong>alt-T</strong></small></li>
+                  <li id="save-view-as-svg__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save view as SVG </a><small
+                      class="ml-3 text-nowrap"><strong>alt-g</strong></small></li>
+                  <li id="save-as-musicxml__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save as MusicXML </a></li>
+                  <li id="display-mei-data__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Display MEI data </a><small
+                      class="ml-3 text-nowrap"><strong>alt-m</strong></small></li>
+                  <li id="display-humdrum-data__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Display Humdrum data </a><small
+                      class="ml-3 text-nowrap"><strong>alt-h</strong></small></li>
+                  <li id="save-to-local-buffer__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Save to local buffer »</a><small
+                      class="ml-3 text-nowrap"><strong>info</strong></small>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="save-to-buffer-1__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 1 </a><small
+                          class="ml-3 text-nowrap"><strong>1 alt-S</strong></small></li>
+                      <li id="save-to-buffer-2__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 2 </a><small
+                          class="ml-3 text-nowrap"><strong>2 alt-S</strong></small></li>
+                      <li id="save-to-buffer-3__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 3 </a><small
+                          class="ml-3 text-nowrap"><strong>3 alt-S</strong></small></li>
+                      <li id="save-to-buffer-4__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 4 </a><small
+                          class="ml-3 text-nowrap"><strong>4 alt-S</strong></small></li>
+                      <li id="save-to-buffer-5__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 5 </a><small
+                          class="ml-3 text-nowrap"><strong>5 alt-S</strong></small></li>
+                      <li id="save-to-buffer-6__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 6 </a><small
+                          class="ml-3 text-nowrap"><strong>6 alt-S</strong></small></li>
+                      <li id="save-to-buffer-7__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 7 </a><small
+                          class="ml-3 text-nowrap"><strong>7 alt-S</strong></small></li>
+                      <li id="save-to-buffer-8__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 8 </a><small
+                          class="ml-3 text-nowrap"><strong>8 alt-S</strong></small></li>
+                      <li id="save-to-buffer-9__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Save to buffer 9 </a><small
+                          class="ml-3 text-nowrap"><strong>9 alt-S</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="load-local-buffer__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Load local buffer »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="load-from-buffer-1__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 1 </a><small
+                          class="ml-3 text-nowrap"><strong>1 alt-R</strong></small></li>
+                      <li id="load-from-buffer-2__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 2 </a><small
+                          class="ml-3 text-nowrap"><strong>2 alt-R</strong></small></li>
+                      <li id="load-from-buffer-3__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 3 </a><small
+                          class="ml-3 text-nowrap"><strong>3 alt-R</strong></small></li>
+                      <li id="load-from-buffer-4__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 4 </a><small
+                          class="ml-3 text-nowrap"><strong>4 alt-R</strong></small></li>
+                      <li id="load-from-buffer-5__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 5 </a><small
+                          class="ml-3 text-nowrap"><strong>5 alt-R</strong></small></li>
+                      <li id="load-from-buffer-6__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 6 </a><small
+                          class="ml-3 text-nowrap"><strong>6 alt-R</strong></small></li>
+                      <li id="load-from-buffer-7__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 7 </a><small
+                          class="ml-3 text-nowrap"><strong>7 alt-R</strong></small></li>
+                      <li id="load-from-buffer-8__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 8 </a><small
+                          class="ml-3 text-nowrap"><strong>8 alt-R</strong></small></li>
+                      <li id="load-from-buffer-9__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from buffer 9 </a><small
+                          class="ml-3 text-nowrap"><strong>9 alt-R</strong></small></li>
+                      <li id="load-from-autosave-buffer__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Load from autosave buffer </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li id="reload-data-from-source__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Reload data from source </a><small
+                      class="ml-3 text-nowrap"><strong>alt-r</strong></small></li>
+                  <li id="convert-to-humdrum__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Convert to Humdrum </a><small
+                      class="ml-3 text-nowrap"><strong>info</strong></small></li>
+                  <li id="toggle-csv-tsv__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle CSV/TSV </a><small
+                      class="ml-3 text-nowrap"><strong>alt-u</strong></small></li>
+                </ul>
+              </li>
+              <li id="view__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">View</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="play-pause-midi-performance__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Play/pause MIDI performance </a><small
+                      class="ml-3 text-nowrap"><strong>space</strong></small></li>
+                  <li id="notation__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Notation »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="make-notation-larger__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Make notation larger </a></li>
+                      <li id="make-notation-smaller__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Make notation smaller </a></li>
+                      <li id="increase-horizontal-notation-spacing__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Increase horizontal notation
+                          spacing </a><small class="ml-3 text-nowrap"><strong>alt-w</strong></small></li>
+                      <li id="decrease-horizontal-notation-spacing__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Decrease horizontal notation
+                          spacing </a><small class="ml-3 text-nowrap"><strong>alt-W</strong></small></li>
+                      <li id="increase-vertical-staff-spacing__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Increase vertical staff spacing
+                        </a></li>
+                      <li id="decrease-vertical-staff-spacing__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Decrease vertical staff spacing
+                        </a></li>
+                      <li id="increase-vertical-system-spacing__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Increase vertical system spacing
+                        </a></li>
+                      <li id="decrease-vertical-system-spacing__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Decrease vertical system spacing
+                        </a></li>
+                      <li id="ignore-encoded-line-breaks__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Ignore encoded line breaks </a>
+                      </li>
+                      <li id="display-with-encoded-line-breaks__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Display with encoded line breaks
+                        </a></li>
+                      <li id="increase-text-size__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Increase text size </a></li>
+                      <li id="decrease-text-size__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Decrease text size </a></li>
+                    </ul>
+                  </li>
+                  <li id="tabs__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Tabs »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="auto-tab-width__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Auto tab width </a></li>
+                      <li id="increase-tab-width__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Increase tab width </a><small
+                          class="ml-3 text-nowrap"><strong>alt-&gt;</strong></small></li>
+                      <li id="decrease-tab-width__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Decrease tab width </a><small
+                          class="ml-3 text-nowrap"><strong>alt-&lt;</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="splits__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Splits »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="start-splitting--32-measure-splits-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Start splitting (32 measure
+                          splits) </a></li>
+                      <li id="next-split__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Next split </a></li>
+                      <li id="previous-split__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Previous split </a></li>
+                      <li id="remove-splits__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove splits </a></li>
+                    </ul>
+                  </li>
+                  <li id="music-font__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Music Font »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="bravura__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Bravura </a></li>
+                      <li id="gootville__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Gootville </a></li>
+                      <li id="leipzig__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Leipzig </a></li>
+                      <li id="leland__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Leland </a></li>
+                      <li id="petaluma__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Petaluma </a></li>
+                    </ul>
+                  </li>
+                  <li id="text-editor__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Text editor »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="toggle-text-display__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle text display </a><small
+                          class="ml-3 text-nowrap"><strong>alt-y</strong></small></li>
+                      <li id="increase-font-size__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Increase font size </a></li>
+                      <li id="decrease-font-size__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Decrease font size </a></li>
+                      <li id="toggle-csv-tsv-humdrum-display__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle CSV/TSV Humdrum display
+                        </a></li>
+                    </ul>
+                  </li>
+                  <li id="toggle-layer-highlighting__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle layer highlighting </a><small
+                      class="ml-3 text-nowrap"><strong>alt-l</strong></small></li>
+                  <li id="freeze-unfreeze-notation-rendering__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Freeze/unfreeze notation rendering
+                    </a><small class="ml-3 text-nowrap"><strong>alt-f</strong></small></li>
+                  <li id="toggle-original-clefs__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle original clefs </a><small
+                      class="ml-3 text-nowrap"><strong>alt-o</strong></small></li>
+                </ul>
+              </li>
+              <li id="edit__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Edit</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="clear-text-editor__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Clear text editor </a><small
+                      class="ml-3 text-nowrap"><strong>alt-e</strong></small></li>
+                  <li id="undo-last-change__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Undo last change </a><small
+                      class="ml-3 text-nowrap"><strong>ctrl-z</strong></small></li>
+                  <li id="compile-embedded-filters__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Compile embedded filters </a><small
+                      class="ml-3 text-nowrap"><strong>alt-c</strong></small></li>
+                  <li id="remove-trailing-tabs__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Remove trailing tabs </a></li>
+                  <li id="beams__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Beams »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="beam-by-meter__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Beam by meter </a><small
+                          class="ml-3 text-nowrap"><strong>autobeam</strong></small></li>
+                      <li id="split-beams-by-lyrics__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Split beams by lyrics </a><small
+                          class="ml-3 text-nowrap"><strong>autobeam -l</strong></small></li>
+                      <li id="remove-beams__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove beams </a><small
+                          class="ml-3 text-nowrap"><strong>autobeam -r</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="chords__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Chords »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="sort-chords-highest-note-first__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Sort chords highest note first
+                        </a><small class="ml-3 text-nowrap"><strong>chord -d</strong></small></li>
+                      <li id="sort-chords-lowest-note-first__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Sort chords lowest note first
+                        </a><small class="ml-3 text-nowrap"><strong>chord -u</strong></small></li>
+                      <li id="extract-first-note-in-chord__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Extract first note in chord
+                        </a><small class="ml-3 text-nowrap"><strong>chord -f</strong></small></li>
+                      <li id="extract-last-note-in-chord__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Extract last note in chord
+                        </a><small class="ml-3 text-nowrap"><strong>chord -l</strong></small></li>
+                      <li id="highest-note-in-chord__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Highest note in chord </a><small
+                          class="ml-3 text-nowrap"><strong>chord -d | chord -f</strong></small></li>
+                      <li id="lowest-note-in-chord__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Lowest note in chord </a><small
+                          class="ml-3 text-nowrap"><strong>chord -u | chord -f</strong></small></li>
+                      <li id="compress-chords__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Compress chords </a><small
+                          class="ml-3 text-nowrap"><strong>chord -m</strong></small></li>
+                      <li id="expand-chords__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Expand chords </a><small
+                          class="ml-3 text-nowrap"><strong>chord -M</strong></small></li>
+                      <li id="bass-melody-chord-notes--for-grand-staff-scores-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Bass/melody chord notes (for grand
+                          staff scores) </a><small class="ml-3 text-nowrap"><strong>chord -u | chord -fs1 |
+                            chord -ls2</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="data__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Data »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="insert-local-comment-line--above-cursor-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Insert local comment line (above
+                          cursor) </a><small class="ml-3 text-nowrap"><strong>alt-L</strong></small></li>
+                      <li id="insert-interpretation-line--above-cursor-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Insert interpretation line (above
+                          cursor) </a><small class="ml-3 text-nowrap"><strong>alt-I</strong></small></li>
+                      <li id="insert-null-data-line--above-cursor-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Insert null data line (above
+                          cursor) </a><small class="ml-3 text-nowrap"><strong>alt-D</strong></small></li>
+                      <li id="insert-barline--above-cursor-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Insert barline (above cursor)
+                        </a><small class="ml-3 text-nowrap"><strong>alt-B</strong></small></li>
+                      <li id="remove-null-lines__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove null lines </a><small
+                          class="ml-3 text-nowrap"><strong>rid -glid</strong></small></li>
+                      <li id="remove-null-data-lines__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove null data lines </a><small
+                          class="ml-3 text-nowrap"><strong>rid -d</strong></small></li>
+                      <li id="remove-null-interpretation-lines__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove null interpretation lines
+                        </a><small class="ml-3 text-nowrap"><strong>rid -i</strong></small></li>
+                      <li id="remove-null-local-comment-lines__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove null local comment lines
+                        </a><small class="ml-3 text-nowrap"><strong>rid -l</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="ornaments__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Ornaments »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="undefined__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">undefined </a></li>
+                      <li id="remove-accidentals-from-trills-and-ornaments__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove accidentals from trills and
+                          ornaments </a><small class="ml-3 text-nowrap"><strong>trillspell</strong></small>
+                      </li>
+                    </ul>
+                  </li>
+                  <li id="system__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">System »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="remove-non-kern-spines__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove non-kern spines </a><small
+                          class="ml-3 text-nowrap"><strong>extract -ikern</strong></small></li>
+                      <li id="add-staff-above-system__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add staff above system </a><small
+                          class="ml-3 text-nowrap"><strong>extract -s 1-$,0 | restfill -i
+                            blank</strong></small></li>
+                      <li id="add-staff-above-system-with-hidden-rests__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add staff above system with hidden
+                          rests </a><small class="ml-3 text-nowrap"><strong>extract -s 1-$,0 | restfill -yi
+                            blank</strong></small></li>
+                      <li id="add-staff-below-system__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add staff below system </a><small
+                          class="ml-3 text-nowrap"><strong>extract -s 0,1-$ | restfill -i
+                            blank</strong></small></li>
+                      <li id="add-staff-below-system-with-hidden-rests__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add staff below system with hidden
+                          rests </a><small class="ml-3 text-nowrap"><strong>extract -s 0,1-$ | restfill -yi
+                            blank</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="stems__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Stems »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="add-note-stem-directions__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add note stem directions
+                        </a><small class="ml-3 text-nowrap"><strong>autostem</strong></small></li>
+                      <li id="remove-note-stem-directions__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove note stem directions
+                        </a><small class="ml-3 text-nowrap"><strong>autostem -r</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="text__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Text »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="add-lyric-verse-to-top-staff__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add lyric verse to top staff
+                        </a><small class="ml-3 text-nowrap"><strong>extract -s 1-$,0 -n
+                            text</strong></small></li>
+                      <li id="remove-lyric-text__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Remove lyric text </a><small
+                          class="ml-3 text-nowrap"><strong>extract -Itext</strong></small></li>
+                      <li id="split-beams-by-lyrics__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Split beams by lyrics </a><small
+                          class="ml-3 text-nowrap"><strong>autobeam -l</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="transpose-by-key--if-data-contains-key-__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Transpose by key (if data contains
+                      key) »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="tonic-to-c__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to C </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k c</strong></small></li>
+                      <li id="tonic-to-c-sharp-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to C&amp;sharp; </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k c#</strong></small></li>
+                      <li id="tonic-to-d-flat-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to D&amp;flat; </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k d-</strong></small></li>
+                      <li id="tonic-to-d__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to D </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k d</strong></small></li>
+                      <li id="tonic-to-e-flat-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to E&amp;flat; </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k e-</strong></small></li>
+                      <li id="tonic-to-e__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to E </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k e</strong></small></li>
+                      <li id="tonic-to-f__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to F </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k f</strong></small></li>
+                      <li id="tonic-to-f-sharp-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to F&amp;sharp; </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k f#</strong></small></li>
+                      <li id="tonic-to-g__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to G </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k g</strong></small></li>
+                      <li id="tonic-to-a-flat-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to A&amp;flat; </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k a-</strong></small></li>
+                      <li id="tonic-to-a__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to A </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k a</strong></small></li>
+                      <li id="tonic-to-b-flat-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to B&amp;flat; </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k b-</strong></small></li>
+                      <li id="tonic-to-b__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tonic to B </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -k b</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="transpose-by-up-interval__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Transpose by up interval »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="up-a-minor-second__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a minor second </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t m2</strong></small></li>
+                      <li id="up-a-major-second__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a major second </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t M2</strong></small></li>
+                      <li id="up-a-minor-third__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a minor third </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t m3</strong></small></li>
+                      <li id="up-a-major-third__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a major third </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t M3</strong></small></li>
+                      <li id="up-a-perfect-fourth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a perfect fourth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t P4</strong></small></li>
+                      <li id="up-an-augmented-fourth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up an augmented fourth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t A4</strong></small></li>
+                      <li id="up-a-diminished-fifth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a diminished fifth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t d5</strong></small></li>
+                      <li id="up-a-perfect-fifth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a perfect fifth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t P5</strong></small></li>
+                      <li id="up-a-minor-sixth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a minor sixth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t m6</strong></small></li>
+                      <li id="up-a-major-sixth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a major sixth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t M6</strong></small></li>
+                      <li id="up-a-minor-seventh__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a minor seventh </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t m7</strong></small></li>
+                      <li id="up-a-major-seventh__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a major seventh </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t M7</strong></small></li>
+                      <li id="up-a-perfect-octave__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a perfect octave </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t P8</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="transpose-down-by-interval__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Transpose down by interval »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="down-a-minor-second__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a minor second </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -m2</strong></small></li>
+                      <li id="down-a-major-second__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a major second </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -M2</strong></small></li>
+                      <li id="down-a-minor-third__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a minor third </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -m3</strong></small></li>
+                      <li id="down-a-major-third__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a major third </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -M3</strong></small></li>
+                      <li id="down-a-perfect-fourth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a perfect fourth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -P4</strong></small></li>
+                      <li id="down-an-augmented-fourth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down an augmented fourth
+                        </a><small class="ml-3 text-nowrap"><strong>transpose -t -A4</strong></small></li>
+                      <li id="down-an-diminished-fifth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down an diminished fifth
+                        </a><small class="ml-3 text-nowrap"><strong>transpose -t -d5</strong></small></li>
+                      <li id="down-a-perfect-fifth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a perfect fifth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -P5</strong></small></li>
+                      <li id="down-a-minor-sixth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a minor sixth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -m6</strong></small></li>
+                      <li id="down-a-major-sixth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a major sixth </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -M6</strong></small></li>
+                      <li id="down-a-minor-seventh__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a minor seventh </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -m7</strong></small></li>
+                      <li id="down-a-major-seventh__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a major seventh </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -M7</strong></small></li>
+                      <li id="down-a-perfect-octave__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a perfect octave </a><small
+                          class="ml-3 text-nowrap"><strong>transpose -t -P8</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="import-formatting__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Import Formatting »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="tassoize__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Tassoize </a><small
+                          class="ml-3 text-nowrap"><strong>tassoize</strong></small></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li id="beam__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Beam</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="unfocus-beam__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Unfocus beam </a><small
+                      class="ml-3 text-nowrap"><strong>esc</strong></small></li>
+                  <li id="force-beam-above__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Force beam above </a><small
+                      class="ml-3 text-nowrap"><strong>a</strong></small></li>
+                  <li id="force-beam-below__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Force beam below </a><small
+                      class="ml-3 text-nowrap"><strong>b</strong></small></li>
+                  <li id="clear-beam-direction__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Clear beam direction </a><small
+                      class="ml-3 text-nowrap"><strong>c</strong></small></li>
+                </ul>
+              </li>
+              <li id="note__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Note</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="unfocus-note__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Unfocus note </a><small
+                      class="ml-3 text-nowrap"><strong>esc</strong></small></li>
+                  <li id="navigation__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Navigation »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="next-melodic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Next melodic note </a><small
+                          class="ml-3 text-nowrap"><strong>→</strong></small></li>
+                      <li id="previous-melodic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Previous melodic note </a><small
+                          class="ml-3 text-nowrap"><strong>←</strong></small></li>
+                      <li id="next-harmonic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Next harmonic note </a><small
+                          class="ml-3 text-nowrap"><strong>↓</strong></small></li>
+                      <li id="previous-harmonic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Previous harmonic note </a><small
+                          class="ml-3 text-nowrap"><strong>↑</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="pitch__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Pitch »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="up-a-step__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a step </a><small
+                          class="ml-3 text-nowrap"><strong>shift-↑</strong></small></li>
+                      <li id="down-a-step__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a step </a><small
+                          class="ml-3 text-nowrap"><strong>shift-↓</strong></small></li>
+                      <li id="up-an-octave__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up an octave </a><small
+                          class="ml-3 text-nowrap"><strong>ctrl-↑</strong></small></li>
+                      <li id="down-an-octave__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down an octave </a><small
+                          class="ml-3 text-nowrap"><strong>ctrl-↓</strong></small></li>
+                      <li id="up-a-fifth__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Up a fifth </a><small
+                          class="ml-3 text-nowrap"><strong>5 shift-↑</strong></small></li>
+                      <li id="down-a-third__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Down a third </a><small
+                          class="ml-3 text-nowrap"><strong>3 shift-↓</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="stems__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Stems »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="force-stem-above__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Force stem above </a><small
+                          class="ml-3 text-nowrap"><strong>a</strong></small></li>
+                      <li id="force-stem-below__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Force stem below </a><small
+                          class="ml-3 text-nowrap"><strong>b</strong></small></li>
+                      <li id="clear-stem-direction__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Clear stem direction </a><small
+                          class="ml-3 text-nowrap"><strong>c</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="accidentals__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Accidentals »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="toggle-natural-accidental__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle natural accidental
+                        </a><small class="ml-3 text-nowrap"><strong>n</strong></small></li>
+                      <li id="toggle-sharp-accidental__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle sharp accidental </a><small
+                          class="ml-3 text-nowrap"><strong>#</strong></small></li>
+                      <li id="toggle-flat-accidental__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle flat accidental </a><small
+                          class="ml-3 text-nowrap"><strong>-</strong></small></li>
+                      <li id="toggle-forced-display-of-accidental__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle forced display of
+                          accidental </a><small class="ml-3 text-nowrap"><strong>X</strong></small></li>
+                      <li id="toggle-editorial-accidental__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle editorial accidental
+                        </a><small class="ml-3 text-nowrap"><strong>i</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="articulations__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Articulations »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="toggle-staccato__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle staccato </a><small
+                          class="ml-3 text-nowrap"><strong>'</strong></small></li>
+                      <li id="toggle-staccatissimo__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle staccatissimo </a><small
+                          class="ml-3 text-nowrap"><strong>`</strong></small></li>
+                      <li id="toggle-tenuto__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle tenuto </a><small
+                          class="ml-3 text-nowrap"><strong>~</strong></small></li>
+                      <li id="toggle-accent__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle accent </a><small
+                          class="ml-3 text-nowrap"><strong>6</strong></small></li>
+                      <li id="toggle-marcato__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle marcato </a><small
+                          class="ml-3 text-nowrap"><strong>^</strong></small></li>
+                      <li id="toggle-fermata__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle fermata </a><small
+                          class="ml-3 text-nowrap"><strong>;</strong></small></li>
+                      <li id="toggle-arpeggio__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle arpeggio </a><small
+                          class="ml-3 text-nowrap"><strong>:</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="ornaments__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Ornaments »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="toggle-minor-trill__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle minor trill </a><small
+                          class="ml-3 text-nowrap"><strong>t</strong></small></li>
+                      <li id="toggle-major-trill__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle major trill </a><small
+                          class="ml-3 text-nowrap"><strong>T</strong></small></li>
+                      <li id="toggle-minor-lower-mordent__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle minor lower mordent
+                        </a><small class="ml-3 text-nowrap"><strong>m</strong></small></li>
+                      <li id="toggle-major-lower-mordent__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle major lower mordent
+                        </a><small class="ml-3 text-nowrap"><strong>M</strong></small></li>
+                      <li id="toggle-minor-upper-mordent__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle minor upper mordent
+                        </a><small class="ml-3 text-nowrap"><strong>w</strong></small></li>
+                      <li id="toggle-major-upper-mordent__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Toggle major upper mordent
+                        </a><small class="ml-3 text-nowrap"><strong>W</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="slurs__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Slurs »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="add-slur-to-next-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Add slur to next note </a><small
+                          class="ml-3 text-nowrap"><strong>shift-↑</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="break-beam-before-note__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Break beam before note </a><small
+                      class="ml-3 text-nowrap"><strong>L</strong></small></li>
+                  <li id="break-beam-after-note__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Break beam after note </a><small
+                      class="ml-3 text-nowrap"><strong>L</strong></small></li>
+                  <li id="toggle-pedal-down-before-note__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle pedal down before note
+                    </a><small class="ml-3 text-nowrap"><strong>p</strong></small></li>
+                  <li id="toggle-pedal-up-after-note__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle pedal up after note </a><small
+                      class="ml-3 text-nowrap"><strong>P</strong></small></li>
+                  <li id="toggle-gracenote-style__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle gracenote style </a><small
+                      class="ml-3 text-nowrap"><strong>q</strong></small></li>
+                  <li id="toggle---mark__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Toggle @ mark </a><small
+                      class="ml-3 text-nowrap"><strong>@</strong></small></li>
+                </ul>
+              </li>
+              <li id="rest__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Rest</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="unfocus-rest__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Unfocus rest </a><small
+                      class="ml-3 text-nowrap"><strong>esc</strong></small></li>
+                  <li id="navigation__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Navigation »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="next-melodic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Next melodic note </a><small
+                          class="ml-3 text-nowrap"><strong>→</strong></small></li>
+                      <li id="previous-melodic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Previous melodic note </a><small
+                          class="ml-3 text-nowrap"><strong>←</strong></small></li>
+                      <li id="next-harmonic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Next harmonic note </a><small
+                          class="ml-3 text-nowrap"><strong>↓</strong></small></li>
+                      <li id="previous-harmonic-note__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Previous harmonic note </a><small
+                          class="ml-3 text-nowrap"><strong>↑</strong></small></li>
+                    </ul>
+                  </li>
+                  <li id="make-rest-invisible__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Make rest invisible </a><small
+                      class="ml-3 text-nowrap"><strong>y</strong></small></li>
+                </ul>
+              </li>
+              <li id="slur__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Slur</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="unfocus-slur__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Unfocus slur </a><small
+                      class="ml-3 text-nowrap"><strong>esc</strong></small></li>
+                  <li id="force-slur-above__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Force slur above </a><small
+                      class="ml-3 text-nowrap"><strong>a</strong></small></li>
+                  <li id="force-slur-below__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Force slur below </a><small
+                      class="ml-3 text-nowrap"><strong>b</strong></small></li>
+                  <li id="clear-slur-direction__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Clear slur direction </a><small
+                      class="ml-3 text-nowrap"><strong>c</strong></small></li>
+                  <li id="delete-slur__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Delete slur </a><small
+                      class="ml-3 text-nowrap"><strong>D</strong></small></li>
+                  <li id="move-slur-start-left__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Move slur start left </a><small
+                      class="ml-3 text-nowrap"><strong>←</strong></small></li>
+                  <li id="move-slur-start-right__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Move slur start right </a><small
+                      class="ml-3 text-nowrap"><strong>→</strong></small></li>
+                  <li id="move-slur-end-left__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Move slur end left </a><small
+                      class="ml-3 text-nowrap"><strong>shift-←</strong></small></li>
+                  <li id="move-slur-end-right__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Move slur end right </a><small
+                      class="ml-3 text-nowrap"><strong>shift-→</strong></small></li>
+                  <li id="move-slur-end-3-notes-right__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Move slur end 3 notes right </a><small
+                      class="ml-3 text-nowrap"><strong>3 shift-→</strong></small></li>
+                </ul>
+              </li>
+              <li id="tie__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Tie</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="unfocus-slur__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Unfocus slur </a><small
+                      class="ml-3 text-nowrap"><strong>esc</strong></small></li>
+                  <li id="force-tie-above__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Force tie above </a><small
+                      class="ml-3 text-nowrap"><strong>a</strong></small></li>
+                  <li id="force-tie-below__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Force tie below </a><small
+                      class="ml-3 text-nowrap"><strong>b</strong></small></li>
+                  <li id="clear-tie-direction__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Clear tie direction </a><small
+                      class="ml-3 text-nowrap"><strong>c</strong></small></li>
+                </ul>
+              </li>
+              <li id="scores__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Scores</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="bach-370-chorales__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Bach 370 chorales </a></li>
+                  <li id="bach-wtc-fugues__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Bach WTC fugues </a></li>
+                  <li id="beethoven-piano-sonatas__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Beethoven piano sonatas </a></li>
+                  <li id="beethoven-string-quartets__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Beethoven string quartets </a></li>
+                  <li id="chopin-first-editions__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Chopin First Editions </a></li>
+                  <li id="chopin-mazurkas__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Chopin mazurkas </a></li>
+                  <li id="haydn-keyboard-sonatas__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Haydn keyboard sonatas </a></li>
+                  <li id="hummel-preludes--op--67__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Hummel preludes, op. 67 </a></li>
+                  <li id="joplin__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Joplin </a></li>
+                  <li id="mozart-piano-sonatas__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Mozart piano sonatas </a></li>
+                  <li id="mozart--100-contradances--k-sup-6--sup--anh--c30-01__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Mozart, 100 Contradances,
+                      K&lt;sup&gt;6&lt;/sup&gt; Anh. C30.01 </a><small
+                      class="ml-3 text-nowrap"><strong><i>measures</i></strong></small></li>
+                  <li id="scarlatti-sonatas__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Scarlatti sonatas </a></li>
+                  <li id="harmonized-songs__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Harmonized songs »</a>
+                    <ul class="dropdown-menu p-0 dropdown-submenu">
+                      <li id="barbershop-quartets__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Barbershop quartets </a></li>
+                      <li id="barbershop-quartets--grand-staff-__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Barbershop quartets (Grand staff)
+                        </a></li>
+                      <li id="deutscher-liderschatz__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">Deutscher Liderschatz </a></li>
+                      <li id="undefined__submenu-item"
+                        class="dropdown-item d-flex justify-content-between text-dark"><a
+                          class="text-decoration-none text-dark" href="#">undefined </a></li>
+                    </ul>
+                  </li>
+                  <li id="polyrhythm-project__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Polyrhythm Project </a></li>
+                </ul>
+              </li>
+              <li id="comments__menu-item" class="nav-item dropdown mr-2"><a class="nav-link" href="#"
+                  role="button" data-toggle="dropdown" aria-expanded="false">Comments</a>
+                <ul class="dropdown-menu p-0 false">
+                  <li id="show-comments__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Show Comments </a></li>
+                  <li id="hide-comments__submenu-item"
+                    class="dropdown-item d-flex justify-content-between text-dark"><a
+                      class="text-decoration-none text-dark" href="#">Hide Comments </a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        
+        </nav>
+
+        <div id="online-users" class="d-flex justify-content-between"></div>
+
+      </div>
+    </div>
+
+    <div class="container-fluid p-0">
+      <div class="row no-gutters">
+
+        <!-- Hide ace by default (col-4 to show by default)-->
+        <div id="input" class="col-0"></div>
+
+        <!-- Show notation only by default (if ace is shown by default change to col-8)-->
+        <div class="container output-with-comments col-12">
+          <div class="output-container row no-gutters">
+
+            <div id="output" class="col-12 position-relative">
+              <div id="collab"></div>
+            </div>
+
+          </div>
+        </div>
+        <!-- <div id="splitter"></div> -->
+      </div>
+    </div>
+
+  </div>
+
+
+  <div id="dropArea"></div>
+  <div id="index"></div>
+  <!-- <div id="help-container" style="display:none;"></div> -->
+
+  <div class="modal" id="post-comment" tabindex="-1" aria-labelledby="postCommentLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="postCommentLabel">Add Comment</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- filters used in styles/styles.css to control highlighting in SVG images -->
+
+  <svg height="0" style="position: absolute; top: -999999px" xmlns="http://www.w3.org/2000/svg">
+
+    <filter id="highlight-shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" />
+      <feOffset dx="0" dy="0" result="offsetblur" />
+      <feFlood flood-color="black" />
+      <feComposite in2="offsetblur" operator="in" />
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="hover-shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" />
+      <feOffset dx="0" dy="0" result="offsetblur" />
+      <feFlood flood-color="#D30" />
+      <feComposite in2="offsetblur" operator="in" />
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+  </svg>
+
+
+
+
+</body>
+
+</html>
