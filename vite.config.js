@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/vite-scaffold/',
+  base: '/vhv/',
   build: {
     sourcemap: true,
   }
