@@ -53,8 +53,13 @@ export async function saveContentAsMIDI() {
 export async function promptForFile() {
   let url = window.prompt("Enter the URL of a krn file:");
 
-  let fileContent = await loadFileFromRepository(url);
-  console.log(fileContent);
+  try {
+    let fileContent = await loadFileFromRepository(url);
+    if (fileContent.length > 0) {
+      getAceEditor()?.session.setValue(fileContent);
+    }
+    console.log(fileContent);
+  } catch (err) {}
 }
 window.promptForFile = promptForFile;
 
