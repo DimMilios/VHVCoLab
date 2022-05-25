@@ -5,6 +5,9 @@ import { ClassWatcher } from './collaboration/ClassWatcher.js';
 const menu = getMenu();
 
 document
+  .querySelector('#load-from-repository__submenu-item')
+  .addEventListener('click', () => menu.loadFromRepository());
+document
   .querySelector('#open__submenu-item')
   .addEventListener('click', () => menu.openScoreFileFromDisk());
 document

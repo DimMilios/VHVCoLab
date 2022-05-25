@@ -49,3 +49,41 @@ export async function saveContentAsMIDI() {
   element.click();
   document.body.removeChild(element);
 }
+
+export async function promptForFile() {
+  let url = window.prompt("Enter the URL of a krn file:");
+
+  let fileContent = await loadFileFromRepository(url);
+  console.log(fileContent);
+}
+window.promptForFile = promptForFile;
+
+/**
+ * 
+ * @param {string} url 
+ * @returns 
+ */
+export async function loadFileFromRepository(url) {
+  if (!isValidHttpUrl(url) || !url.endsWith('.krn')) {
+    return Promise.reject('Invalid repository URL');
+  }
+
+  try {
+    let res = await fetch(url);
+    return await res.text();
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+function isValidHttpUrl(string) {
+  let url;
+  
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;  
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}

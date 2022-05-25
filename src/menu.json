@@ -6,6 +6,12 @@
         "ENTRY": [
           {
             "TEXT": {
+              "DEFAULT": "Load from Repository",
+              "ACTION": "MENU.loadFromRepository()"
+            }
+          },
+          {
+            "TEXT": {
               "DEFAULT": "Open",
               "ACTION": "MENU.openScoreFileFromDisk()"
             },
