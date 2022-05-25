@@ -114,7 +114,7 @@ import { selectService } from '../state/selectStateMachine.js';
 import { layoutService } from '../state/layoutStateMachine.js';
 import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 import { chordLocation } from './chords.js';
-import { openFileFromDisk } from './file-operations.js';
+import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { loadKernScoresFile } from './loading.js';
 import { Base64 } from './utility.js';
 
@@ -125,49 +125,9 @@ document.addEventListener('DOMContentLoaded', function () {
     inputElement.style.fontSize = global_editorOptions.INPUT_FONT_SIZE + 'rem';
   }
 
-  let CGI = GetCgiParameters();
-
-  if (CGI.file || CGI.tasso || CGI.jrp || CGI.bb || CGI.bitbucket || CGI.gh || CGI.github || CGI.poly) {
-		loadKernScoresFile(
-			{
-				file: CGI.file,
-				tasso: CGI.tasso,
-				poly: CGI.poly,
-				jrp: CGI.jrp,
-				bitbucket: CGI.bitbucket,
-				bb: CGI.bb,
-				github: CGI.github,
-				gh: CGI.gh,
-				measures: CGI.mm,
-				next: true,
-				previous: true
-			}
-		);
-	} else {
-		if (CGI.t) {
-			var text = CGI.t;
-			if (text.match(/\*kern/)) {
-				// do nothing
-			} else if (text.match(/\*mens/)) {
-				// do nothing
-			} else if (text.match(/<xml/)) {
-				// do nothing
-			} else {
-				// presumably MIME data, so decode
-				// will have to deal with embedded UTF-8 probably.
-				try {
-					text = Base64.decode(text);
-				} catch (err) {
-					// text is not MIME encoded
-					console.error("INPUT TEXT IS NOT MIME ENCODED");
-				}
-			}
-			setTextInEditor(text);
-		}
-	}
-
   setEditorMode('humdrum');
-
+  
+  loadFileFromURLParam().then(f => console.log(`Editor initialized with: ${f}`));
   // The block of code below loads the edits to the Ace editor from the AUTOSAVE local buffer,
   // but it breaks Ace Editor
 

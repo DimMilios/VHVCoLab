@@ -50,6 +50,15 @@ export async function saveContentAsMIDI() {
   document.body.removeChild(element);
 }
 
+export async function loadFileFromURLParam() {
+  let params = new URLSearchParams(window.location.search);
+  if (params.has('file')) {
+    let file = await loadFileFromRepository(params.get('file'));
+    getAceEditor()?.session.setValue(file);
+    return params.get('file');
+  }
+}
+
 export async function promptForFile() {
   let url = window.prompt("Enter the URL of a krn file:");
 
@@ -58,17 +67,15 @@ export async function promptForFile() {
     if (fileContent.length > 0) {
       getAceEditor()?.session.setValue(fileContent);
     }
-    console.log(fileContent);
   } catch (err) {}
 }
-window.promptForFile = promptForFile;
 
 /**
  * 
  * @param {string} url 
  * @returns 
  */
-export async function loadFileFromRepository(url) {
+async function loadFileFromRepository(url) {
   if (!isValidHttpUrl(url) || !url.endsWith('.krn')) {
     return Promise.reject('Invalid repository URL');
   }
