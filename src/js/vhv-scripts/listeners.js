@@ -231,14 +231,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inSvgImage(event.target)) {
       let target = event.target?.closest('[id]');
 
+      //alx2
+      let chordBtns = document.getElementById('show-edit-suggest-buttons');
+      chordBtns.style.visibility = 'hidden';
+      //alx2_
+
       let harmonyElem = event.target.closest('.harm');
       //alx         
       if (harmonyElem){
         chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
         chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
 
-        let editBtn = document.getElementById('show-chord-editor-btn');
-        editBtn.style.visibility = 'visible';
+        chordBtns.style.visibility = 'visible';
 
                 // let pgx = event.clientX + 10;
         // let pgy = event.clientY + 10;
@@ -248,11 +252,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let jitsiContainer = document.getElementById('jitsi-meeting-container');
         if (jitsiContainer) {
-          editBtn.style.transform = `translateY(-${jitsiContainer.getBoundingClientRect().height}px)`;
+          chordBtns.style.transform = `translateY(-${jitsiContainer.getBoundingClientRect().height}px)`;
         }
 
-        editBtn.style.top = `${pgy}px`;
-        editBtn.style.left = `${pgx}px`;;
+        chordBtns.style.top = `${pgy}px`;
+        chordBtns.style.left = `${pgx}px`;;
       }
       //alx_
 

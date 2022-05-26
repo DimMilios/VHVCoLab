@@ -1,7 +1,8 @@
 import { getAceEditor } from "./setup";
 
 let chordEditor = document.getElementById('chord-editor');
-let editBtn = document.getElementById('show-chord-editor-btn');
+let chordBtns = document.getElementById('show-edit-suggest-buttons');
+let suggestBtn = document.getElementById('suggest-btn');
 let sendBtn = document.getElementById('send-chord-btn');
 
 export let chord = {
@@ -10,7 +11,8 @@ export let chord = {
     root: null,
     accidental: null,
     variation: null
-  }
+  },
+  reharmonize: false
 };
 export let chordLocation = {};
 export let chordSelected = {
@@ -68,15 +70,44 @@ document.getElementById('close-chord-btn').addEventListener('click', function (e
 });
 
 //edit click
-editBtn.addEventListener('click', (event) => {
+chordBtns.addEventListener('click', (event) => {
   chordEditor.style.display = 'block';
-  editBtn.style.visibility = 'hidden';
+  chordBtns.style.visibility = 'hidden';
 });
 
-//edit hidden when scrolling
-document.querySelector('#output').parentElement.addEventListener('scroll', function () {
-  editBtn.style.visibility = 'hidden';
-});
+//suggest click
+suggestBtn.addEventListener('click', (event) => {
+  let edtr = getAceEditor();
+  if (!edtr) {
+    throw new Error('Ace Editor is undefined');
+  }
+  let kernfile = edtr.session.getValue();
+
+  chord.reharmonize = 'true';
+
+  let jsonRequest = {
+    kernfile,
+    chordLocation,
+    chord,
+  };
+
+  console.log(jsonRequest);
+  let jsonFile = JSON.stringify(jsonRequest);
+
+
+  let xhttp = new XMLHttpRequest();
+  xhttp.onload = function () {
+    let jsonResponse = JSON.parse(xhttp.response); //to response einai json?mporei kai sketo string
+    let newKern = jsonResponse[0];
+    edtr.setValue(newKern);
+  };
+  //xhttp.open("POST", url);
+  //xhttp.setRequestHeader('Content-Type', 'application/json');
+  //xhttp.send(jsonFile);
+
+  chord.reharmonize = 'false';
+  sendBtn.style.display = 'none';
+})
 
 //send click
 sendBtn.addEventListener('click', function (event) {
@@ -100,6 +131,8 @@ sendBtn.addEventListener('click', function (event) {
     chord,
   };
 
+  let jsonFile = JSON.stringify(jsonRequest);
+
   console.log(jsonRequest);
 
   let xhttp = new XMLHttpRequest();
@@ -108,9 +141,9 @@ sendBtn.addEventListener('click', function (event) {
     let newKern = jsonResponse[0];
     edtr.setValue(newKern);
   };
-  //xhttp.open("POST", url)
+  //xhttp.open("POST", url);
   //xhttp.setRequestHeader('Content-Type', 'application/json');
-  //xhttp.send(jsonRequest);
+  //xhttp.send(jsonFile);
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
   sendBtn.style.display = 'none';
 });
