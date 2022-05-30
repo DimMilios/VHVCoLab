@@ -1,5 +1,5 @@
 ## Deployment
-Current deployment @GitHub Pages: https://dimmilios.github.io/vite-scaffold/
+Current deployment @GitHub Pages: https://dimmilios.github.io/vhv/
 
 ## Προαπαιτούμενα
 Πρέπει να είναι εγκατεστημένα:
