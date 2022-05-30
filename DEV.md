@@ -1,5 +1,15 @@
 ## Change Log
 
+### 2022/05/29
+
+- Automate the build process of the main navbar
+- The structure of the menu is defined in the `src/menu.json` file
+- Execute `npm run build-navbar` to run the script located at `scripts/menu-gen-script.js` which rebuilds the navbar from `src/menu.json`
+  - Loads `index.html`
+  - Replaces the `<nav>` element with the updated navbar content
+  - Replaces the whole `index.html` file with the updated version
+  - Generates event handlers attached to the menu items under `src/js/menuEventHandlers.js`
+
 ### 2022/05/22
 - Implemented open file from disk functionality for supported file formats (`.krn`, `.xml`, `.musicxml`, `.mei`).
 - Implemented save current song as MIDI functionality

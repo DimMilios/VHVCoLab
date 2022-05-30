@@ -16,6 +16,6 @@ git checkout -b main
 git add -A
 git commit -m 'deploy'
 
-git push -f git@github.com:DimMilios/vite-scaffold.git main:gh-pages
+git push -f git@github.com:DimMilios/vhv.git main:gh-pages
 
 cd -

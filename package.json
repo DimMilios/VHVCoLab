@@ -5,11 +5,10 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "deploy": "ntl deploy",
     "clean:build": "rm -rf dist && npm run build",
     "lint": "eslint src/**",
     "format": "prettier --write src/**",
-    "json-server": "json-server --watch --delay 1000 --port 3001 db.json"
+    "build-navbar": "node scripts/menu-gen-script.js"
   },
   "devDependencies": {
     "@types/ace": "^0.0.48",
