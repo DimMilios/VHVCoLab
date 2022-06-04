@@ -7,9 +7,16 @@
 
   <link rel="stylesheet" href="/styles/bootstrap-4.6/bootstrap.min.css">
   
-  <script src="./files/wavesurfer.js"></script>
-  <script src="./files/wavesurfer.cursor.js"></script>
-  <script src="./files/wavesurfer.microphone.min.js"></script>
+  <script src="/scripts/audio/wavesurfer.js"></script>
+  <script src="/scripts/audio/wavesurfer.cursor.js"></script>
+  <script src="/scripts/audio/wavesurfer.microphone.min.js"></script>
+  <script src="/scripts/audio/rec2wav.js"></script>
+
+  <!-- don't place these scripts in <head>, it won't work... -->
+  <script src="/src/js/audio/synchronize.js" async defer></script>
+  <script src="/src/js/audio/wave_one.js" async defer></script>
+  <script src="/src/js/audio/mic_events.js" async defer></script>
+  <script src="/src/js/audio/rec2wav_2.js" async defer></script>
 
   <script src="/styles/bootstrap-4.6/jquery-3.5.1.min.js"></script>
   <script src="/styles/bootstrap-4.6/bootstrap.bundle.min.js"></script>
@@ -1919,7 +1926,7 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <div class="controls">
             <form hidden action="/action_page.php">
-            <input type="file" id="file-input" />
+            <!-- <input type="file" id="file-input" /> -->
             </form>
             <center>
               <div id="control_section_buttons">  
@@ -2085,12 +2092,4 @@
 
 
 </body>
-      
-  <!-- don't place these scripts in <head>, it won't work... -->
-  <script src = "./files/synchronize.js"></script>
-  <script src = "./files/wave_one.js"></script>
-  <script src = "./files/mic_events.js"></script>
-  <script src = "./files/rec2wav.js"></script>
-  <script src = "./files/rec2wav_2.js"></script>
-    
 </html>
