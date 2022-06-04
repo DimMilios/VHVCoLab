@@ -2,5 +2,5 @@
   "score": true,
   "collaboration": false,
   "videoConference": false,
-  "soundEditor": false
+  "soundEditor": true
 }
