@@ -207,6 +207,18 @@ function initForm(config) {
             return;
           default:
             break;
+            case 'soundEditor':
+              // disappearing only, still working on the background
+              
+              if (res.changed[feat.name]) {
+                document.getElementById("control_section_buttons").removeAttribute("style");
+                document.getElementById("waveforms-display").removeAttribute("style");
+              } else {
+                document.getElementById("control_section_buttons").setAttribute("style","display: none");
+                document.getElementById("waveforms-display").setAttribute("style","display: none");
+                wavesurfer.stop();              
+              }
+              break;
         }
       });
     }
