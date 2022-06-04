@@ -20,7 +20,7 @@
 	position: relative;
 }
 
-#show-chord-editor-btn {
+#show-edit-suggest-buttons {
 	position: absolute;
 	visibility: hidden;
 	z-index: 15;

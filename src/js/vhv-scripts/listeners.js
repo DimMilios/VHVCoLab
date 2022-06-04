@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         chordBtns.style.visibility = 'visible';
 
-                // let pgx = event.clientX + 10;
+        // let pgx = event.clientX + 10;
         // let pgy = event.clientY + 10;
         let harmonyBox = harmonyElem.getBoundingClientRect();
         let pgx = harmonyBox.x + 25;
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         chordBtns.style.top = `${pgy}px`;
-        chordBtns.style.left = `${pgx}px`;;
+        chordBtns.style.left = `${pgx}px`;
       }
       //alx_
 

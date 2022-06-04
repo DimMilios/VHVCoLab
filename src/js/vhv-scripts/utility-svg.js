@@ -895,7 +895,7 @@ export function highlightIdInEditor(id, source) {
     let line = editor.session.doc.getLine(row-1);
     let stopIndex = col;
     //alx2
-    while(!line[stopIndex] == '\t') stopIndex++;
+    // while(!line[stopIndex] == '\t') stopIndex++;
     //alx2_
     chord.current = line.substring(col, stopIndex);
 
