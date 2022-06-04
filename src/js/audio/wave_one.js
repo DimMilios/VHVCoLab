@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', function () {
     ],
   });
 
+  window.wavesurfer = wavesurfer;
+  console.log(wavesurfer)
+
   wavesurfer.on('error', function (e) {
     console.warn(e);
   });
