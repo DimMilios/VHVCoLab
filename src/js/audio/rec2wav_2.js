@@ -150,9 +150,7 @@ function createDownloadLink(blob) {
   au.controls = true;
   au.src = url;
 
-  console.log({ recordingUrl: url });
-
-  wavesurfer.load(au); // LOAD RECORDING TO WAVESURFER ###############################################################
+  window.wavesurfer.load(au); // LOAD RECORDING TO WAVESURFER ###############################################################
 
   //save to disk link
   link.href = url;
