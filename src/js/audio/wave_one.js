@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
     //   .addEventListener('change', readSingleFile, false);
   wavesurfer = WaveSurfer.create({
     container: document.querySelector('#waveform'),
+    waveColor: 'black',
+    cursorWidth: 0,
     plugins: [
       WaveSurfer.cursor.create({
         showTime: true,
@@ -50,6 +52,15 @@ document.addEventListener('DOMContentLoaded', function () {
           'font-size': '10px',
         },
       }),
+      WaveSurfer.microphone.create({
+        bufferSize: 4096,
+        numberOfInputChannels: 1,
+        numberOfOutputChannels: 1,
+        constraints: {
+            video: false,
+            audio: true
+        }
+      })
     ],
   });
 
@@ -88,4 +99,15 @@ document.addEventListener('DOMContentLoaded', function () {
   //
   //
   //
+
+  wavesurfer.microphone.on('deviceReady', function() {
+    console.info('Device ready!');
+  });
+  wavesurfer.microphone.on('deviceError', function(code) {
+      console.warn('Device error: ' + code);
+  });
+  wavesurfer.on('error', function(e) {
+      console.warn(e);
+  });
+  wavesurfer.microphone.start();
 });
