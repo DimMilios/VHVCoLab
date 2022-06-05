@@ -12,10 +12,16 @@ var recordButton = document.getElementById('recordButton');
 var stopButton = document.getElementById('stopButton');
 var pauseButton = document.getElementById('pauseButton');
 
+var download; // the name of the downloaded file
+var fileUrl; // url to the produced audio file
+
 //add events to those 3 buttons
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
 pauseButton.addEventListener('click', pauseRecording);
+document
+    .getElementById('Download') ///////////////////////////////////////////////////////////////////////////////
+    .addEventListener('click', handleFileDownload(), false);
 
 function startRecording() {
   console.log('recordButton clicked');
@@ -157,15 +163,9 @@ function createDownloadLink(blob) {
   link.download = filename + '.wav'; //download forces the browser to donwload the file using the filename
   link.innerHTML = 'Save to disk';
 
-  document
-    .getElementById('Download') ///////////////////////////////////////////////////////////////////////////////
-    .addEventListener(
-      'click',
-      function () {
-        download_file(link.download, url);
-      },
-      false
-    );
+  // update information for the .wav file (needed for downloading)
+  download = link.download;
+  fileUrl = url; 
 
   //add the new audio element to li
   li.appendChild(au);
@@ -205,4 +205,14 @@ function download_file(name, audio) {
   antikeimeno2.setAttribute('download', name);
   document.body.appendChild(antikeimeno2);
   antikeimeno2.click();
+
+  document.body.removeChild(antikeimeno2);
+  URL.revokeObjectURL(fileUrl);
+}
+
+function handleFileDownload() {
+  return function(event) {
+    console.log('Download click handler', { download, fileUrl });
+    download_file(download, fileUrl);
+  }
 }
