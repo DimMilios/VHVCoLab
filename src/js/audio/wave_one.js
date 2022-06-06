@@ -1,7 +1,8 @@
 'use strict';
 
 // Create an instance
-let wavesurfer = {};
+let wavesurfer;
+let wavesurfer3;
 var VHVtime = 2.5;
 
 // Read a file
@@ -28,9 +29,14 @@ function displayContents(contents) {
 //   .getElementById('file-input')
 //   .addEventListener('change', readSingleFile, false);
 
-
 // Init & load audio file
 document.addEventListener('DOMContentLoaded', function () {
+  
+
+  
+});
+
+function setupWaveSurfer() {
   let playButton = document.querySelector('#PlayPause'),
     toggleMuteButton = document.querySelector('#toggleMute'),
     stopButton = document.querySelector('#Stop'),
@@ -39,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //   .addEventListener('change', readSingleFile, false);
   wavesurfer = WaveSurfer.create({
     container: document.querySelector('#waveform'),
-    waveColor: 'black',
+    waveColor: '#345',
     cursorWidth: 0,
     plugins: [
       WaveSurfer.cursor.create({
@@ -51,21 +57,11 @@ document.addEventListener('DOMContentLoaded', function () {
           padding: '2px',
           'font-size': '10px',
         },
-      }),
-      WaveSurfer.microphone.create({
-        bufferSize: 4096,
-        numberOfInputChannels: 1,
-        numberOfOutputChannels: 1,
-        constraints: {
-            video: false,
-            audio: true
-        }
       })
     ],
   });
 
   window.wavesurfer = wavesurfer;
-  console.log(wavesurfer)
 
   wavesurfer.on('error', function (e) {
     console.warn(e);
@@ -99,15 +95,34 @@ document.addEventListener('DOMContentLoaded', function () {
   //
   //
   //
+}
+window.setupWaveSurfer = setupWaveSurfer;
 
-  wavesurfer.microphone.on('deviceReady', function() {
+function setupMicWaveSurfer(audioContext) {
+  wavesurfer3 = WaveSurfer.create({
+    container: document.querySelector('#waveform3'),
+    waveColor: '#345',
+    cursorWidth: 0,
+    audioContext,
+    plugins: [
+      WaveSurfer.microphone.create({
+        bufferSize: 4096,
+        numberOfInputChannels: 1,
+        numberOfOutputChannels: 1,
+      })
+    ]
+  })
+  
+  window.wavesurfer3 = wavesurfer3;
+
+  wavesurfer3.microphone.on('deviceReady', function() {
     console.info('Device ready!');
   });
-  wavesurfer.microphone.on('deviceError', function(code) {
+  wavesurfer3.microphone.on('deviceError', function(code) {
       console.warn('Device error: ' + code);
   });
-  wavesurfer.on('error', function(e) {
+  wavesurfer3.on('error', function(e) {
       console.warn(e);
   });
-  wavesurfer.microphone.start();
-});
+}
+window.setupMicWaveSurfer = setupMicWaveSurfer;

@@ -29,6 +29,8 @@ function startRecording() {
   rec_waveform.removeAttribute('hidden');
   let play_waveform = document.getElementById('play_wave');
   play_waveform.setAttribute('hidden', true);
+
+
   /*
             Simple constraints object, for more advanced audio features see
             https://addpipe.com/blog/audio-constraints-getusermedia/
@@ -57,6 +59,7 @@ function startRecording() {
   navigator.mediaDevices
     .getUserMedia(constraints)
     .then(function (stream) {
+
       console.log(
         'getUserMedia() success, stream created, initializing Recorder.js ...'
       );
@@ -79,6 +82,14 @@ function startRecording() {
       /* use the stream */
       input = audioContext.createMediaStreamSource(stream);
 
+      if (!window.wavesurfer) {
+        window.setupWaveSurfer();
+      }
+
+      if (!window.wavesurfer3) {
+        window.setupMicWaveSurfer(audioContext);
+      }
+
       /* 
                 Create the Recorder object and configure to record mono sound (1 channel)
                 Recording 2 channels  will double the file size
@@ -87,6 +98,8 @@ function startRecording() {
 
       //start the recording process
       rec.record();
+
+      window.wavesurfer3.microphone.togglePlay();
 
       console.log('Recording started');
     })
@@ -132,6 +145,7 @@ function stopRecording() {
 
   //reset button just in case the recording is stopped while paused
   pauseButton.title = 'Pause Recording';
+  window.wavesurfer3.microphone.stop();
 
   //tell the recorder to stop the recording
   rec.stop();
