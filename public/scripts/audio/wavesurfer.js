@@ -4675,7 +4675,7 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
       this.seekTo(0);
       this.drawer.progress(0);
     }
-    /** // viglis  
+    /** // viglis (go_to_selection key) 
      * goes to the selected time in seconds.
      *
      * @example wavesurfer.stop();

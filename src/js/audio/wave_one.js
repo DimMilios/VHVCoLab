@@ -3,9 +3,10 @@
 // Create an instance
 let wavesurfer;
 let wavesurfer3;
-var VHVtime = 2.5;
+//var VHVtime = window.rec_time //get recording time after function "score_2_rec_time" is called
+var VHVtime = 2.5 //for testing purposes only
 
-// Read a file
+/* Read a file
 function readSingleFile(e) {
   var file = e.target.files[0];
   if (!file) {
@@ -24,7 +25,7 @@ function displayContents(contents) {
   var element = document.getElementById('file-content');
   element.textContent = contents;
 }
-
+*/
 // document
 //   .getElementById('file-input')
 //   .addEventListener('change', readSingleFile, false);
@@ -90,12 +91,11 @@ function setupWaveSurfer() {
   // wavesurfer.go_to_selection(4.88);
   GotoSelectionButton.onclick = function () {
     wavesurfer.go_to_selection(VHVtime);
+    // this function was created in wavesurfer.js script, line 4686+
   };
-  //
-  //
-  //
-  //
+
 }
+
 window.setupWaveSurfer = setupWaveSurfer;
 
 function setupMicWaveSurfer(audioContext) {
