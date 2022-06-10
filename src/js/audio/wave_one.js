@@ -47,7 +47,7 @@ function setupWaveSurfer() {
   wavesurfer = WaveSurfer.create({
     container: document.querySelector('#waveform'),
     waveColor: '#345',
-    cursorWidth: 0,
+    cursorWidth: 1,
     plugins: [
       WaveSurfer.cursor.create({
         showTime: true,
@@ -101,7 +101,7 @@ window.setupWaveSurfer = setupWaveSurfer;
 function setupMicWaveSurfer(audioContext) {
   wavesurfer3 = WaveSurfer.create({
     container: document.querySelector('#waveform3'),
-    waveColor: '#345',
+    waveColor: '#999',
     cursorWidth: 0,
     audioContext,
     plugins: [

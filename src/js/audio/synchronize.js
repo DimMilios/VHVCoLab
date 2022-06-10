@@ -1,15 +1,39 @@
 'use strict';
 
+var synchronizeButton = document.getElementById('Synchronize');
+synchronizeButton.addEventListener('click', startSynchronization);
+
+
 // global variables
+
+var D_array,wp_array,wp_s_array
+
 var C_path
-var w_path_sec
 var rec_time
 var score_measure_value
 
+
 window.score_measure_value = score_measure_value
+window.D_array = D_array
 window.C_path = C_path
-window.w_path_sec = w_path_sec
+window.wp_array = wp_array
+window.wp_s_array = wp_s_array
 window.rec_time = rec_time
+
+/*
+function startSynchronization(audio_file,midi_file){
+    console.log('syncButton clicked');
+
+    wp_array = (wp from server)
+    wp_s_array = (wp_s from server)
+    D_array = (D from server)
+
+    Synchronize.disabled = true;
+}
+*/
+
+
+
 
 function calculate_C_D_path(D_array,wp_array){
 
