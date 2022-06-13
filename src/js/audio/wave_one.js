@@ -48,6 +48,7 @@ function setupWaveSurfer() {
     container: document.querySelector('#waveform'),
     waveColor: '#345',
     cursorWidth: 1,
+    progressColor: '#e81',
     plugins: [
       WaveSurfer.cursor.create({
         showTime: true,
@@ -102,6 +103,7 @@ function setupMicWaveSurfer(audioContext) {
   wavesurfer3 = WaveSurfer.create({
     container: document.querySelector('#waveform3'),
     waveColor: '#999',
+    progressColor: '#e81',
     cursorWidth: 0,
     audioContext,
     plugins: [

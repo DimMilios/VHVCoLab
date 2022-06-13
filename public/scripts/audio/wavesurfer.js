@@ -3989,7 +3989,7 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
       partialRender: false,
       pixelRatio: window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
       plugins: [],
-      progressColor: '#e81',
+      progressColor: '#555',
       removeMediaElementOnDestroy: true,
       renderer: _drawer.default,
       responsive: false,
