@@ -20,6 +20,7 @@ function readSingleFile(e) {
   };
   reader.readAsArrayBuffer(file);
 }
+
 function displayContents(contents) {
   var element = document.getElementById('file-content');
   element.textContent = contents;
@@ -87,11 +88,10 @@ function setupWaveSurfer() {
   };
 
   // Go to selection button
-  // εδώ αν σταλεί χρόνος από το VHV θα κληθεί η συνάρτηση "go_to_selection" με όρισμα το χρόνο αυτό (σε s)
-  // wavesurfer.go_to_selection(4.88);
+  // εδώ αν σταλεί χρόνος από το VHV θα κληθεί η συνάρτηση "setCurrentTime" με όρισμα το χρόνο αυτό (σε s)
+  // wavesurfer.setCurrentTime(4.88);
   GotoSelectionButton.onclick = function () {
-    wavesurfer.go_to_selection(VHVtime);
-    // this function was created in wavesurfer.js script, line 4686+
+    wavesurfer.setCurrentTime(VHVtime);
   };
 
 }
