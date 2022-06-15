@@ -1,8 +1,5 @@
 /* global $ */
 
-
-import * as aceAjaxEditor from './../../../node_modules/@types/ace/index.d.ts';
-
 //////////////////////////////
 //
 // goDownHarmonically --
