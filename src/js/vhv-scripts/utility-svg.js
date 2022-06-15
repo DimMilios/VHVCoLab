@@ -1,5 +1,8 @@
 /* global $ */
 
+
+import * as aceAjaxEditor from './../../../node_modules/@types/ace/index.d.ts';
+
 //////////////////////////////
 //
 // goDownHarmonically --
@@ -895,15 +898,26 @@ export function highlightIdInEditor(id, source) {
     let line = editor.session.doc.getLine(row-1);
     let stopIndex = col;
     //alx2
-    // while(!line[stopIndex] == '\t') stopIndex++;
+    while( stopIndex-col<line.length ) stopIndex++; 
     //alx2_
     chord.current = line.substring(col, stopIndex);
-
-    console.log({ chord, line: line.substring(col, stopIndex), elmnt });
   }
   //alx_
 
+ 
   // 0.5 = center the cursor vertically:
   editor.renderer.scrollCursorIntoView({ row: row - 1, column: col }, 0.5);
   centerCursorHorizontallyInEditor();
+
+   //alx2
+  //retrieveing measure NO. when clicking inside the svg   
+  let measureNoPosition = editor.find('=', {backwards:true});
+  let measureNoLine = editor.session.getLine(measureNoPosition.start.row);
+  
+  if (measureNoLine[0] == '*' || measureNoLine[0] == '!') {
+    window.MEASURENO = 1;
+  }  else {
+    window.MEASURENO = parseInt(measureNoLine[measureNoPosition.start.column+1]);
+  }  
+   //alx2_
 }
