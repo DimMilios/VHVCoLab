@@ -895,15 +895,26 @@ export function highlightIdInEditor(id, source) {
     let line = editor.session.doc.getLine(row-1);
     let stopIndex = col;
     //alx2
-    // while(!line[stopIndex] == '\t') stopIndex++;
+    while( stopIndex-col<line.length ) stopIndex++; 
     //alx2_
     chord.current = line.substring(col, stopIndex);
-
-    console.log({ chord, line: line.substring(col, stopIndex), elmnt });
   }
   //alx_
 
+ 
   // 0.5 = center the cursor vertically:
   editor.renderer.scrollCursorIntoView({ row: row - 1, column: col }, 0.5);
   centerCursorHorizontallyInEditor();
+
+   //alx2
+  //retrieveing measure NO. when clicking inside the svg   
+  let measureNoPosition = editor.find('\\t=\\d+', {backwards:true, regExp:true});
+  
+  if (!measureNoPosition){
+    window.MEASURENO = 1;
+  } else{
+    let measureColString = editor.session.getTextRange(measureNoPosition); 
+    window.MEASURENO = parseInt(measureColString.slice(2));
+  }
+  //alx2_
 }
