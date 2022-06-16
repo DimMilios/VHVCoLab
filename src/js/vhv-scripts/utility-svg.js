@@ -908,13 +908,13 @@ export function highlightIdInEditor(id, source) {
 
    //alx2
   //retrieveing measure NO. when clicking inside the svg   
-  let measureNoPosition = editor.find('=', {backwards:true});
-  let measureNoLine = editor.session.getLine(measureNoPosition.start.row);
+  let measureNoPosition = editor.find('\\t=\\d+', {backwards:true, regExp:true});
   
-  if (measureNoLine[0] == '*' || measureNoLine[0] == '!') {
+  if (!measureNoPosition){
     window.MEASURENO = 1;
-  }  else {
-    window.MEASURENO = parseInt(measureNoLine[measureNoPosition.start.column+1]);
-  }  
-   //alx2_
+  } else{
+    let measureColString = editor.session.getTextRange(measureNoPosition); 
+    window.MEASURENO = parseInt(measureColString.slice(2));
+  }
+  //alx2_
 }
