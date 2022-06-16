@@ -117,6 +117,7 @@ import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { loadKernScoresFile } from './loading.js';
 import { Base64 } from './utility.js';
+import { time } from 'lib0';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -201,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (harmonyElem){
         chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
         chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
-
         chordBtns.style.visibility = 'visible';
 
         // let pgx = event.clientX + 10;
@@ -1089,3 +1089,58 @@ export function verovioCallback(data) {
   }
   markup.loadSvg('svg');
 }
+
+//alx2
+getAceEditor().getSession().on('change', function() {
+  
+  let kernFile = getAceEditor().getSession().getValue();
+
+  //extracting tempo
+  if ( !kernFile || !(kernFile.includes('\t')) ) {
+    console.log('Invalid kern file');
+    return;
+  }
+
+  let startIndex = kernFile.indexOf('MM') + 2;
+  let stopIndex = startIndex;
+
+  while( !(kernFile[stopIndex] == '\t') ) stopIndex++;
+
+  window.TEMPO = parseInt( kernFile.slice(startIndex, stopIndex) ); 
+  //providing tempo value to 'insert-tempo' form
+  document.getElementById('tempo-input').placeholder = window.TEMPO;
+
+  //extracting time signature  
+  startIndex = kernFile.indexOf('M') + 1;
+  stopIndex = startIndex;
+ 
+  while( !(kernFile[stopIndex] == '\t') ) stopIndex++;
+
+  //ensuring that time signature is retrieved from the right part of kernfile
+  let floorPosition;
+  let timeSignatureText = kernFile.slice(startIndex, stopIndex);
+
+  while ( !( timeSignatureText.length==3 && timeSignatureText.includes('/') ) ) {
+    floorPosition = startIndex + 1;
+    startIndex = kernFile.indexOf('M', floorPosition) + 1;
+    stopIndex = startIndex;
+    while( !(kernFile[stopIndex] == '\t') ) stopIndex++;
+
+    timeSignatureText = kernFile.slice(startIndex, stopIndex);
+  }
+  
+  window.BEATSPERMEASURE = parseInt(timeSignatureText[0]);
+  
+});
+
+document.getElementById('change-tempo').addEventListener('click', () => {
+  let kernFile = getAceEditor().getSession().getValue();
+  let newTempo = document.getElementById('tempo-input').value;
+
+  let newKern = kernFile.replaceAll(/MM\d+/g, `MM${newTempo}`);
+  
+
+  getAceEditor().getSession().setValue(newKern, 0);
+  
+} )
+//alx2_

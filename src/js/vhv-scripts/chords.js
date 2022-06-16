@@ -36,7 +36,6 @@ for (let td of document.querySelectorAll('.Chords td')) {
         case 'root':
           chord.new.root = event.target.innerText;
           chordSelected.root = event.target;
-          console.log({ chord, chordSelected })
           break;
         case 'accidental':
           chord.new.accidental = event.target.innerText;
@@ -132,18 +131,27 @@ sendBtn.addEventListener('click', function (event) {
   };
 
   let jsonFile = JSON.stringify(jsonRequest);
+  
 
   console.log(jsonRequest);
 
   let xhttp = new XMLHttpRequest();
   xhttp.onload = function () {
-    let jsonResponse = JSON.parse(xhttp.response); //to response einai json?mporei kai sketo string
-    let newKern = jsonResponse[0];
-    edtr.setValue(newKern);
+    
+    let jsonResponse = xhttp.response; //to response einai json?mporei kai sketo string
+    
+    //let newKern = jsonResponse[0];
+    //edtr.setValue(newKern);
   };
-  //xhttp.open("POST", url);
-  //xhttp.setRequestHeader('Content-Type', 'application/json');
-  //xhttp.send(jsonFile);
+  /*
+  xhttp.open("POST", 'http://155.207.188.7:6001/sending_kern?row=17&column=8&chord=Cm&kern=lalala');
+  xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.send(jsonFile);
+  */
+
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
   sendBtn.style.display = 'none';
+
+  
+
 });
