@@ -879,6 +879,9 @@ function processInfo(info, obj, nextwork, prevwork) {
   // inputarea.value = score;
   displayScoreTextInEditor(score, vrvWorker.page);
 
+  let bpm_show_banner = document.getElementById("bpm_show");
+  bpm_show_banner.removeAttribute('hidden');
+  
   obj.next = false;
   obj.previous = false;
 

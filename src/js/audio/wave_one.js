@@ -91,6 +91,7 @@ function setupWaveSurfer() {
   // εδώ αν σταλεί χρόνος από το VHV θα κληθεί η συνάρτηση "setCurrentTime" με όρισμα το χρόνο αυτό (σε s)
   // wavesurfer.setCurrentTime(4.88);
   GotoSelectionButton.onclick = function () {
+    VHVtime = ((window.MEASURENO-1)*window.BEATSPERMEASURE)* 60/window.TEMPO;
     wavesurfer.setCurrentTime(VHVtime);
   };
 
