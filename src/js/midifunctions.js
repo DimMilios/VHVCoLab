@@ -42,6 +42,8 @@ export function play_midi(starttime) {
       $('#player').midiPlayer.play(song, starttime);
       global_playerOptions.PLAY = true;
       LASTLINE = -1;
+      let bpm_show_banner = document.getElementById("bpm_show");
+      bpm_show_banner.setAttribute('hidden',true);
     })
     .catch((err) => console.log('Error when trying to play midi', err));
 }
@@ -287,6 +289,8 @@ export const midiStop = function () {
   global_cursor.CursorNote = null;
   global_playerOptions.PLAY = false;
   LASTLINE = -1;
+  let bpm_show_banner = document.getElementById("bpm_show");
+  bpm_show_banner.removeAttribute('hidden');
 };
 
 $.fn.addClassSVG = function (className) {
