@@ -909,8 +909,11 @@ export function highlightIdInEditor(id, source) {
    //alx2
   //retrieveing measure NO. when clicking inside the svg   
   let measureNoPosition = editor.find('\\t=\\d+', {backwards:true, regExp:true});
+
   
-  if (!measureNoPosition){
+  let nextMeasure = editor.find('\\t=\\d+', {regExp:true});
+  let nextMeasureColString = editor.session.getTextRange(nextMeasure);  
+  if (nextMeasureColString.slice(2)===2){
     window.MEASURENO = 1;
   } else{
     let measureColString = editor.session.getTextRange(measureNoPosition); 
