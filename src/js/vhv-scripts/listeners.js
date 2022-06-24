@@ -1137,7 +1137,7 @@ document.getElementById('change-tempo').addEventListener('click', () => {
   let kernFile = getAceEditor().getSession().getValue();
   let newTempo = document.getElementById('tempo-input').value;
 
-  let newKern = kernFile.replaceAll(/MM\d+/g, `MM${newTempo}`);
+  let newKern = ( kernFile.replaceAll(/MM\d+/g, `MM${newTempo}`) ).replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
   
 
   getAceEditor().getSession().setValue(newKern, 0);
