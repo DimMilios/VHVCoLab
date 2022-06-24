@@ -1143,4 +1143,5 @@ document.getElementById('change-tempo').addEventListener('click', () => {
   getAceEditor().getSession().setValue(newKern, 0);
   
 } )
+
 //alx2_
