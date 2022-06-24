@@ -1,10 +1,39 @@
 'use strict';
 
-// global variables?
+var synchronizeButton = document.getElementById('Synchronize');
+synchronizeButton.addEventListener('click', startSynchronization);
+
+
+// global variables
+
+var D_array,wp_array,wp_s_array
+
 var C_path
-var w_path_sec
 var rec_time
-var score_meter_value
+var score_measure_value
+
+
+window.score_measure_value = score_measure_value
+window.D_array = D_array
+window.C_path = C_path
+window.wp_array = wp_array
+window.wp_s_array = wp_s_array
+window.rec_time = rec_time
+
+/*
+function startSynchronization(audio_file,midi_file){
+    console.log('syncButton clicked');
+
+    wp_array = (wp from server)
+    wp_s_array = (wp_s from server)
+    D_array = (D from server)
+
+    Synchronize.disabled = true;
+}
+*/
+
+
+
 
 function calculate_C_D_path(D_array,wp_array){
 
@@ -36,7 +65,7 @@ function score_2_rec_time(wp_s_array,score_meter,score_bpm,score_rythm,){ //scor
         rectime = wp_s_array[i,1];
         ++i;
     }
-    rec_time=rectime //assign to global variable?
+    rec_time=rectime //assign to global variable
 
 }
 
@@ -48,7 +77,7 @@ function rec_time_2_score(wp_s_array,selected_rec_time,score_bpm,score_rythm,){ 
         ++i;
     }
     var scoremetervalue = scoretime*score_bpm/(60*score_rythm); // score meter number ( +- 1 ???)
-    score_meter_value=scoremetervalue //assign to global variable?
-    console.log("go to meter #", score_meter_value)
+    score_measure_value=scoremetervalue //assign to global variable?
+    console.log("go to meter #", score_measure_value)
 
 }

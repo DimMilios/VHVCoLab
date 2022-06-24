@@ -283,16 +283,17 @@
           </div>
 
           <!--alx2-->
-          <div class="input-group input-group-sm mb-3 w-50 p-3">
+
+          <div class="input-group-prepend p-0" id="bpm_show" hidden="" >
             <div class="input-group-prepend">
               <span class="input-group-text">Tempo:</span>
             </div>
-            <input type="text" class="form-control" id="tempo-input" style="text-align:right">
+            <input type="text" class="form-control" id="tempo-input" style="text-align:right" maxlength="3">
             <div class="input-group-append">
               <span class="input-group-text">bpm</span>
             </div>
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary btn-sm" type="button" id="change-tempo">Change!</button>
+
             </div>
           </div>
           
@@ -1932,9 +1933,6 @@
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <div class="controls">
-            <form hidden action="/action_page.php">
-            <!-- <input type="file" id="file-input" /> -->
-            </form>
             <center>
               <div id="control_section_buttons">  
                 <button disabled id="GotoSelectionButton" class="btn btn-lg" title="Go to selection">
@@ -2094,7 +2092,6 @@
     </filter>
 
   </svg>
-
 
   <script src="/scripts/audio/wavesurfer.js"></script>
   <script src="/scripts/audio/wavesurfer.cursor.js"></script>

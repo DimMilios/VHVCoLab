@@ -3,9 +3,10 @@
 // Create an instance
 let wavesurfer;
 let wavesurfer3;
-var VHVtime = 2.5;
+//var VHVtime = window.rec_time //get recording time after function "score_2_rec_time" is called
+var VHVtime = 2.5 //for testing purposes only
 
-// Read a file
+/* Read a file
 function readSingleFile(e) {
   var file = e.target.files[0];
   if (!file) {
@@ -24,7 +25,7 @@ function displayContents(contents) {
   var element = document.getElementById('file-content');
   element.textContent = contents;
 }
-
+*/
 // document
 //   .getElementById('file-input')
 //   .addEventListener('change', readSingleFile, false);
@@ -46,7 +47,8 @@ function setupWaveSurfer() {
   wavesurfer = WaveSurfer.create({
     container: document.querySelector('#waveform'),
     waveColor: '#345',
-    cursorWidth: 0,
+    cursorWidth: 1,
+    progressColor: '#e81',
     plugins: [
       WaveSurfer.cursor.create({
         showTime: true,
@@ -86,22 +88,22 @@ function setupWaveSurfer() {
   };
 
   // Go to selection button
-  // εδώ αν σταλεί χρόνος από το VHV θα κληθεί η συνάρτηση "go_to_selection" με όρισμα το χρόνο αυτό (σε s)
-  // wavesurfer.go_to_selection(4.88);
+  // εδώ αν σταλεί χρόνος από το VHV θα κληθεί η συνάρτηση "setCurrentTime" με όρισμα το χρόνο αυτό (σε s)
+  // wavesurfer.setCurrentTime(4.88);
   GotoSelectionButton.onclick = function () {
-    wavesurfer.go_to_selection(VHVtime);
+    VHVtime = ((window.MEASURENO-1)*window.BEATSPERMEASURE)* 60/window.TEMPO;
+    wavesurfer.setCurrentTime(VHVtime);
   };
-  //
-  //
-  //
-  //
+
 }
+
 window.setupWaveSurfer = setupWaveSurfer;
 
 function setupMicWaveSurfer(audioContext) {
   wavesurfer3 = WaveSurfer.create({
     container: document.querySelector('#waveform3'),
-    waveColor: '#345',
+    waveColor: '#999',
+    progressColor: '#e81',
     cursorWidth: 0,
     audioContext,
     plugins: [

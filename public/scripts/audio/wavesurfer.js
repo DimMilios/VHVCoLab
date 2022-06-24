@@ -4675,27 +4675,6 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
       this.seekTo(0);
       this.drawer.progress(0);
     }
-    /** // viglis  
-     * goes to the selected time in seconds.
-     *
-     * @example wavesurfer.stop();
-     */
-
-  }, {
-  
-    key: "go_to_selection",                                     
-    value: function go_to_selection(selected_time) {
-      var sel_percentage = selected_time/this.getDuration();
-      //console.log ("sel_time=",selected_time);
-      //console.log ("duration=",this.getDuration);
-      //console.log ("0-1=",sel_percentage);
-      if (sel_percentage>1){
-        sel_percentage = 1;
-        this.pause();
-      }
-      this.seekTo(sel_percentage);
-      this.drawer.progress(sel_percentage);
-    }
     /**
      * Sets the ID of the audio device to use for output and returns a Promise.
      *

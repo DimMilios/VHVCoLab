@@ -9,7 +9,7 @@ Current deployment @GitHub Pages: https://dimmilios.github.io/vhv/
 ## Λήψη του project από το Github
 - Αν υπάρχει το `git` εγκατεστημένο:
   ```sh
-  git clone https://github.com/DimMilios/vite-scaffold.git
+  git clone https://github.com/DimMilios/vhv.git
   ```
 - Διαφορετικά πατώντας `Code>Download ZIP` στη σελίδα του project στο Github.
 
