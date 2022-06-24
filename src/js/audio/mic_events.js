@@ -1,5 +1,6 @@
 'use strict';
 
+import {getVrvWorker} from './../humdrum-notation-plugin-worker.js';
 
 let wavesurfer3, context3, processor3;
 
@@ -25,7 +26,9 @@ wavesurfer3 = WaveSurfer.create({
 });
 
 wavesurfer3.microphone.on('deviceReady', function() {
-    console.info('Device ready!');
+    	console.info('Device ready!');
+	//kalohr
+	getVrvWorker();
 });
 wavesurfer3.microphone.on('deviceError', function(code) {
     console.warn('Device error: ' + code);

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- alr --->
+
 <head>
   <title>MusiCoLab | VHV</title>
   <meta charset="UTF-8">
@@ -288,7 +288,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Tempo:</span>
             </div>
-            <input type="number" class="form-control" id="tempo-input" style="text-align:right" maxlength="3">
+            <input type="number" class="form-control form-control-lg" id="tempo-input" style="text-align:center" maxlength="3" min="30" max="300" step="1" pattern="[0-9]{3}">
             <div class="input-group-append">
               <span class="input-group-text">bpm</span>
             </div>
@@ -320,125 +320,27 @@
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown"
                   aria-expanded="false">File</a>
                 <ul class="dropdown-menu p-0 false">
-                  <li id="load-from-repository__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Load from Repository </a>
-
-
-                  </li>
-                  <li id="open__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Open </a>
-                    <small class="ml-3 text-nowrap"><strong>ctrl-o</strong></small>
-
-                  </li>
-                  <li id="save-editor-contents__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save editor contents </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-s</strong></small>
-
-                  </li>
-                  <li id="save-as-midi__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save as MIDI </a>
-
-
-                  </li>
-                  <li id="save-as-pdf__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save as PDF </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-t</strong></small>
-
-                  </li>
-                  <li id="save-view-as-pdf__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save view as PDF </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-T</strong></small>
-
-                  </li>
-                  <li id="save-view-as-svg__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save view as SVG </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-g</strong></small>
-
-                  </li>
-                  <li id="save-as-musicxml__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save as MusicXML </a>
-
-
-                  </li>
-                  <li id="display-mei-data__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Display MEI data </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-m</strong></small>
-
-                  </li>
-                  <li id="display-humdrum-data__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Display Humdrum data </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-h</strong></small>
-
-                  </li>
-                  <li id="save-to-local-buffer__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save to local buffer »</a>
-                    <small class="ml-3 text-nowrap"><strong>info</strong></small>
+                  <li id="load-from-repository__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Load from Repository </a> </li>
+                  <li id="open__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Open </a> <small class="ml-3 text-nowrap"><strong>ctrl-o</strong></small> </li>
+                  <li id="save-editor-contents__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save editor contents </a> <small class="ml-3 text-nowrap"><strong>alt-s</strong></small> </li>
+                  <li id="save-as-midi__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save as MIDI </a> </li>
+                  <li id="save-as-pdf__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save as PDF </a> <small class="ml-3 text-nowrap"><strong>alt-t</strong></small> </li>
+                  <li id="save-view-as-pdf__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save view as PDF </a> <small class="ml-3 text-nowrap"><strong>alt-T</strong></small> </li>
+                  <li id="save-view-as-svg__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save view as SVG </a> <small class="ml-3 text-nowrap"><strong>alt-g</strong></small> </li>
+                  <li id="save-as-musicxml__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save as MusicXML </a> </li>
+                  <li id="display-mei-data__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Display MEI data </a> <small class="ml-3 text-nowrap"><strong>alt-m</strong></small> </li>
+                  <li id="display-humdrum-data__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Display Humdrum data </a> <small class="ml-3 text-nowrap"><strong>alt-h</strong></small> </li>
+                  <li id="save-to-local-buffer__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to local buffer »</a> <small class="ml-3 text-nowrap"><strong>info</strong></small>
                     <ul class="dropdown-menu p-0 dropdown-submenu">
-                      <li id="save-to-buffer-1__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 1 </a>
-                        <small class="ml-3 text-nowrap"><strong>1 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-2__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 2 </a>
-                        <small class="ml-3 text-nowrap"><strong>2 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-3__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 3 </a>
-                        <small class="ml-3 text-nowrap"><strong>3 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-4__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 4 </a>
-                        <small class="ml-3 text-nowrap"><strong>4 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-5__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 5 </a>
-                        <small class="ml-3 text-nowrap"><strong>5 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-6__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 6 </a>
-                        <small class="ml-3 text-nowrap"><strong>6 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-7__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 7 </a>
-                        <small class="ml-3 text-nowrap"><strong>7 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-8__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 8 </a>
-                        <small class="ml-3 text-nowrap"><strong>8 alt-S</strong></small>
-
-                      </li>
-                      <li id="save-to-buffer-9__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 9 </a>
-                        <small class="ml-3 text-nowrap"><strong>9 alt-S</strong></small>
-
-                      </li>
+                      <li id="save-to-buffer-1__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 1 </a> <small class="ml-3 text-nowrap"><strong>1 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-2__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 2 </a> <small class="ml-3 text-nowrap"><strong>2 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-3__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 3 </a> <small class="ml-3 text-nowrap"><strong>3 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-4__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 4 </a> <small class="ml-3 text-nowrap"><strong>4 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-5__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 5 </a> <small class="ml-3 text-nowrap"><strong>5 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-6__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 6 </a> <small class="ml-3 text-nowrap"><strong>6 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-7__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 7 </a> <small class="ml-3 text-nowrap"><strong>7 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-8__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 8 </a> <small class="ml-3 text-nowrap"><strong>8 alt-S</strong></small> </li>
+                      <li id="save-to-buffer-9__submenu-item" class="dropdown-item d-flex justify-content-between text-dark"> <a class="text-decoration-none text-dark">Save to buffer 9 </a> <small class="ml-3 text-nowrap"><strong>9 alt-S</strong></small> </li>
                     </ul>
                   </li>
                   <li id="load-local-buffer__submenu-item"
@@ -2101,11 +2003,11 @@
   <script src="/scripts/audio/wavesurfer.cursor.js"></script>
   <script src="/scripts/audio/wavesurfer.microphone.min.js"></script>
   <script src="/scripts/audio/rec2wav.js"></script>
-
   <script src="/src/js/audio/synchronize.js" type="module"></script>
   <script src="/src/js/audio/wave_one.js" type="module"></script>
   <script src="/src/js/audio/rec2wav_2.js" type="module"></script>
-  <!-- <script src="/src/js/audio/mic_events.js" type="module"></script> -->
+  <script src="/src/js/audio/mic_events.js" type="module"></script>
+  <script src="/src/js/sync.js" type="module"></script>
 
 </body>
 </html>

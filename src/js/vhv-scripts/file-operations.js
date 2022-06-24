@@ -36,6 +36,29 @@ export function openFileFromDisk() {
   input.click();
 }
 
+//kalohr
+export async function saveContentAsMIDIUpload(chunks) {
+  let base64Midi = await getVrvWorker().renderToMidi();
+  //let song = 'data:audio/midi;base64,' + base64Midi;
+  let song = base64Midi;
+  let fd = new FormData();
+  fd.append('action','synchronization');
+  let midifile = new Blob([song], {'type':'audio/midi'});
+  fd.append('file', midifile, "themid");
+  let audiofile =  new Blob(chunks, {'type':'audio'});
+  fd.append('blob', audiofile, 'blobname');
+  var ajax = new XMLHttpRequest();
+  ajax.open("post", "https://musicolab.hmu.gr/apprepository/synchroniseScoreAudioResp.php", true);
+  ajax.send(fd);
+}
+
+export function saveContentAsMIDIStr() {
+  let base64Midi = getVrvWorker().renderToMidi();
+  let song = base64Midi;
+  //let song = 'data:audio/midi;base64,' + base64Midi;
+  return song;
+}
+
 export async function saveContentAsMIDI() {
   let base64Midi = await getVrvWorker().renderToMidi();
   let song = 'data:audio/midi;base64,' + base64Midi;

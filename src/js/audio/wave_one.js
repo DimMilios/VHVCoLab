@@ -31,11 +31,7 @@ function displayContents(contents) {
 //   .addEventListener('change', readSingleFile, false);
 
 // Init & load audio file
-document.addEventListener('DOMContentLoaded', function () {
-  
-
-  
-});
+document.addEventListener('DOMContentLoaded', function () {});
 
 function setupWaveSurfer() {
   let playButton = document.querySelector('#PlayPause'),
@@ -91,8 +87,51 @@ function setupWaveSurfer() {
   // εδώ αν σταλεί χρόνος από το VHV θα κληθεί η συνάρτηση "setCurrentTime" με όρισμα το χρόνο αυτό (σε s)
   // wavesurfer.setCurrentTime(4.88);
   GotoSelectionButton.onclick = function () {
-    VHVtime = ((window.MEASURENO-1)*window.BEATSPERMEASURE)* 60/window.TEMPO;
-    wavesurfer.setCurrentTime(VHVtime);
+    VHVtime = ((window.MEASURENO-1)*window.BEATSPERMEASURE)* 60/window.TEMPO; // είναι ο χρόνος του μέτρου
+    //wavesurfer.setCurrentTime(VHVtime); δοκιμαστικό μόνο
+    let ajax1 = new XMLHttpRequest();
+    let v1 = "";
+    ajax1.onreadystatechange = function(){
+	if(this.readyState==4 && this.status==200){
+    		v1 = ajax1.responseText;
+		//console.log(v1);
+		let ajax2 = new XMLHttpRequest();
+		let v2 = "";
+		ajax2.onreadystatechange = function(){
+			if(this.readyState==4 && this.status==200){
+	                	v2 = ajax2.responseText;
+				//console.log(v2);
+				let ajax3 = new XMLHttpRequest();
+  				let v3 = "";
+				ajax3.onreadystatechange = function(){
+				        if(this.readyState==4 && this.status==200){
+			                v3 = ajax3.responseText;
+
+                            
+        
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            // all thre vars have been loaded at this point
+			                console.log(v1);
+				        }
+				}
+    				ajax3.open('get', 'wp_s_array.csv');
+	    			ajax3.send();
+        		}
+    		}
+	    	ajax2.open('get', 'wp_array.csv');
+	    	ajax2.send();
+ 	}
+    }
+    ajax1.open('get', 'D_array.csv');
+    ajax1.send();
+
   };
 
 }
