@@ -19,7 +19,7 @@ window.wp_s_array = wp_s_array
 */
 
 
-/*
+/* //sync button must be disabled after pressed and must be re-enabled when new recording or new krn file loaded
 function startSynchronization(audio_file,midi_file){
     console.log('syncButton clicked');
 
@@ -115,8 +115,6 @@ function setupWaveSurfer() {
   };
 
   GotoSelectionButton.onclick = function () {
-    //VHVtime = ((window.MEASURENO-1)*window.BEATSPERMEASURE)* 60/window.TEMPO; // είναι ο χρόνος του μέτρου
-    //wavesurfer.setCurrentTime(VHVtime);    // δοκιμαστικό μόνο, το VHV_time πρέπει να γίνει rec_time 
     let ajax1 = new XMLHttpRequest();
     let v1 = "";
     ajax1.onreadystatechange = function(){
