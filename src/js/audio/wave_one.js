@@ -3,15 +3,12 @@
 //var synchronizeButton = document.getElementById('Synchronize');
 //synchronizeButton.addEventListener('click', startSynchronization);
 
-
-// global variables
-
+// variables
 var GotoSelectionButton = document.getElementById('GotoSelectionButton');
 var D_array,wp_array,wp_s_array
-
-var C_path
 var rec_time
-var score_measure_value
+//var score_measure_value
+//var C_path
 
 
 /*
@@ -39,7 +36,7 @@ let wavesurfer;
 let wavesurfer3;
 
 
-/* Read a file
+/* //Read a file  (this was a function to load any audio file to the wavesurfer instance)
 function readSingleFile(e) {
   var file = e.target.files[0];
   if (!file) {
@@ -64,6 +61,7 @@ function displayContents(contents) {
 //   .addEventListener('change', readSingleFile, false);
 
 // Init & load audio file
+
 document.addEventListener('DOMContentLoaded', function () {});
 
 function setupWaveSurfer() {
@@ -140,7 +138,7 @@ function setupWaveSurfer() {
 
                       // all thre vars have been loaded at this point
                       
-                      // convert them to arrays
+                      // converting them to arrays
                       D_array = v1.split("\n").map(function(row){return row.split(" ");})
                       wp_array = v2.split("\n").map(function(row){return row.split(" ");})
                       wp_s_array = v3.split("\n").map(function(row){return row.split(" ");})
@@ -166,8 +164,6 @@ function setupWaveSurfer() {
 
 }
 
-window.setupWaveSurfer = setupWaveSurfer;
-
 function score_2_rec_time(wp_s,score_measure,score_tempo,score_beatspermeasure,){ 
   
   console.log("score_measure=",score_measure);
@@ -180,11 +176,11 @@ function score_2_rec_time(wp_s,score_measure,score_tempo,score_beatspermeasure,)
   var i = 0;
   var rectime = 0;
   if (wp_s_array[i][0] <= score_time){
-      console.log("something is wrong, score_time should not be grater than wp_s_array[0][0]");
+      console.log("something went wrong, score_time should not be greater than wp_s_array[0][0]");
       rectime=wp_s_array[i][1];
   }
   while (wp_s_array[i][0] > score_time){
-      console.log("wp_s[",i,"][0]=",wp_s[i][0]," and rec_time=",wp_s[i][1]);
+      //console.log("score_time=",wp_s[i][0]," and rec_time=",wp_s[i][1]);
       rectime = wp_s[i][1];
       ++i;
   }
@@ -192,6 +188,7 @@ function score_2_rec_time(wp_s,score_measure,score_tempo,score_beatspermeasure,)
   console.log("rec_time=",rec_time);
 }
 
+/* // this function goes fronm the recorded time (from cursor) to the number of the vhv measure
 function rec_time_2_score(wp_s_array,selected_rec_time,score_bpm,score_rythm,){ //score_rythm only nominator (integer)
   var i = 0;
   var scoretime = 0;
@@ -205,7 +202,10 @@ function rec_time_2_score(wp_s_array,selected_rec_time,score_bpm,score_rythm,){ 
   console.log("go to meter #", score_measure_value)
 
 }
+*/
 
+/*  // this function produces a single dimension array with values representing
+    //the degree of differentiation between recording and midi file over time
 function calculate_C_D_path(D_array,wp_array){
 
   var len = D_array.length;
@@ -217,16 +217,19 @@ function calculate_C_D_path(D_array,wp_array){
       Dpath[p] = D_array[wp_array[p][0]],[wp_array[p][1]];
       Cpath[p] = Dpath[p]-Dpath[p+1]; 
   }
-  /* different syntax for the same process ?
-  var p = len-1;
-  while (p>=0){
-      Dpath[p] = D_array[wp_array[p,0]],[wp_array[p,1]];
-      Cpath[p] = Dpath[p]-Dpath[p+1];
-      p = p - 1;
+  // different syntax for the same process ?
+  //var p = len-1;
+  //while (p>=0){
+  //    Dpath[p] = D_array[wp_array[p,0]],[wp_array[p,1]];
+  //    Cpath[p] = Dpath[p]-Dpath[p+1];
+  //    p = p - 1;
   }
-  */
+  
   C_path = Cpath; //assign to global variable?
 }
+*/
+
+window.setupWaveSurfer = setupWaveSurfer;
 
 function setupMicWaveSurfer(audioContext) {
   wavesurfer3 = WaveSurfer.create({
