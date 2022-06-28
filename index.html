@@ -90,8 +90,7 @@
       </div>
 
       <div class="form-group form-check">
-        <input class="form-check-input" type="checkbox" name="soundEditor"
-          id="soundEditor-option">          
+        <input class="form-check-input" type="checkbox" name="soundEditor" id="soundEditor-option">
         <label class="form-check-label" for="soundEditor">
           Sound Editor
           <span class="badge badge-success">Unselect</span>
@@ -283,22 +282,28 @@
           </div>
 
           <!--alx2-->
-          <div class="input-group-prepend p-0" id="bpm_show" hidden="" >
+
+          <div class="input-group-prepend p-0" id="bpm_show">
             <div class="input-group-prepend">
               <span class="input-group-text">Tempo:</span>
             </div>
-            <input type="text" class="form-control" id="tempo-input" style="text-align:right" maxlength="3">
+            <input type="number" class="form-control" id="tempo-input"
+              style="text-align:center; width: fit-content;" maxlength="3" min="30" max="300"
+              step="1" pattern="[0-9]{3}">
             <div class="input-group-append">
               <span class="input-group-text">bpm</span>
             </div>
             <div class="input-group-append">
-              <button type="button" id="change-tempo" class="btn btn-outline-secondary btn-sm">Change!</button>
+
+
+              <button id="change-tempo" class="btn btn-outline-secondary btn-sm">Change!</button>
               &nbsp;&nbsp;&nbsp;&nbsp;
+
             </div>
           </div>
-          
 
-        
+
+
           <!--alx2_-->
 
           <div id="player" style="display: none; color:white;">
@@ -317,124 +322,83 @@
                   aria-expanded="false">File</a>
                 <ul class="dropdown-menu p-0 false">
                   <li id="load-from-repository__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Load from Repository </a>
-
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Load from Repository </a> </li>
                   <li id="open__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Open </a>
-                    <small class="ml-3 text-nowrap"><strong>ctrl-o</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Open </a> <small
+                      class="ml-3 text-nowrap"><strong>ctrl-o</strong></small> </li>
                   <li id="save-editor-contents__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save editor contents </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-s</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save editor contents </a> <small
+                      class="ml-3 text-nowrap"><strong>alt-s</strong></small> </li>
                   <li id="save-as-midi__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save as MIDI </a>
-
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save as MIDI </a> </li>
                   <li id="save-as-pdf__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save as PDF </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-t</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save as PDF </a> <small
+                      class="ml-3 text-nowrap"><strong>alt-t</strong></small> </li>
                   <li id="save-view-as-pdf__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save view as PDF </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-T</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save view as PDF </a> <small
+                      class="ml-3 text-nowrap"><strong>alt-T</strong></small> </li>
                   <li id="save-view-as-svg__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save view as SVG </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-g</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save view as SVG </a> <small
+                      class="ml-3 text-nowrap"><strong>alt-g</strong></small> </li>
                   <li id="save-as-musicxml__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save as MusicXML </a>
-
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save as MusicXML </a> </li>
                   <li id="display-mei-data__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Display MEI data </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-m</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Display MEI data </a> <small
+                      class="ml-3 text-nowrap"><strong>alt-m</strong></small> </li>
                   <li id="display-humdrum-data__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Display Humdrum data </a>
-                    <small class="ml-3 text-nowrap"><strong>alt-h</strong></small>
-
-                  </li>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Display Humdrum data </a> <small
+                      class="ml-3 text-nowrap"><strong>alt-h</strong></small> </li>
                   <li id="save-to-local-buffer__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Save to local buffer »</a>
-                    <small class="ml-3 text-nowrap"><strong>info</strong></small>
+                    class="dropdown-item d-flex justify-content-between text-dark"> <a
+                      class="text-decoration-none text-dark">Save to local buffer »</a> <small
+                      class="ml-3 text-nowrap"><strong>info</strong></small>
                     <ul class="dropdown-menu p-0 dropdown-submenu">
                       <li id="save-to-buffer-1__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 1 </a>
-                        <small class="ml-3 text-nowrap"><strong>1 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 1 </a> <small
+                          class="ml-3 text-nowrap"><strong>1 alt-S</strong></small> </li>
                       <li id="save-to-buffer-2__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 2 </a>
-                        <small class="ml-3 text-nowrap"><strong>2 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 2 </a> <small
+                          class="ml-3 text-nowrap"><strong>2 alt-S</strong></small> </li>
                       <li id="save-to-buffer-3__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 3 </a>
-                        <small class="ml-3 text-nowrap"><strong>3 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 3 </a> <small
+                          class="ml-3 text-nowrap"><strong>3 alt-S</strong></small> </li>
                       <li id="save-to-buffer-4__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 4 </a>
-                        <small class="ml-3 text-nowrap"><strong>4 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 4 </a> <small
+                          class="ml-3 text-nowrap"><strong>4 alt-S</strong></small> </li>
                       <li id="save-to-buffer-5__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 5 </a>
-                        <small class="ml-3 text-nowrap"><strong>5 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 5 </a> <small
+                          class="ml-3 text-nowrap"><strong>5 alt-S</strong></small> </li>
                       <li id="save-to-buffer-6__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 6 </a>
-                        <small class="ml-3 text-nowrap"><strong>6 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 6 </a> <small
+                          class="ml-3 text-nowrap"><strong>6 alt-S</strong></small> </li>
                       <li id="save-to-buffer-7__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 7 </a>
-                        <small class="ml-3 text-nowrap"><strong>7 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 7 </a> <small
+                          class="ml-3 text-nowrap"><strong>7 alt-S</strong></small> </li>
                       <li id="save-to-buffer-8__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 8 </a>
-                        <small class="ml-3 text-nowrap"><strong>8 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 8 </a> <small
+                          class="ml-3 text-nowrap"><strong>8 alt-S</strong></small> </li>
                       <li id="save-to-buffer-9__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Save to buffer 9 </a>
-                        <small class="ml-3 text-nowrap"><strong>9 alt-S</strong></small>
-
-                      </li>
+                        class="dropdown-item d-flex justify-content-between text-dark"> <a
+                          class="text-decoration-none text-dark">Save to buffer 9 </a> <small
+                          class="ml-3 text-nowrap"><strong>9 alt-S</strong></small> </li>
                     </ul>
                   </li>
                   <li id="load-local-buffer__submenu-item"
@@ -1934,91 +1898,117 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <div class="controls">
             <center>
-              <div id="control_section_buttons">  
-                <button disabled id="GotoSelectionButton" class="btn btn-lg" title="Go to selection">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="orangered" class="bi bi-music-note-list" viewBox="0 0 16 16">
-                    <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"/>
-                    <path fill-rule="evenodd" d="M12 3v10h-1V3h1z"/>
-                    <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z"/>
-                    <path fill-rule="evenodd" d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
+              <div id="control_section_buttons">
+                <button disabled id="GotoSelectionButton" class="btn btn-lg"
+                  title="Go to selection">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="orangered"
+                    class="bi bi-music-note-list" viewBox="0 0 16 16">
+                    <path
+                      d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z" />
+                    <path fill-rule="evenodd" d="M12 3v10h-1V3h1z" />
+                    <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z" />
+                    <path fill-rule="evenodd"
+                      d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z" />
                   </svg></button>&nbsp;&nbsp;&nbsp;&nbsp;
-                  
+
                 <button disabled id="Stop" class="btn btn-lg" title="Stop">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black" class="bi bi-skip-start-fill" viewBox="0 0 16 16">
-                    <path d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0V4z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black"
+                    class="bi bi-skip-start-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0V4z" />
                   </svg></button>
-                
-                  <button disabled id="PlayPause" class="btn btn-lg" title="Play/Pause">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" class="bi bi-play-fill" viewBox="0 0 16 16">
-                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+
+                <button disabled id="PlayPause" class="btn btn-lg" title="Play/Pause">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green"
+                    class="bi bi-play-fill" viewBox="0 0 16 16">
+                    <path
+                      d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
                   </svg>/
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
-                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                    class="bi bi-pause-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z" />
                   </svg></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                
-                  <!--<button disabled id="Stop" class="btn btn-lg" title="Stop">
+
+                <!--<button disabled id="Stop" class="btn btn-lg" title="Stop">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-stop-fill" viewBox="0 0 16 16">
                     <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
                   </svg></button>
                   -->
-                <button disabled hidden id="toggleMute" class="btn btn-primary"><i class="glyphicon glyphicon-volume-off"></i>Mute / Unmute<i class="glyphicon glyphicon-volume-up"></i></button>
-              
+                <button disabled hidden id="toggleMute" class="btn btn-primary"><i
+                    class="glyphicon glyphicon-volume-off"></i>Mute / Unmute<i
+                    class="glyphicon glyphicon-volume-up"></i></button>
+
                 <button id="recordButton" class="btn btn-lg" title="Record">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-record-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red"
+                    class="bi bi-record-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
                   </svg></button>
-                  
+
                 <button id="pauseButton" class="btn btn-lg" title="Pause Recording" disabled>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
-                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                    class="bi bi-pause-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z" />
                   </svg></button>
-                
+
                 <button id="stopButton" class="btn btn-lg" title="Stop Recording" disabled>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-stop-fill" viewBox="0 0 16 16">
-                    <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                    class="bi bi-stop-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z" />
                   </svg></button>
-                
-                  <button disabled id="Synchronize" class="btn btn-lg" title="Synchronize">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+
+                <button disabled id="Synchronize" class="btn btn-lg" title="Synchronize">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                    <path
+                      d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                    <path fill-rule="evenodd"
+                      d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
                   </svg></button>
- 
+
                 <button disabled id="Analyze" class="btn btn-lg" title="Analyze">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard2-data-fill" viewBox="0 0 16 16">
-                  <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
-                  <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585c.055.156.085.325.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5c0-.175.03-.344.085-.5ZM10 7a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7Zm-6 4a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1Zm4-3a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1Z"/>
-                </svg></button>
-                
-                <button id="Download" class="btn btn-lg" title="Download" icon="play">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-clipboard2-data-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z" />
+                    <path
+                      d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585c.055.156.085.325.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5c0-.175.03-.344.085-.5ZM10 7a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7Zm-6 4a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1Zm4-3a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1Z" />
                   </svg></button>
-              </div>  
+
+                <button id="Download" class="btn btn-lg" title="Download" icon="play">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-download" viewBox="0 0 16 16">
+                    <path
+                      d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                    <path
+                      d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                  </svg></button>
+              </div>
             </center>
           </div>
-          <!-- hidden. if missing produces error    -->  
+          <!-- hidden. if missing produces error    -->
           <div class="controls">
             <div hidden id="formats">
-          <!--<ol id="recordingsList"></ol>  also comment out line 193 in rec2wav_2.js    -->   
+              <!--<ol id="recordingsList"></ol>  also comment out line 193 in rec2wav_2.js    -->
             </div>
           </div>
-        </div>      
+        </div>
       </div>
 
     </div>
     <div id="waveforms-display">
-      <div class="container">           
+      <div class="container">
         <div hidden id="rec_wave">
-            <div id="waveform3">
-              <!-- The mic waveform will be here-->
-            </div>
+          <div id="waveform3">
+            <!-- The mic waveform will be here-->
+          </div>
         </div>
         <div id="play_wave">
-            <div id="waveform">
-              <!-- The waveform will appear here-->
-            </div>
+          <div id="waveform">
+            <!-- The waveform will appear here-->
+          </div>
         </div>
       </div>
     </div>
@@ -2097,11 +2087,14 @@
   <script src="/scripts/audio/wavesurfer.cursor.js"></script>
   <script src="/scripts/audio/wavesurfer.microphone.min.js"></script>
   <script src="/scripts/audio/rec2wav.js"></script>
-
-  <script src="/src/js/audio/synchronize.js" type="module"></script>
   <script src="/src/js/audio/wave_one.js" type="module"></script>
   <script src="/src/js/audio/rec2wav_2.js" type="module"></script>
-  <!-- <script src="/src/js/audio/mic_events.js" type="module"></script> -->
+  <!--
+  <script src="/src/js/audio/mic_events.js" type="module"></script>     
+  <script src="/src/js/audio/synchronize.js" type="module"></script>
+    -->
+  <script src="/src/js/sync.js" type="module"></script>
 
 </body>
+
 </html>

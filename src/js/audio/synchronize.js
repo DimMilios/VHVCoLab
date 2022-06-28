@@ -57,8 +57,8 @@ function calculate_C_D_path(D_array,wp_array){
     C_path = Cpath; //assign to global variable?
 }
 
-function score_2_rec_time(wp_s_array,score_meter,score_bpm,score_rythm,){ //score_rythm only nominator (integer)
-    var score_time = ((score_meter-1)*score_rythm)* 60/score_bpm; // time in seconds
+function score_2_rec_time(wp_s_array,score_measure,score_tempo,score_beatspermeasure,){ 
+    var score_time = ((score_measure-1)*score_beatspermeasure)* 60/score_tempo; // time in seconds
     var i = 0;
     var rectime = 0;
     while (wp_s_array[i,0] > score_time){
