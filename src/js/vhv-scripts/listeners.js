@@ -119,6 +119,7 @@ import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { loadKernScoresFile } from './loading.js';
 import { Base64 } from './utility.js';
 import { time } from 'lib0';
+import { setupSynchronizeHandlers } from '../sync.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -249,6 +250,8 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('keydown', processInterfaceKeyCommand);
 
   observeSvgContent();
+
+  setupSynchronizeHandlers();
 });
 
 function extractEditorPosition(element) {
