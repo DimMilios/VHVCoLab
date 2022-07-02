@@ -1,4 +1,5 @@
 import { yProvider } from '../yjs-setup';
+import { featureIsEnabled } from '../bootstrap.js';
 
 const JITSI_DOMAIN = '147.95.32.219:8443';
 // const JITSI_DOMAIN = 'meet.jit.si';
@@ -56,29 +57,35 @@ class JitsiAPI {
     if (!this.api) {
       this.api = new JitsiMeetExternalAPI(JITSI_DOMAIN, this.options);
 
-      // Retrieve the name the user entered on Jitsi and assign that name on the Yjs session
-      this.api.addListener('videoConferenceJoined', (localUser) => {
-        console.log(localUser);
-        if (localUser?.displayName.length > 0) {
-          let user = yProvider.awareness.getLocalState().user;
+      if (featureIsEnabled('collaboration')) {
+        // Retrieve the name the user entered on Jitsi and assign that name on the Yjs session
+        this.api.addListener('videoConferenceJoined', (localUser) => {
+          console.log(localUser);
+          if (localUser?.displayName.length > 0) {
+            let user = yProvider.awareness.getLocalState().user;
 
-          if (user) {
-            yProvider.awareness.setLocalStateField('user', {
-              ...user,
-              name: localUser.displayName,
-            });
-            console.log({ awarenessUser: yProvider.awareness.getLocalState() });
+            if (user) {
+              yProvider.awareness.setLocalStateField('user', {
+                ...user,
+                name: localUser.displayName,
+              });
+              console.log({
+                awarenessUser: yProvider.awareness.getLocalState(),
+              });
+            }
           }
-        }
+        });
+      }
+
+      this.api.addEventListener('readyToClose', () => {
+        console.log(
+          'Jitsi call has ended. Jitsi iframe will be hidden and the API will be destroyed.'
+        );
+
+        this.destroy();
+        this.hide();
       });
     }
-
-    this.api.addEventListener('readyToClose', (payload) => {
-      console.log('readyToClose Event', payload);
-      console.log('Jitsi call has ended. Jitsi iframe will be hidden.');
-
-      this.hide();
-    });
   }
 
   destroy() {
