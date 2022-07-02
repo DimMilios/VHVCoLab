@@ -86,7 +86,8 @@ import { yProvider } from '../yjs-setup.js';
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
 
-document.getElementById('play-button')
+document
+  .getElementById('play-button')
   ?.addEventListener('click', () => playCurrentMidi(global_cursor.CursorNote));
 
 if (localStorage.FONT) {
@@ -127,8 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   setEditorMode('humdrum');
-  
-  loadFileFromURLParam().then(f => console.log(`Editor initialized with: ${f}`));
+
+  loadFileFromURLParam().then((f) =>
+    console.log(`Editor initialized with: ${f}`)
+  );
   // The block of code below loads the edits to the Ace editor from the AUTOSAVE local buffer,
   // but it breaks Ace Editor
 
@@ -163,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.layoutService = layoutService;
 
-
   var body = document.querySelector('body');
 
   selectService.onTransition((state) => {
@@ -173,10 +175,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (state.context?.elemId.length > 0) {
       let target = document.getElementById(state.context.elemId);
-      yProvider.awareness.setLocalStateField('singleSelect', { elemId: target.id });
+      yProvider.awareness.setLocalStateField('singleSelect', {
+        elemId: target.id,
+      });
       return;
     }
-    
+
     yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
   });
 
@@ -198,8 +202,8 @@ document.addEventListener('DOMContentLoaded', function () {
       //alx2_
 
       let harmonyElem = event.target.closest('.harm');
-      //alx         
-      if (harmonyElem){
+      //alx
+      if (harmonyElem) {
         chordLocation.line = harmonyElem.id.split('L')[1].split('F')[0];
         chordLocation.column = harmonyElem.id.split('L')[1].split('F')[1];
         chordBtns.style.visibility = 'visible';
@@ -212,7 +216,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let jitsiContainer = document.getElementById('jitsi-meeting-container');
         if (jitsiContainer) {
-          chordBtns.style.transform = `translateY(-${jitsiContainer.getBoundingClientRect().height}px)`;
+          chordBtns.style.transform = `translateY(-${
+            jitsiContainer.getBoundingClientRect().height
+          }px)`;
         }
 
         chordBtns.style.top = `${pgy}px`;
@@ -220,15 +226,20 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       //alx_
 
-      $('[data-toggle="popover"]').popover('dispose');
-      if (target?.id && target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)) {
+      // $('[data-toggle="popover"]').popover('dispose');
+      if (
+        target?.id &&
+        target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)
+      ) {
         selectService.send({ type: 'SELECT', elemId: target.id });
       } else {
         selectService.send({ type: 'RESET' });
-        yProvider?.awareness?.setLocalStateField('singleSelect', { elemId: null });
+        yProvider?.awareness?.setLocalStateField('singleSelect', {
+          elemId: null,
+        });
         // clearCursorHighlight();
       }
-      
+
       //alx:prosthiki chord argument sto dataIntoView
       dataIntoView(event);
     }
@@ -238,7 +249,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('keydown', processInterfaceKeyCommand);
 
   observeSvgContent();
-
 });
 
 function extractEditorPosition(element) {
@@ -284,9 +294,7 @@ function extractEditorPosition(element) {
 
 function transposeMultiSelect(state, amount) {
   const notes = Array.from(
-    document.querySelectorAll(
-      state.multiSelect.map((el) => '#' + el).join(',')
-    )
+    document.querySelectorAll(state.multiSelect.map((el) => '#' + el).join(','))
   )
     .map((note) => extractEditorPosition(note))
     .filter(Boolean)
@@ -643,7 +651,10 @@ export function processInterfaceKeyCommand(event) {
     event.preventDefault = function () {};
   }
 
-  if ((!event.altKey || !event.ctrlKey) && event.target?.nodeName == 'TEXTAREA') {
+  if (
+    (!event.altKey || !event.ctrlKey) &&
+    event.target?.nodeName == 'TEXTAREA'
+  ) {
     // needed to prevent key commands when editing text
     return;
   }
@@ -1091,57 +1102,59 @@ export function verovioCallback(data) {
 }
 
 //alx2
-getAceEditor().getSession().on('change', function() {
-  
-  let kernFile = getAceEditor().getSession().getValue();
+getAceEditor()
+  .getSession()
+  .on('change', function () {
+    let kernFile = getAceEditor().getSession().getValue();
 
-  //extracting tempo
-  if ( !kernFile || !(kernFile.includes('\t')) ) {
-    console.log('Invalid kern file');
-    return;
-  }
+    //extracting tempo
+    if (!kernFile || !kernFile.includes('\t')) {
+      console.log('Invalid kern file');
+      return;
+    }
 
-  let startIndex = kernFile.indexOf('MM') + 2;
-  let stopIndex = startIndex;
+    let startIndex = kernFile.indexOf('MM') + 2;
+    let stopIndex = startIndex;
 
-  while( !(kernFile[stopIndex] == '\t') ) stopIndex++;
+    while (!(kernFile[stopIndex] == '\t')) stopIndex++;
 
-  window.TEMPO = parseInt( kernFile.slice(startIndex, stopIndex) ); 
-  //providing tempo value to 'insert-tempo' form
-  document.getElementById('tempo-input').placeholder = window.TEMPO;
+    window.TEMPO = parseInt(kernFile.slice(startIndex, stopIndex));
+    //providing tempo value to 'insert-tempo' form
+    document.getElementById('tempo-input').placeholder = window.TEMPO;
 
-  //extracting time signature  
-  startIndex = kernFile.indexOf('M') + 1;
-  stopIndex = startIndex;
- 
-  while( !(kernFile[stopIndex] == '\t') ) stopIndex++;
-
-  //ensuring that time signature is retrieved from the right part of kernfile
-  let floorPosition;
-  let timeSignatureText = kernFile.slice(startIndex, stopIndex);
-
-  while ( !( timeSignatureText.length==3 && timeSignatureText.includes('/') ) ) {
-    floorPosition = startIndex + 1;
-    startIndex = kernFile.indexOf('M', floorPosition) + 1;
+    //extracting time signature
+    startIndex = kernFile.indexOf('M') + 1;
     stopIndex = startIndex;
-    while( !(kernFile[stopIndex] == '\t') ) stopIndex++;
 
-    timeSignatureText = kernFile.slice(startIndex, stopIndex);
-  }
-  
-  window.BEATSPERMEASURE = parseInt(timeSignatureText[0]);
-  
-});
+    while (!(kernFile[stopIndex] == '\t')) stopIndex++;
+
+    //ensuring that time signature is retrieved from the right part of kernfile
+    let floorPosition;
+    let timeSignatureText = kernFile.slice(startIndex, stopIndex);
+
+    while (
+      !(timeSignatureText.length == 3 && timeSignatureText.includes('/'))
+    ) {
+      floorPosition = startIndex + 1;
+      startIndex = kernFile.indexOf('M', floorPosition) + 1;
+      stopIndex = startIndex;
+      while (!(kernFile[stopIndex] == '\t')) stopIndex++;
+
+      timeSignatureText = kernFile.slice(startIndex, stopIndex);
+    }
+
+    window.BEATSPERMEASURE = parseInt(timeSignatureText[0]);
+  });
 
 document.getElementById('change-tempo').addEventListener('click', () => {
   let kernFile = getAceEditor().getSession().getValue();
   let newTempo = document.getElementById('tempo-input').value;
 
-  let newKern = ( kernFile.replaceAll(/MM\d+/g, `MM${newTempo}`) ).replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
-  
+  let newKern = kernFile
+    .replaceAll(/MM\d+/g, `MM${newTempo}`)
+    .replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
 
   getAceEditor().getSession().setValue(newKern, 0);
-  
-} )
+});
 
 //alx2_

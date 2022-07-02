@@ -14,9 +14,8 @@ import {
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
 import { layoutService } from '../state/layoutStateMachine.js';
-import { featureIsEnabled } from '../boostrap.js';
+import { featureIsEnabled } from '../bootstrap.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
-import { get } from 'lib0/indexeddb';
 
 let DEBUG = false;
 function log(text) {
@@ -159,12 +158,11 @@ export function updateHandler(clients = defaultClients()) {
       .toStrings()
       .some((name) => name.toLowerCase().includes('comment'));
 
-    let highlights = html`${commentsVisible ? 
-      html`${state.comments
-            ?.filter((c) => c?.highlight != null)
-            .map((c) => highlightTemplate(c.id, c.highlight))}`
-      : null
-    }`
+    let highlights = html`${commentsVisible
+      ? html`${state.comments
+          ?.filter((c) => c?.highlight != null)
+          .map((c) => highlightTemplate(c.id, c.highlight))}`
+      : null}`;
 
     render(
       html`
@@ -249,7 +247,7 @@ export function addListenersToOutput(outputTarget) {
   let shouldMultiSelect = false;
   const rbSelection = new RubberBandSelection();
 
-  console.log('>>>Adding listeners to output')
+  console.log('>>>Adding listeners to output');
 
   document.addEventListener('mousedown', (event) => {
     // Start selecting only when there isn't a note element on the cursor
@@ -324,9 +322,9 @@ function createNoteBounds() {
 
   return {
     /**
-     * 
-     * @param {HTMLElement | null} left 
-     * @param {HTMLElement | null} right 
+     *
+     * @param {HTMLElement | null} left
+     * @param {HTMLElement | null} right
      */
     setBounds(left, right) {
       if (left) {
@@ -338,22 +336,26 @@ function createNoteBounds() {
       }
     },
     /**
-     * 
+     *
      * @returns {{ leftMost: HTMLElement | null, rightMost: HTMLElement | null}}
      */
-    getBounds() { return { leftMost, rightMost }}
-  }
+    getBounds() {
+      return { leftMost, rightMost };
+    },
+  };
 }
 
 export let noteBounds = createNoteBounds();
 /**
- * 
- * @param {HTMLElement[]} selectedElements 
+ *
+ * @param {HTMLElement[]} selectedElements
  */
 function setNoteBounds(selectedElements) {
   if (selectedElements.length > 0) {
-    let selectedNotes = [...selectedElements].map(elem => {
-      return elem.classList.contains('beam') ? elem.querySelector('.note') : elem
+    let selectedNotes = [...selectedElements].map((elem) => {
+      return elem.classList.contains('beam')
+        ? elem.querySelector('.note')
+        : elem;
     });
 
     let { leftMost, rightMost } = findLeftMostAndRightMost(selectedNotes);
