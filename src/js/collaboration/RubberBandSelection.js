@@ -1,5 +1,5 @@
-import { render } from "lit-html";
-import { selectAreaTemplate } from "../templates/multiSelect.js";
+import { render } from 'lit-html';
+import { selectAreaTemplate } from '../templates/multiSelect.js';
 
 export class RubberBandSelection {
   coords = {
@@ -31,8 +31,8 @@ export class RubberBandSelection {
   }
 
   /**
-   * 
-   * @param {MouseEvent} event 
+   *
+   * @param {MouseEvent} event
    */
   setUpperCoords(event) {
     this.coords.left = event.clientX;
@@ -41,10 +41,10 @@ export class RubberBandSelection {
     this.offsetCoords.left = event.offsetX;
     this.offsetCoords.top = event.offsetY;
   }
- 
+
   /**
-   * 
-   * @param {MouseEvent} event 
+   *
+   * @param {MouseEvent} event
    */
   setLowerCoords(event) {
     this.coords.right = event.clientX;
@@ -65,7 +65,7 @@ export class RubberBandSelection {
     let maxX = Math.max(left, right);
     let minY = Math.min(top, bottom);
     let maxY = Math.max(top, bottom);
-    
+
     this.renderSelectArea();
     // this.selectAreaElem.style.transform = `translate(${minX}px, ${minY}px)`;
     // this.selectAreaElem.style.width = maxX - minX + 'px';
