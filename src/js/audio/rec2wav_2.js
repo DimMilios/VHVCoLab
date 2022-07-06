@@ -25,6 +25,8 @@ document
   .getElementById('Download') ///////////////////////////////////////////////////////////////////////////////
   .addEventListener('click', handleFileDownload(), false);
 
+let shouldSetupSynchronize = true;
+
 function startRecording() {
   console.log('recordButton clicked');
   let rec_waveform = document.getElementById('rec_wave');
@@ -110,7 +112,10 @@ function startRecording() {
       pauseButton.disabled = true;
     });
 
-  setupSynchronizeHandlers();
+  if (shouldSetupSynchronize) {
+    setupSynchronizeHandlers();
+    shouldSetupSynchronize = false;
+  }
 }
 
 function pauseRecording() {
