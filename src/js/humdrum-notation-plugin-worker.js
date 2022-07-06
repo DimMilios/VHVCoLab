@@ -51,7 +51,7 @@
 
 'use strict';
 
-import { featureIsEnabled } from './boostrap.js';
+import { featureIsEnabled } from './bootstrap.js';
 //////////////////////////////
 //
 // DOMContentLoaded event listener --
@@ -116,14 +116,14 @@ function initializeVerovioToolkit() {
       // console.log('changeCursor event', { row, column, item })
       if (item && item.classList.contains('note')) {
         markItem(item);
-    
+
         // createNewEditorSession({ item, row, column });
         // createDraggableContainer(item);
-  
+
         if (featureIsEnabled('collaboration')) {
           if (yProvider) {
             const localState = yProvider.awareness.getLocalState();
-        
+
             yProvider.awareness.setLocalState({
               ...localState,
               singleSelect: { elemId: item.id },
@@ -264,10 +264,14 @@ vrvInterface.prototype.createWorkerInterface = function (onReady) {
     // Worker script location need to be static, otherwise Vite won't transform them
     if (import.meta.env.DEV) {
       console.log('Loading development Verovio Worker');
-      that.worker = new Worker(new URL('./worker/verovio-worker-dev.js', import.meta.url));
+      that.worker = new Worker(
+        new URL('./worker/verovio-worker-dev.js', import.meta.url)
+      );
     } else {
       console.log('Loading production Verovio Worker');
-      that.worker = new Worker(new URL('./worker/verovio-worker-prod.js', import.meta.url));
+      that.worker = new Worker(
+        new URL('./worker/verovio-worker-prod.js', import.meta.url)
+      );
     }
     that.worker.addEventListener('message', handleEvent);
 

@@ -1,3 +1,5 @@
+import { setupSynchronizeHandlers } from '../sync';
+
 URL = window.URL || window.webkitURL;
 
 var gumStream; //stream from getUserMedia()
@@ -20,8 +22,8 @@ recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
 pauseButton.addEventListener('click', pauseRecording);
 document
-    .getElementById('Download') ///////////////////////////////////////////////////////////////////////////////
-    .addEventListener('click', handleFileDownload(), false);
+  .getElementById('Download') ///////////////////////////////////////////////////////////////////////////////
+  .addEventListener('click', handleFileDownload(), false);
 
 function startRecording() {
   console.log('recordButton clicked');
@@ -29,7 +31,6 @@ function startRecording() {
   rec_waveform.removeAttribute('hidden');
   let play_waveform = document.getElementById('play_wave');
   play_waveform.setAttribute('hidden', true);
-
 
   /*
             Simple constraints object, for more advanced audio features see
@@ -59,7 +60,6 @@ function startRecording() {
   navigator.mediaDevices
     .getUserMedia(constraints)
     .then(function (stream) {
-
       console.log(
         'getUserMedia() success, stream created, initializing Recorder.js ...'
       );
@@ -109,6 +109,8 @@ function startRecording() {
       stopButton.disabled = true;
       pauseButton.disabled = true;
     });
+
+  setupSynchronizeHandlers();
 }
 
 function pauseRecording() {
@@ -179,7 +181,7 @@ function createDownloadLink(blob) {
 
   // update information for the .wav file (needed for downloading)
   download = link.download;
-  fileUrl = url; 
+  fileUrl = url;
 
   //add the new audio element to li
   li.appendChild(au);
@@ -225,8 +227,8 @@ function download_file(name, audio) {
 }
 
 function handleFileDownload() {
-  return function(event) {
+  return function (event) {
     console.log('Download click handler', { download, fileUrl });
     download_file(download, fileUrl);
-  }
+  };
 }

@@ -26,27 +26,34 @@ let options = featureForm.querySelectorAll('input[type="checkbox"]');
 
 /**
  * Based on https://www.martinfowler.com/articles/feature-toggles.html
- * 
- * @param {FeatureConfig} initialConfig 
- * @returns 
+ *
+ * @param {FeatureConfig} initialConfig
+ * @returns
  */
 function createFeatureToggler(initialConfig = FeatureConfig) {
   let config = Object.assign({}, initialConfig);
 
   return {
     /**
-     * 
-     * @param {FeatureKey} featureName 
+     *
+     * @param {FeatureKey} featureName
      * @param {boolean} isEnabled
      * @returns {Promise<Object>}>}
      */
     setFeature(featureName, isEnabled) {
       let error;
       if (!(featureName in config)) {
-        error = new Error(`Feature ${featureName} not found on feature config ${JSON.stringify(config, null, 2 )}`);
+        error = new Error(
+          `Feature ${featureName} not found on feature config ${JSON.stringify(
+            config,
+            null,
+            2
+          )}`
+        );
       }
-      if (typeof isEnabled !== 'boolean') error = new Error('Value must be boolean');
-      
+      if (typeof isEnabled !== 'boolean')
+        error = new Error('Value must be boolean');
+
       return new Promise((resolve, reject) => {
         if (error) {
           reject(error);
@@ -58,11 +65,11 @@ function createFeatureToggler(initialConfig = FeatureConfig) {
           config,
           changed: oldValue != isEnabled ? { [featureName]: isEnabled } : null,
         });
-      })
+      });
     },
     /**
-     * 
-     * @param {FeatureKey} featureName 
+     *
+     * @param {FeatureKey} featureName
      * @returns {boolean}
      */
     featureIsEnabled(featureName) {
@@ -72,12 +79,16 @@ function createFeatureToggler(initialConfig = FeatureConfig) {
 }
 
 let useConfigFile = keysEqual(CONFIG, FeatureConfig);
-const featureToggler = createFeatureToggler(useConfigFile ? CONFIG : FeatureConfig);
+const featureToggler = createFeatureToggler(
+  useConfigFile ? CONFIG : FeatureConfig
+);
 if (useConfigFile) {
-  bootstrap().then(() => console.log('Loaded features from file configuration'));
+  bootstrap().then(() =>
+    console.log('Loaded features from file configuration')
+  );
 }
 /**
- * 
+ *
  * @param {FeatureKey} featureName
  * @returns {boolean}
  */
@@ -90,19 +101,18 @@ async function bootstrap() {
     handleScore();
     disableOption('score', options);
   }
-  
+
   if (featureToggler.featureIsEnabled('collaboration')) {
     handleCollabSetup();
     disableOption('collaboration', options);
   }
 
   if (featureToggler.featureIsEnabled('videoConference')) {
-    let { default: jitsi } = await import('../js/jitsi/index.js');
+    let { default: jitsi } = await import('./jitsi/index.js');
     handleVideoConfSetup(jitsi);
   }
 
   if (featureToggler.featureIsEnabled('soundEditor')) {
-
   }
 }
 
@@ -141,46 +151,36 @@ function handleCollabTearDown() {
 }
 
 function handleVideoConfSetup(jitsi) {
-  let jitsiContainer = document.getElementById('jitsi-meeting-container');
-  if (!jitsiContainer) {
-    console.error('Jitsi container element was not found. Check index.html');
-    return;
-  }
-  
-  jitsiContainer.style.display = 'block';
   jitsi.setup();
 }
 
 function handleVideoConfTearDown(jitsi) {
-  let jitsiContainer = document.getElementById('jitsi-meeting-container');
-  if (!jitsiContainer) {
-    console.error('Jitsi container element was not found. Check index.html');
-    return;
-  }
-  jitsiContainer.style.display = 'none';
   jitsi.destroy();
 }
 
 function initForm(config) {
-  return function() {
+  return function () {
     options.forEach((opt) => {
       opt.checked = config[opt.name];
     });
-  
+
     featureForm?.addEventListener('submit', handleSubmit);
-  
+
     function handleSubmit(e) {
       e.preventDefault();
-  
-      const asFeatures = Array.from(options).map((o) => ({ name: o.name, checked: o.checked }));
+
+      const asFeatures = Array.from(options).map((o) => ({
+        name: o.name,
+        checked: o.checked,
+      }));
       console.log(asFeatures);
-  
+
       asFeatures.forEach(async (feat) => {
         let res = await featureToggler.setFeature(feat.name, feat.checked);
-  
+
         // This option was unchanged, check the next option
         if (res.changed === null) return;
-  
+
         switch (feat.name) {
           case 'score':
             if (res.changed[feat.name]) {
@@ -198,7 +198,7 @@ function initForm(config) {
             break;
           case 'videoConference':
             // FIX: we're reloading Jitsi Meet every time
-            let { default: jitsi } = await import('../js/jitsi/index.js');
+            let { default: jitsi } = await import('./jitsi/index.js');
             if (res.changed[feat.name]) {
               handleVideoConfSetup(jitsi);
             } else {
@@ -207,24 +207,35 @@ function initForm(config) {
             return;
           default:
             break;
-            case 'soundEditor':
-              // disappearing only, still working on the background
-              
-              if (res.changed[feat.name]) {
-                document.getElementById("control_section_buttons").removeAttribute("style");
-                document.getElementById("waveforms-display").removeAttribute("style");
-              } else {
-                document.getElementById("control_section_buttons").setAttribute("style","display: none");
-                document.getElementById("waveforms-display").setAttribute("style","display: none");
-                wavesurfer.stop();              
-              }
-              break;
+          case 'soundEditor':
+            // disappearing only, still working on the background
+
+            if (res.changed[feat.name]) {
+              document
+                .getElementById('control_section_buttons')
+                .removeAttribute('style');
+              document
+                .getElementById('waveforms-display')
+                .removeAttribute('style');
+            } else {
+              document
+                .getElementById('control_section_buttons')
+                .setAttribute('style', 'display: none');
+              document
+                .getElementById('waveforms-display')
+                .setAttribute('style', 'display: none');
+              wavesurfer.stop();
+            }
+            break;
         }
       });
     }
-  }
+  };
 }
-window.addEventListener('load', initForm(useConfigFile ? CONFIG : FeatureConfig));
+window.addEventListener(
+  'load',
+  initForm(useConfigFile ? CONFIG : FeatureConfig)
+);
 
 window.bts = bootstrap;
 window.FeatureConfig = FeatureConfig;

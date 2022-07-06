@@ -1,5 +1,5 @@
 export function getURLParams(keys = []) {
-  let params = new URL(document.location).searchParams;
+  let params = new URL(window.location.href).searchParams;
 
   return keys
     .map((key) => ({ [key]: params.get(key) }))
@@ -8,7 +8,16 @@ export function getURLParams(keys = []) {
 
 export let noop = () => {};
 
-let productionURL = new URL('http://localhost:3001/'); // Replace when we have a server
+const isSecure = (protocol = 'https') => {
+  return window.location.protocol.includes(protocol);
+};
+
+let productionOrigin = 'vhv-ws-server.herokuapp.com';
 export let baseUrl = import.meta.env.DEV
-  ? new URL('http://localhost:3001/')
-  : productionURL;
+  ? 'http://localhost:3001/'
+  : `${isSecure() ? 'https' : 'http'}://${productionOrigin}`;
+
+let wsProductionOrigin = 'vhv-ws-server.herokuapp.com';
+export let wsBaseUrl = import.meta.env.DEV
+  ? 'ws://localhost:3001'
+  : `${isSecure() ? 'wss' : 'ws'}://${wsProductionOrigin}`;

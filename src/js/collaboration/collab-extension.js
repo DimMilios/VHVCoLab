@@ -13,10 +13,7 @@ import {
   highlightTemplate,
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
-import { layoutService } from '../state/layoutStateMachine.js';
-import { featureIsEnabled } from '../boostrap.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
-import { get } from 'lib0/indexeddb';
 
 let DEBUG = false;
 function log(text) {
@@ -155,22 +152,20 @@ export function updateHandler(clients = defaultClients()) {
         )
       )}`;
 
-    let commentsVisible = layoutService.state
-      .toStrings()
-      .some((name) => name.toLowerCase().includes('comment'));
+    // let commentsVisible = layoutService.state
+    //   .toStrings()
+    //   .some((name) => name.toLowerCase().includes('comment'));
 
-    let highlights = html`${commentsVisible ? 
-      html`${state.comments
-            ?.filter((c) => c?.highlight != null)
-            .map((c) => highlightTemplate(c.id, c.highlight))}`
-      : null
-    }`
+    // let highlights = html`${commentsVisible
+    //   ? html`${state.comments
+    //       ?.filter((c) => c?.highlight != null)
+    //       .map((c) => highlightTemplate(c.id, c.highlight))}`
+    //   : null}`;
+
+    // ${renderHighlightLayer(highlights)}
 
     render(
-      html`
-        ${collabLayer(multiSelects, singleSelects, userAwareness)}
-        ${renderHighlightLayer(highlights)}
-      `,
+      html` ${collabLayer(multiSelects, singleSelects, userAwareness)} `,
       collabContainer
     );
 
@@ -201,31 +196,6 @@ export function updateHandler(clients = defaultClients()) {
   clients?.removed?.forEach(f);
 }
 
-// window.addEventListener('DOMContentLoaded', () => {
-//   if (featureIsEnabled('collaboration')) {
-//     // Use a MutationObserver to find out when the score output SVG
-//     // is added to the DOM and attach mouse event listeners to it.
-//     // Then, disconnect the observer.
-//     const mutationObserver = new MutationObserver((mutationsList, observer) => {
-//       for (const mutation of mutationsList) {
-//         if (mutation.type === 'childList') {
-//           if (mutation.target.id === 'output') {
-//             if (
-//               !mutation.target.onmousedown &&
-//               !mutation.target.onmousemove &&
-//               !mutation.target.onmouseup
-//             ) {
-//               addListenersToOutput(mutation.target);
-//               observer.disconnect();
-//             }
-//           }
-//         }
-//       }
-//     });
-//     mutationObserver.observe(document.body, { childList: true, subtree: true });
-//   }
-// });
-
 function collabLayer(...children) {
   let output = document.querySelector('#output');
   let renderBefore = document.querySelector('#output > svg');
@@ -249,7 +219,7 @@ export function addListenersToOutput(outputTarget) {
   let shouldMultiSelect = false;
   const rbSelection = new RubberBandSelection();
 
-  console.log('>>>Adding listeners to output')
+  console.log('>>>Adding listeners to output');
 
   document.addEventListener('mousedown', (event) => {
     // Start selecting only when there isn't a note element on the cursor
@@ -285,37 +255,36 @@ export function addListenersToOutput(outputTarget) {
     }
   });
 
-  document.addEventListener('mouseup', handleMouseUp(yProvider.awareness));
+  document.addEventListener('mouseup', () => {
+    rbSelection.reCalculateCoords();
+    rbSelection.isSelecting = false;
 
-  function handleMouseUp(awareness) {
-    return () => {
-      rbSelection.reCalculateCoords();
-      rbSelection.isSelecting = false;
+    if (shouldMultiSelect) {
+      // TODO: extremely inefficient, selecting every single note element
+      const notes = Array.from(document.querySelectorAll('.note, .beam'));
+      const selectedElements = rbSelection.selectNoteElements(notes);
 
-      if (shouldMultiSelect) {
-        // TODO: extremely inefficient, selecting every single note element
-        const notes = Array.from(document.querySelectorAll('.note, .beam'));
-        const selectedElements = rbSelection.selectNoteElements(notes);
+      setNoteBounds(selectedElements);
 
-        setNoteBounds(selectedElements);
+      const multiSelectedNotes = selectedElements
+        .map((note) => note.id)
+        .filter((id) => /^note/g.test(id));
 
-        const multiSelectedNotes = selectedElements
-          .map((note) => note.id)
-          .filter((id) => /^note/g.test(id));
-
-        if (multiSelectedNotes.length > 0) {
-          awareness?.setLocalStateField('multiSelect', multiSelectedNotes);
-        }
-
-        shouldMultiSelect = false;
+      if (multiSelectedNotes.length > 0) {
+        yProvider?.awareness?.setLocalStateField(
+          'multiSelect',
+          multiSelectedNotes
+        );
       }
 
-      rbSelection.resetCoords();
-      // rbSelection.selectAreaElem.hidden = true;
-      rbSelection.hide();
-      startTime = endTime = undefined;
-    };
-  }
+      shouldMultiSelect = false;
+    }
+
+    rbSelection.resetCoords();
+    // rbSelection.selectAreaElem.hidden = true;
+    rbSelection.hide();
+    startTime = endTime = undefined;
+  });
 }
 
 function createNoteBounds() {
@@ -324,9 +293,9 @@ function createNoteBounds() {
 
   return {
     /**
-     * 
-     * @param {HTMLElement | null} left 
-     * @param {HTMLElement | null} right 
+     *
+     * @param {HTMLElement | null} left
+     * @param {HTMLElement | null} right
      */
     setBounds(left, right) {
       if (left) {
@@ -338,22 +307,26 @@ function createNoteBounds() {
       }
     },
     /**
-     * 
+     *
      * @returns {{ leftMost: HTMLElement | null, rightMost: HTMLElement | null}}
      */
-    getBounds() { return { leftMost, rightMost }}
-  }
+    getBounds() {
+      return { leftMost, rightMost };
+    },
+  };
 }
 
 export let noteBounds = createNoteBounds();
 /**
- * 
- * @param {HTMLElement[]} selectedElements 
+ *
+ * @param {HTMLElement[]} selectedElements
  */
 function setNoteBounds(selectedElements) {
   if (selectedElements.length > 0) {
-    let selectedNotes = [...selectedElements].map(elem => {
-      return elem.classList.contains('beam') ? elem.querySelector('.note') : elem
+    let selectedNotes = [...selectedElements].map((elem) => {
+      return elem.classList.contains('beam')
+        ? elem.querySelector('.note')
+        : elem;
     });
 
     let { leftMost, rightMost } = findLeftMostAndRightMost(selectedNotes);
