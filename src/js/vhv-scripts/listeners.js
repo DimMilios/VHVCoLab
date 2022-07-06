@@ -250,8 +250,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('keydown', processInterfaceKeyCommand);
 
   observeSvgContent();
-
-  setupSynchronizeHandlers();
 });
 
 function extractEditorPosition(element) {

@@ -43,8 +43,10 @@ export function setupSynchronizeHandlers() {
       };
 
       stop.addEventListener('click', (ev) => {
-        mediaRecorder.stop();
-        console.log('- media recording stops');
+        if (mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+          console.log('- media recording stops');
+        }
       });
 
       upload.addEventListener('click', (ev) => {
