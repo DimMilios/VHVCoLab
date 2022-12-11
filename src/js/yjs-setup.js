@@ -1,10 +1,6 @@
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
-// import { WebrtcProvider } from 'y-webrtc';
-import {
-  addListenersToOutput,
-  updateHandler,
-} from './collaboration/collab-extension.js';
+import { updateHandler } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
@@ -12,7 +8,7 @@ import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
 import * as userService from './api/users.js';
-import { baseUrl, wsBaseUrl, getURLParams } from './api/util.js';
+import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo } from './api/util.js';
 
 const names = [
   'Michael',
@@ -45,42 +41,29 @@ let userData = {
   id: 1,
 };
 
+/** @type{WebsocketProvider} */
 export let yProvider;
 
-const ROOM_ID = '70226ca0-f79c-4605-947e-7b6ed47ae6e7';
-const herokuWs = 'wss://vhv-ws-server.herokuapp.com';
-
-export function setupCollaboration() {
+export async function setupCollaboration() {
   const ydoc = new Y.Doc();
 
-  // let { docId: DOC_ID, roomname } = getURLParams(['docId', 'roomname']);
-  // let room = `docId=${DOC_ID}&roomname=${roomname}`;
-  let room = ROOM_ID;
+  const { file, user } = getURLInfo();
+
+  let room = 'test-room';
+  let roomData;
+  if (file && user) {
+    roomData = await fetchRoom(file, user);
+    room = roomData?.room ?? room;
+  }
 
   if (typeof yProvider == 'undefined') {
-    // wsBaseUrl
-    yProvider = new WebsocketProvider(herokuWs, room, ydoc); // local
+    yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
     });
-
-    // yProvider = new WebrtcProvider(room, ydoc);
   }
 
-  let appUser = Cookies.get('user');
-  if (appUser) {
-    let user = JSON.parse(appUser);
-    if (!user.name) {
-      user.name = user.email.split('@')[0];
-    }
-
-    yProvider.awareness.setLocalStateField('user', {
-      ...user,
-      color: oneOf(colors),
-    });
-  } else {
-    yProvider.awareness.setLocalStateField('user', userData);
-  }
+  setUserAwarenessData(user);
 
   const type = ydoc.getText('ace');
   const yUndoManager = new Y.UndoManager(type);
@@ -94,13 +77,35 @@ export function setupCollaboration() {
     yUndoManager,
   });
 
-  // yProvider.awareness.on('update', updateHandler);
-  yProvider.awareness.on('change', updateHandler);
+  // yProvider.awareness.on('change', updateHandler);
+  yProvider.awareness.on('update', updateHandler);
 
   window.example = { yProvider, ydoc, type };
   window.awareness = yProvider.awareness;
 
   // setupSSE(DOC_ID);
+}
+
+function setUserAwarenessData(user) {
+  console.log({ user });
+  let appUser = Cookies.get('user');
+  if (appUser) {
+    let user = JSON.parse(appUser);
+    if (!user.name) {
+      user.name = user.email.split('@')[0];
+    }
+
+    yProvider.awareness.setLocalStateField('user', {
+      ...user,
+      color: oneOf(colors),
+    });
+    return;
+  }
+
+  if (user) {
+    userData.name = user;
+  }
+  yProvider.awareness.setLocalStateField('user', userData);
 }
 
 function setupSSE(DOC_ID) {

@@ -1,9 +1,50 @@
-export function getURLParams(keys = []) {
-  let params = new URL(window.location.href).searchParams;
+import { isValidHttpUrl } from '../vhv-scripts/file-operations';
 
-  return keys
-    .map((key) => ({ [key]: params.get(key) }))
-    .reduce((prev, curr) => Object.assign({}, prev, curr), {});
+export function getURLParams(keys = []) {
+  return Object.fromEntries(new URLSearchParams(window.location.search));
+}
+
+export function getURLInfo() {
+  let { file: fileUrl, user } = getURLParams();
+  let file = fileUrl;
+
+  // Extract the file name for the file passed from URL
+  // The file is stored in MusiCoLab's file repository
+  if (fileUrl && isValidHttpUrl(fileUrl)) {
+    file = Object.fromEntries(new URL(fileUrl).searchParams)?.f;
+  }
+  console.log({ file, user });
+
+  return {
+    file,
+    user,
+  };
+}
+
+export async function fetchRoom(file, username) {
+  try {
+    // Get the shared document id for this WebSocket connection
+    const response = await fetch(
+      `${baseUrl}api/documents/room-id?fileName=${file}&username=${username}`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      }
+    );
+
+    const { documents, usersForCurrentDocument } = await response.json();
+    if (documents?.length > 0 && documents[0]?.document_id) {
+      return {
+        documentId: documents[0].document_id,
+        room: `docId=${documents[0].document_id.toString()}&fileName=${file}`,
+        usersForCurrentDocument: usersForCurrentDocument ?? [],
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export let noop = () => {};
@@ -12,12 +53,14 @@ const isSecure = (protocol = 'https') => {
   return window.location.protocol.includes(protocol);
 };
 
-let productionOrigin = 'vhv-ws-server.herokuapp.com';
+let productionOrigin = 'musicolab.hmu.gr/';
 export let baseUrl = import.meta.env.DEV
-  ? 'http://localhost:3001/'
+  ? 'http://localhost:8080/'
   : `${isSecure() ? 'https' : 'http'}://${productionOrigin}`;
 
-let wsProductionOrigin = 'vhv-ws-server.herokuapp.com';
 export let wsBaseUrl = import.meta.env.DEV
-  ? 'ws://localhost:3001'
-  : `${isSecure() ? 'wss' : 'ws'}://${wsProductionOrigin}`;
+  ? 'ws://localhost:8080'
+  : `${isSecure() ? 'wss' : 'ws'}://${productionOrigin}`;
+
+// const herokuWs = 'wss://vhv-ws-server.herokuapp.com';
+// const flyIoWs = 'wss://vhv-api.fly.dev';

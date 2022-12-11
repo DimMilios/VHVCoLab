@@ -102,98 +102,102 @@ function defaultClients() {
 export function updateHandler(clients = defaultClients()) {
   const awStates = Array.from(yProvider.awareness.getStates().entries());
   // console.log(yProvider.awareness.getStates());
-  const f = () => {
-    let collabContainer = document.querySelector('#output #collab');
-    if (!collabContainer) {
-      console.log(
-        'Element div#collab is not found. Cannot render collaboration elements.'
-      );
-      collabContainer = document.createElement('div');
-      collabContainer.id = 'collab';
-      document.querySelector('#output')?.prepend(collabContainer);
-    }
-
-    let multiSelects = html`${awStates
-      .filter(
-        ([_, state]) => state.multiSelect != null && state?.user?.color != null
-      )
-      .map(([clientId, state]) =>
-        multiSelectTemplate(
-          clientId,
-          clientId === yProvider.awareness.clientID,
-          state.multiSelect,
-          state.user.color
-        )
-      )}`;
-
-    let singleSelects = html`${awStates
-      .filter(
-        ([_, state]) =>
-          state?.singleSelect?.elemId != null && state?.user?.color != null
-      )
-      .map(([clientId, state]) =>
-        singleSelectTemplate(
-          clientId,
-          state.singleSelect.elemId,
-          state.user.color
-        )
-      )}`;
-
-    let userAwareness = html`${awStates
-      .filter(
-        ([_, state]) =>
-          state?.singleSelect?.elemId != null && state?.user?.name != null
-      )
-      .map(([clientId, state]) =>
-        userAwarenessTemplate(
-          clientId,
-          state.singleSelect.elemId,
-          state.user.name
-        )
-      )}`;
-
-    // let commentsVisible = layoutService.state
-    //   .toStrings()
-    //   .some((name) => name.toLowerCase().includes('comment'));
-
-    // let highlights = html`${commentsVisible
-    //   ? html`${state.comments
-    //       ?.filter((c) => c?.highlight != null)
-    //       .map((c) => highlightTemplate(c.id, c.highlight))}`
-    //   : null}`;
-
-    // ${renderHighlightLayer(highlights)}
-
-    render(
-      html` ${collabLayer(multiSelects, singleSelects, userAwareness)} `,
-      collabContainer
+  let collabContainer = document.querySelector('#output #collab');
+  if (!collabContainer) {
+    console.log(
+      'Element div#collab is not found. Cannot render collaboration elements.'
     );
+    collabContainer = document.createElement('div');
+    collabContainer.id = 'collab';
+    document.querySelector('#output')?.prepend(collabContainer);
+  }
 
-    // Display connection status (online/offline) for the users sharing the current document
-    let onlineElem = document.querySelector('#online-users');
-    if (onlineElem) {
-      let connectedIds = [...yProvider.awareness.getStates().values()].map(
-        (s) => s.user.id
-      );
-      let copy = [...state.users];
-      setState({
-        users: copy
-          .map((u) => ({ ...u, online: connectedIds.includes(u.id) }))
-          .sort((a, b) => b.online - a.online),
-      });
-      render(html`${userListTemplate(state.users)}`, onlineElem);
-      // Initialize bootstrap tooltips
-      $('[data-toggle="tooltip"]').tooltip();
-    } else {
-      console.log(
-        'Element div#online-users is not found. Cannot display online user info.'
-      );
-    }
-  };
+  // console.log('Updating awareness');
 
-  clients?.added?.forEach(f);
-  clients?.updated?.forEach(f);
-  clients?.removed?.forEach(f);
+  let multiSelects = html`${awStates
+    .filter(
+      ([_, state]) => state.multiSelect != null && state?.user?.color != null
+    )
+    .map(([clientId, state]) =>
+      multiSelectTemplate(
+        clientId,
+        clientId === yProvider.awareness.clientID,
+        state.multiSelect,
+        state.user.color
+      )
+    )}`;
+
+  let singleSelects = html`${awStates
+    .filter(
+      ([_, state]) =>
+        state?.singleSelect?.elemId != null && state?.user?.color != null
+    )
+    .map(([clientId, state]) =>
+      singleSelectTemplate(
+        clientId,
+        state.singleSelect.elemId,
+        state.user.color
+      )
+    )}`;
+
+  let userAwareness = html`${awStates
+    .filter(
+      ([_, state]) =>
+        state?.singleSelect?.elemId != null && state?.user?.name != null
+    )
+    .map(([clientId, state]) =>
+      userAwarenessTemplate(
+        clientId,
+        state.singleSelect.elemId,
+        state.user.name
+      )
+    )}`;
+
+  // let commentsVisible = layoutService.state
+  //   .toStrings()
+  //   .some((name) => name.toLowerCase().includes('comment'));
+
+  // let highlights = html`${commentsVisible
+  //   ? html`${state.comments
+  //       ?.filter((c) => c?.highlight != null)
+  //       .map((c) => highlightTemplate(c.id, c.highlight))}`
+  //   : null}`;
+
+  // ${renderHighlightLayer(highlights)}
+
+  render(
+    html` ${collabLayer(multiSelects, singleSelects, userAwareness)} `,
+    collabContainer
+  );
+
+  // Display connection status (online/offline) for the users sharing the current document
+  renderUserAwareness();
+
+  // clients?.added?.forEach(f);
+  // clients?.updated?.forEach(f);
+  // clients?.removed?.forEach(f);
+}
+
+export function renderUserAwareness() {
+  let onlineElem = document.querySelector('#online-users');
+  if (onlineElem) {
+    let connectedIds = [...yProvider.awareness.getStates().values()].map(
+      (s) => s.user.id
+    );
+    let copy = [...state.users];
+    setState({
+      users: copy
+        .map((u) => ({ ...u, online: connectedIds.includes(u.id) }))
+        .sort((a, b) => b.online - a.online),
+    });
+    render(html`${userListTemplate(state.users)}`, onlineElem);
+    // Initialize bootstrap tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+  } else {
+    console.log(
+      'Element div#online-users is not found. Cannot display online user info.'
+    );
+  }
 }
 
 function collabLayer(...children) {

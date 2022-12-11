@@ -107,7 +107,7 @@ async function loadFileFromRepository(url) {
   }
 }
 
-function isValidHttpUrl(string) {
+export function isValidHttpUrl(string) {
   let url;
 
   try {

@@ -1,4 +1,5 @@
 import CONFIG from '../features.json';
+import { getURLInfo } from './api/util';
 
 import { addListenersToOutput } from './collaboration/collab-extension.js';
 import { keysEqual } from './util';
@@ -103,6 +104,14 @@ async function bootstrap() {
   }
 
   if (featureToggler.featureIsEnabled('collaboration')) {
+    handleCollabSetup();
+    disableOption('collaboration', options);
+  }
+
+  const { file, user } = getURLInfo();
+  // Implicitly turn collaboration on if file and user data is present in the URL
+  if (typeof file != 'undefined' && typeof user != 'undefined') {
+    await featureToggler.setFeature('collaboration', true);
     handleCollabSetup();
     disableOption('collaboration', options);
   }
