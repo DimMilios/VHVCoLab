@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/vhv/',
+  base: '/apprepository/vhvWs/',
   build: {
     sourcemap: true,
   },

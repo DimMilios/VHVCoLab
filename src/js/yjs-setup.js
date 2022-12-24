@@ -49,12 +49,14 @@ export async function setupCollaboration() {
 
   const { file, user } = getURLInfo();
 
-  let room = 'test-room';
-  let roomData;
+  let room = file ?? 'test-room';
+  // let roomData;
+/*
   if (file && user) {
     roomData = await fetchRoom(file, user);
     room = roomData?.room ?? room;
   }
+  */
 
   if (typeof yProvider == 'undefined') {
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc); // local
