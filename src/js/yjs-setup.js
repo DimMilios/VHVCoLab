@@ -1,6 +1,9 @@
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
-import { updateHandler } from './collaboration/collab-extension.js';
+import {
+  commentsObserver,
+  updateHandler,
+} from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import { setState, state } from './state/comments.js';
@@ -44,14 +47,17 @@ let userData = {
 /** @type{WebsocketProvider} */
 export let yProvider;
 
+/** @type {Y.Doc} */
+let ydoc;
+
 export async function setupCollaboration() {
-  const ydoc = new Y.Doc();
+  ydoc = new Y.Doc();
 
   const { file, user } = getURLInfo();
 
   let room = file ?? 'test-room';
   // let roomData;
-/*
+  /*
   if (file && user) {
     roomData = await fetchRoom(file, user);
     room = roomData?.room ?? room;
@@ -79,6 +85,40 @@ export async function setupCollaboration() {
     yUndoManager,
   });
 
+  const commentsList = ydoc.getArray('comments');
+  commentsList.observe((event) => {
+    console.log(event, event.changes.added);
+
+    commentsObserver();
+
+    // prettier-ignore
+    if (event.transaction.afterState.size - event.transaction.beforeState.size >= 2) {
+      console.log('Syncing comments array with remote document');
+      return;
+    }
+
+    if (
+      event.delta.some((d) => d.delete > 0 || d.insert) &&
+      !event.transaction.local
+    ) {
+      let commentsMenuItem = document.querySelector('#comments__menu-item');
+      if (commentsMenuItem) {
+        commentsMenuItem.classList.add('d-flex');
+
+        let badge = document.createElement('span');
+        badge.innerText = 'NEW';
+        badge.classList.add('badge', 'badge-primary', 'align-self-center');
+        commentsMenuItem.append(badge);
+
+        setTimeout(() => {
+          if (badge) {
+            commentsMenuItem.removeChild(badge);
+          }
+        }, 1000 * 20);
+      }
+    }
+  });
+
   // yProvider.awareness.on('change', updateHandler);
   yProvider.awareness.on('update', updateHandler);
 
@@ -86,6 +126,14 @@ export async function setupCollaboration() {
   window.awareness = yProvider.awareness;
 
   // setupSSE(DOC_ID);
+}
+
+/**
+ *
+ * @returns {Y.Array}
+ */
+export function getCommentsList() {
+  return ydoc.getArray('comments');
 }
 
 function setUserAwarenessData(user) {
@@ -111,30 +159,6 @@ function setUserAwarenessData(user) {
 }
 
 function setupSSE(DOC_ID) {
-  let eventSource = new EventSource(
-    `${baseUrl}events/comments?docId=${DOC_ID}&clientId=${yProvider.awareness.clientID}`,
-    { withCredentials: true }
-  );
-
-  eventSource.addEventListener('open', async () => {
-    console.log('Event source connection for comments open');
-
-    userService.getByDocumentId(DOC_ID, {
-      onSuccess: (usersJSON) => {
-        let connectedIds = [...yProvider.awareness.getStates().values()].map(
-          (s) => s.user.id
-        );
-        let users = [];
-        for (let user of usersJSON) {
-          user.online = connectedIds.includes(user.id);
-          users.push(user);
-        }
-
-        setState({ users });
-      },
-    });
-  });
-
   function handleCommentsMessage(event) {
     let payload = JSON.parse(event.data);
     console.log('Message event', payload);
@@ -206,15 +230,4 @@ function setupSSE(DOC_ID) {
       }),
     });
   }
-
-  eventSource.addEventListener('message', handleCommentsMessage);
-
-  eventSource.addEventListener('error', (error) => {
-    console.log('Error', error);
-    eventSource.close();
-  });
-
-  window.addEventListener('beforeunload', () => {
-    eventSource.close();
-  });
 }

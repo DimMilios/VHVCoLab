@@ -1,6 +1,9 @@
 import { html } from 'lit-html';
 import { hexToRgbA, MULTI_SELECT_ALPHA } from '../collaboration/util-collab.js';
-import { commentsButtonTemplate } from './commentsButton';
+import {
+  commentButtonHandler,
+  selectAreaButtonTemplate,
+} from './commentsButton';
 import { multiSelectCoords } from '../collaboration/templates';
 
 export let multiSelectTemplate = (
@@ -18,7 +21,9 @@ export let multiSelectTemplate = (
       ) ?? 'rgba(0, 0, 255, 0.09)'};"
       data-client-id=${clientId}
     ></div>
-    ${isLocalUser ? commentsButtonTemplate(coords, coords.top) : null}`;
+    ${isLocalUser
+      ? selectAreaButtonTemplate(coords, 'comment', commentButtonHandler)
+      : null}`;
 };
 
 export let selectAreaTemplate = (

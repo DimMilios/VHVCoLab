@@ -34,10 +34,21 @@ import {
   global_cursor,
   global_editorOptions,
   global_verovioOptions,
+  toggleCommentsVisibility,
 } from './vhv-scripts/global-variables.js';
 import { layoutService } from './state/layoutStateMachine.js';
-import { hideCommentSection, showCommentSection } from './collaboration/util-collab.js';
-import { promptForFile, saveContentAsMIDI } from './vhv-scripts/file-operations.js';
+import {
+  hideCommentSection,
+  showCommentSection,
+} from './collaboration/util-collab.js';
+import {
+  promptForFile,
+  saveContentAsMIDI,
+} from './vhv-scripts/file-operations.js';
+import {
+  commentsObserver,
+  updateHandler,
+} from './collaboration/collab-extension.js';
 
 class MenuInterface {
   constructor() {
@@ -89,11 +100,17 @@ class MenuInterface {
   }
 
   showComments() {
-    showCommentSection();
+    // showCommentSection();
+    toggleCommentsVisibility(true);
+    commentsObserver();
+    // updateHandler();
   }
-  
+
   hideComments() {
-    hideCommentSection();
+    // hideCommentSection();
+    toggleCommentsVisibility(false);
+    commentsObserver();
+    // updateHandler();
   }
 
   getContextualMenus() {

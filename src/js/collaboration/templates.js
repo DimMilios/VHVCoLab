@@ -46,13 +46,15 @@ export const multiSelectCoords = (selectedNotes) => {
     }
   }
 
-  const selector = selectedNotes.map((id) => '#' + id).join(',');
+  const selector = selectedNotes?.map((id) => '#' + id).join(',');
   let coords = calculateMultiSelectCoordsWithOffset(
     Array.from(document.querySelectorAll(selector)),
     document.querySelector('#input')
   );
 
-  coords.top -= heightOffset;
+  if (coords?.top) {
+    coords.top -= heightOffset;
+  }
   return coords;
 };
 
