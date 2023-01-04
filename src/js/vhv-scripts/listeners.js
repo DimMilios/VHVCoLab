@@ -189,9 +189,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   body.addEventListener('click', function (event) {
     // turnOffAllHighlights();
-    if (!event.target.closest('.comment-with-replies')) {
-      unfocusCommentHighlights();
-    }
+
+    // if (!event.target.closest('.comment-with-replies')) {
+    //   unfocusCommentHighlights();
+    // }
 
     // console.log("SINGLE CLICK");
     if (inSvgImage(event.target)) {

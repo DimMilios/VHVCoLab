@@ -3,11 +3,10 @@ import { getURLParams } from '../api/util.js';
 import { formatUserElem } from '../collaboration/collab-extension.js';
 import { multiSelectCoords } from '../collaboration/templates.js';
 import { getCoordinatesWithOffset } from '../collaboration/util-collab.js';
-import { yProvider } from '../yjs-setup.js';
+import { getCommentsList, yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
-import * as commentService from '../api/comments.js';
-import { setState, state } from '../state/comments.js';
 import { getAceEditor } from '../vhv-scripts/setup.js';
+import { Comment } from '../collaboration/Comment.js';
 
 let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
   html`
@@ -106,8 +105,10 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
       let undoManager = editor.getSession().getUndoManager();
 
       console.log(undoManager.$undoStack);
-      console.log({ elemRefId })
-      let [ ,line, field, subfield ] = elemRefId.match(/-.*L(\d+)F(\d+)S?(\d+)?/);
+      console.log({ elemRefId });
+      let [, line, field, subfield] = elemRefId.match(
+        /-.*L(\d+)F(\d+)S?(\d+)?/
+      );
 
       line = parseInt(line, 10) - 1;
 
@@ -117,7 +118,6 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
           // editor.getSession().redoChanges(item, true);
         }
       }
-      
     } else {
       console.log('Element does not have id');
     }
@@ -161,39 +161,54 @@ export const handleSingleComment = (notes, coords) => async (event) => {
   let { docId: documentId } = getURLParams(['docId']);
 
   if (Array.isArray(notes) && notes.length > 0) {
-    await commentService.create({
-      data: {
-        content: content.value,
-        parentCommentId: null,
-        documentId: documentId ? Number(documentId) : 1,
-        clientId: yProvider.awareness.clientID,
-        multiSelectElements: notes.join(','),
-      },
-      onSuccess: (createdComment) => {
-        createdComment.highlight = Object.assign({}, coords);
-        console.log('Added comment', createdComment);
+    // await commentService.create({
+    //   data: {
+    //     content: content.value,
+    //     parentCommentId: null,
+    //     documentId: documentId ? Number(documentId) : 1,
+    //     clientId: yProvider.awareness.clientID,
+    //     multiSelectElements: notes.join(','),
+    //   },
+    //   onSuccess: (createdComment) => {
+    //     createdComment.highlight = Object.assign({}, coords);
+    //     console.log('Added comment', createdComment);
 
-        setState({
-          comments: state.comments
-            .map((c) => {
-              return c.highlight == null &&
-                typeof c?.multiSelectElements == 'string'
-                ? {
-                    ...c,
-                    highlight: Object.assign(
-                      {},
-                      multiSelectCoords(c.multiSelectElements.split(','))
-                    ),
-                  }
-                : c;
-            })
-            .concat(createdComment),
-        });
+    //     setState({
+    //       comments: state.comments
+    //         .map((c) => {
+    //           return c.highlight == null &&
+    //             typeof c?.multiSelectElements == 'string'
+    //             ? {
+    //                 ...c,
+    //                 highlight: Object.assign(
+    //                   {},
+    //                   multiSelectCoords(c.multiSelectElements.split(','))
+    //                 ),
+    //               }
+    //             : c;
+    //         })
+    //         .concat(createdComment),
+    //     });
 
-        console.log('Comments after calculating coords', state.comments);
-      },
-      onError: console.log
+    //     console.log('Comments after calculating coords', state.comments);
+    //   },
+    //   onError: console.log
+    // });
+    let { user } = yProvider.awareness.getLocalState();
+
+    let comment = new Comment({
+      content: content.value,
+      createdAt: new Date(),
+      multiSelectElements: notes.join(','),
+      documentId,
+      clientId: yProvider.awareness.clientID,
+      author: user,
     });
+
+    let comments = getCommentsList();
+    if (comments) {
+      comments.push([comment.toJSON()]);
+    }
   }
 
   yProvider.awareness.setLocalStateField('multiSelect', null);

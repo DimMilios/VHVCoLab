@@ -58,23 +58,6 @@ export const commentButtonHandler = () => {
   );
 };
 
-// export const highlightButtonHandler = (e) => {
-//   console.log({ highlightButtonEvent: e });
-//   const highlightArea = e.target.closest(
-//     '.select-area-button'
-//   )?.previousElementSibling;
-//   if (highlightArea) {
-//     console.log('Clicked on highlight button');
-//     highlightArea.classList.add('highlight-area-focus');
-//     console.log(highlightArea.classList);
-//   }
-
-//   // render(
-//   //   commentFormTemplate(handleCommentPost),
-//   //   document.querySelector('#post-comment .modal-content')
-//   // );
-// };
-
 export const selectAreaButtonTemplate = (
   coords,
   svgIconName,

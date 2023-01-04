@@ -87,40 +87,25 @@ export async function setupCollaboration() {
 
   const commentsList = ydoc.getArray('comments');
   commentsList.observe((event) => {
-    console.log(event, event.changes.added);
+    console.log(event.changes.added);
 
-    commentsObserver();
-
-    // prettier-ignore
-    if (event.transaction.afterState.size - event.transaction.beforeState.size >= 2) {
-      console.log('Syncing comments array with remote document');
-      return;
-    }
-
-    if (
-      event.delta.some((d) => d.delete > 0 || d.insert) &&
-      !event.transaction.local
-    ) {
-      let commentsMenuItem = document.querySelector('#comments__menu-item');
-      if (commentsMenuItem) {
-        commentsMenuItem.classList.add('d-flex');
-
-        let badge = document.createElement('span');
-        badge.innerText = 'NEW';
-        badge.classList.add('badge', 'badge-primary', 'align-self-center');
-        commentsMenuItem.append(badge);
-
-        setTimeout(() => {
-          if (badge) {
-            commentsMenuItem.removeChild(badge);
-          }
-        }, 1000 * 20);
+    const focusedArea = document.querySelector('.highlight-area-focus');
+    // If a comment reply was added, render comments while focusing on its parent
+    const arr = event?.changes?.added?.values()?.next()?.value?.content?.arr;
+    if (arr?.length > 0) {
+      const commentAdded = JSON.parse(arr[0]);
+      if (commentAdded?.parentCommentId && commentAdded.parentCommentId === focusedArea.dataset.commentId) {
+        commentsObserver({ [commentAdded.parentCommentId]: true });
+        return;
       }
     }
+
+    const focus = focusedArea ? { [focusedArea.dataset.commentId]: true } : {};
+    commentsObserver(focus);
   });
 
-  // yProvider.awareness.on('change', updateHandler);
-  yProvider.awareness.on('update', updateHandler);
+  yProvider.awareness.on('change', updateHandler);
+  // yProvider.awareness.on('update', updateHandler);
 
   window.example = { yProvider, ydoc, type };
   window.awareness = yProvider.awareness;

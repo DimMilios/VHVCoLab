@@ -5,6 +5,7 @@ import * as commentService from '../api/comments.js';
 import { getURLParams } from '../api/util.js';
 import { Comment } from '../collaboration/Comment.js';
 import { multiSelectCoords } from '../collaboration/templates';
+import { commentsObserver } from '../collaboration/collab-extension.js';
 
 export const handleCommentPost = async (event) => {
   event.preventDefault();
@@ -17,8 +18,6 @@ export const handleCommentPost = async (event) => {
   let localState = yProvider.awareness.getLocalState();
   let notes = localState?.multiSelect;
   if (Array.isArray(notes) && notes.length > 0) {
-    let coords = multiSelectCoords(notes);
-
     let comment = new Comment({
       content: content.value,
       createdAt: new Date(),
@@ -32,6 +31,8 @@ export const handleCommentPost = async (event) => {
     if (comments) {
       comments.push([comment.toJSON()]);
     }
+
+    commentsObserver({ [comment.id]: true });
 
     // await commentService.create({
     //   data: {

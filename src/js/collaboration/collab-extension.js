@@ -13,11 +13,9 @@ import {
   highlightTemplate,
 } from '../templates/highlights.js';
 import { setState, state } from '../state/comments.js';
-import {
-  COMMENTS_VISIBLE,
-  global_cursor,
-} from '../vhv-scripts/global-variables.js';
+import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
+import { COMMENTS_VISIBLE } from '../bootstrap.js';
 
 let DEBUG = false;
 function log(text) {
@@ -210,21 +208,55 @@ export function commentsObserver(elementsInFocus = {}) {
 
   let highlights = html`${COMMENTS_VISIBLE
     ? commentsList
+        .filter((c) => c.parentCommentId === null)
         .map((c) => ({
-          id: c.id,
-          ...multiSelectCoords(c.multiSelectElements.split(',')),
+          comment: c,
+          coords: multiSelectCoords(c.multiSelectElements.split(',')),
         }))
-        .map((c) =>
-          highlightTemplate(c, c.id in elementsInFocus && elementsInFocus[c.id])
+        .map((data) =>
+          highlightTemplate(data.comment, data.coords, elementsInFocus)
         )
     : null}`;
 
-  console.log({ elementsInFocus });
+  const comments = findCommentGroupForFocusedElement(elementsInFocus);
+  const commentsGroup = comments?.length > 0 ? fixedCommentReplyContainerTemplate(comments) : null;
 
-  let commentsGroup = fixedCommentReplyContainerTemplate(commentsList);
   render(renderHighlightLayer(highlights, commentsGroup), commentsContainer);
 }
-window.commentsObserver = commentsObserver;
+
+function findCommentGroupForFocusedElement(elementsInFocus) {
+  const list = getCommentsList()
+    .toArray()
+    .map((c) => JSON.parse(c));
+
+  if (typeof elementsInFocus != 'undefined') {
+    const comment = list.find(
+      (comment) => comment.id === Object.keys(elementsInFocus)[0]
+    );
+
+    if (comment) {
+      const replies = list.filter(
+        (reply) => reply.parentCommentId === comment.id
+      );
+      return [].concat(comment, replies);
+    }
+  }
+
+  // Find focused element
+  const focusedElement = document.querySelector('.highlight-area-focus');
+  if (!focusedElement) return [];
+
+  // Filter Y.Array comments by focused element comment id
+  const comment = list.find(
+    (comment) => comment.id === focusedElement.dataset.commentId
+  );
+  if (comment) {
+    const replies = list.filter(
+      (reply) => reply.parentCommentId === comment.id
+    );
+    return [].concat(comment, replies);
+  }
+}
 
 export function renderHighlightLayer(...children) {
   let output = document.querySelector('#output');

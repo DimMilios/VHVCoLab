@@ -274,16 +274,6 @@ export const global_interface = {
   FreezeRendering: false,
 };
 
-export let COMMENTS_VISIBLE = true;
-export function toggleCommentsVisibility(commentsVisible) {
-  if (typeof commentsVisible != 'undefined') {
-    COMMENTS_VISIBLE = commentsVisible;
-    return;
-  }
-
-  COMMENTS_VISIBLE = !COMMENTS_VISIBLE;
-}
-
 //////////////////////////////
 //
 // Key-code variables for cases in listeners.js:

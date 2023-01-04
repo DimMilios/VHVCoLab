@@ -160,17 +160,60 @@
   position: fixed;
   right: 1rem;
   bottom: 1rem;
-  padding-inline: 1rem;
   max-height: 30vh;
-  border: 2px solid red;
+  min-width: 20vw;
+
   overflow: scroll;
   overflow-x: scroll;
   pointer-events: all;
+
+  padding-inline: 1rem;
+  border: 2px solid red;
+
+  background-color: var(--theme-color5);
 }
 
 .comment {
-  background-color: var(--theme-color1);
-  border: 1px solid blue;
+  background-color: var(--score-color2);
+  margin-block: 0.3rem;
+  border-radius: 0.5rem;
+}
+
+.comment .card-text {
+  inline-size: 30ch;
+  overflow-wrap: break-word;
+}
+
+/* Source: https://usefulangle.com/post/377/css-animation-on-dom-insert */
+@keyframes append-single-comment-animate {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.new-single-comment {
+  animation: append-single-comment-animate 0.3s ease-out;
+}
+
+
+@keyframes delete-single-comment-animate {
+  from {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.deleted-single-comment {
+  animation: delete-single-comment-animate 0.3s ease-out;
 }
 
 /* Given to note elements when selected */
