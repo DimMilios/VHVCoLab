@@ -10,7 +10,6 @@ import { setState, state } from './state/comments.js';
 import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
-import * as userService from './api/users.js';
 import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo } from './api/util.js';
 
 const names = [
@@ -48,7 +47,7 @@ let userData = {
 export let yProvider;
 
 /** @type {Y.Doc} */
-let ydoc;
+export let ydoc;
 
 export async function setupCollaboration() {
   ydoc = new Y.Doc();
@@ -87,14 +86,17 @@ export async function setupCollaboration() {
 
   const commentsList = ydoc.getArray('comments');
   commentsList.observe((event) => {
-    console.log(event.changes.added);
+    // console.log(event.changes.added);
 
     const focusedArea = document.querySelector('.highlight-area-focus');
     // If a comment reply was added, render comments while focusing on its parent
     const arr = event?.changes?.added?.values()?.next()?.value?.content?.arr;
     if (arr?.length > 0) {
       const commentAdded = JSON.parse(arr[0]);
-      if (commentAdded?.parentCommentId && commentAdded.parentCommentId === focusedArea.dataset.commentId) {
+      if (
+        commentAdded?.parentCommentId &&
+        commentAdded.parentCommentId === focusedArea?.dataset?.commentId
+      ) {
         commentsObserver({ [commentAdded.parentCommentId]: true });
         return;
       }
@@ -114,8 +116,9 @@ export async function setupCollaboration() {
 }
 
 /**
+ * Contains JSON serialized comments
  *
- * @returns {Y.Array}
+ * @returns {Y.Array<string>}
  */
 export function getCommentsList() {
   return ydoc.getArray('comments');

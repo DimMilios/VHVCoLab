@@ -1,16 +1,16 @@
 import { html } from 'lit-html';
 import { COMMENTS_VISIBLE } from '../bootstrap';
-import { Comment } from '../collaboration/Comment';
-import { getCommentsList, yProvider } from '../yjs-setup';
-import {commentsObserver} from "../collaboration/collab-extension";
-import {timeSince} from "../collaboration/util-collab";
+import { yProvider } from '../yjs-setup';
+import { commentsObserver } from '../collaboration/collab-extension';
+import { timeSince } from '../collaboration/util-collab';
+import { CommentService } from '../api/CommentService';
 
 export const fixedCommentReplyContainerTemplate = (commentsList) => {
   if (commentsList?.length == 0) {
     return null;
   }
 
-  return html`<div
+  return html` <div
     id="comment-reply-container"
     class="comment-group-container new-comment-reply-container"
     ?hidden=${!COMMENTS_VISIBLE}
@@ -24,24 +24,27 @@ export const fixedCommentReplyContainerTemplate = (commentsList) => {
 
 const singleComment = (comment) => {
   const handleDelete = () => {
-    const list = getCommentsList().toArray().map(c => JSON.parse(c));
-    const indexToDelete = list.findIndex(c => c.id === comment.id);
-    if (indexToDelete != -1) {
-      document.querySelector(`#comment-${comment.id}`)?.classList.add('deleted-single-comment');
-      setTimeout(() => {
-        getCommentsList().delete(indexToDelete);
-        if (comment.parentCommentId) {
-          commentsObserver({ [comment.parentCommentId]: true });
-        } else {
-          commentsObserver();
-        }
-      }, 200);
-    }
-  }
+    const service = new CommentService();
+
+    document
+      .querySelector(`#comment-${comment.id}`)
+      ?.classList.add('deleted-single-comment');
+    setTimeout(() => {
+      service.deleteCommentGroupById(comment);
+      if (comment.parentCommentId) {
+        commentsObserver({ [comment.parentCommentId]: true });
+      }
+    }, 200);
+  };
 
   const { user } = yProvider.awareness.getLocalState();
-  const deleteButton = () => user.name === comment.author.name
-      ? html`<div><button type="button" class="btn btn-danger" @click=${handleDelete}>X</button></div>`
+  const deleteButton = () =>
+    user.name === comment.author.name
+      ? html`<div>
+          <button type="button" class="btn btn-danger" @click=${handleDelete}>
+            X
+          </button>
+        </div>`
       : null;
 
   let time = timeSince(new Date(comment.createdAt));
@@ -54,7 +57,9 @@ const singleComment = (comment) => {
       <div class="d-flex justify-content-between w-100">
         <div class="d-inline-flex flex-column ml-2">
           <h5 class="m-0">${comment.author.name}</h5>
-          <small class="text-muted font-italic">${time.charAt(0) === '0' ? 'Now' : time + ' ago'}</small>
+          <small class="text-muted font-italic"
+            >${time.charAt(0) === '0' ? 'Now' : time + ' ago'}</small
+          >
         </div>
         ${deleteButton()}
       </div>
@@ -73,7 +78,8 @@ const replyForm = (commentsList) => {
     const parentComment = commentsList.slice(0)[0];
     let { user } = yProvider.awareness.getLocalState();
 
-    let comment = new Comment({
+    const service = new CommentService();
+    service.addComment({
       content: formData['comment-reply'],
       createdAt: new Date(),
       parentCommentId: parentComment.id,
@@ -82,11 +88,6 @@ const replyForm = (commentsList) => {
       clientId: parentComment.clientId,
       author: user,
     });
-
-    const comments = getCommentsList();
-    if (comments) {
-      comments.push([comment.toJSON()]);
-    }
 
     inputElem.value = '';
 

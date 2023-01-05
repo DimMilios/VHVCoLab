@@ -1,4 +1,4 @@
-import { getCommentsList, yProvider } from '../yjs-setup.js';
+import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
 import { collabTemplate, multiSelectCoords, uiCoords } from './templates.js';
@@ -16,6 +16,7 @@ import { setState, state } from '../state/comments.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
+import { CommentService } from '../api/CommentService.js';
 
 let DEBUG = false;
 function log(text) {
@@ -202,9 +203,9 @@ export function commentsObserver(elementsInFocus = {}) {
     commentsContainer.id = 'comments-layer';
     document.querySelector('#output')?.prepend(commentsContainer);
   }
-  let commentsList = getCommentsList()
-    .toArray()
-    .map((c) => JSON.parse(c));
+
+  const service = new CommentService();
+  let commentsList = service.fromJSON();
 
   let highlights = html`${COMMENTS_VISIBLE
     ? commentsList
@@ -218,24 +219,24 @@ export function commentsObserver(elementsInFocus = {}) {
         )
     : null}`;
 
-  const comments = findCommentGroupForFocusedElement(elementsInFocus);
-  const commentsGroup = comments?.length > 0 ? fixedCommentReplyContainerTemplate(comments) : null;
+  const comments = findCommentGroupForFocusedElement(
+    elementsInFocus,
+    commentsList
+  );
+  const commentsGroup =
+    comments?.length > 0 ? fixedCommentReplyContainerTemplate(comments) : null;
 
   render(renderHighlightLayer(highlights, commentsGroup), commentsContainer);
 }
 
-function findCommentGroupForFocusedElement(elementsInFocus) {
-  const list = getCommentsList()
-    .toArray()
-    .map((c) => JSON.parse(c));
-
+function findCommentGroupForFocusedElement(elementsInFocus, commentsList) {
   if (typeof elementsInFocus != 'undefined') {
-    const comment = list.find(
+    const comment = commentsList.find(
       (comment) => comment.id === Object.keys(elementsInFocus)[0]
     );
 
     if (comment) {
-      const replies = list.filter(
+      const replies = commentsList.filter(
         (reply) => reply.parentCommentId === comment.id
       );
       return [].concat(comment, replies);
@@ -247,11 +248,11 @@ function findCommentGroupForFocusedElement(elementsInFocus) {
   if (!focusedElement) return [];
 
   // Filter Y.Array comments by focused element comment id
-  const comment = list.find(
-    (comment) => comment.id === focusedElement.dataset.commentId
+  const comment = commentsList.find(
+    (comment) => comment.id === focusedElement?.dataset.commentId
   );
   if (comment) {
-    const replies = list.filter(
+    const replies = commentsList.filter(
       (reply) => reply.parentCommentId === comment.id
     );
     return [].concat(comment, replies);

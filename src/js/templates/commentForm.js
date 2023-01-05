@@ -1,11 +1,8 @@
 import { html } from 'lit-html';
-import { setState, state } from '../state/comments.js';
-import { getCommentsList, yProvider } from '../yjs-setup.js';
-import * as commentService from '../api/comments.js';
+import { yProvider } from '../yjs-setup.js';
 import { getURLParams } from '../api/util.js';
-import { Comment } from '../collaboration/Comment.js';
-import { multiSelectCoords } from '../collaboration/templates';
 import { commentsObserver } from '../collaboration/collab-extension.js';
+import { CommentService } from '../api/CommentService.js';
 
 export const handleCommentPost = async (event) => {
   event.preventDefault();
@@ -18,7 +15,8 @@ export const handleCommentPost = async (event) => {
   let localState = yProvider.awareness.getLocalState();
   let notes = localState?.multiSelect;
   if (Array.isArray(notes) && notes.length > 0) {
-    let comment = new Comment({
+    const service = new CommentService();
+    const addedComment = service.addComment({
       content: content.value,
       createdAt: new Date(),
       multiSelectElements: notes.join(','),
@@ -27,45 +25,9 @@ export const handleCommentPost = async (event) => {
       author: localState.user,
     });
 
-    let comments = getCommentsList();
-    if (comments) {
-      comments.push([comment.toJSON()]);
+    if (addedComment) {
+      commentsObserver({ [addedComment.id]: true });
     }
-
-    commentsObserver({ [comment.id]: true });
-
-    // await commentService.create({
-    //   data: {
-    //     content: content.value,
-    //     parentCommentId: null,
-    //     documentId: documentId ? Number(documentId) : 1,
-    //     clientId: yProvider.awareness.clientID,
-    //     multiSelectElements: notes.join(','),
-    //   },
-    //   onSuccess: (createdComment) => {
-    //     console.log('Added comment', createdComment);
-    //     createdComment.highlight = Object.assign({}, coords);
-
-    //     setState({
-    //       comments: state.comments
-    //         .map((c) => {
-    //           return c.highlight == null &&
-    //             typeof c?.multiSelectElements == 'string'
-    //             ? {
-    //                 ...c,
-    //                 highlight: Object.assign(
-    //                   {},
-    //                   multiSelectCoords(c.multiSelectElements.split(','))
-    //                 ),
-    //               }
-    //             : c;
-    //         })
-    //         .concat(createdComment),
-    //     });
-
-    //     console.log('Comments after calculating coords', state.comments);
-    //   },
-    // });
   }
 
   yProvider.awareness.setLocalStateField('multiSelect', null);

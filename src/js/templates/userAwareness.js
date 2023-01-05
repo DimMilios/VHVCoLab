@@ -1,12 +1,15 @@
 import { html, render } from 'lit-html';
 import { getURLParams } from '../api/util.js';
-import { formatUserElem } from '../collaboration/collab-extension.js';
+import {
+  commentsObserver,
+  formatUserElem,
+} from '../collaboration/collab-extension.js';
 import { multiSelectCoords } from '../collaboration/templates.js';
 import { getCoordinatesWithOffset } from '../collaboration/util-collab.js';
-import { getCommentsList, yProvider } from '../yjs-setup.js';
+import { yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
 import { getAceEditor } from '../vhv-scripts/setup.js';
-import { Comment } from '../collaboration/Comment.js';
+import { CommentService } from '../api/CommentService.js';
 
 let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
   html`
@@ -161,42 +164,10 @@ export const handleSingleComment = (notes, coords) => async (event) => {
   let { docId: documentId } = getURLParams(['docId']);
 
   if (Array.isArray(notes) && notes.length > 0) {
-    // await commentService.create({
-    //   data: {
-    //     content: content.value,
-    //     parentCommentId: null,
-    //     documentId: documentId ? Number(documentId) : 1,
-    //     clientId: yProvider.awareness.clientID,
-    //     multiSelectElements: notes.join(','),
-    //   },
-    //   onSuccess: (createdComment) => {
-    //     createdComment.highlight = Object.assign({}, coords);
-    //     console.log('Added comment', createdComment);
-
-    //     setState({
-    //       comments: state.comments
-    //         .map((c) => {
-    //           return c.highlight == null &&
-    //             typeof c?.multiSelectElements == 'string'
-    //             ? {
-    //                 ...c,
-    //                 highlight: Object.assign(
-    //                   {},
-    //                   multiSelectCoords(c.multiSelectElements.split(','))
-    //                 ),
-    //               }
-    //             : c;
-    //         })
-    //         .concat(createdComment),
-    //     });
-
-    //     console.log('Comments after calculating coords', state.comments);
-    //   },
-    //   onError: console.log
-    // });
     let { user } = yProvider.awareness.getLocalState();
 
-    let comment = new Comment({
+    const service = new CommentService();
+    const addedComment = service.addComment({
       content: content.value,
       createdAt: new Date(),
       multiSelectElements: notes.join(','),
@@ -205,9 +176,8 @@ export const handleSingleComment = (notes, coords) => async (event) => {
       author: user,
     });
 
-    let comments = getCommentsList();
-    if (comments) {
-      comments.push([comment.toJSON()]);
+    if (addedComment) {
+      commentsObserver({ [addedComment.id]: true });
     }
   }
 
