@@ -6,7 +6,6 @@ import {
 } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import { setState, state } from './state/comments.js';
 import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
@@ -144,78 +143,4 @@ function setUserAwarenessData(user) {
     userData.name = user;
   }
   yProvider.awareness.setLocalStateField('user', userData);
-}
-
-function setupSSE(DOC_ID) {
-  function handleCommentsMessage(event) {
-    let payload = JSON.parse(event.data);
-    console.log('Message event', payload);
-
-    if (Array.isArray(payload)) {
-      let shouldCompute = payload.some((p) => p.highlight == null);
-
-      if (document.querySelector('#output svg') && shouldCompute) {
-        computeCommentHighlights(payload);
-      } else {
-        // The SVG music score element hasn't been rendered yet here.
-        // We can't calculate comment highlight coordinates yet.
-        setState({ comments: payload }, { reRender: false });
-      }
-      return;
-    }
-
-    // { type: 'resource:method', id: number }
-    // e.g { type: 'comment:delete', id: 1 }
-    if (payload.hasOwnProperty('type')) {
-      let [resource, method] = payload.type.split(':');
-
-      if (Object.keys(state).includes(resource)) {
-        switch (method) {
-          case 'create':
-            if (resource === 'comments') {
-              computeCommentHighlights(
-                state.comments.concat(payload.createdComment)
-              );
-              updateHandler();
-            }
-            break;
-          case 'delete':
-            if (resource === 'comments') {
-              if (Array.isArray(payload.ids)) {
-                setState({
-                  comments: state.comments.filter(
-                    (r) => !payload.ids.includes(r.id)
-                  ),
-                });
-              }
-            }
-            updateHandler(); // Re-render collab layer
-            break;
-          default:
-            console.log(`Unknown method: ${method}`);
-        }
-      }
-
-      return;
-    }
-
-    // let comments = state?.comments ? [...state.comments, payload] : [payload];
-  }
-
-  function computeCommentHighlights(comments) {
-    // Add the highlight coordinates for each comment
-    setState({
-      comments: comments.map((c) => {
-        return c.highlight == null && typeof c?.multiSelectElements == 'string'
-          ? {
-              ...c,
-              highlight: Object.assign(
-                {},
-                multiSelectCoords(c.multiSelectElements.split(','))
-              ),
-            }
-          : c;
-      }),
-    });
-  }
 }

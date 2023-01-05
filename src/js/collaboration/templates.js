@@ -1,10 +1,6 @@
 import { html, render } from 'lit-html';
-import { layoutService } from '../state/layoutStateMachine.js';
 import { calculateMultiSelectCoordsWithOffset } from './util-collab.js';
 
-import { commentReplyContainerTemplate } from '../templates/commentReplyContainer';
-import { updateHandler } from './collab-extension.js';
-import { yProvider } from '../yjs-setup.js';
 import { featureIsEnabled } from '../bootstrap.js';
 
 export let uiCoords = {
@@ -76,43 +72,3 @@ let commentSectionTemplate = (height) => {
 export function remToPixels(rem) {
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
-
-export let renderComments = (comments, overlaps = []) => {
-  let container = /** @type HTMLElement */ (
-    document.querySelector('#comments-container')
-  );
-
-  // Render comments only if user chooses to show them
-  let commentsVisible = layoutService.state
-    .toStrings()
-    .some((name) => name.toLowerCase().includes('comment'));
-
-  if (container && commentsVisible) {
-    let commentsWithReplies = [];
-    for (let c of comments) {
-      if (!c?.parentCommentId) {
-        commentsWithReplies.push({ ...c, children: [] });
-        continue;
-      }
-
-      let parent = commentsWithReplies.find((p) => p.id == c.parentCommentId);
-      if (!parent) continue;
-      parent.children = [...parent.children, c];
-    }
-
-    let width = container.offsetWidth;
-    console.log('commentsWithReplies', commentsWithReplies);
-    render(
-      html`${commentsWithReplies.map((p) =>
-        commentReplyContainerTemplate(p, width)
-      )}`,
-      container
-    );
-
-    updateHandler({
-      added: [...yProvider.awareness.getStates().keys()],
-      updated: [],
-      removed: [],
-    });
-  }
-};

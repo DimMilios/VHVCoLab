@@ -12,7 +12,6 @@ import {
   highlightLayerTemplate,
   highlightTemplate,
 } from '../templates/highlights.js';
-import { setState, state } from '../state/comments.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
@@ -163,30 +162,25 @@ export function updateHandler(clients = defaultClients()) {
   );
 
   // Display connection status (online/offline) for the users sharing the current document
-  renderUserAwareness();
+  // renderUserAwareness();
 }
 
-export function renderUserAwareness() {
-  let onlineElem = document.querySelector('#online-users');
-  if (onlineElem) {
-    let connectedIds = [...yProvider.awareness.getStates().values()].map(
-      (s) => s.user.id
-    );
-    let copy = [...state.users];
-    setState({
-      users: copy
-        .map((u) => ({ ...u, online: connectedIds.includes(u.id) }))
-        .sort((a, b) => b.online - a.online),
-    });
-    render(html`${userListTemplate(state.users)}`, onlineElem);
-    // Initialize bootstrap tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-  } else {
-    console.log(
-      'Element div#online-users is not found. Cannot display online user info.'
-    );
-  }
-}
+// export function renderUserAwareness() {
+//   let onlineElem = document.querySelector('#online-users');
+//   if (onlineElem) {
+//     let connectedIds = [...yProvider.awareness.getStates().values()].map(
+//       (s) => s.user.id
+//     );
+
+//     render(html`${userListTemplate()}`, onlineElem);
+//     // Initialize bootstrap tooltips
+//     $('[data-toggle="tooltip"]').tooltip();
+//   } else {
+//     console.log(
+//       'Element div#online-users is not found. Cannot display online user info.'
+//     );
+//   }
+// }
 
 function collabLayer(...children) {
   let output = document.querySelector('#output');

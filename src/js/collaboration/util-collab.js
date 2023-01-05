@@ -1,5 +1,3 @@
-import { state } from '../state/comments';
-import { layoutService } from '../state/layoutStateMachine';
 import { global_cursor } from '../vhv-scripts/global-variables';
 // import { handleCommentsMessage } from "../yjs-setup";
 
@@ -184,20 +182,4 @@ export function clearCursorHighlight() {
     global_cursor.CursorNote.setAttribute('class', outclass);
     global_cursor.CursorNote = null;
   }
-}
-
-export function showCommentSection() {
-  // Check if comment highlights are computed
-  let highlightsComputed = state.comments.some((c) => c.highlight == null);
-
-  // if (highlightsComputed) {
-  //   handleCommentsMessage(new MessageEvent('message', { data: JSON.stringify(state.comments) }));
-  //   console.log('Comments after highlight', state.comments);
-  // }
-
-  // layoutService.send('SHOW_COMMENTS_HIDE_TEXT');
-}
-export function hideCommentSection() {
-  // layoutService.send('HIDE_COMMENTS');
-  // layoutService.send('SHOW_TEXT');
 }
