@@ -30,9 +30,7 @@ export function getCoordinatesWithOffset(target, offsetElem) {
   const closestStaffElem = target?.closest('.staff');
 
   let staffBounds = closestStaffElem?.getBoundingClientRect();
-
-  let output = document.querySelector('#output');
-  let scrollTop = output.closest('[class*=output-container]').scrollTop;
+  let scrollTop = window.scrollY;
 
   return {
     staffX: staffBounds.x ?? targetBounds.x,
