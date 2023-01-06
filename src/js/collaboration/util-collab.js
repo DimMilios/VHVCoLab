@@ -124,12 +124,22 @@ export function calculateMultiSelectCoordsWithOffset(
 }
 
 function withScrollingAndOffset(coords, offsetElem) {
+  let top =
+    coords.top +
+    window.scrollY -
+    document.getElementById('topnav').getBoundingClientRect().height;
+
+  const waveformCoords = document
+    .getElementById('waveforms-display')
+    ?.getBoundingClientRect();
+  if (waveformCoords) {
+    // Waveform is displayed, get its height into account when calculating multi select coordinates
+    top -= waveformCoords.height;
+  }
+
   return {
     left: coords.left - offsetElem.offsetWidth,
-    top:
-      coords.top +
-      window.scrollY -
-      document.getElementById('topnav').getBoundingClientRect().height,
+    top,
     width: coords.right - coords.left,
     height: coords.bottom - coords.top,
   };
