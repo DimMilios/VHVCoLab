@@ -12,7 +12,7 @@ export const fixedCommentReplyContainerTemplate = (commentsList) => {
 
   return html` <div
     id="comment-reply-container"
-    class="comment-group-container new-comment-reply-container"
+    class="comment-group-container new-comment-reply-container shadow"
     ?hidden=${!COMMENTS_VISIBLE}
   >
     ${commentsList.map((comment) => {
@@ -33,6 +33,8 @@ const singleComment = (comment) => {
       service.deleteCommentGroupById(comment);
       if (comment.parentCommentId) {
         commentsObserver({ [comment.parentCommentId]: true });
+      } else {
+        commentsObserver();
       }
     }, 200);
   };

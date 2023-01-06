@@ -161,16 +161,17 @@
   right: 1rem;
   bottom: 1rem;
   max-height: 30vh;
-  min-width: 20vw;
+  min-width: 15vw;
 
   overflow: scroll;
   overflow-x: scroll;
   pointer-events: all;
 
   padding-inline: 1rem;
-  border: 2px solid red;
+  padding-top: 0.5rem;
 
-  background-color: var(--theme-color5);
+  background-color: var(--theme-color9);
+  border-radius: 0.5rem;
 }
 
 .comment {
@@ -199,7 +200,6 @@
 .new-single-comment {
   animation: append-single-comment-animate 0.3s ease-out;
 }
-
 
 @keyframes delete-single-comment-animate {
   from {

@@ -56,6 +56,11 @@ export class CommentService {
     }
   }
 
+  deleteAll() {
+    console.info(`Deleting all comments`);
+    this._commentsList.delete(0, this._commentsList.length);
+  }
+
   /**
    *
    * @returns {Comment[]}
