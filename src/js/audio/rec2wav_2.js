@@ -17,6 +17,10 @@ var pauseButton = document.getElementById('pauseButton');
 var download; // the name of the downloaded file
 var fileUrl; // url to the produced audio file
 
+const constraints = {
+  audio: {echoCancellation: false}
+};
+
 //add events to those 3 buttons
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
@@ -39,7 +43,7 @@ function startRecording() {
             https://addpipe.com/blog/audio-constraints-getusermedia/
         */
 
-  var constraints = { audio: true, video: false };
+  //var constraints = { audio: true, video: false };
 
   /*
             Disable the record button until we get a success or fail from getUserMedia() 

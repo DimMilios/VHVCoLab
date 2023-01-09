@@ -22,6 +22,10 @@ Current deployment @GitHub Pages: https://dimmilios.github.io/vhv/
   - Εκκίνηση της εφαρμογής στο `http://localhost:3000`
     ```sh
     npm run dev
+
+  - Compilation: παράγει στον φάκελο dist το αποτέλεσμα
+
+    npm run build
     ```
 
 ## Αρχεία που ενδιαφέρουν

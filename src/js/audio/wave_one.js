@@ -277,6 +277,9 @@ function setupMicWaveSurfer(audioContext) {
         bufferSize: 4096,
         numberOfInputChannels: 1,
         numberOfOutputChannels: 1,
+        constraints: {
+        audio: {echoCancellation: false}
+        },
       }),
     ],
   });

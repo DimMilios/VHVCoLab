@@ -100,9 +100,9 @@ suggestBtn.addEventListener('click', (event) => {
     let newKern = jsonResponse[0];
     edtr.setValue(newKern);
   };
-  //xhttp.open("POST", url);
-  //xhttp.setRequestHeader('Content-Type', 'application/json');
-  //xhttp.send(jsonFile);
+  xhttp.open("POST", url);
+  xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.send(jsonFile);
 
   chord.reharmonize = 'false';
   sendBtn.style.display = 'none';
@@ -120,7 +120,7 @@ sendBtn.addEventListener('click', function (event) {
 
   let edtr = getAceEditor();
   if (!edtr) {
-    throw new Error('Ace Editor is undefined');
+    throw new Error('Ace Editor is undefined. Chord cannot be edited');
   }
   let kernfile = edtr.session.getValue();
 
@@ -140,14 +140,14 @@ sendBtn.addEventListener('click', function (event) {
     
     let jsonResponse = xhttp.response; //to response einai json?mporei kai sketo string
     
-    //let newKern = jsonResponse[0];
-    //edtr.setValue(newKern);
+    let newKern = jsonResponse[0];
+    edtr.setValue(newKern);
   };
-  /*
+  
   xhttp.open("POST", 'http://155.207.188.7:6001/sending_kern?row=17&column=8&chord=Cm&kern=lalala');
   xhttp.setRequestHeader('Content-Type', 'application/json');
   xhttp.send(jsonFile);
-  */
+  
 
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
   sendBtn.style.display = 'none';

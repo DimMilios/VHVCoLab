@@ -1107,44 +1107,33 @@ getAceEditor()
   .getSession()
   .on('change', function () {
     let kernFile = getAceEditor().getSession().getValue();
-
+    console.log('alx');
     //extracting tempo
-    if (!kernFile || !kernFile.includes('\t')) {
-      console.log('Invalid kern file');
+    if (!kernFile) {
+      console.log("Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted");
       return;
     }
 
-    let startIndex = kernFile.indexOf('MM') + 2;
-    let stopIndex = startIndex;
-
-    while (!(kernFile[stopIndex] == '\t')) stopIndex++;
-
-    window.TEMPO = parseInt(kernFile.slice(startIndex, stopIndex));
-    //providing tempo value to 'insert-tempo' form
-    document.getElementById('tempo-input').placeholder = window.TEMPO;
-
+    let tempo = kernFile
+      .match(/\*MM\d+/g)?.[0]
+      .match(/\d+/)[0];
+    
+    if (!tempo) {
+      console.log('Tempo has not been encoded in kern file')
+    } else {
+      window.TEMPO = parseInt(tempo);
+      document.getElementById('tempo-input').placeholder = window.TEMPO;
+    }     
+    
     //extracting time signature
-    startIndex = kernFile.indexOf('M') + 1;
-    stopIndex = startIndex;
+    let timeSignature = kernFile
+      .match(/\*M\d\/\d/g)?.[0]
+      .match(/\d/)[0];
 
-    while (!(kernFile[stopIndex] == '\t')) stopIndex++;
-
-    //ensuring that time signature is retrieved from the right part of kernfile
-    let floorPosition;
-    let timeSignatureText = kernFile.slice(startIndex, stopIndex);
-
-    while (
-      !(timeSignatureText.length == 3 && timeSignatureText.includes('/'))
-    ) {
-      floorPosition = startIndex + 1;
-      startIndex = kernFile.indexOf('M', floorPosition) + 1;
-      stopIndex = startIndex;
-      while (!(kernFile[stopIndex] == '\t')) stopIndex++;
-
-      timeSignatureText = kernFile.slice(startIndex, stopIndex);
-    }
-
-    window.BEATSPERMEASURE = parseInt(timeSignatureText[0]);
+    if (!timeSignature) {
+      console.log('Time signature has not been encoded in kern file')
+    } else   window.BEATSPERMEASURE = parseInt(timeSignature);
+          
   });
 
 document.getElementById('change-tempo').addEventListener('click', () => {
