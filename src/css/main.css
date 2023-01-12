@@ -239,11 +239,18 @@ div#index {
 	font-weight: normal
 }
 
-
 @font-face {
 	font-family: "Variations";
 	
 	src: url("/styles/Chord_types-Regular.otf");
+	font-style: normal;
+	font-weight: normal
+}
+
+@font-face {
+	font-family: "SVG_fonts";
+	
+	src: url("/styles/SVG_fonts.otf");
 	font-style: normal;
 	font-weight: normal
 }
@@ -340,6 +347,11 @@ div#index {
 
 #output svg g.dir.sic tspan.rend tspan.text tspan.text.s {
   font-family: 'FontAwesome';
+}
+/* alx */
+#output g.harm tspan.text {
+  font-family: 'SVG_fonts';
+  font-size: 600px
 }
 
 /* .nav-link {

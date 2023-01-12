@@ -5,6 +5,7 @@ let chordBtns = document.getElementById('show-edit-suggest-buttons');
 let suggestBtn = document.getElementById('suggest-btn');
 let sendBtn = document.getElementById('send-chord-btn');
 
+//defining json request's keys
 export let chord = {
   current: null,
   new: {
@@ -21,7 +22,7 @@ export let chordSelected = {
   variation:null
 }
 
-//coloring selection and decoloring previous selections
+//colorizing selections and decolorizing previous selections
 for (let td of document.querySelectorAll('.Chords td')) {
   if (td.closest('#chord-editor')) {
     td.addEventListener('click', function (event) {
@@ -56,16 +57,19 @@ for (let td of document.querySelectorAll('.Chords td')) {
 
 //back click
 document.getElementById('close-chord-btn').addEventListener('click', function (event) {
+
+  //decolorizing selected chord tables' cells
   if (chordSelected.root) chordSelected.root.style.color = 'white';
   if (chordSelected.accidental)
     chordSelected.accidental.style.color = 'white';
   if (chordSelected.variation) chordSelected.variation.style.color = 'white';
-
   Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
+  
+  //resetting chord object's keys and getting it ready for next use
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
 
   chordEditor.style.display = 'none';
-  // document.getElementById('cover').style.visibility = 'hidden';
+  
 });
 
 //edit click
@@ -76,82 +80,94 @@ chordBtns.addEventListener('click', (event) => {
 
 //suggest click
 suggestBtn.addEventListener('click', (event) => {
+
+  //current kern retrieval
   let edtr = getAceEditor();
   if (!edtr) {
     throw new Error('Ace Editor is undefined');
   }
   let kernfile = edtr.session.getValue();
 
+  //setting the suggestion option true
   chord.reharmonize = 'true';
 
+  //constructing json to be sent
   let jsonRequest = {
     kernfile,
     chordLocation,
     chord,
   };
-
   console.log(jsonRequest);
   let jsonFile = JSON.stringify(jsonRequest);
-
-
+  
   let xhttp = new XMLHttpRequest();
-  xhttp.onload = function () {
-    let jsonResponse = JSON.parse(xhttp.response); //to response einai json?mporei kai sketo string
+  //XHTTP response function
+  xhttp.onload = function () {    
+    //retrieveing json sent from GJT server
+    let jsonResponse = JSON.parse(xhttp.response);
+    //retrieveing new kern file from json response and setting it as editor's content
     let newKern = jsonResponse[0];
     edtr.setValue(newKern);
   };
-  xhttp.open("POST", url);
+
+  //opening XHTTP connection to GJT server. Sending the json request
+  xhttp.open("POST", 'https://155.207.188.7:6001/');
   xhttp.setRequestHeader('Content-Type', 'application/json');
   xhttp.send(jsonFile);
 
+  //resetting chord object's keys and getting it ready for next use
   chord.reharmonize = 'false';
   sendBtn.style.display = 'none';
 })
 
 //send click
 sendBtn.addEventListener('click', function (event) {
-  chordEditor.style.display = 'none';
-  // document.getElementById('cover').style.visibility = 'hidden';
 
+  //chord editor gets hidden
+  chordEditor.style.display = 'none';
+
+  //decolorizing selected chord tables' cells
   chordSelected.root.style.color = 'white';
   if (chordSelected.accidental) chordSelected.accidental.style.color = 'white';
   chordSelected.variation.style.color = 'white';
   Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
 
+  //kern retrieval
   let edtr = getAceEditor();
   if (!edtr) {
     throw new Error('Ace Editor is undefined. Chord cannot be edited');
   }
   let kernfile = edtr.session.getValue();
 
+  //constructing json to be sent
   let jsonRequest = {
     kernfile,
     chordLocation,
     chord,
   };
-
   let jsonFile = JSON.stringify(jsonRequest);
-  
-
   console.log(jsonRequest);
 
+
   let xhttp = new XMLHttpRequest();
+
+  //XHTTP response function
   xhttp.onload = function () {
-    
-    let jsonResponse = xhttp.response; //to response einai json?mporei kai sketo string
-    
+    //retrieveing json sent from GJT server
+    let jsonResponse = xhttp.response;
+    console.log(jsonResponse);
+    //retrieveing new kern file and setting it as editor's content
     let newKern = jsonResponse[0];
     edtr.setValue(newKern);
   };
   
-  xhttp.open("POST", 'http://155.207.188.7:6001/sending_kern?row=17&column=8&chord=Cm&kern=lalala');
+  //opening XHTTP connection to GJT server. Sending the json request
+  xhttp.open("POST", 'https://155.207.188.7:6001/');
   xhttp.setRequestHeader('Content-Type', 'application/json');
   xhttp.send(jsonFile);
   
-
+  //resetting chord object's keys and getting it ready for next use
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
-  sendBtn.style.display = 'none';
-
-  
+  sendBtn.style.display = 'none';  
 
 });
