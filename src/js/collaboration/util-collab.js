@@ -1,6 +1,4 @@
-import { state } from "../state/comments";
-import { layoutService } from "../state/layoutStateMachine";
-import { global_cursor } from "../vhv-scripts/global-variables";
+import { global_cursor } from '../vhv-scripts/global-variables';
 // import { handleCommentsMessage } from "../yjs-setup";
 
 export const MULTI_SELECT_ALPHA = 0.3;
@@ -30,9 +28,7 @@ export function getCoordinatesWithOffset(target, offsetElem) {
   const closestStaffElem = target?.closest('.staff');
 
   let staffBounds = closestStaffElem?.getBoundingClientRect();
-
-  let output = document.querySelector('#output');
-  let scrollTop = output.closest('[class*=output-container]').scrollTop
+  let scrollTop = window.scrollY;
 
   return {
     staffX: staffBounds.x ?? targetBounds.x,
@@ -85,17 +81,27 @@ export function calculateMultiSelectCoords(selectedNotes) {
   };
 }
 
-export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem) {
-  if (!selectedNotes || !Array.isArray(selectedNotes) || selectedNotes.length == 0) {
-    console.log('Argument "selectedNotes" must be an array of elements', selectedNotes);
+export function calculateMultiSelectCoordsWithOffset(
+  selectedNotes,
+  offsetElem
+) {
+  if (
+    !selectedNotes ||
+    !Array.isArray(selectedNotes) ||
+    selectedNotes.length == 0
+  ) {
+    console.log(
+      'Argument "selectedNotes" must be an array of elements',
+      selectedNotes
+    );
     return;
   }
-  
+
   if (!offsetElem || !(offsetElem instanceof HTMLElement)) {
     console.log('Argument "offsetElem" must be an HTMLElement');
     return;
   }
-  
+
   const coords = selectedNotes.reduce(
     (oldBox, note) => {
       const box = note.getBoundingClientRect();
@@ -118,9 +124,22 @@ export function calculateMultiSelectCoordsWithOffset(selectedNotes, offsetElem) 
 }
 
 function withScrollingAndOffset(coords, offsetElem) {
+  let top =
+    coords.top +
+    window.scrollY -
+    document.getElementById('topnav').getBoundingClientRect().height;
+
+  const waveformCoords = document
+    .getElementById('waveforms-display')
+    ?.getBoundingClientRect();
+  if (waveformCoords) {
+    // Waveform is displayed, get its height into account when calculating multi select coordinates
+    top -= waveformCoords.height;
+  }
+
   return {
     left: coords.left - offsetElem.offsetWidth,
-    top: coords.top + window.scrollY - document.getElementById('topnav').getBoundingClientRect().height,
+    top,
     width: coords.right - coords.left,
     height: coords.bottom - coords.top,
   };
@@ -131,29 +150,31 @@ export function timeSince(date) {
   let interval = seconds / 31536000;
 
   if (interval > 1) {
-    return Math.floor(interval) + " years";
+    return Math.floor(interval) + ' years';
   }
   interval = seconds / 2592000;
   if (interval > 1) {
-    return Math.floor(interval) + " months";
+    return Math.floor(interval) + ' months';
   }
   interval = seconds / 86400;
   if (interval > 1) {
-    return Math.floor(interval) + " days";
+    return Math.floor(interval) + ' days';
   }
   interval = seconds / 3600;
   if (interval > 1) {
-    return Math.floor(interval) + " hours";
+    return Math.floor(interval) + ' hours';
   }
   interval = seconds / 60;
   if (interval > 1) {
-    return Math.floor(interval) + " minutes";
+    return Math.floor(interval) + ' minutes';
   }
-  return Math.floor(seconds) + " seconds";
+  return Math.floor(seconds) + ' seconds';
 }
 
 export function unfocusCommentHighlights() {
-  document.querySelectorAll('.highlight-area').forEach(h => h.classList.remove('highlight-area-focus'));
+  document
+    .querySelectorAll('.highlight-area')
+    .forEach((h) => h.classList.remove('highlight-area-focus'));
 }
 
 export function clearCursorHighlight() {
@@ -171,20 +192,4 @@ export function clearCursorHighlight() {
     global_cursor.CursorNote.setAttribute('class', outclass);
     global_cursor.CursorNote = null;
   }
-}
-
-export function showCommentSection() {
-  // Check if comment highlights are computed
-  let highlightsComputed = state.comments.some(c => c.highlight == null);
-
-  // if (highlightsComputed) {
-  //   handleCommentsMessage(new MessageEvent('message', { data: JSON.stringify(state.comments) }));
-  //   console.log('Comments after highlight', state.comments);
-  // }
-
-  layoutService.send('SHOW_COMMENTS_HIDE_TEXT');
-}
-export function hideCommentSection() {
-  layoutService.send('HIDE_COMMENTS');
-  layoutService.send('SHOW_TEXT');
 }

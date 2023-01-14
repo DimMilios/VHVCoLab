@@ -111,8 +111,6 @@ import { loadEditorFontSizes } from './verovio-options.js';
 import { setupDropArea } from '../drop.js';
 import { inSvgImage } from './utility-svg.js';
 
-import { selectService } from '../state/selectStateMachine.js';
-import { layoutService } from '../state/layoutStateMachine.js';
 import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
@@ -163,35 +161,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // set init (default) state
   // $('#input').data('x', $('#input').outerWidth());
   // $('#input').data('y', $('#input').outerHeight());
-  layoutService.start();
-
-  window.layoutService = layoutService;
 
   var body = document.querySelector('body');
-
-  selectService.onTransition((state) => {
-    // console.log('State changed:', state.value, state.context);
-
-    if (!yProvider) return;
-
-    if (state.context?.elemId.length > 0) {
-      let target = document.getElementById(state.context.elemId);
-      yProvider.awareness.setLocalStateField('singleSelect', {
-        elemId: target.id,
-      });
-      return;
-    }
-
-    yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
-  });
 
   // selectService.start();
 
   body.addEventListener('click', function (event) {
     // turnOffAllHighlights();
-    if (!event.target.closest('.comment-with-replies')) {
-      unfocusCommentHighlights();
-    }
+
+    // if (!event.target.closest('.comment-with-replies')) {
+    //   unfocusCommentHighlights();
+    // }
 
     // console.log("SINGLE CLICK");
     if (inSvgImage(event.target)) {
@@ -228,18 +208,6 @@ document.addEventListener('DOMContentLoaded', function () {
       //alx_
 
       // $('[data-toggle="popover"]').popover('dispose');
-      if (
-        target?.id &&
-        target.id.match(/^(note|chord|layer)-L{1}(\d+)F{1}(\d+)/g)
-      ) {
-        selectService.send({ type: 'SELECT', elemId: target.id });
-      } else {
-        selectService.send({ type: 'RESET' });
-        yProvider?.awareness?.setLocalStateField('singleSelect', {
-          elemId: null,
-        });
-        // clearCursorHighlight();
-      }
 
       //alx:prosthiki chord argument sto dataIntoView
       dataIntoView(event);

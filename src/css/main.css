@@ -17,14 +17,14 @@ body {
 
 /* needed to see scroll bar in help menu */
 ::-webkit-scrollbar {
-	-webkit-appearance: none;
-	width: 7px;
+  -webkit-appearance: none;
+  width: 7px;
 }
 ::-webkit-scrollbar-thumb {
-	border-radius: 4px;
-	background-color: rgba(0,0,0,.5);
-	box-shadow: 0 0 1px rgba(255,255,255,.5);
-	-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 g[id^='clef-']:hover,
@@ -53,32 +53,31 @@ g[id^='slur-'] path:hover {
 }
 
 table.index-list {
-	padding-left: 40px;
-	margin-left: 40px;
-	padding-top: 40px;
-	margin-top: 40px;
-	margin-bottom: 100px;
+  padding-left: 40px;
+  margin-left: 40px;
+  padding-top: 40px;
+  margin-top: 40px;
+  margin-bottom: 100px;
 }
 
 .index-list td {
-	font-family: Palatino;
-	font-size: 18pt;
+  font-family: Palatino;
+  font-size: 18pt;
 }
 
-
 td.igroup {
-	color: #333333;
-	font-size: 2.0rem;
+  color: #333333;
+  font-size: 2rem;
 }
 
 .ilink {
-	cursor: pointer;
-	color: #333388;
+  cursor: pointer;
+  color: #333388;
 }
 
 .ilink:hover {
-	cursor: pointer;
-	color: #883333;
+  cursor: pointer;
+  color: #883333;
 }
 
 svg:not(:root) {
@@ -104,7 +103,7 @@ svg:not(:root) {
 /* Song title */
 #title-info {
   width: 100%;
-  color: rgba(0,0,0,.6);
+  color: rgba(0, 0, 0, 0.6);
   font-family: Palatino, Times-Roman, serif;
   font-size: 145%;
   white-space: nowrap;
@@ -147,7 +146,7 @@ div#dropArea {
 .topnav {
   background-color: var(--theme-color1);
 
-	/* background-color: #01313f;
+  /* background-color: #01313f;
 	color: #30edf7; */
 }
 
@@ -156,10 +155,10 @@ div#dropArea {
 }
 
 #actions-nav {
-	/* background-color: #01313f; */
+  /* background-color: #01313f; */
 
-	background-color: var(--theme-color1);
-	margin-left: 10px;
+  background-color: var(--theme-color1);
+  margin-left: 10px;
 }
 
 /* For index headings */
@@ -208,15 +207,11 @@ div#index {
 #output {
   /* background: #fffcf1; */
 
-	background-color: var(--score-color);
+  background-color: var(--score-color);
 }
 
 .output-with-comments {
-	background-color: var(--score-color);
-}
-
-.output-container {
-  overflow-y: scroll !important;
+  background-color: var(--score-color);
 }
 
 /* Menu stylings */
@@ -232,19 +227,19 @@ div#index {
 }
 
 @font-face {
-	font-family: "Roots_Slashes";
-	
-	src: url("/styles/Rootslashbarsrepeats-Regular.otf");
-	font-style: normal;
-	font-weight: normal
+  font-family: 'Roots_Slashes';
+
+  src: url('/styles/Rootslashbarsrepeats-Regular.otf');
+  font-style: normal;
+  font-weight: normal;
 }
 
 @font-face {
-	font-family: "Variations";
-	
-	src: url("/styles/Chord_types-Regular.otf");
-	font-style: normal;
-	font-weight: normal
+  font-family: 'Variations';
+
+  src: url('/styles/Chord_types-Regular.otf');
+  font-style: normal;
+  font-weight: normal;
 }
 
 @font-face {

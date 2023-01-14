@@ -82,7 +82,7 @@ export function displayNotation(page, force, restoreid) {
 
       let oldSvg = output.querySelectorAll('svg');
       if (oldSvg.length > 0) {
-        oldSvg.forEach(svg => { 
+        oldSvg.forEach((svg) => {
           if (!svg.classList.contains('bi')) {
             svg.remove();
           }
@@ -232,8 +232,6 @@ export function toggleTextVisibility(suppressZoom) {
 }
 
 window.toggleTextVisibility = toggleTextVisibility;
-
-
 
 // export function toggleTextVisibility(suppressZoom) {
 //   global_interface.InputVisible = !global_interface.InputVisible;
@@ -599,7 +597,7 @@ export async function displayWork(file) {
     return;
   }
 
-  console.log(file)
+  console.log(file);
   moveToTopOfNotation();
   vrvWorker.page = 1;
   $('html').css('cursor', 'wait');
@@ -609,10 +607,6 @@ export async function displayWork(file) {
     previous: true,
     next: true,
   });
-
-  let { docId } = getURLParams(['docId']);
-
-  await removeByDocumentId(docId, { data: { clientId: yProvider.awareness.clientID }, onSuccess: console.log, onError: console.error })
 }
 
 window.displayWork = displayWork;
@@ -1006,17 +1000,17 @@ function ensureTsv(text) {
 //
 
 export function setTextInEditor(text) {
-  console.log('setTextInEditor', { splash: text })
+  console.log('setTextInEditor', { splash: text });
   if (!text) {
     editor.setValue('');
   } else if (text.charAt(text.length - 1) === '\n') {
     // Get rid of #@%! empty line at end of text editor:
     // editor.setValue(text.slice(0, -1), -1);
     editor.setValue(text, -1);
-    console.log('else if')
+    console.log('else if');
   } else {
     editor.setValue(text, -1);
-    console.log('else', {text})
+    console.log('else', { text });
   }
   editor.getSession().selection.clearSelection();
 }
@@ -1755,8 +1749,6 @@ import { getMode } from './utility-ace.js';
 import { getAceEditor } from './setup.js';
 import { getMenu } from '../menu.js';
 import splitter from './splitter.js';
-import { layoutService } from '../state/layoutStateMachine.js';
-import { removeByDocumentId } from '../api/comments.js';
 import { getURLParams } from '../api/util.js';
 import { yProvider } from '../yjs-setup.js';
 

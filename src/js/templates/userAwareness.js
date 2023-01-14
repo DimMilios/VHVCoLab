@@ -1,13 +1,15 @@
 import { html, render } from 'lit-html';
 import { getURLParams } from '../api/util.js';
-import { formatUserElem } from '../collaboration/collab-extension.js';
+import {
+  commentsObserver,
+  formatUserElem,
+} from '../collaboration/collab-extension.js';
 import { multiSelectCoords } from '../collaboration/templates.js';
 import { getCoordinatesWithOffset } from '../collaboration/util-collab.js';
 import { yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
-import * as commentService from '../api/comments.js';
-import { setState, state } from '../state/comments.js';
 import { getAceEditor } from '../vhv-scripts/setup.js';
+import { CommentService } from '../api/CommentService.js';
 
 let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
   html`
@@ -106,8 +108,10 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
       let undoManager = editor.getSession().getUndoManager();
 
       console.log(undoManager.$undoStack);
-      console.log({ elemRefId })
-      let [ ,line, field, subfield ] = elemRefId.match(/-.*L(\d+)F(\d+)S?(\d+)?/);
+      console.log({ elemRefId });
+      let [, line, field, subfield] = elemRefId.match(
+        /-.*L(\d+)F(\d+)S?(\d+)?/
+      );
 
       line = parseInt(line, 10) - 1;
 
@@ -117,7 +121,6 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
           // editor.getSession().redoChanges(item, true);
         }
       }
-      
     } else {
       console.log('Element does not have id');
     }
@@ -161,39 +164,21 @@ export const handleSingleComment = (notes, coords) => async (event) => {
   let { docId: documentId } = getURLParams(['docId']);
 
   if (Array.isArray(notes) && notes.length > 0) {
-    await commentService.create({
-      data: {
-        content: content.value,
-        parentCommentId: null,
-        documentId: documentId ? Number(documentId) : 1,
-        clientId: yProvider.awareness.clientID,
-        multiSelectElements: notes.join(','),
-      },
-      onSuccess: (createdComment) => {
-        createdComment.highlight = Object.assign({}, coords);
-        console.log('Added comment', createdComment);
+    let { user } = yProvider.awareness.getLocalState();
 
-        setState({
-          comments: state.comments
-            .map((c) => {
-              return c.highlight == null &&
-                typeof c?.multiSelectElements == 'string'
-                ? {
-                    ...c,
-                    highlight: Object.assign(
-                      {},
-                      multiSelectCoords(c.multiSelectElements.split(','))
-                    ),
-                  }
-                : c;
-            })
-            .concat(createdComment),
-        });
-
-        console.log('Comments after calculating coords', state.comments);
-      },
-      onError: console.log
+    const service = new CommentService();
+    const addedComment = service.addComment({
+      content: content.value,
+      createdAt: new Date(),
+      multiSelectElements: notes.join(','),
+      documentId,
+      clientId: yProvider.awareness.clientID,
+      author: user,
     });
+
+    if (addedComment) {
+      commentsObserver({ [addedComment.id]: true });
+    }
   }
 
   yProvider.awareness.setLocalStateField('multiSelect', null);

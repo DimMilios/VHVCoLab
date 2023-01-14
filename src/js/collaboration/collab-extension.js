@@ -1,7 +1,7 @@
 import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
-import { collabTemplate, uiCoords } from './templates.js';
+import { collabTemplate, multiSelectCoords, uiCoords } from './templates.js';
 import { multiSelectTemplate } from '../templates/multiSelect';
 import {
   singleSelectTemplate,
@@ -12,8 +12,10 @@ import {
   highlightLayerTemplate,
   highlightTemplate,
 } from '../templates/highlights.js';
-import { setState, state } from '../state/comments.js';
 import { global_cursor } from '../vhv-scripts/global-variables.js';
+import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
+import { COMMENTS_VISIBLE } from '../bootstrap.js';
+import { CommentService } from '../api/CommentService.js';
 
 let DEBUG = false;
 function log(text) {
@@ -101,7 +103,6 @@ function defaultClients() {
 
 export function updateHandler(clients = defaultClients()) {
   const awStates = Array.from(yProvider.awareness.getStates().entries());
-  // console.log(yProvider.awareness.getStates());
   let collabContainer = document.querySelector('#output #collab');
   if (!collabContainer) {
     console.log(
@@ -153,52 +154,33 @@ export function updateHandler(clients = defaultClients()) {
       )
     )}`;
 
-  // let commentsVisible = layoutService.state
-  //   .toStrings()
-  //   .some((name) => name.toLowerCase().includes('comment'));
-
-  // let highlights = html`${commentsVisible
-  //   ? html`${state.comments
-  //       ?.filter((c) => c?.highlight != null)
-  //       .map((c) => highlightTemplate(c.id, c.highlight))}`
-  //   : null}`;
-
-  // ${renderHighlightLayer(highlights)}
+  // ${renderHighlightLayer(highlights, commentsGroup)} `,
 
   render(
-    html` ${collabLayer(multiSelects, singleSelects, userAwareness)} `,
+    html`${collabLayer(multiSelects, singleSelects, userAwareness)}`,
     collabContainer
   );
 
   // Display connection status (online/offline) for the users sharing the current document
-  renderUserAwareness();
-
-  // clients?.added?.forEach(f);
-  // clients?.updated?.forEach(f);
-  // clients?.removed?.forEach(f);
+  // renderUserAwareness();
 }
 
-export function renderUserAwareness() {
-  let onlineElem = document.querySelector('#online-users');
-  if (onlineElem) {
-    let connectedIds = [...yProvider.awareness.getStates().values()].map(
-      (s) => s.user.id
-    );
-    let copy = [...state.users];
-    setState({
-      users: copy
-        .map((u) => ({ ...u, online: connectedIds.includes(u.id) }))
-        .sort((a, b) => b.online - a.online),
-    });
-    render(html`${userListTemplate(state.users)}`, onlineElem);
-    // Initialize bootstrap tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-  } else {
-    console.log(
-      'Element div#online-users is not found. Cannot display online user info.'
-    );
-  }
-}
+// export function renderUserAwareness() {
+//   let onlineElem = document.querySelector('#online-users');
+//   if (onlineElem) {
+//     let connectedIds = [...yProvider.awareness.getStates().values()].map(
+//       (s) => s.user.id
+//     );
+
+//     render(html`${userListTemplate()}`, onlineElem);
+//     // Initialize bootstrap tooltips
+//     $('[data-toggle="tooltip"]').tooltip();
+//   } else {
+//     console.log(
+//       'Element div#online-users is not found. Cannot display online user info.'
+//     );
+//   }
+// }
 
 function collabLayer(...children) {
   let output = document.querySelector('#output');
@@ -206,6 +188,69 @@ function collabLayer(...children) {
   uiCoords.svgHeight = renderBefore?.height.baseVal.value ?? window.innerHeight;
 
   return collabTemplate(uiCoords.svgHeight, ...children);
+}
+
+export function commentsObserver(elementsInFocus = {}) {
+  let commentsContainer = document.querySelector('#output #comments-layer');
+  if (!commentsContainer) {
+    commentsContainer = document.createElement('div');
+    commentsContainer.id = 'comments-layer';
+    document.querySelector('#output')?.prepend(commentsContainer);
+  }
+
+  const service = new CommentService();
+  let commentsList = service.fromJSON();
+
+  let highlights = html`${COMMENTS_VISIBLE
+    ? commentsList
+        .filter((c) => c.parentCommentId === null)
+        .map((c) => ({
+          comment: c,
+          coords: multiSelectCoords(c.multiSelectElements.split(',')),
+        }))
+        .map((data) =>
+          highlightTemplate(data.comment, data.coords, elementsInFocus)
+        )
+    : null}`;
+
+  const comments = findCommentGroupForFocusedElement(
+    elementsInFocus,
+    commentsList
+  );
+  const commentsGroup =
+    comments?.length > 0 ? fixedCommentReplyContainerTemplate(comments) : null;
+
+  render(renderHighlightLayer(highlights, commentsGroup), commentsContainer);
+}
+
+function findCommentGroupForFocusedElement(elementsInFocus, commentsList) {
+  if (typeof elementsInFocus != 'undefined') {
+    const comment = commentsList.find(
+      (comment) => comment.id === Object.keys(elementsInFocus)[0]
+    );
+
+    if (comment) {
+      const replies = commentsList.filter(
+        (reply) => reply.parentCommentId === comment.id
+      );
+      return [].concat(comment, replies);
+    }
+  }
+
+  // Find focused element
+  const focusedElement = document.querySelector('.highlight-area-focus');
+  if (!focusedElement) return [];
+
+  // Filter Y.Array comments by focused element comment id
+  const comment = commentsList.find(
+    (comment) => comment.id === focusedElement?.dataset.commentId
+  );
+  if (comment) {
+    const replies = commentsList.filter(
+      (reply) => reply.parentCommentId === comment.id
+    );
+    return [].concat(comment, replies);
+  }
 }
 
 export function renderHighlightLayer(...children) {

@@ -1,7 +1,10 @@
 import CONFIG from '../features.json';
 import { getURLInfo } from './api/util';
 
-import { addListenersToOutput } from './collaboration/collab-extension.js';
+import {
+  addListenersToOutput,
+  commentsObserver,
+} from './collaboration/collab-extension.js';
 import { keysEqual } from './util';
 import { setupCollaboration } from './yjs-setup.js';
 
@@ -165,6 +168,23 @@ function handleVideoConfSetup(jitsi) {
 
 function handleVideoConfTearDown(jitsi) {
   jitsi.destroy();
+}
+
+export let COMMENTS_VISIBLE = false;
+export function toggleCommentsVisibility(commentsVisible) {
+  if (!featureIsEnabled('collaboration')) {
+    console.log(`Collaboration feature must be enabled to show comments`);
+    return;
+  }
+
+  if (typeof commentsVisible != 'undefined') {
+    COMMENTS_VISIBLE = commentsVisible;
+    commentsObserver();
+    return;
+  }
+
+  COMMENTS_VISIBLE = !COMMENTS_VISIBLE;
+  commentsObserver();
 }
 
 function initForm(config) {

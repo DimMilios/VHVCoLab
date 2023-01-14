@@ -35,9 +35,12 @@ import {
   global_editorOptions,
   global_verovioOptions,
 } from './vhv-scripts/global-variables.js';
-import { layoutService } from './state/layoutStateMachine.js';
-import { hideCommentSection, showCommentSection } from './collaboration/util-collab.js';
-import { promptForFile, saveContentAsMIDI } from './vhv-scripts/file-operations.js';
+import {
+  promptForFile,
+  saveContentAsMIDI,
+} from './vhv-scripts/file-operations.js';
+import { featureIsEnabled, toggleCommentsVisibility } from './bootstrap.js';
+import { CommentService } from './api/CommentService.js';
 
 class MenuInterface {
   constructor() {
@@ -89,11 +92,15 @@ class MenuInterface {
   }
 
   showComments() {
-    showCommentSection();
+    // showCommentSection();
+    toggleCommentsVisibility(true);
+    // updateHandler();
   }
-  
+
   hideComments() {
-    hideCommentSection();
+    // hideCommentSection();
+    toggleCommentsVisibility(false);
+    // updateHandler();
   }
 
   getContextualMenus() {
@@ -149,10 +156,17 @@ class MenuInterface {
       options.filter = filter;
     }
     loadKernScoresFile(options);
+
+    if (featureIsEnabled('collaboration')) {
+      new CommentService().deleteAll();
+    }
   }
 
   loadFromRepository() {
     promptForFile();
+    if (featureIsEnabled('collaboration')) {
+      new CommentService().deleteAll();
+    }
   }
 
   openScoreFileFromDisk() {
@@ -160,6 +174,9 @@ class MenuInterface {
     event.code = OKey;
     event.ctrlKey = true;
     processInterfaceKeyCommand(event);
+    if (featureIsEnabled('collaboration')) {
+      new CommentService().deleteAll();
+    }
   }
 
   saveAsMIDI() {
