@@ -49,66 +49,75 @@ export let yProvider;
 export let ydoc;
 
 export async function setupCollaboration() {
-  ydoc = new Y.Doc();
+  if (typeof ydoc == 'undefined') {
+    ydoc = new Y.Doc();
 
-  const { file, user } = getURLInfo();
+    const type = ydoc.getText('ace');
 
-  let room = file ?? 'test-room';
-  // let roomData;
-  /*
+    const commentsList = ydoc.getArray('comments');
+    commentsList.observe((event) => {
+      // console.log(event.changes.added);
+
+      const focusedArea = document.querySelector('.highlight-area-focus');
+      // If a comment reply was added, render comments while focusing on its parent
+      const arr = event?.changes?.added?.values()?.next()?.value?.content?.arr;
+      if (arr?.length > 0) {
+        const commentAdded = JSON.parse(arr[0]);
+        if (
+          commentAdded?.parentCommentId &&
+          commentAdded.parentCommentId === focusedArea?.dataset?.commentId
+        ) {
+          commentsObserver({ [commentAdded.parentCommentId]: true });
+          return;
+        }
+      }
+
+      const focus = focusedArea
+        ? { [focusedArea.dataset.commentId]: true }
+        : {};
+      commentsObserver(focus);
+    });
+  }
+
+  if (typeof yProvider == 'undefined') {
+    const { file, user } = getURLInfo();
+
+    let room = file ?? 'test-room';
+    // let roomData;
+    /*
   if (file && user) {
     roomData = await fetchRoom(file, user);
     room = roomData?.room ?? room;
   }
   */
 
-  if (typeof yProvider == 'undefined') {
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
-    });
-  }
-
-  setUserAwarenessData(user);
-
-  const type = ydoc.getText('ace');
-  const yUndoManager = new Y.UndoManager(type);
-
-  const editor = getAceEditor();
-  if (!editor) {
-    throw new Error('Ace Editor is undefined');
-  }
-
-  const binding = new AceBinding(type, editor, yProvider.awareness, {
-    yUndoManager,
-  });
-
-  const commentsList = ydoc.getArray('comments');
-  commentsList.observe((event) => {
-    // console.log(event.changes.added);
-
-    const focusedArea = document.querySelector('.highlight-area-focus');
-    // If a comment reply was added, render comments while focusing on its parent
-    const arr = event?.changes?.added?.values()?.next()?.value?.content?.arr;
-    if (arr?.length > 0) {
-      const commentAdded = JSON.parse(arr[0]);
-      if (
-        commentAdded?.parentCommentId &&
-        commentAdded.parentCommentId === focusedArea?.dataset?.commentId
-      ) {
-        commentsObserver({ [commentAdded.parentCommentId]: true });
-        return;
+      const editor = getAceEditor();
+      if (!editor) {
+        throw new Error('Ace Editor is undefined');
       }
-    }
 
-    const focus = focusedArea ? { [focusedArea.dataset.commentId]: true } : {};
-    commentsObserver(focus);
-  });
+      const yUndoManager = new Y.UndoManager(ydoc.getText('ace'));
 
-  yProvider.awareness.on('change', updateHandler);
-  // yProvider.awareness.on('update', updateHandler);
+      const binding = new AceBinding(
+        ydoc.getText('ace'),
+        editor,
+        yProvider.awareness,
+        {
+          yUndoManager,
+        }
+      );
+    });
 
-  window.example = { yProvider, ydoc, type };
+    yProvider.awareness.on('change', updateHandler);
+    // yProvider.awareness.on('update', updateHandler);
+
+    setUserAwarenessData(user);
+  }
+
+  window.example = { yProvider, ydoc, type: ydoc.getText('ace') };
   window.awareness = yProvider.awareness;
 
   // setupSSE(DOC_ID);

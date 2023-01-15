@@ -40,8 +40,8 @@ export default class AceBinding {
         exec: editorRedo,
       });
 
-      yUndoManager.on('stack-item-added', this._onStackItemAdded)
-      yUndoManager.on('stack-item-popped', this._onStackItemPopped)
+      yUndoManager.on('stack-item-added', this._onStackItemAdded);
+      yUndoManager.on('stack-item-popped', this._onStackItemPopped);
     }
 
     this.awareness = awareness;
@@ -137,7 +137,7 @@ export default class AceBinding {
         }, this);
       });
     };
-    this.ace.on('change', this._aceObserver);
+    this.ace.session.on('change', this._aceObserver);
 
     this._cursorObserver = () => {
       let user = this.awareness.getLocalState().user;
@@ -173,13 +173,18 @@ export default class AceBinding {
       const aw = /** @type {any} */ (this.awareness.getLocalState());
       if (curSel === null) {
         if (this.awareness.getLocalState() !== null) {
-          this.awareness.setLocalStateField('cursor',/** @type {any} */(null));
+          this.awareness.setLocalStateField(
+            'cursor',
+            /** @type {any} */ (null)
+          );
         }
       } else {
-        if (!aw ||
+        if (
+          !aw ||
           !aw.cursor ||
           cursor.anchor !== aw.cursor.anchor ||
-          cursor.head !== aw.cursor.head) {
+          cursor.head !== aw.cursor.head
+        ) {
           this.awareness.setLocalStateField('cursor', cursor);
         }
       }
@@ -230,7 +235,8 @@ class AceCursors {
     this.aceID = this.ace.container.id;
 
     this.marker.update = function (html, markerLayer, session, config) {
-      let start = config.firstRow, end = config.lastRow;
+      let start = config.firstRow,
+        end = config.lastRow;
       let cursors = this.cursors;
 
       for (let i = 0; i < cursors.length; i++) {
@@ -243,11 +249,13 @@ class AceCursors {
           // compute cursor position on screen
           // this code is based on ace/layer/marker.js
           let screenPos = session.documentToScreenPosition(pos.row, pos.column);
-          let aceGutter = document.getElementsByClassName('ace_gutter')[0].offsetWidth;
+          let aceGutter =
+            document.getElementsByClassName('ace_gutter')[0].offsetWidth;
           let height = config.lineHeight;
           let width = config.characterWidth;
           let top = markerLayer.$getTop(screenPos.row, config);
-          let left = markerLayer.$padding + aceGutter + screenPos.column * width;
+          let left =
+            markerLayer.$padding + aceGutter + screenPos.column * width;
 
           // draw cursor and flag
           let el = document.getElementById(
@@ -302,9 +310,11 @@ class AceCursors {
 
       // handle selection
       if (c.sel) {
-        if (this.markerID[c.id] !== undefined &&
+        if (
+          this.markerID[c.id] !== undefined &&
           this.markerID[c.id].hasOwnProperty('sel') &&
-          this.markerID[c.id].sel !== undefined) {
+          this.markerID[c.id].sel !== undefined
+        ) {
           this.ace.session.removeMarker(this.markerID[c.id].sel);
           this.markerID[c.id].sel = undefined;
         }
@@ -336,9 +346,11 @@ class AceCursors {
           ),
         };
       } else {
-        if (this.markerID[c.id] !== undefined &&
+        if (
+          this.markerID[c.id] !== undefined &&
           this.markerID[c.id].hasOwnProperty('sel') &&
-          this.markerID[c.id].sel !== undefined) {
+          this.markerID[c.id].sel !== undefined
+        ) {
           this.ace.session.removeMarker(this.markerID[c.id].sel);
           this.markerID[c.id].sel = undefined;
         }
@@ -349,9 +361,11 @@ class AceCursors {
       let el = document.getElementById(this.aceID + '_cursor_' + cid);
       if (el) {
         el.parentNode.removeChild(el);
-        if (this.markerID[cid] !== undefined &&
+        if (
+          this.markerID[cid] !== undefined &&
           this.markerID[cid].hasOwnProperty('sel') &&
-          this.markerID[cid].sel !== undefined) {
+          this.markerID[cid].sel !== undefined
+        ) {
           this.ace.session.removeMarker(this.markerID[cid].sel);
           this.markerID[cid].sel = undefined;
         }
