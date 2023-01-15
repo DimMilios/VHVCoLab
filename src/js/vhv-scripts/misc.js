@@ -213,12 +213,10 @@ export function toggleTextVisibility(suppressZoom) {
       global_interface.LastInputWidth = 400;
     }
 
-    layoutService.send('HIDE_TEXT');
-    // splitter.setPositionX(global_interface.LastInputWidth);
+    splitter.setPositionX(global_interface.LastInputWidth);
   } else {
-    layoutService.send('SHOW_TEXT');
     global_interface.LastInputWidth = parseInt(input.style.width);
-    // splitter.setPositionX(0);
+    splitter.setPositionX(0);
   }
 
   global_interface.InputVisible = !global_interface.InputVisible;

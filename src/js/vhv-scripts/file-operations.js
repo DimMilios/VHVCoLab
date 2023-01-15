@@ -71,11 +71,27 @@ export async function saveContentAsMIDI() {
 
 export async function loadFileFromURLParam() {
   let params = new URLSearchParams(window.location.search);
-  if (params.has('file')) {
-    let file = await loadFileFromRepository(params.get('file'));
-    getAceEditor()?.session.setValue(file);
-    return params.get('file');
+  if (!params.has('file')) {
+    return;
   }
+
+  let file;
+  if (import.meta.env.DEV) {
+    // Load file locally for development
+    let module = await import(`../../${params.get('file')}?raw`);
+    if (module) {
+      file = module.default;
+      console.log({ module, value: file });
+    }
+  } else {
+    // Load file from remote repository
+    file = await loadFileFromRepository(params.get('file'));
+  }
+
+  // if (file) {
+  getAceEditor()?.session.setValue(file);
+  return params.get('file');
+  // }
 }
 
 export async function promptForFile() {
