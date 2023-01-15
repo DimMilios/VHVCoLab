@@ -148,8 +148,12 @@ sendBtn.addEventListener('click', function (event) {
   let jsonFile = JSON.stringify(jsonRequest);
   console.log(jsonRequest);
 
-
-  let xhttp = new XMLHttpRequest();
+  //initializing and configuring request
+  let xhttp = new XMLHttpRequest();  
+  xhttp.open("GET", 'http://155.207.188.7:6001/sending_kern?row=17&column=8&chord=Cm&kern=lalala');
+  //xhttp.setRequestHeader('Content-Type', 'text/plain');
+  //xhttp.responseType = 'json';
+  //xhttp.withCredentials = true;
 
   //XHTTP response function
   xhttp.onload = function () {
@@ -162,9 +166,7 @@ sendBtn.addEventListener('click', function (event) {
   };
   
   //opening XHTTP connection to GJT server. Sending the json request
-  xhttp.open("POST", 'https://155.207.188.7:6001/');
-  xhttp.setRequestHeader('Content-Type', 'application/json');
-  xhttp.send(jsonFile);
+  xhttp.send('alx');
   
   //resetting chord object's keys and getting it ready for next use
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
