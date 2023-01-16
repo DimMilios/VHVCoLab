@@ -207,10 +207,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       //alx_
 
-      // $('[data-toggle="popover"]').popover('dispose');
-
       //alx:prosthiki chord argument sto dataIntoView
       dataIntoView(event);
+    }
+
+    if (!event.target?.id.startsWith('details-note')) {
+      $('[data-toggle="popover"]').popover('hide');
     }
   });
 
