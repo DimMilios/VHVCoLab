@@ -1,9 +1,10 @@
-import { setupSynchronizeHandlers } from '../sync';
+import { getAceEditor } from '../vhv-scripts/setup.js';
+import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 
 URL = window.URL || window.webkitURL;
 
 var gumStream; //stream from getUserMedia()
-var rec; //Recorder.js object
+export var rec; //Recorder.js object needs to be exported
 var input; //MediaStreamAudioSourceNode we'll be recording
 
 // shim for AudioContext when it's not avb.
@@ -13,23 +14,96 @@ var audioContext; //audio context to help us record
 var recordButton = document.getElementById('recordButton');
 var stopButton = document.getElementById('stopButton');
 var pauseButton = document.getElementById('pauseButton');
-
 var download; // the name of the downloaded file
-var fileUrl; // url to the produced audio file
 
-const constraints = {
-  audio: {echoCancellation: false}
-};
+//kalohr
+var syncronizeButton = document.getElementById("Synchronize"); 
+console.log("kalohr: adding event listener for the sync button");
+export var fileUrl; // url to the produced audio file
+export var theblob;
+//kalohr
 
 //add events to those 3 buttons
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
 pauseButton.addEventListener('click', pauseRecording);
-document
-  .getElementById('Download') ///////////////////////////////////////////////////////////////////////////////
-  .addEventListener('click', handleFileDownload(), false);
 
-let shouldSetupSynchronize = true;
+syncronizeButton.addEventListener('click', doSyncronize); //kalohr
+
+document.getElementById('Download').addEventListener('click', handleFileDownload(), false);
+
+let chunks = []; //kalohr
+
+async function doSyncronize(){
+  console.log("rec2wav_2.js: doSynchronize: SYNCRONISE ");
+  console.log(" - getting the song");
+
+  let base64Midi = await getVrvWorker().renderToMidi();
+  let song = base64Midi;
+  //console.log(song);
+  //let song = 'data:audio/midi;base64,' + base64Midi;
+ 
+  let fd = new FormData();
+
+  console.log(" - setting the action");
+  fd.append('action','synchronization');
+  fd.append("theUrl", fileUrl);
+
+  console.log(" - appeding the audio/midi as BLOB")
+  let midifile = new Blob([song], {'type':'audio/midi'});
+  console.log(midifile);
+  fd.append('themid', midifile);
+
+  console.log(" - appeding the wav as FILE")
+ /*
+  let audiofile =  new Blob(rec.exportWav(
+   function(blob){ 
+    return blob; 
+   }), {'type':'audio'});
+   */
+  console.log(" -- recorder.js: ",rec);
+  console.log(" -- theblob ",theblob);
+ /*
+  theblob = {
+   theblob, 
+   [Symbol.iterator]:function(){
+    return{
+     next:() => ({
+      value: 0,
+      done: true
+     })
+    }
+   }
+  }
+  */
+  //console.log(" -- theblob[Symbol.iterator] ",theblob[Symbol.iterator]);
+  //let bb = new BlobBuilder();
+  //bb.append(theblob)
+  //let audiofile = bb.getBob('audio');
+  //let audiofile =  new Blob(theblob);
+  //let audiofile =  new Blob(theblob, {type:'audio/wav; codecs=0'});
+  let audiofile =  theblob;
+  //kalohr: the line above needs to be replaced with a line that uses Record.js
+  //let audiofile =  new Blob(rec.getBuffer(), {'type':'audio'});
+
+  //let audiofile   = fileUrl;
+  //console.log("saveContentAsMidiUpload: ",audiofile);
+  fd.append('theaudio', audiofile);
+  //fd.append('file', audiofile, 'blobname');
+ 
+  var ajax = new XMLHttpRequest();
+  ajax.open("post", "https://musicolab.hmu.gr/apprepository/synchroniseScoreAudioResp.php", true);
+  ajax.onreadystatechange = function(){
+   if(ajax.readyState ==4){
+    //alert("the upload has finished !");
+    GotoSelectionButton.disabled=false;
+    document.getElementById("syncImg").src="LABstill.png";
+   }
+  }
+  ajax.send(fd);
+  document.getElementById("syncImg").src="LAB.webp";
+
+}
 
 function startRecording() {
   console.log('recordButton clicked');
@@ -38,12 +112,13 @@ function startRecording() {
   let play_waveform = document.getElementById('play_wave');
   play_waveform.setAttribute('hidden', true);
 
+
   /*
             Simple constraints object, for more advanced audio features see
             https://addpipe.com/blog/audio-constraints-getusermedia/
         */
 
-  //var constraints = { audio: true, video: false };
+  var constraints = { audio: true, video: false };
 
   /*
             Disable the record button until we get a success or fail from getUserMedia() 
@@ -63,11 +138,10 @@ function startRecording() {
             https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         */
 
-  navigator.mediaDevices
-    .getUserMedia(constraints)
-    .then(function (stream) {
+  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+
       console.log(
-        'getUserMedia() success, stream created, initializing Recorder.js ...'
+        'recorder.js: getUserMedia() success, stream created, initializing Recorder.js ...'
       );
 
       /*
@@ -75,12 +149,11 @@ function startRecording() {
                 sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
                 the sampleRate defaults to the one set in your OS for your playback device
     
-            */
+      */
       audioContext = new AudioContext();
 
       //update the format
-      document.getElementById('formats').innerHTML =
-        'Format: 1 channel pcm @ ' + audioContext.sampleRate / 1000 + 'kHz';
+      document.getElementById('formats').innerHTML = 'Format: 1 channel pcm @ ' + audioContext.sampleRate / 1000 + 'kHz';
 
       /*  assign to gumStream for later use  */
       gumStream = stream;
@@ -99,7 +172,7 @@ function startRecording() {
       /* 
                 Create the Recorder object and configure to record mono sound (1 channel)
                 Recording 2 channels  will double the file size
-            */
+      */
       rec = new Recorder(input, { numChannels: 1 });
 
       //start the recording process
@@ -108,18 +181,13 @@ function startRecording() {
       window.wavesurfer3.microphone.togglePlay();
 
       console.log('Recording started');
-    })
-    .catch(function (err) {
-      //enable the record button if getUserMedia() fails
-      recordButton.disabled = false;
-      stopButton.disabled = true;
-      pauseButton.disabled = true;
+    }).catch(function (err) {
+ //enable the record button if getUserMedia() fails
+ recordButton.disabled = false;
+ stopButton.disabled = true;
+ pauseButton.disabled = true;
+ console.log("ERROR: recorder.js maybe? ");
     });
-
-  if (shouldSetupSynchronize) {
-    setupSynchronizeHandlers();
-    shouldSetupSynchronize = false;
-  }
 }
 
 function pauseRecording() {
@@ -152,7 +220,7 @@ function stopRecording() {
   Synchronize.disabled = false;
   Analyze.disabled = false;
   Download.disabled = false;
-  GotoSelectionButton.disabled = false;
+  //GotoSelectionButton.disabled = false;
 
   //reset button just in case the recording is stopped while paused
   pauseButton.title = 'Pause Recording';
@@ -166,9 +234,18 @@ function stopRecording() {
 
   //create the wav blob and pass it on to createDownloadLink
   rec.exportWAV(createDownloadLink);
+
+//kalohr
+   console.log("stop recording: pushing the env data in chunks");
+   //rec.ondataavailable = function(ev) {
+    //chunks.push(ev.data);
+   //};
+//kalohr
+
 }
 
 function createDownloadLink(blob) {
+ theblob = blob;
   var url = URL.createObjectURL(blob);
   var au = document.createElement('audio');
   var li = document.createElement('li');
@@ -190,7 +267,9 @@ function createDownloadLink(blob) {
 
   // update information for the .wav file (needed for downloading)
   download = link.download;
-  fileUrl = url;
+  fileUrl = url; 
+  console.log("create download link: download = ", download.toString());
+  console.log("create download link: fileUrl = ", fileUrl.toString());
 
   //add the new audio element to li
   li.appendChild(au);
@@ -224,6 +303,7 @@ function createDownloadLink(blob) {
   //add the li element to the ol
   //recordingsList.appendChild(li);
 }
+
 function download_file(name, audio) {
   var antikeimeno2 = document.createElement('a');
   antikeimeno2.setAttribute('href', audio);
@@ -231,13 +311,14 @@ function download_file(name, audio) {
   document.body.appendChild(antikeimeno2);
   antikeimeno2.click();
 
-  document.body.removeChild(antikeimeno2);
-  URL.revokeObjectURL(fileUrl);
+  //document.body.removeChild(antikeimeno2);
+    //URL.revokeObjectURL(fileUrl);
 }
 
 function handleFileDownload() {
-  return function (event) {
+  return function(event) {
     console.log('Download click handler', { download, fileUrl });
     download_file(download, fileUrl);
-  };
+  }
 }
+
