@@ -20,6 +20,9 @@ var download; // the name of the downloaded file
 var syncronizeButton = document.getElementById("Synchronize"); 
 console.log("kalohr: adding event listener for the sync button");
 export var fileUrl; // url to the produced audio file
+const constraints = {
+  audio: {echoCancellation: false}
+};
 export var theblob;
 //kalohr
 
@@ -118,7 +121,7 @@ function startRecording() {
             https://addpipe.com/blog/audio-constraints-getusermedia/
         */
 
-  var constraints = { audio: true, video: false };
+  //var constraints = { audio: true, video: false };
 
   /*
             Disable the record button until we get a success or fail from getUserMedia() 
