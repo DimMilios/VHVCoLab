@@ -908,7 +908,7 @@ export function highlightIdInEditor(id, source) {
 
    //alx2
   //retrieveing measure NO. when clicking inside the svg   
-  let measureNoEncoding = editor.find('^=\\d+', {backwards:true, regExp:true});
+  let measureNoEncoding = editor.find('^=\\d+', {backwards:true, regExp:true, wrap:false});
   
   if (!measureNoEncoding){
     window.MEASURENO = 1;
