@@ -1,11 +1,11 @@
 import { getAceEditor } from "./setup";
 
+//defining variables and functions to be used
 let chordEditor = document.getElementById('chord-editor');
 let chordBtns = document.getElementById('show-edit-suggest-buttons');
 let suggestBtn = document.getElementById('suggest-btn');
 let sendBtn = document.getElementById('send-chord-btn');
 
-//defining json request's keys
 export let chord = {
   current: null,
   new: {
@@ -20,6 +20,15 @@ export let chordSelected = {
   root:null,
   accidental:null,
   variation:null
+}
+
+let GJTurl = new URL('https://155.207.188.7:6001/sending_kern');
+
+function setURLParams (chordEditInfo) {
+  for ( let [key, value] of Object.entries(chordEditInfo) ) {
+    if (typeof value === 'object' && value !== null)      setURLParams(value);
+    else      GJTurl.searchParams.set(`${key}`, `${value}`);
+  }
 }
 
 //colorizing selections and decolorizing previous selections
@@ -98,22 +107,27 @@ suggestBtn.addEventListener('click', (event) => {
     chord,
   };
   console.log(jsonRequest);
-  let jsonFile = JSON.stringify(jsonRequest);
-  
+  //let jsonFile = JSON.stringify(jsonRequest);
+
+  //setting the url to be used in xhttp request
+  setURLParams(jsonRequest);
+  console.log(GJTurl);
+
+  //initializing, configuring and sending the request
   let xhttp = new XMLHttpRequest();
-  //XHTTP response function
+  xhttp.open("GET", GJTurl);
+  //xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.responseType = 'json';
+  //xhttp.withCredentials = true;
+  xhttp.send();
+
+  //defining response function
   xhttp.onload = function () {    
     //retrieveing json sent from GJT server
-    let jsonResponse = JSON.parse(xhttp.response);
-    //retrieveing new kern file from json response and setting it as editor's content
-    let newKern = jsonResponse[0];
-    edtr.setValue(newKern);
+    let jsonResponse = xhttp.response;
+    console.log(jsonResponse);
+    edtr.setValue(jsonResponse.new);
   };
-
-  //opening XHTTP connection to GJT server. Sending the json request
-  xhttp.open("POST", 'https://155.207.188.7:6001/');
-  xhttp.setRequestHeader('Content-Type', 'application/json');
-  xhttp.send(jsonFile);
 
   //resetting chord object's keys and getting it ready for next use
   chord.reharmonize = 'false';
@@ -122,15 +136,6 @@ suggestBtn.addEventListener('click', (event) => {
 
 //send click
 sendBtn.addEventListener('click', function (event) {
-
-  //chord editor gets hidden
-  chordEditor.style.display = 'none';
-
-  //decolorizing selected chord tables' cells
-  chordSelected.root.style.color = 'white';
-  if (chordSelected.accidental) chordSelected.accidental.style.color = 'white';
-  chordSelected.variation.style.color = 'white';
-  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
 
   //kern retrieval
   let edtr = getAceEditor();
@@ -145,31 +150,39 @@ sendBtn.addEventListener('click', function (event) {
     chordLocation,
     chord,
   };
-  let jsonFile = JSON.stringify(jsonRequest);
+  //let jsonFile = JSON.stringify(jsonRequest);
   console.log(jsonRequest);
 
-  //initializing and configuring request
-  let xhttp = new XMLHttpRequest();  
-  xhttp.open("GET", 'http://155.207.188.7:6001/sending_kern?row=17&column=8&chord=Cm&kern=lalala');
-  //xhttp.setRequestHeader('Content-Type', 'text/plain');
-  //xhttp.responseType = 'json';
-  //xhttp.withCredentials = true;
+  //setting the url to be used in xhttp request
+  setURLParams(jsonRequest);
+  console.log(GJTurl);
 
-  //XHTTP response function
-  xhttp.onload = function () {
+  //initializing, configuring and sending the request
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", GJTurl);
+  //xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.responseType = 'json';
+  //xhttp.withCredentials = true;
+  xhttp.send();
+
+  //defining response function
+  xhttp.onload = function () {    
     //retrieveing json sent from GJT server
     let jsonResponse = xhttp.response;
     console.log(jsonResponse);
-    //retrieveing new kern file and setting it as editor's content
-    let newKern = jsonResponse[0];
-    edtr.setValue(newKern);
+    edtr.setValue(jsonResponse.new);
   };
   
-  //opening XHTTP connection to GJT server. Sending the json request
-  xhttp.send('alx');
+  //decolorizing selected chord tables' cells
+  chordSelected.root.style.color = 'white';
+  if (chordSelected.accidental) chordSelected.accidental.style.color = 'white';
+  chordSelected.variation.style.color = 'white';
+  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
   
   //resetting chord object's keys and getting it ready for next use
   Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
-  sendBtn.style.display = 'none';  
 
+  //chord editor and send btn get hidden
+  chordEditor.style.display = 'none';
+  sendBtn.style.display = 'none';  
 });
