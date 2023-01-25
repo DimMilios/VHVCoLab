@@ -232,10 +232,8 @@ export function toggleTextVisibility(suppressZoom) {
     }
 
     updateColumnLayout(input, output, true);
-    splitter.setPositionX(global_interface.LastInputWidth);
   } else {
     global_interface.LastInputWidth = parseInt(input.style.width);
-    splitter.setPositionX(0);
 
     updateColumnLayout(input, output, false);
   }
