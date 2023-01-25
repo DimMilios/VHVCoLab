@@ -3,6 +3,7 @@ import { yProvider } from '../yjs-setup.js';
 import { getURLParams } from '../api/util.js';
 import { commentsObserver } from '../collaboration/collab-extension.js';
 import { CommentService } from '../api/CommentService.js';
+import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap.js';
 
 export const handleCommentPost = async (event) => {
   event.preventDefault();
@@ -26,6 +27,9 @@ export const handleCommentPost = async (event) => {
     });
 
     if (addedComment) {
+      if (!COMMENTS_VISIBLE) {
+        toggleCommentsVisibility(true);
+      }
       commentsObserver({ [addedComment.id]: true });
     }
   }

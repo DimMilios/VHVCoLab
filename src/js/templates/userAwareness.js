@@ -10,6 +10,7 @@ import { yProvider } from '../yjs-setup.js';
 import { commentFormTemplate } from './commentForm.js';
 import { getAceEditor } from '../vhv-scripts/setup.js';
 import { CommentService } from '../api/CommentService.js';
+import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap.js';
 
 let contextMenu = (clientId, elemRefId, targetX, targetY, handleClick) =>
   html`
@@ -103,6 +104,9 @@ export let userAwarenessTemplate = (clientId, elemRefId, name) => {
         commentFormTemplate(handleSingleComment([elemRefId], coords)),
         document.querySelector('#post-comment .modal-content')
       );
+      if (!COMMENTS_VISIBLE) {
+        toggleCommentsVisibility(true);
+      }
     } else if (/^history/.test(id)) {
       let editor = getAceEditor();
       let undoManager = editor.getSession().getUndoManager();
