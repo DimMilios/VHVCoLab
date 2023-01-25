@@ -113,7 +113,7 @@ async function bootstrap() {
 
   const { file, user } = getURLInfo();
   // Implicitly turn collaboration on if file and user data is present in the URL
-  if (typeof file != 'undefined' && typeof user != 'undefined') {
+  if (!featureToggler.featureIsEnabled('collaboration') && file && user) {
     await featureToggler.setFeature('collaboration', true);
     handleCollabSetup();
     disableOption('collaboration', options);

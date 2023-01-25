@@ -65,6 +65,7 @@ export function displayNotation(page, force, restoreid) {
 
   setOptions(options);
   // console.log('Calling vrvWorker.renderData with args:', {options, OPTIONS: OPTIONS, editorValue:editor.getValue(), data, page, force, vrvWorker: vrvWorker})
+  $('html').css('cursor', 'wait');
   vrvWorker
     .renderData(options, data, page, force)
     .then(function (svg) {
@@ -206,19 +207,38 @@ if (!editor) {
   throw new Error('Ace Editor is undefined');
 }
 
+function updateColumnLayout(input, output, hideTextEditor = true) {
+  if (hideTextEditor) {
+    input.classList.remove('col-4');
+    input.classList.add('col-0');
+
+    output.classList.remove('col-8');
+    output.classList.add('col-12');
+  } else {
+    input.classList.remove('col-0');
+    input.classList.add('col-4');
+
+    output.classList.remove('col-12');
+    output.classList.add('col-8');
+  }
+}
+
 export function toggleTextVisibility(suppressZoom) {
   let input = document.querySelector('#input');
+  const output = document.querySelector('.output-with-comments');
   if (global_interface.InputVisible) {
     if (global_interface.LastInputWidth == 0) {
       global_interface.LastInputWidth = 400;
     }
 
+    updateColumnLayout(input, output, true);
     splitter.setPositionX(global_interface.LastInputWidth);
   } else {
     global_interface.LastInputWidth = parseInt(input.style.width);
     splitter.setPositionX(0);
-  }
 
+    updateColumnLayout(input, output, false);
+  }
   global_interface.InputVisible = !global_interface.InputVisible;
 
   // if (!suppressZoom) {
@@ -226,6 +246,7 @@ export function toggleTextVisibility(suppressZoom) {
   //   // applyZoom();
   // }
   editor.resize();
+  displayNotation();
   // matchToolbarVisibilityIconToState();
 }
 
