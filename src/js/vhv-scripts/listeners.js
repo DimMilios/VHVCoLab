@@ -82,6 +82,7 @@ import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
 import { yProvider } from '../yjs-setup.js';
+import { featureIsEnabled } from '../bootstrap.js';
 
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
@@ -128,9 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   setEditorMode('humdrum');
 
-  loadFileFromURLParam().then((f) =>
-    console.log(`Editor initialized with: ${f}`)
-  );
   // The block of code below loads the edits to the Ace editor from the AUTOSAVE local buffer,
   // but it breaks Ace Editor
 
@@ -153,6 +151,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   getAceEditor()._dispatchEvent('ready');
   setupDropArea();
+
+
 
   displayNotation();
 
@@ -221,6 +221,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   observeSvgContent();
 });
+
+if (!featureIsEnabled('collaboration')) {
+  document.addEventListener('load', () => {
+    // Load kern file from URL only if editor content is empty
+    const contentLength = Number(getAceEditor()?.getSession()?.getLength());
+    if (!Number.isNaN(contentLength) && contentLength < 10) {
+      loadFileFromURLParam().then((f) =>
+        console.log(`Editor initialized with: ${f}`)
+      );
+    }
+  });
+}
 
 function extractEditorPosition(element) {
   var id = element.id;

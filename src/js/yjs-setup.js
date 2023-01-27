@@ -10,6 +10,7 @@ import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
 import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo } from './api/util.js';
+import { loadFileFromURLParam } from './vhv-scripts/file-operations.js';
 
 const names = [
   'Michael',
@@ -109,6 +110,17 @@ export async function setupCollaboration() {
           yUndoManager,
         }
       );
+
+    });
+
+    yProvider.on('synced', (event) => {
+      console.log('Yjs content was synced with the WebSocket server');
+      const contentLength = Number(getAceEditor()?.getSession()?.getLength());
+      if (!Number.isNaN(contentLength) && contentLength < 10) {
+        loadFileFromURLParam().then((f) =>
+          console.log(`Editor content was nearly empty. Fetched and initialized editor from repository with: ${f}`)
+        );
+      }
     });
 
     yProvider.awareness.on('change', updateHandler);
