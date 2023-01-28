@@ -354,6 +354,10 @@ div#index {
   padding-left: 0 !important;
 } */
 
+.dropdown-menu li {
+  cursor: pointer;
+}
+
 /* FEATURE TOGGLE FOR DEBUGGING */
 #feature-toggle {
   box-sizing: border-box;
