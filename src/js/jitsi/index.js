@@ -1,5 +1,6 @@
 import { yProvider } from '../yjs-setup';
 import { featureIsEnabled } from '../bootstrap.js';
+import { getURLParams } from '../api/util';
 
 const JITSI_DOMAIN = '147.95.32.219:8443';
 // const JITSI_DOMAIN = 'meet.jit.si';
