@@ -1,5 +1,6 @@
 import { yProvider } from '../yjs-setup';
 import { featureIsEnabled } from '../bootstrap.js';
+import { getURLParams } from '../api/util';
 
 const JITSI_DOMAIN = '147.95.32.219:8443';
 // const JITSI_DOMAIN = 'meet.jit.si';
@@ -31,8 +32,8 @@ class JitsiAPI {
 
   setup() {
     let startJitsi = document.getElementById('start-jitsi-meet-btn');
-    let meetRoomForm = document.getElementById('meet-room-form');
-
+    let meetRoomForm = document.getElementById('meet-room-form'); 
+    
     startJitsi.addEventListener('click', (event) => {});
     meetRoomForm.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -48,9 +49,10 @@ class JitsiAPI {
       this.initAPI();
     });
 
-    $('#jitsi-meeting-container').resizable({
-      resizeWidth: false,
-    });
+    this.jitsiContainer.style.resize="height";
+    this.jitsiContainer.style.minHeight = '100px'; 
+
+    $('#meet-room')[0].value = getURLParams().course ?? 'test-room';
   }
 
   initAPI() {

@@ -13,6 +13,7 @@
 //
 
 import {
+  editorMode,
   FILEINFO,
   global_cursor,
   global_editorOptions,
@@ -1088,34 +1089,40 @@ export function verovioCallback(data) {
 getAceEditor()
   .getSession()
   .on('change', function () {
-    let kernFile = getAceEditor().getSession().getValue();
-    console.log('alx');
+    let editor = getAceEditor();
+    let kernFile = editor.getSession().getValue();
     //extracting tempo
     if (!kernFile) {
       console.log("Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted");
       return;
     }
-
+    let tempoInput = document.getElementById('tempo-input');
     let tempo = kernFile
-      .match(/\*MM\d+/g)?.[0]
-      .match(/\d+/)[0];
+      .match(/\*MM(\d+)/)?.[1];
     
     if (!tempo) {
-      console.log('Tempo has not been encoded in kern file')
+      window.TEMPO = 200;
+      let exIntLine = kernFile.
+        match(/^\*\*.*\n/m)[0];
+      let tempoLine = exIntLine.
+        replaceAll(/\*\*[^\t]*/g , `*MM${window.TEMPO}`);
+      let tempo_incKern = kernFile.
+        replace(exIntLine, exIntLine + tempoLine + '\n');
+
+      editor.setValue(tempo_incKern);
+      tempoInput.placeholder = window.TEMPO;
     } else {
       window.TEMPO = parseInt(tempo);
-      document.getElementById('tempo-input').placeholder = window.TEMPO;
+      tempoInput.placeholder = window.TEMPO;
     }     
     
     //extracting time signature
     let timeSignature = kernFile
-      .match(/\*M\d\/\d/g)?.[0]
-      .match(/\d/)[0];
+      .match(/\*M(\d)\/\d/)?.[1]
 
     if (!timeSignature) {
       console.log('Time signature has not been encoded in kern file')
     } else   window.BEATSPERMEASURE = parseInt(timeSignature);
-          
   });
 
 document.getElementById('change-tempo').addEventListener('click', () => {

@@ -369,3 +369,8 @@ window.F10Key = 'F10'; // 121     "F10"
 window.F11Key = 'F11'; // 122     "F11"
 window.F12Key = 'F12'; // 123     "F12"
 // etc. to F32Key
+
+//score alignment global variables
+window.TEMPO = 200;
+window.BEATSPERMEASURE;
+window.MEASURENO;
