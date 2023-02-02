@@ -33,7 +33,9 @@ class JitsiAPI {
     let startJitsi = document.getElementById('start-jitsi-meet-btn');
     let meetRoomForm = document.getElementById('meet-room-form');
 
-    startJitsi.addEventListener('click', (event) => {});
+    startJitsi.addEventListener('click', (event) => {
+	    //event.preventDefault();
+    });
     meetRoomForm.addEventListener('submit', (event) => {
       event.preventDefault();
       let formData = new FormData(event.target);
@@ -56,6 +58,8 @@ class JitsiAPI {
   initAPI() {
     if (!this.api) {
       this.api = new JitsiMeetExternalAPI(JITSI_DOMAIN, this.options);
+      let startJitsi = document.getElementById('start-jitsi-meet-btn');
+      startJitsi.style.color='red';
 
       if (featureIsEnabled('collaboration')) {
         // Retrieve the name the user entered on Jitsi and assign that name on the Yjs session
@@ -78,12 +82,11 @@ class JitsiAPI {
       }
 
       this.api.addEventListener('readyToClose', () => {
-        console.log(
-          'Jitsi call has ended. Jitsi iframe will be hidden and the API will be destroyed.'
-        );
-
+        console.log( 'Jitsi call has ended. Jitsi iframe will be hidden and the API will be destroyed.');
         this.destroy();
         this.hide();
+      	let startJitsi = document.getElementById('start-jitsi-meet-btn');
+      	startJitsi.style.color='green';
       });
     }
   }
