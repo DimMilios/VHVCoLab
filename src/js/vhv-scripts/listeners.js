@@ -1133,6 +1133,7 @@ document.getElementById('change-tempo').addEventListener('click', () => {
     .replaceAll(/MM\d+/g, `MM${newTempo}`)
     .replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
 
+
   getAceEditor().getSession().setValue(newKern, 0);
 });
 
