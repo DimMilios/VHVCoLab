@@ -1109,6 +1109,8 @@ getAceEditor()
       let tempo_incKern = kernFile.
         replace(exIntLine, exIntLine + tempoLine + '\n');
 
+        
+
       editor.setValue(tempo_incKern);
       tempoInput.placeholder = window.TEMPO;
     } else {
