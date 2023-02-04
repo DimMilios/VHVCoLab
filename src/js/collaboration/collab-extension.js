@@ -324,6 +324,7 @@ export function addListenersToOutput(outputTarget) {
           'multiSelect',
           multiSelectedNotes
         );
+        yProvider?.awareness?.setLocalStateField('singleSelect', null);
       }
 
       shouldMultiSelect = false;

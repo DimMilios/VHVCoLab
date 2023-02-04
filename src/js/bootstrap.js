@@ -17,7 +17,9 @@ const FeatureConfig = {
   soundEditor: false,
 };
 
-if (import.meta.env.DEV) {
+const isDevMode = import.meta.env.DEV;
+
+if (isDevMode) {
   document.getElementById('feature-toggle').style.display = 'block';
 }
 
@@ -100,20 +102,42 @@ export function featureIsEnabled(featureName) {
   return featureToggler.featureIsEnabled(featureName);
 }
 
+function getCollabStatus() {
+  const { course, collab } = getURLInfo();
+
+  // `course` URL search parameter
+  if (typeof course == 'string' && course.length > 0 && collab !== 'false') {
+    return {
+      enable: true,
+      reason: `course search parameter specified with value: ${course}`,
+    };
+  }
+
+  // `collab` URL search parameter
+  if (typeof collab != 'undefined') {
+    return {
+      enable: collab === 'true',
+      reason: `collab search parameter specified with value: ${collab}`,
+    };
+  }
+
+  // Fallback to features.json file config
+  return {
+    enable: featureToggler.featureIsEnabled('collaboration'),
+    reason:
+      'Relevant search parameters not specified. Falling back to "features.json" config file',
+  };
+}
+
 async function bootstrap() {
   if (featureToggler.featureIsEnabled('score')) {
     handleScore();
     disableOption('score', options);
   }
 
-  if (featureToggler.featureIsEnabled('collaboration')) {
-    handleCollabSetup();
-    disableOption('collaboration', options);
-  }
-
-  const { file, user } = getURLInfo();
-  // Implicitly turn collaboration on if file and user data is present in the URL
-  if (!featureToggler.featureIsEnabled('collaboration') && file && user) {
+  const collabStatus = getCollabStatus();
+  console.log(collabStatus.reason);
+  if (collabStatus.enable) {
     await featureToggler.setFeature('collaboration', true);
     handleCollabSetup();
     disableOption('collaboration', options);
@@ -129,13 +153,28 @@ async function bootstrap() {
 }
 
 function disableOption(featureName, options) {
-  console.log(`Disabling ${featureName}`);
-  let optToDisable = [...options].find((o) => o.name === featureName);
-  if (!optToDisable) {
-    console.error('Option to disable was not found.');
-    return;
+  if (isDevMode) {
+    console.log(`Disabling ${featureName} option`);
+    let optToDisable = [...options].find((o) => o.name === featureName);
+    if (!optToDisable) {
+      console.error('Option to disable was not found.');
+      return;
+    }
+    optToDisable.disabled = true;
   }
-  optToDisable.disabled = true;
+}
+
+function enableOption(featureName, options) {
+  if (isDevMode) {
+    console.log(`Enabling ${featureName} option`);
+    let optToEnable = [...options].find((o) => o.name === featureName);
+    if (!optToEnable) {
+      console.error('Option to enable was not found.');
+      return;
+    }
+    optToEnable.disabled = false;
+    optToEnable.checked = false;
+  }
 }
 
 function showCommentsInNav() {
@@ -152,12 +191,14 @@ function handleScore() {
 }
 
 function handleCollabSetup() {
+  console.log('Setting up collaboration feature');
   setupCollaboration();
   addListenersToOutput();
   showCommentsInNav();
 }
 
 function handleCollabTearDown() {
+  console.warn('Tearing down collaboration feature');
   // TODO: disconnect from Yjs provider
   // TODO: destroy Yjs document
 }
@@ -202,7 +243,9 @@ function initForm(config) {
         name: o.name,
         checked: o.checked,
       }));
-      console.log(asFeatures);
+      if (isDevMode) {
+        console.log(asFeatures);
+      }
 
       asFeatures.forEach(async (feat) => {
         let res = await featureToggler.setFeature(feat.name, feat.checked);
@@ -222,7 +265,7 @@ function initForm(config) {
               handleCollabSetup();
               disableOption('collaboration', options);
             } else {
-              handleCollabTearDown();
+              // handleCollabTearDown();
             }
             break;
           case 'videoConference':
@@ -261,10 +304,13 @@ function initForm(config) {
     }
   };
 }
-window.addEventListener(
-  'load',
-  initForm(useConfigFile ? CONFIG : FeatureConfig)
-);
+
+if (isDevMode) {
+  window.addEventListener(
+    'load',
+    initForm(useConfigFile ? CONFIG : FeatureConfig)
+  );
+}
 
 window.bts = bootstrap;
 window.FeatureConfig = FeatureConfig;

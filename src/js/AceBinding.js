@@ -74,9 +74,9 @@ export default class AceBinding {
             // console.log('>>>Yjs: removing at', start, end)
           }
         }
-        this.ace.session.$undoManager.markIgnored(rev);
-        this._cursorObserver();
+        // this._cursorObserver();
       });
+      this.ace.session.$undoManager.markIgnored(rev);
     };
     type.observe(this._typeObserver);
 
@@ -97,24 +97,15 @@ export default class AceBinding {
           } else {
             if (eventType.action === 'insert') {
               const start = aceDocument.positionToIndex(eventType.start, 0);
-              // console.log('>>>Ace: inserting at index: ', start);
-              if (window.navigator.userAgent.indexOf('Win') != -1) {
-                eventType.lines.forEach((line) => line.replaceAll('\r', ''));
-              }
-              // console.log('>>>Ace: Event lines:', eventType.lines)
               type.insert(start, eventType.lines.join('\n'));
             } else if (eventType.action === 'remove') {
               const start = aceDocument.positionToIndex(eventType.start, 0);
-              // console.log('>>>Ace: Deleting at index: ', start);
-              if (window.navigator.userAgent.indexOf('Win') != -1) {
-                eventType.lines.forEach((line) => line.replaceAll('\r', ''));
-              }
               const length = eventType.lines.join('\n').length;
               type.delete(start, length);
             }
           }
           type.applyDelta(eventType);
-          this._cursorObserver();
+          // this._cursorObserver();
         }, this);
       });
     };
@@ -172,22 +163,23 @@ export default class AceBinding {
     };
 
     // update cursors
-    this.ace
-      .getSession()
-      .selection.on('changeCursor', () => this._cursorObserver());
+    // this.ace
+    //   .getSession()
+    //   .selection.on('changeCursor', () => this._cursorObserver());
   }
   _onStackItemPopped(event) {
-    // console.log('stackItem added to UndoManager', event);
+    // console.log('stackItem removed from UndoManager', event);
     // event.stackItem.meta.set('replacedValue',);
   }
   _onStackItemAdded(event) {
-    // console.log('stackItem removed from UndoManager', event);
+    // console.log('stackItem added to UndoManager', event);
   }
 
   destroy() {
     console.log('destroyed');
     this.type.unobserve(this._typeObserver);
     this.ace.off('change', this._aceObserver);
+    // this.ace.session.off('changeCursor', this._cursorObserver);
     if (this.yUndoManager) {
       this.yUndoManager.off('stack-item-added', this._onStackItemAdded);
       this.yUndoManager.off('stack-item-popped', this._onStackItemPopped);

@@ -6,7 +6,6 @@ import {
 } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
 import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo } from './api/util.js';
@@ -49,11 +48,16 @@ export let yProvider;
 /** @type {Y.Doc} */
 export let ydoc;
 
+/** @type {Y.UndoManager} */
+export let yUndoManager;
+
+let binding;
+
 export async function setupCollaboration() {
   if (typeof ydoc == 'undefined') {
     ydoc = new Y.Doc();
 
-    const type = ydoc.getText('ace');
+    // const type = ydoc.getText('ace');
 
     const commentsList = ydoc.getArray('comments');
     commentsList.observe((event) => {
@@ -95,42 +99,48 @@ export async function setupCollaboration() {
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
-      const editor = getAceEditor();
-      if (!editor) {
-        throw new Error('Ace Editor is undefined');
+      if (event.status === 'connected') {
+        document.title = document.title.replace('🔴', '🟢');
+      } else if (event.status === 'disconnected') {
+        document.title = document.title.replace('🟢', '🔴');
       }
+    });
 
-      const yUndoManager = new Y.UndoManager(ydoc.getText('ace'));
+    const editor = getAceEditor();
+    if (!editor) {
+      throw new Error('Ace Editor is undefined');
+    }
 
-      const binding = new AceBinding(
-        ydoc.getText('ace'),
-        editor,
-        yProvider.awareness,
-        {
-          yUndoManager,
-        }
-      );
+    yUndoManager = new Y.UndoManager(ydoc.getText('ace'), {
+      captureTimeout: 100,
+    });
 
+    binding = new AceBinding(ydoc.getText('ace'), editor, yProvider.awareness, {
+      yUndoManager,
     });
 
     yProvider.on('synced', (event) => {
       console.log('Yjs content was synced with the WebSocket server');
       const contentLength = Number(getAceEditor()?.getSession()?.getLength());
       if (!Number.isNaN(contentLength) && contentLength < 10) {
-        loadFileFromURLParam().then((f) =>
-          console.log(`Editor content was nearly empty. Fetched and initialized editor from repository with: ${f}`)
-        );
+        loadFileFromURLParam().then((f) => {
+          console.log(
+            `Editor content was nearly empty. Fetched and initialized editor from repository with: ${f}`
+          );
+        });
       }
     });
 
-    yProvider.awareness.on('change', updateHandler);
-    // yProvider.awareness.on('update', updateHandler);
+    // yProvider.awareness.on('change', updateHandler);
+    yProvider.awareness.on('update', updateHandler);
 
     setUserAwarenessData(user);
   }
 
   window.example = { yProvider, ydoc, type: ydoc.getText('ace') };
   window.awareness = yProvider.awareness;
+  window.yUndoManager = yUndoManager;
+  window.binding = binding;
 
   // setupSSE(DOC_ID);
 }
@@ -145,7 +155,6 @@ export function getCommentsList() {
 }
 
 function setUserAwarenessData(user) {
-  console.log({ user });
   let appUser = Cookies.get('user');
   if (appUser) {
     let user = JSON.parse(appUser);

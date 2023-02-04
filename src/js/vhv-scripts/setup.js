@@ -25,7 +25,7 @@ export function setupAceEditor(idtag) {
 
   let configPath = `${import.meta.env.BASE_URL}scripts/ace`;
 
-  ace.config.set("basePath", configPath);
+  ace.config.set('basePath', configPath);
   ace.config.set('modePath', configPath);
   ace.config.set('workerPath', configPath);
   ace.config.set('themePath', configPath);
@@ -48,6 +48,7 @@ export function configureAceEditor() {
 
   editor.getSession().setTabSize(global_editorOptions.TABSIZE);
   editor.getSession().setUseSoftTabs(false);
+  editor.getSession().setNewLineMode('unix');
 
   // Don't show line at 80 columns:
   editor.setShowPrintMargin(false);
@@ -194,99 +195,99 @@ export function setupSplitter() {
 //
 
 export function GetCgiParameters() {
-	var url = window.location.search.substring(1);
-	var output = {};
-	var settings = url.split('&');
-	for (var i=0; i<settings.length; i++) {
-		var pair = settings[i].split('=');
-		pair[0] = decodeURIComponent(pair[0]);
-		pair[1] = decodeURIComponent(pair[1]);
-		if (typeof output[pair[0]] === 'undefined') {
-			output[pair[0]] = pair[1];
-		} else if (typeof output[pair[0]] === 'string') {
-			var arr = [ output[pair[0]], pair[1] ];
-			output[pair[0]] = arr;
-		} else {
-			output[pair[0]].push(pair[1]);
-		}
-	}
-	if (!output.mm || output.mm.match(/^\s*$/)) {
-		if (output.m) {
-			output.mm = output.m;
-		}
-	}
+  var url = window.location.search.substring(1);
+  var output = {};
+  var settings = url.split('&');
+  for (var i = 0; i < settings.length; i++) {
+    var pair = settings[i].split('=');
+    pair[0] = decodeURIComponent(pair[0]);
+    pair[1] = decodeURIComponent(pair[1]);
+    if (typeof output[pair[0]] === 'undefined') {
+      output[pair[0]] = pair[1];
+    } else if (typeof output[pair[0]] === 'string') {
+      var arr = [output[pair[0]], pair[1]];
+      output[pair[0]] = arr;
+    } else {
+      output[pair[0]].push(pair[1]);
+    }
+  }
+  if (!output.mm || output.mm.match(/^\s*$/)) {
+    if (output.m) {
+      output.mm = output.m;
+    }
+  }
 
-	// process aliases:
+  // process aliases:
 
-	if (!output.k && output.keys) {
-		output.k = output.keys;
-	} else if (output.k && !output.keys) {
-		output.keys = output.k;
-	}
+  if (!output.k && output.keys) {
+    output.k = output.keys;
+  } else if (output.k && !output.keys) {
+    output.keys = output.k;
+  }
 
-	if (!output.t && output.text) {
-		output.t = output.text;
-	} else if (output.t && !output.text) {
-		output.text = output.t;
-	}
+  if (!output.t && output.text) {
+    output.t = output.text;
+  } else if (output.t && !output.text) {
+    output.text = output.t;
+  }
 
-	if (!output.f && output.file) {
-		output.f = output.file;
-	} else if (output.f && !output.file) {
-		output.file = output.f;
-	}
+  if (!output.f && output.file) {
+    output.f = output.file;
+  } else if (output.f && !output.file) {
+    output.file = output.f;
+  }
 
-	if (!output.F && output.filter) {
-		output.F = output.filter;
-	} else if (output.F && !output.filter) {
-		output.filter = output.F;
-	}
+  if (!output.F && output.filter) {
+    output.F = output.filter;
+  } else if (output.F && !output.filter) {
+    output.filter = output.F;
+  }
 
-	if (!output.p && output.pitch) {
-		output.p = output.pitch;
-	} else if (output.p && !output.pitch) {
-		output.pitch = output.p;
-	}
+  if (!output.p && output.pitch) {
+    output.p = output.pitch;
+  } else if (output.p && !output.pitch) {
+    output.pitch = output.p;
+  }
 
-	if (!output.r && output.rhythm) {
-		output.r = output.rhythm;
-	} else if (output.r && !output.rhythm) {
-		output.rhythm = output.r;
-	}
+  if (!output.r && output.rhythm) {
+    output.r = output.rhythm;
+  } else if (output.r && !output.rhythm) {
+    output.rhythm = output.r;
+  }
 
-	if (!output.i && output.interval) {
-		output.i = output.interval;
-	} else if (output.i && !output.interval) {
-		output.interval = output.i;
-	}
+  if (!output.i && output.interval) {
+    output.i = output.interval;
+  } else if (output.i && !output.interval) {
+    output.interval = output.i;
+  }
 
-	// store the URL anchor as a output parameter
-	let hash = location.hash.replace(/^#/, "");
-	let matches;
+  // store the URL anchor as a output parameter
+  let hash = location.hash.replace(/^#/, '');
+  let matches;
 
-	// store #m parameter
-	matches = hash.match(/m(?![a-z])(\d+.*)/);
-	if (matches) {
-		output.hash_m = matches[1];
-	}
+  // store #m parameter
+  matches = hash.match(/m(?![a-z])(\d+.*)/);
+  if (matches) {
+    output.hash_m = matches[1];
+  }
 
-	// store #mm parameter
-	matches = hash.match(/mm(?![a-z])(\d+.*)/);
-	if (matches) {
-		output.hash_mm = matches[1];
-	}
+  // store #mm parameter
+  matches = hash.match(/mm(?![a-z])(\d+.*)/);
+  if (matches) {
+    output.hash_mm = matches[1];
+  }
 
-	// store #mh parameter
-	matches = hash.match(/mh(?![a-z])(\d+.*)/);
-	if (matches) {
-		output.hash_mh = matches[1];
-	}
+  // store #mh parameter
+  matches = hash.match(/mh(?![a-z])(\d+.*)/);
+  if (matches) {
+    output.hash_mh = matches[1];
+  }
 
-	// store #mmh parameter
-	matches = hash.match(/mmh(?![a-z])(\d+.*)/);
-	if (matches) {
-		output.hash_mmh = matches[1];
-	}
+  // store #mmh parameter
+  matches = hash.match(/mmh(?![a-z])(\d+.*)/);
+  if (matches) {
+    output.hash_mmh = matches[1];
+  }
 
-	return output;
+  return output;
 }

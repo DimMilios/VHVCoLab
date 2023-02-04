@@ -82,7 +82,7 @@ import {
 import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
-import { yProvider } from '../yjs-setup.js';
+import { yProvider, yUndoManager } from '../yjs-setup.js';
 import { featureIsEnabled } from '../bootstrap.js';
 
 // window.HIDEMENU = false;
@@ -152,8 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   getAceEditor()._dispatchEvent('ready');
   setupDropArea();
-
-
 
   displayNotation();
 
@@ -314,7 +312,15 @@ function processNotationKeyCommand(event) {
     if (!editor) {
       throw new Error('Ace Editor is undefined');
     }
-    editor.undo();
+
+    if (featureIsEnabled('collaboration')) {
+      // Collaborative undo
+      yUndoManager?.undo();
+    } else {
+      // Non-collaborative undo
+      editor.undo();
+    }
+
     return;
   }
 
@@ -1093,38 +1099,36 @@ getAceEditor()
     let kernFile = editor.getSession().getValue();
     //extracting tempo
     if (!kernFile) {
-      console.log("Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted");
+      console.log(
+        "Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted"
+      );
       return;
     }
     let tempoInput = document.getElementById('tempo-input');
-    let tempo = kernFile
-      .match(/\*MM(\d+)/)?.[1];
-    
+    let tempo = kernFile.match(/\*MM(\d+)/)?.[1];
+
     if (!tempo) {
       window.TEMPO = 200;
-      let exIntLine = kernFile.
-        match(/^\*\*.*\n/m)[0];
-      let tempoLine = exIntLine.
-        replaceAll(/\*\*[^\t]*/g , `*MM${window.TEMPO}`);
-      let tempo_incKern = kernFile.
-        replace(exIntLine, exIntLine + tempoLine + '\n');
-
-        
+      let exIntLine = kernFile.match(/^\*\*.*\n/m)[0];
+      let tempoLine = exIntLine.replaceAll(/\*\*[^\t]*/g, `*MM${window.TEMPO}`);
+      let tempo_incKern = kernFile.replace(
+        exIntLine,
+        exIntLine + tempoLine + '\n'
+      );
 
       editor.setValue(tempo_incKern);
       tempoInput.placeholder = window.TEMPO;
     } else {
       window.TEMPO = parseInt(tempo);
       tempoInput.placeholder = window.TEMPO;
-    }     
-    
+    }
+
     //extracting time signature
-    let timeSignature = kernFile
-      .match(/\*M(\d)\/\d/)?.[1]
+    let timeSignature = kernFile.match(/\*M(\d)\/\d/)?.[1];
 
     if (!timeSignature) {
-      console.log('Time signature has not been encoded in kern file')
-    } else   window.BEATSPERMEASURE = parseInt(timeSignature);
+      console.log('Time signature has not been encoded in kern file');
+    } else window.BEATSPERMEASURE = parseInt(timeSignature);
   });
 
 document.getElementById('change-tempo').addEventListener('click', () => {
@@ -1134,7 +1138,6 @@ document.getElementById('change-tempo').addEventListener('click', () => {
   let newKern = kernFile
     .replaceAll(/MM\d+/g, `MM${newTempo}`)
     .replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
-
 
   getAceEditor().getSession().setValue(newKern, 0);
 });
