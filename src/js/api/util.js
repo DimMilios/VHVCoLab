@@ -5,19 +5,19 @@ export function getURLParams(keys = []) {
 }
 
 export function getURLInfo() {
-  let { file: fileUrl, user } = getURLParams();
-  let file = fileUrl;
+  let urlParams = getURLParams();
+  let file = urlParams?.file;
 
   // Extract the file name for the file passed from URL
   // The file is stored in MusiCoLab's file repository
-  if (fileUrl && isValidHttpUrl(fileUrl)) {
+  if (file && isValidHttpUrl(file)) {
     file = Object.fromEntries(new URL(fileUrl).searchParams)?.f;
   }
-  console.log({ file, user });
+  // console.log({ ...urlParams, file });
 
   return {
+    ...urlParams,
     file,
-    user,
   };
 }
 
@@ -56,7 +56,6 @@ const isSecure = (protocol = 'https') => {
 // export let baseUrl = 'http://localhost:8080/';
 // export let wsBaseUrl = 'ws://localhost:8080';
 
-
 let productionOrigin = 'musicolab.hmu.gr:8080';
 // let productionOrigin = '147.95.40.74:8080';
 export let baseUrl = import.meta.env.DEV
@@ -66,7 +65,6 @@ export let baseUrl = import.meta.env.DEV
 export let wsBaseUrl = import.meta.env.DEV
   ? 'ws://localhost:8080'
   : `${isSecure() ? 'wss' : 'ws'}://${productionOrigin}`;
-
 
 // const herokuWs = 'wss://vhv-ws-server.herokuapp.com';
 // const flyIoWs = 'wss://vhv-api.fly.dev';

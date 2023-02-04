@@ -1,5 +1,7 @@
 import { getAceEditor } from './setup.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { featureIsEnabled } from '../bootstrap.js';
+import { yUndoManager } from '../yjs-setup.js';
 
 const ACCEPTED_FORMATS = '.xml,.musicxml,.mei,.krn';
 
@@ -88,10 +90,15 @@ export async function loadFileFromURLParam() {
     file = await loadFileFromRepository(params.get('file'));
   }
 
-  // if (file) {
-  getAceEditor()?.session.setValue(file);
-  return params.get('file');
-  // }
+  if (file) {
+    console.log('Loaded', file);
+    getAceEditor()?.session.setValue(file);
+    if (featureIsEnabled('collaboration')) {
+      // Reset collaborative undo stack for this initialization from file
+      yUndoManager.clear();
+    }
+    return params.get('file');
+  }
 }
 
 export async function promptForFile() {

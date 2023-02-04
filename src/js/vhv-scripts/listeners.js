@@ -81,7 +81,7 @@ import {
 import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
-import { yProvider } from '../yjs-setup.js';
+import { yProvider, yUndoManager } from '../yjs-setup.js';
 import { featureIsEnabled } from '../bootstrap.js';
 
 // window.HIDEMENU = false;
@@ -151,8 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   getAceEditor()._dispatchEvent('ready');
   setupDropArea();
-
-
 
   displayNotation();
 
@@ -313,7 +311,15 @@ function processNotationKeyCommand(event) {
     if (!editor) {
       throw new Error('Ace Editor is undefined');
     }
-    editor.undo();
+
+    if (featureIsEnabled('collaboration')) {
+      // Collaborative undo
+      yUndoManager?.undo();
+    } else {
+      // Non-collaborative undo
+      editor.undo();
+    }
+
     return;
   }
 
@@ -1089,33 +1095,29 @@ getAceEditor()
   .getSession()
   .on('change', function () {
     let kernFile = getAceEditor().getSession().getValue();
-    console.log('alx');
     //extracting tempo
     if (!kernFile) {
-      console.log("Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted");
+      console.log(
+        "Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted"
+      );
       return;
     }
 
-    let tempo = kernFile
-      .match(/\*MM\d+/g)?.[0]
-      .match(/\d+/)[0];
-    
+    let tempo = kernFile.match(/\*MM\d+/g)?.[0].match(/\d+/)[0];
+
     if (!tempo) {
-      console.log('Tempo has not been encoded in kern file')
+      console.log('Tempo has not been encoded in kern file');
     } else {
       window.TEMPO = parseInt(tempo);
       document.getElementById('tempo-input').placeholder = window.TEMPO;
-    }     
-    
+    }
+
     //extracting time signature
-    let timeSignature = kernFile
-      .match(/\*M\d\/\d/g)?.[0]
-      .match(/\d/)[0];
+    let timeSignature = kernFile.match(/\*M\d\/\d/g)?.[0].match(/\d/)[0];
 
     if (!timeSignature) {
-      console.log('Time signature has not been encoded in kern file')
-    } else   window.BEATSPERMEASURE = parseInt(timeSignature);
-          
+      console.log('Time signature has not been encoded in kern file');
+    } else window.BEATSPERMEASURE = parseInt(timeSignature);
   });
 
 document.getElementById('change-tempo').addEventListener('click', () => {
