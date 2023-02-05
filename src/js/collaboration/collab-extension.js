@@ -16,6 +16,8 @@ import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
 import { CommentService } from '../api/CommentService.js';
+import { isEditing } from '../vhv-scripts/chords.js';
+import { showChordEditor } from '../vhv-scripts/chords.js';
 
 let DEBUG = false;
 function log(text) {
@@ -93,6 +95,29 @@ function parseQuarterTime(quarterTime) {
   return quarterTime.includes('_') ? qTimeValue / divisor : qTimeValue;
 }
 
+function collabChordEdit(awStates) {
+  let me = yProvider.awareness.clientID;
+  let editingClient;
+  debugger;
+  //checking if any chordEdit status has been set true
+  let chordEditStates = awStates
+    .filter( ([client, state]) => state.chordEdit?.isDisplayed == true );  
+
+  if (!chordEditStates.length) return;
+  else editingClient = chordEditStates?.[0]?.[0];
+  
+  //showing chord editor on other clients' UIs
+  if ( editingClient !== me ) {
+    if (isEditing) {
+      document.
+        getElementById('back-btn').
+        dispatchEvent(new Event('click'));
+      }
+    showChordEditor();
+    }
+}  
+
+
 function defaultClients() {
   return {
     added: [],
@@ -112,6 +137,7 @@ export function updateHandler(clients = defaultClients()) {
     collabContainer.id = 'collab';
     document.querySelector('#output')?.prepend(collabContainer);
   }
+
 
   // console.log('Updating awareness');
 
@@ -160,7 +186,8 @@ export function updateHandler(clients = defaultClients()) {
     html`${collabLayer(multiSelects, singleSelects, userAwareness)}`,
     collabContainer
   );
-
+  
+  collabChordEdit(awStates);
   // Display connection status (online/offline) for the users sharing the current document
   // renderUserAwareness();
 }

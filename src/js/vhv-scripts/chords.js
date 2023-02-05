@@ -1,7 +1,8 @@
 import { getAceEditor } from "./setup";
+import { yProvider } from "../yjs-setup";
 
 //defining variables and functions to be used
-let chordEditor = document.getElementById('chord-editor');
+export let chordEditor = document.getElementById('chord-editor');
 let chordBtns = document.getElementById('show-edit-suggest-buttons');
 let suggestBtn = document.getElementById('suggest-btn');
 let sendBtn = document.getElementById('send-chord-btn');
@@ -22,7 +23,14 @@ export let chordSelected = {
   variation:null
 }
 
-let GJTurl = new URL('https://155.207.188.7:6001/sending_kern');
+export let isEditing;
+
+let GJTurl = new URL('https://maxim.mus.auth.gr:6001/sending_kern');
+
+export function showChordEditor () {
+  chordBtns.style.visibility = 'hidden';
+  chordEditor.style.display = 'block';
+}
 
 function setURLParams (chordEditInfo) {
   for ( let [key, value] of Object.entries(chordEditInfo) ) {
@@ -31,60 +39,52 @@ function setURLParams (chordEditInfo) {
   }
 }
 
-//colorizing selections and decolorizing previous selections
-for (let td of document.querySelectorAll('.Chords td')) {
-  if (td.closest('#chord-editor')) {
-    td.addEventListener('click', function (event) {
-      event.target.style.color = 'tomato';
+chordEditor.addEventListener('click', (event) => {
+  const [selection, component] = [event.target, event.target.className];
 
-      let otherCells = document.getElementsByClassName(event.target.className);
-      for (let other of otherCells) {
-        if (other !== event.target) other.style.color = 'white';
-      }
+  if (isCollab) {
 
-      switch (event.target.className) {
-        case 'root':
-          chord.new.root = event.target.innerText;
-          chordSelected.root = event.target;
-          break;
-        case 'accidental':
-          chord.new.accidental = event.target.innerText;
-          chordSelected.accidental = event.target;
-          break;
-        case 'variation':
-          chord.new.variation = event.target.innerText;
-          chordSelected.variation = event.target;
-          break;
-      }
+  } else {
+    let notSelected = document.
+      querySelectorAll(`#${chordEditor.id} > .${component}`) //deb. ontws parent?
 
-      if (chord.new.root && chord.new.variation) {
-        sendBtn.style.display = 'block';
-      }
-    });
+    //decolorizing not selected and colorizing selection
+    for (let cell of notSelected)       cell.style.color = 'white';
+    selection.style.color = 'tomato';
+
+    //filling chord.new and chordSelected objects
+    chord.new[component] = selection.innerText;
+    chordSelected[component] = selection;
+
+    //displaying edit and click btn
+    if (chord.new.root && chord.new.variation) {
+      sendBtn.style.display = 'block';
+    }
   }
-}
+})
 
-//back click
-document.getElementById('close-chord-btn').addEventListener('click', function (event) {
-
+//back click. tsek
+document.getElementById('back-btn').
+  addEventListener('click', function (event) {
   //decolorizing selected chord tables' cells
-  if (chordSelected.root) chordSelected.root.style.color = 'white';
-  if (chordSelected.accidental)
-    chordSelected.accidental.style.color = 'white';
-  if (chordSelected.variation) chordSelected.variation.style.color = 'white';
-  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
-  
+  Object.keys(chordSelected).
+    forEach( (component) => {
+      chordSelected[component].style.color = 'white';
+      chordSelected[component] = null;
+    };
   //resetting chord object's keys and getting it ready for next use
-  Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
+  Object.keys(chord.new).
+    forEach((component) => chord.new[component] = null);
 
   chordEditor.style.display = 'none';
-  
+  isEditing = false;
 });
 
 //edit click
 chordBtns.addEventListener('click', (event) => {
-  chordEditor.style.display = 'block';
-  chordBtns.style.visibility = 'hidden';
+  showChordEditor();
+  isEditing = 'true'
+  yProvider.awareness.setLocalStateField('chordEdit', { isDisplayed: true }); 
 });
 
 //suggest click
@@ -98,7 +98,7 @@ suggestBtn.addEventListener('click', (event) => {
   let kernfile = edtr.session.getValue();
 
   //setting the suggestion option true
-  chord.reharmonize = 'true';
+  chord.reharmonize = true;
 
   //constructing json to be sent
   let jsonRequest = {
@@ -130,7 +130,7 @@ suggestBtn.addEventListener('click', (event) => {
   };
 
   //resetting chord object's keys and getting it ready for next use
-  chord.reharmonize = 'false';
+  chord.reharmonize = false;
   sendBtn.style.display = 'none';
 })
 
