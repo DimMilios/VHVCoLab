@@ -1,6 +1,8 @@
 import * as Y from 'yjs';
 import { getCommentsList, ydoc } from '../yjs-setup';
 import { Comment } from '../collaboration/Comment';
+import { baseUrl } from './util';
+import { ActionPayload, sendAction } from './actions';
 
 export class CommentService {
   /** @type {Y.Array<string>} */
@@ -32,6 +34,17 @@ export class CommentService {
     console.info(`Adding comment to list`, commentToAdd);
 
     this._commentsList.push([commentToAdd.toJSON()]);
+
+    sendAction(
+      new ActionPayload({
+        type: 'add_comment',
+        content: commentToAdd.toAction(),
+      })
+    )
+      .then(() =>
+        console.log(`Action for comment with id: ${commentToAdd.id} was sent.`)
+      )
+      .catch(() => console.error(`Failed to send comment action`));
     return commentToAdd;
   }
 
@@ -58,6 +71,7 @@ export class CommentService {
 
   deleteAll() {
     console.info(`Deleting all comments`);
+    const deleted = this.fromJSON().map((comment) => comment.id);
     this._commentsList.delete(0, this._commentsList.length);
   }
 

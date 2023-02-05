@@ -144,13 +144,13 @@ export function processNotationKey(key, element) {
     } else if (key === 'J') {
       endNewBeam(element, line, field);
     } else if (key === 'transpose-up-step') {
-      transposeNote(id, line, field, subfield, +1);
+      return transposeNote(id, line, field, subfield, +1);
     } else if (key === 'transpose-down-step') {
-      transposeNote(id, line, field, subfield, -1);
+      return transposeNote(id, line, field, subfield, -1);
     } else if (key === 'transpose-up-octave') {
-      transposeNote(id, line, field, subfield, +7);
+      return transposeNote(id, line, field, subfield, +7);
     } else if (key === 'transpose-down-octave') {
-      transposeNote(id, line, field, subfield, -7);
+      return transposeNote(id, line, field, subfield, -7);
     } else if (key === "'") {
       toggleStaccato(id, line, field);
     } else if (key === '^') {
@@ -1638,7 +1638,7 @@ function deleteStemMarker(id, line, field) {
 //
 
 export function transposeNote(id, line, field, subfield, amount) {
-  // console.log('TRANSPOSE Note', { line, column: field, subfield, noteId: id });
+  console.log('TRANSPOSE Note', { line, column: field, subfield, noteId: id });
   var token = getEditorContents(line, field);
 
   amount = parseInt(amount);
@@ -1682,11 +1682,19 @@ export function transposeNote(id, line, field, subfield, amount) {
     newtoken = subtokens.join(' ');
   }
 
-  // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
+  console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
   if (newtoken !== token) {
     global_cursor.RestoreCursorNote = id;
     global_cursor.HIGHLIGHTQUERY = id;
     setEditorContents(line, field, newtoken, id);
+
+    return {
+      noteElementId: id,
+      row: line - 1,
+      col: field - 1,
+      oldValue: token,
+      newValue: newtoken,
+    };
 
     // let shouldUpdate = window.confirm('Include value?');
     // if (shouldUpdate) {
@@ -1699,16 +1707,16 @@ export function transposeNote(id, line, field, subfield, amount) {
 // id, line, field, subfield, amount
 export function transposeNotes(noteDescriptions) {
   const transposedNotes = [];
-  for (let { id, line, field, subfield, amount }  of noteDescriptions) {
+  for (let { id, line, field, subfield, amount } of noteDescriptions) {
     let token = getEditorContents(line, field);
     amount = parseInt(amount);
-  
+
     let subtokens;
     if (subfield) {
       subtokens = token.split(' ');
       token = subtokens[subfield - 1];
     }
-  
+
     if (token === '.' || token[0] == '!' || token[0] == '*') {
       continue;
     }
@@ -1716,7 +1724,7 @@ export function transposeNotes(noteDescriptions) {
       // rest, which does not need/have a natural
       continue;
     }
-  
+
     let newtoken;
     let matches;
     if ((matches = token.match(/([^a-gA-G]*)([a-gA-G]+)([^a-gA-G]*)/))) {
@@ -1724,15 +1732,21 @@ export function transposeNotes(noteDescriptions) {
       newtoken += transposeDiatonic(matches[2], amount);
       newtoken += matches[3];
     }
-  
+
     if (subfield) {
       subtokens[subfield - 1] = newtoken;
       newtoken = subtokens.join(' ');
     }
-  
+
     // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
     if (newtoken !== token) {
-      transposedNotes.push({ line, field, token: newtoken, id });
+      transposedNotes.push({
+        line,
+        field,
+        oldToken: token,
+        token: newtoken,
+        id,
+      });
     }
   }
   return transposedNotes;
@@ -3033,7 +3047,9 @@ function setEditorContents2(line, field, token, id) {
 
 export function setEditorContentsMany(notes) {
   global_interface.FreezeRendering = true;
-  notes.forEach(note => setEditorContents2(note.line, note.field, note.token, note.id));
+  notes.forEach((note) =>
+    setEditorContents2(note.line, note.field, note.token, note.id)
+  );
   global_interface.FreezeRendering = false;
   displayNotation();
 }
@@ -3076,7 +3092,7 @@ export function getEditorContents(line, field) {
 
   return token;
 }
-
+window.getEditorContents = getEditorContents;
 //////////////////////////////
 //
 // toggleMarkedNote --

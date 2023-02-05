@@ -30,4 +30,14 @@ export class Comment {
       author: this.author,
     });
   }
+
+  toAction() {
+    return JSON.stringify({
+      id: this.id,
+      parentCommentId: this.parentCommentId,
+      content: this.content,
+      createdAt: this.createdAt,
+      multiSelectElements: this.multiSelectElements,
+    });
+  }
 }

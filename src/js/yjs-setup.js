@@ -38,8 +38,6 @@ let name = oneOf(names);
 let userData = {
   name,
   color: oneOf(colors),
-  email: name + '@test.com',
-  id: 1,
 };
 
 /** @type{WebsocketProvider} */
@@ -85,7 +83,7 @@ export async function setupCollaboration() {
   }
 
   if (typeof yProvider == 'undefined') {
-    const { file, user } = getURLInfo();
+    const { file, user, course } = getURLInfo();
 
     let room = file ?? 'test-room';
     // let roomData;
@@ -134,7 +132,7 @@ export async function setupCollaboration() {
     // yProvider.awareness.on('change', updateHandler);
     yProvider.awareness.on('update', updateHandler);
 
-    setUserAwarenessData(user);
+    setUserAwarenessData(user, course);
   }
 
   window.example = { yProvider, ydoc, type: ydoc.getText('ace') };
@@ -155,7 +153,7 @@ export function getCommentsList() {
   return ydoc.getArray('comments');
 }
 
-function setUserAwarenessData(user) {
+function setUserAwarenessData(user, course) {
   let appUser = Cookies.get('user');
   if (appUser) {
     let user = JSON.parse(appUser);
@@ -172,6 +170,7 @@ function setUserAwarenessData(user) {
 
   if (user) {
     userData.name = user;
+    userData.course = course;
   }
   yProvider.awareness.setLocalStateField('user', userData);
 }

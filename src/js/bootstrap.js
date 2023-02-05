@@ -8,13 +8,14 @@ import {
 import { keysEqual } from './util';
 import { setupCollaboration } from './yjs-setup.js';
 
-/** @typedef {'score' | 'collaboration' | 'videoConference' | 'soundEditor'} FeatureKey */
+/** @typedef {'score' | 'collaboration' | 'videoConference' | 'soundEditor' | 'actions'} FeatureKey */
 /** @param {{FeatureKey: boolean }} FeatureConfig*/
 const FeatureConfig = {
   score: false,
   collaboration: false,
   videoConference: false,
   soundEditor: false,
+  actions: false,
 };
 
 const isDevMode = import.meta.env.DEV;

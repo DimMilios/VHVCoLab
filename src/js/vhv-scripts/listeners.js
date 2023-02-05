@@ -113,13 +113,9 @@ import { loadEditorFontSizes } from './verovio-options.js';
 import { setupDropArea } from '../drop.js';
 import { inSvgImage } from './utility-svg.js';
 
-import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
-import { loadKernScoresFile } from './loading.js';
-import { Base64 } from './utility.js';
-import { time } from 'lib0';
-import { setupSynchronizeHandlers } from '../sync.js';
+import { ActionPayload, sendAction } from '../api/actions.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -292,6 +288,29 @@ function transposeMultiSelect(state, amount) {
 // keydown event listener -- Notation editor listener.
 //
 
+/**
+ *
+ * @param {} changePitchAction
+ * @param {'single' | 'multi'} changePitchType
+ */
+function sendChangePitchAction(changePitchAction, changePitchType = 'single') {
+  console.log({ transposedNote: changePitchAction });
+
+  if (changePitchAction) {
+    sendAction(
+      new ActionPayload({
+        type: 'change_pitch',
+        content: JSON.stringify({
+          type: changePitchType,
+          change: changePitchAction,
+        }),
+      })
+    )
+      .then(() => console.log(`change_pitch action was sent.`))
+      .catch(() => console.error(`Failed to send change_pitch action`));
+  }
+}
+
 function processNotationKeyCommand(event) {
   if (!event.preventDefault) {
     event.preventDefault = function () {};
@@ -330,16 +349,20 @@ function processNotationKeyCommand(event) {
     // FIX: If the global CursorNote is defined, and we then try to transpose a multi-selected area
     // the CursorNote is re-assigned to one of the multi-selected note elements
     if (event.code === UpKey && event.shiftKey) {
-      transposeMultiSelect(localState, 1);
+      const action = transposeMultiSelect(localState, 1);
+      sendChangePitchAction(action, 'multi');
       return;
     } else if (event.code === DownKey && event.shiftKey) {
-      transposeMultiSelect(localState, -1);
+      const action = transposeMultiSelect(localState, -1);
+      sendChangePitchAction(action, 'multi');
       return;
     } else if (event.code === UpKey && event.ctrlKey) {
-      transposeMultiSelect(localState, 7);
+      const action = transposeMultiSelect(localState, 7);
+      sendChangePitchAction(action, 'multi');
       return;
     } else if (event.code === DownKey && event.ctrlKey) {
-      transposeMultiSelect(localState, -7);
+      const action = transposeMultiSelect(localState, -7);
+      sendChangePitchAction(action, 'multi');
       return;
     }
   }
@@ -545,13 +568,21 @@ function processNotationKeyCommand(event) {
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
           console.log('Shift + Up, Current note: ', global_cursor.CursorNote);
-          processNotationKey('transpose-up-step', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-up-step',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
         event.preventDefault();
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
-          processNotationKey('transpose-up-octave', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-up-octave',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else {
         event.preventDefault();
@@ -565,13 +596,21 @@ function processNotationKeyCommand(event) {
         event.preventDefault();
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
-          processNotationKey('transpose-down-step', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-down-step',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
         event.preventDefault();
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
-          processNotationKey('transpose-down-octave', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-down-octave',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else {
         event.preventDefault();

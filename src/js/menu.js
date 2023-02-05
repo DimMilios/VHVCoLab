@@ -40,8 +40,7 @@ import {
   promptForFile,
   saveContentAsMIDI,
 } from './vhv-scripts/file-operations.js';
-import { featureIsEnabled, toggleCommentsVisibility } from './bootstrap.js';
-import { CommentService } from './api/CommentService.js';
+import { toggleCommentsVisibility } from './bootstrap.js';
 
 class MenuInterface {
   constructor() {
@@ -157,17 +156,10 @@ class MenuInterface {
       options.filter = filter;
     }
     loadKernScoresFile(options);
-
-    if (featureIsEnabled('collaboration')) {
-      new CommentService().deleteAll();
-    }
   }
 
   loadFromRepository() {
     promptForFile();
-    if (featureIsEnabled('collaboration')) {
-      new CommentService().deleteAll();
-    }
   }
 
   exportToPrivateFiles() {
@@ -179,9 +171,6 @@ class MenuInterface {
     event.code = OKey;
     event.ctrlKey = true;
     processInterfaceKeyCommand(event);
-    if (featureIsEnabled('collaboration')) {
-      new CommentService().deleteAll();
-    }
   }
 
   saveAsMIDI() {
