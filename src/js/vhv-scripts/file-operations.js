@@ -2,6 +2,7 @@ import { getAceEditor } from './setup.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 import { featureIsEnabled } from '../bootstrap.js';
 import { yUndoManager } from '../yjs-setup.js';
+import { getURLInfo } from '../api/util.js';
 
 const ACCEPTED_FORMATS = '.xml,.musicxml,.mei,.krn';
 
@@ -71,6 +72,28 @@ export async function saveContentAsMIDI() {
   document.body.removeChild(element);
 }
 
+export function exportKernToPrivateFiles() {
+  const content = getAceEditor()?.session.getValue();
+  if (content === undefined || content.length === 0) {
+    console.error('Failed to export empty Kern content');
+    return;
+  }
+
+  const { file: filename } = getURLInfo();
+
+  let fd = new FormData();
+  let file = new Blob([content], { type: 'text/plain' });
+  fd.append('file', file, filename);
+  var ajax = new XMLHttpRequest();
+  ajax.open(
+    'post',
+    // 'https://musicolab.hmu.gr/apprepository/synchroniseScoreAudioResp.php',
+    'export-krn-url',
+    true
+  );
+  ajax.send(fd);
+}
+
 export async function loadFileFromURLParam() {
   let params = new URLSearchParams(window.location.search);
   if (!params.has('file')) {
@@ -91,7 +114,6 @@ export async function loadFileFromURLParam() {
   }
 
   if (file) {
-    console.log('Loaded', file);
     getAceEditor()?.session.setValue(file);
     if (featureIsEnabled('collaboration')) {
       // Reset collaborative undo stack for this initialization from file

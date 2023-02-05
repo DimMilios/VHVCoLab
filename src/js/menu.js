@@ -36,6 +36,7 @@ import {
   global_verovioOptions,
 } from './vhv-scripts/global-variables.js';
 import {
+  exportKernToPrivateFiles,
   promptForFile,
   saveContentAsMIDI,
 } from './vhv-scripts/file-operations.js';
@@ -167,6 +168,10 @@ class MenuInterface {
     if (featureIsEnabled('collaboration')) {
       new CommentService().deleteAll();
     }
+  }
+
+  exportToPrivateFiles() {
+    exportKernToPrivateFiles();
   }
 
   openScoreFileFromDisk() {

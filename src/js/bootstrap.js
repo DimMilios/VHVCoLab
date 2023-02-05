@@ -141,6 +141,8 @@ async function bootstrap() {
     await featureToggler.setFeature('collaboration', true);
     handleCollabSetup();
     disableOption('collaboration', options);
+  } else {
+    await featureToggler.setFeature('collaboration', false);
   }
 
   if (featureToggler.featureIsEnabled('videoConference')) {

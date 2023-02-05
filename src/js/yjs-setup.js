@@ -141,6 +141,7 @@ export async function setupCollaboration() {
   window.awareness = yProvider.awareness;
   window.yUndoManager = yUndoManager;
   window.binding = binding;
+  window.Y = Y;
 
   // setupSSE(DOC_ID);
 }
