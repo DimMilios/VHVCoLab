@@ -49,6 +49,9 @@ export let ydoc;
 /** @type {Y.UndoManager} */
 export let yUndoManager;
 
+/** @type {Y.PermanentUserData} */
+export let permanentUserData;
+
 let binding;
 
 export async function setupCollaboration() {
@@ -93,6 +96,8 @@ export async function setupCollaboration() {
     room = roomData?.room ?? room;
   }
   */
+    permanentUserData = new Y.PermanentUserData(ydoc);
+    permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc); // local
     yProvider.on('status', (event) => {
@@ -140,6 +145,7 @@ export async function setupCollaboration() {
   window.yUndoManager = yUndoManager;
   window.binding = binding;
   window.Y = Y;
+  window.permanentUserData = permanentUserData;
 
   // setupSSE(DOC_ID);
 }

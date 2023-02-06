@@ -111,56 +111,56 @@ export default class AceBinding {
     };
     this.ace.session.on('change', this._aceObserver);
 
-    this._cursorObserver = () => {
-      let user = this.awareness.getLocalState().user;
-      let curSel = this.ace.getSession().selection;
-      let cursor = {
-        id: doc.clientID,
-        name: user.name,
-        sel: true,
-        color: user.color,
-      };
+    // this._cursorObserver = () => {
+    //   let user = this.awareness.getLocalState().user;
+    //   let curSel = this.ace.getSession().selection;
+    //   let cursor = {
+    //     id: doc.clientID,
+    //     name: user.name,
+    //     sel: true,
+    //     color: user.color,
+    //   };
 
-      let indexAnchor = this.ace
-        .getSession()
-        .doc.positionToIndex(curSel.getSelectionAnchor());
-      let indexHead = this.ace
-        .getSession()
-        .doc.positionToIndex(curSel.getSelectionLead());
-      cursor.anchor = indexAnchor;
-      cursor.head = indexHead;
+    //   let indexAnchor = this.ace
+    //     .getSession()
+    //     .doc.positionToIndex(curSel.getSelectionAnchor());
+    //   let indexHead = this.ace
+    //     .getSession()
+    //     .doc.positionToIndex(curSel.getSelectionLead());
+    //   cursor.anchor = indexAnchor;
+    //   cursor.head = indexHead;
 
-      // flip if selected right to left
-      if (indexAnchor > indexHead) {
-        cursor.anchor = indexHead;
-        cursor.head = indexAnchor;
-      }
+    //   // flip if selected right to left
+    //   if (indexAnchor > indexHead) {
+    //     cursor.anchor = indexHead;
+    //     cursor.head = indexAnchor;
+    //   }
 
-      cursor.pos = cursor.head;
+    //   cursor.pos = cursor.head;
 
-      if (cursor.anchor === cursor.head) {
-        cursor.sel = false;
-      }
+    //   if (cursor.anchor === cursor.head) {
+    //     cursor.sel = false;
+    //   }
 
-      const aw = /** @type {any} */ (this.awareness.getLocalState());
-      if (curSel === null) {
-        if (this.awareness.getLocalState() !== null) {
-          this.awareness.setLocalStateField(
-            'cursor',
-            /** @type {any} */ (null)
-          );
-        }
-      } else {
-        if (
-          !aw ||
-          !aw.cursor ||
-          cursor.anchor !== aw.cursor.anchor ||
-          cursor.head !== aw.cursor.head
-        ) {
-          this.awareness.setLocalStateField('cursor', cursor);
-        }
-      }
-    };
+    //   const aw = /** @type {any} */ (this.awareness.getLocalState());
+    //   if (curSel === null) {
+    //     if (this.awareness.getLocalState() !== null) {
+    //       this.awareness.setLocalStateField(
+    //         'cursor',
+    //         /** @type {any} */ (null)
+    //       );
+    //     }
+    //   } else {
+    //     if (
+    //       !aw ||
+    //       !aw.cursor ||
+    //       cursor.anchor !== aw.cursor.anchor ||
+    //       cursor.head !== aw.cursor.head
+    //     ) {
+    //       this.awareness.setLocalStateField('cursor', cursor);
+    //     }
+    //   }
+    // };
 
     // update cursors
     // this.ace

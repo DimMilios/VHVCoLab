@@ -1,4 +1,4 @@
-import { yProvider } from '../yjs-setup.js';
+import { permanentUserData, yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
 import { collabTemplate, multiSelectCoords, uiCoords } from './templates.js';
@@ -163,6 +163,17 @@ export function updateHandler(clients = defaultClients()) {
 
   // Display connection status (online/offline) for the users sharing the current document
   // renderUserAwareness();
+  // const clientID = permanentUserData.doc.clientID;
+  // const allUsers = permanentUserData.clients;
+
+  // const onlineClientIDs = Array.from(yProvider.awareness.getStates().keys());
+  // const connectedUsers = Array.from(allUsers.entries()).filter(
+  //   ([cid, _username]) => onlineClientIDs.includes(cid)
+  // );
+  // const disconnectedUsers = Array.from(allUsers.entries()).filter(
+  //   ([cid, _username]) => !onlineClientIDs.includes(cid)
+  // );
+  // console.log({ clientID, allUsers, connectedUsers, disconnectedUsers });
 }
 
 // export function renderUserAwareness() {
