@@ -11,7 +11,7 @@ export function getURLInfo() {
   // Extract the file name for the file passed from URL
   // The file is stored in MusiCoLab's file repository
   if (file && isValidHttpUrl(file)) {
-    file = Object.fromEntries(new URL(fileUrl).searchParams)?.f;
+    file = Object.fromEntries(new URL(file).searchParams)?.f;
   }
   // console.log({ ...urlParams, file });
 
@@ -56,7 +56,7 @@ const isSecure = (protocol = 'https') => {
 // export let baseUrl = 'http://localhost:8080/';
 // export let wsBaseUrl = 'ws://localhost:8080';
 
-let productionOrigin = 'musicolab.hmu.gr:8080';
+let productionOrigin = 'musicolab.hmu.gr:8080/';
 // let productionOrigin = '147.95.40.74:8080';
 export let baseUrl = import.meta.env.DEV
   ? 'http://localhost:8080/'

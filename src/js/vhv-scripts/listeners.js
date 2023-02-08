@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 if (!featureIsEnabled('collaboration')) {
-  document.addEventListener('load', () => {
+  window.addEventListener('load', () => {
     // Load kern file from URL only if editor content is empty
     const contentLength = Number(getAceEditor()?.getSession()?.getLength());
     if (!Number.isNaN(contentLength) && contentLength < 10) {
