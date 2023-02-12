@@ -214,6 +214,20 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('keydown', processNotationKeyCommand, true);
   window.addEventListener('keydown', processInterfaceKeyCommand);
 
+  const hoverAreaToggleBtn = document.getElementById(
+    'collab-menu-toolbar-toggle'
+  );
+  const collabMenuToolbar = document.getElementById(
+    'collaborative-menu-toolbar'
+  );
+
+  hoverAreaToggleBtn.addEventListener('click', () => {
+    const open = hoverAreaToggleBtn.classList.toggle(
+      'collab-menu-toolbar-toggle-open'
+    );
+    collabMenuToolbar.classList.toggle('shown', open);
+  });
+
   observeSvgContent();
 });
 

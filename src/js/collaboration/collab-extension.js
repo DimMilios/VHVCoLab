@@ -16,6 +16,7 @@ import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
 import { CommentService } from '../api/CommentService.js';
+import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 
 let DEBUG = false;
 function log(text) {
@@ -174,6 +175,8 @@ export function updateHandler(clients = defaultClients()) {
   //   ([cid, _username]) => !onlineClientIDs.includes(cid)
   // );
   // console.log({ clientID, allUsers, connectedUsers, disconnectedUsers });
+
+  renderCollabMenuSidebar();
 }
 
 // export function renderUserAwareness() {
