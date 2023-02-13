@@ -468,3 +468,23 @@
   transform: translateX(0.5rem) scale(1.03);
 }
 /* Collaborative menu */
+
+/* Action History */
+#action-history-container {
+  /* opacity: 0; */
+  /* transform: translateX(100%); */
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  min-width: 25vw;
+
+  background-color: white;
+
+  z-index: calc(var(--collab-layer-zIndex) * 2);
+
+  transition: opacity 300ms ease-out;
+  transition: transform 300ms ease-out;
+}
+/* Action History */
