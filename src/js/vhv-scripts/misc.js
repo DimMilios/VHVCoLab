@@ -599,6 +599,7 @@ function displayFileTitle(contents) {
     pretitle += composer + ', ';
   }
   tarea.innerHTML = pretitle;
+  sessionStorage.setItem('score-metadata', JSON.stringify({ title, composer }));
 
   displayWorkNavigation('#work-navigator');
 }

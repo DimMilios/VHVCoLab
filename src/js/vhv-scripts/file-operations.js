@@ -79,16 +79,33 @@ export function exportKernToPrivateFiles() {
     return;
   }
 
-  const { file: filename } = getURLInfo();
+  const { file: filenameFromURL } = getURLInfo();
+  let scoreName = filenameFromURL;
+  const scoreMeta = sessionStorage.getItem('score-metadata');
+  if (scoreMeta === null) {
+    console.warn('Could not find metadata for this score. Using URL filename as title.');
+  } else {
+    let title = JSON.parse(scoreMeta).title;
+    scoreName = title.split(' ').join('_') + '.krn';
+  }
 
   let fd = new FormData();
-  let file = new Blob([content], { type: 'text/plain' });
-  fd.append('file', file, filename);
-  var ajax = new XMLHttpRequest();
+  let file = new File([content], scoreName, { type: 'text/plain' });
+  fd.append('f', file);
+  fd.append('action', 'upload');
+  fd.append('ufolder', 'private');
+
+  const ajax = new XMLHttpRequest();
+  ajax.addEventListener('load', () => {
+    alert('File has been exported to your private files!');
+  });
+  ajax.addEventListener('error', () => {
+    alert('Failed to export score to your private files');
+  });
+
   ajax.open(
     'post',
-    // 'https://musicolab.hmu.gr/apprepository/synchroniseScoreAudioResp.php',
-    'export-krn-url',
+    'https://musicolab.hmu.gr/apprepository/uploadFileResAjax.php',
     true
   );
   ajax.send(fd);
