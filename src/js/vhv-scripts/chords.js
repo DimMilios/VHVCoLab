@@ -2,10 +2,12 @@ import { getAceEditor } from "./setup";
 import { yProvider } from "../yjs-setup";
 
 //defining variables and functions to be used
-export let chordEditor = document.getElementById('chord-editor');
-let chordBtns = document.getElementById('show-edit-suggest-buttons');
-let suggestBtn = document.getElementById('suggest-btn');
-let sendBtn = document.getElementById('send-chord-btn');
+const chordEditor = document.getElementById('chord-editor');
+const chordBtns = document.getElementById('show-edit-suggest-buttons');
+const editBtn = document.getElementById('edit-btn');
+const suggestBtn = document.getElementById('suggest-btn');
+const doneBtn = document.getElementById('done-btn');
+const backBtn = document.getElementById('back-btn')
 
 export let chord = {
   current: null,
@@ -17,19 +19,18 @@ export let chord = {
   reharmonize: false
 };
 export let chordLocation = {};
-export let chordSelected = {
-  root:null,
-  accidental:null,
-  variation:null
-}
 
 export let isEditing;
 
-let GJTurl = new URL('https://maxim.mus.auth.gr:6001/sending_kern');
+const GJTurl = new URL('https://maxim.mus.auth.gr:6001/sending_kern');
 
 export function showChordEditor () {
   chordBtns.style.visibility = 'hidden';
-  chordEditor.style.display = 'block';
+  $('#show-chord-editor').modal('show');
+  
+  doneBtn.style.display = 'none';
+  
+  if (!isEditing)   backBtn.style.display = 'none';
 }
 
 function setURLParams (chordEditInfo) {
@@ -39,57 +40,42 @@ function setURLParams (chordEditInfo) {
   }
 }
 
-chordEditor.addEventListener('click', (event) => {
-  const [selection, component] = [event.target, event.target.className];
+function cleanUpSelections () {
+  Object.values(chord.new).
+    forEach((value) => value = null);
 
-  if (isCollab) {
+  decolorizeSelections();
+}
 
+export function select (selection, component) {
+  selection.style.color = 'tomato';  
+  chord.new[component] = selection.innerText;
+
+  yProvider.awareness.
+    setLocalStateField('chordEdit', { 
+      isDisplayed: true,
+      selection: {
+        component,
+        text: selection.innerText
+    }})
+
+  if (chord.new.root && chord.new.variation) {
+    doneBtn.style.display = 'block';
+  }    
+}
+
+export function decolorizeSelections (selectionComponent) {
+  let selections;
+  if (selectionComponent) {
+    selections = document.querySelectorAll(`td.${selectionComponent}`);
   } else {
-    let notSelected = document.
-      querySelectorAll(`#${chordEditor.id} > .${component}`) //deb. ontws parent?
-
-    //decolorizing not selected and colorizing selection
-    for (let cell of notSelected)       cell.style.color = 'white';
-    selection.style.color = 'tomato';
-
-    //filling chord.new and chordSelected objects
-    chord.new[component] = selection.innerText;
-    chordSelected[component] = selection;
-
-    //displaying edit and click btn
-    if (chord.new.root && chord.new.variation) {
-      sendBtn.style.display = 'block';
-    }
+    selections = document.querySelectorAll(`#chord-editor td`);
   }
-})
 
-//back click. tsek
-document.getElementById('back-btn').
-  addEventListener('click', function (event) {
-  //decolorizing selected chord tables' cells
-  Object.keys(chordSelected).
-    forEach( (component) => {
-      chordSelected[component].style.color = 'white';
-      chordSelected[component] = null;
-    };
-  //resetting chord object's keys and getting it ready for next use
-  Object.keys(chord.new).
-    forEach((component) => chord.new[component] = null);
+  for (let one of selections)    one.style.color = 'white';
+}
 
-  chordEditor.style.display = 'none';
-  isEditing = false;
-});
-
-//edit click
-chordBtns.addEventListener('click', (event) => {
-  showChordEditor();
-  isEditing = 'true'
-  yProvider.awareness.setLocalStateField('chordEdit', { isDisplayed: true }); 
-});
-
-//suggest click
-suggestBtn.addEventListener('click', (event) => {
-
+function editChord () {
   //current kern retrieval
   let edtr = getAceEditor();
   if (!edtr) {
@@ -98,27 +84,23 @@ suggestBtn.addEventListener('click', (event) => {
   let kernfile = edtr.session.getValue();
 
   //setting the suggestion option true
-  chord.reharmonize = true;
+  if (this == suggestBtn)     chord.reharmonize = true;
 
-  //constructing json to be sent
-  let jsonRequest = {
+  const chordEditInfo = {
     kernfile,
     chordLocation,
     chord,
   };
-  console.log(jsonRequest);
-  //let jsonFile = JSON.stringify(jsonRequest);
-
+  console.log(chordEditInfo);
+ 
   //setting the url to be used in xhttp request
-  setURLParams(jsonRequest);
+  setURLParams(chordEditInfo);
   console.log(GJTurl);
 
   //initializing, configuring and sending the request
-  let xhttp = new XMLHttpRequest();
+  const xhttp = new XMLHttpRequest();
   xhttp.open("GET", GJTurl);
-  //xhttp.setRequestHeader('Content-Type', 'application/json');
   xhttp.responseType = 'json';
-  //xhttp.withCredentials = true;
   xhttp.send();
 
   //defining response function
@@ -128,61 +110,56 @@ suggestBtn.addEventListener('click', (event) => {
     console.log(jsonResponse);
     edtr.setValue(jsonResponse.new);
   };
+  
+  if (this == suggestBtn) {
+    chord.reharmonize = false;
+    chordBtns.style.display = 'none'; 
+  } else if (this == doneBtn) {
+    cleanUpSelections();
 
-  //resetting chord object's keys and getting it ready for next use
-  chord.reharmonize = false;
-  sendBtn.style.display = 'none';
+    yProvider.awareness.setLocalStateField('chordEdit', {
+      isDisplayed: false,
+      selection: null
+    });
+  } 
+} 
+
+chordEditor.addEventListener('click', (event) => {
+  if(event.target.tagName !== 'TD' || !isEditing)   return;
+
+  const [selection, component] = [event.target, event.target.className];
+  
+  decolorizeSelections(component);
+  select(selection, component);
+
 })
 
-//send click
-sendBtn.addEventListener('click', function (event) {
-
-  //kern retrieval
-  let edtr = getAceEditor();
-  if (!edtr) {
-    throw new Error('Ace Editor is undefined. Chord cannot be edited');
-  }
-  let kernfile = edtr.session.getValue();
-
-  //constructing json to be sent
-  let jsonRequest = {
-    kernfile,
-    chordLocation,
-    chord,
-  };
-  //let jsonFile = JSON.stringify(jsonRequest);
-  console.log(jsonRequest);
-
-  //setting the url to be used in xhttp request
-  setURLParams(jsonRequest);
-  console.log(GJTurl);
-
-  //initializing, configuring and sending the request
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", GJTurl);
-  //xhttp.setRequestHeader('Content-Type', 'application/json');
-  xhttp.responseType = 'json';
-  //xhttp.withCredentials = true;
-  xhttp.send();
-
-  //defining response function
-  xhttp.onload = function () {    
-    //retrieveing json sent from GJT server
-    let jsonResponse = xhttp.response;
-    console.log(jsonResponse);
-    edtr.setValue(jsonResponse.new);
-  };
+//back click
+backBtn.addEventListener('click', function (event) {
+  cleanUpSelections();
+    
+  if (event.isTrusted){
+    yProvider.awareness.setLocalStateField('chordEdit', {
+      isDisplayed: false,
+      selection: null
+     });
+  }  
   
-  //decolorizing selected chord tables' cells
-  chordSelected.root.style.color = 'white';
-  if (chordSelected.accidental) chordSelected.accidental.style.color = 'white';
-  chordSelected.variation.style.color = 'white';
-  Object.keys(chordSelected).forEach((i) => (chordSelected[i] = null));
-  
-  //resetting chord object's keys and getting it ready for next use
-  Object.keys(chord.new).forEach((i) => (chord.new[i] = null));
-
-  //chord editor and send btn get hidden
-  chordEditor.style.display = 'none';
-  sendBtn.style.display = 'none';  
+  isEditing = false;
 });
+
+//edit click
+editBtn.addEventListener('click', (event) => {
+  isEditing = true;
+  showChordEditor();
+  yProvider.awareness.setLocalStateField('chordEdit', {
+    isDisplayed: true,
+    selection: null
+   });
+});
+
+//suggest click
+suggestBtn.addEventListener('click', editChord)
+
+//done click
+doneBtn.addEventListener('click', editChord);

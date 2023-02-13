@@ -193,8 +193,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // let pgx = event.clientX + 10;
         // let pgy = event.clientY + 10;
         let harmonyBox = harmonyElem.getBoundingClientRect();
-        let pgx = harmonyBox.x + 25;
-        let pgy = harmonyBox.y + 25;
+        let pgx = harmonyBox.x + window.scrollX + 25;
+        let pgy = harmonyBox.y + window.scrollY + 25;
 
         let jitsiContainer = document.getElementById('jitsi-meeting-container');
         if (jitsiContainer) {
@@ -206,9 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chordBtns.style.top = `${pgy}px`;
         chordBtns.style.left = `${pgx}px`;
       }
-      //alx_
 
-      //alx:prosthiki chord argument sto dataIntoView
       dataIntoView(event);
     }
 
