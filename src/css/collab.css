@@ -471,20 +471,55 @@
 
 /* Action History */
 #action-history-container {
-  /* opacity: 0; */
-  /* transform: translateX(100%); */
+  opacity: 0;
+  transform: translateX(100%);
 
   position: fixed;
   top: 0;
   right: 0;
   height: 100%;
-  min-width: 25vw;
+  overflow-y: scroll;
 
   background-color: white;
 
   z-index: calc(var(--collab-layer-zIndex) * 2);
 
-  transition: opacity 300ms ease-out;
-  transition: transform 300ms ease-out;
+  transition: opacity 300ms ease-in-out;
+  transition: transform 300ms ease-in-out;
+}
+
+/* Hide body scrollbar while action history is open */
+body:has(#action-history-container.open) {
+  overflow-y: hidden !important;
+}
+
+#action-history-container.open {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+.action-history-btn:focus {
+  box-shadow: none !important;
+}
+
+.action-history-close {
+  background-color: transparent;
+  border: none;
+}
+
+.action-entry-header > h2 {
+  transform: translateY(0);
+  transition: transform 200ms ease-out;
+}
+
+.action-entry-header > h2:hover {
+  transform: translateY(-5%);
+}
+
+.user-color-index {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
 /* Action History */

@@ -1,3 +1,4 @@
+import { createRelativePositionFromJSON } from 'yjs';
 import { featureIsEnabled } from '../bootstrap';
 import { yProvider } from '../yjs-setup';
 import { baseUrl, getURLParams } from './util';
@@ -5,11 +6,37 @@ import { baseUrl, getURLParams } from './util';
 /** @typedef { 'change_pitch' | 'change_chord' | 'add_comment' | 'undo' | 'transpose' | 'connect' | 'disconnect' | 'export'} ActionType */
 export class ActionPayload {
   /**
-   * @param {{ type: ActionType, content: string }} payload
+   * @param {{ type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined }} payload
    */
-  constructor({ type, content }) {
+  constructor({ type, content, username, course, filename }) {
     this.type = type;
     this.content = content;
+    this.username = username;
+    this.course = course;
+    this.filename = filename;
+  }
+}
+
+export class ActionResponse {
+  /**
+   * @param {{ id: number, created_at: Date, type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined }} payload
+   */
+  constructor({ id, created_at, type, content, username, course, filename }) {
+    this.id = id;
+    this.createdAt = created_at;
+    this.type = type;
+    this.content = content;
+    this.username = username;
+    this.course = course;
+    this.filename = filename;
+  }
+
+  /**
+   *
+   * @param {string} action
+   */
+  static fromJSON(action) {
+    return new this(JSON.parse(action));
   }
 }
 
@@ -47,6 +74,9 @@ export async function sendAction(payload) {
 
   try {
     const { username, course, filename } = getQueryData();
+    payload.username = username;
+    payload.course = course;
+    payload.filename = filename;
 
     const res = await fetch(`${baseUrl}api/actions`, {
       method: 'POST',
@@ -54,7 +84,7 @@ export async function sendAction(payload) {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({ ...payload, username, course, filename }),
+      body: JSON.stringify(payload),
     });
     const json = await res.json();
     console.log(`Received:`, json);

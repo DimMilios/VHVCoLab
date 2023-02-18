@@ -28,6 +28,12 @@ export const collabMenuSideBar = () => {
     renderCollabMenuSidebar();
   };
 
+  const handleActionHistoryToggle = () => {
+    document
+      .getElementById('action-history-container')
+      ?.classList.toggle('open');
+  };
+
   return html`${userList()}
     <div class="collab-actions-buttons">
       <ul class="collab-menu-toolbar-list">
@@ -55,7 +61,10 @@ export const collabMenuSideBar = () => {
           </button>
         </li>
         <li class="collab-menu-toolbar-item d-flex justify-content-center">
-          <button class="btn btn-outline-light p-3 rounded-lg w-75 d-flex">
+          <button
+            class="btn btn-outline-light p-3 rounded-lg w-75 d-flex"
+            @click=${handleActionHistoryToggle}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

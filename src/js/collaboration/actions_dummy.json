@@ -1,0 +1,5511 @@
+{
+"actions": [
+	{
+		"id" : 1,
+		"created_at" : "2023-02-05 13:14:34",
+		"type" : "add_comment",
+		"content" : "{\"id\": \"99737454-83e3-47c9-b442-cc1b259fbb06\", \"content\": \"This is a demo comment\", \"createdAt\": \"2023-02-05T11:14:34.414Z\", \"parentCommentId\": null, \"multiSelectElements\": \"note-L13F1,note-L14F1,note-L16F1,note-L17F1\"}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 2,
+		"created_at" : "2023-02-05 13:14:36",
+		"type" : "add_comment",
+		"content" : "{\"id\": \"86c38478-9509-4507-984c-5ec0313281b5\", \"content\": \"qweqe\", \"createdAt\": \"2023-02-05T11:14:36.366Z\", \"parentCommentId\": \"99737454-83e3-47c9-b442-cc1b259fbb06\", \"multiSelectElements\": \"note-L13F1,note-L14F1,note-L16F1,note-L17F1\"}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 3,
+		"created_at" : "2023-02-05 13:20:27",
+		"type" : "change_pitch",
+		"content" : "{\"body\": {\"col\": 0, \"row\": 8, \"newValue\": \"2C\", \"oldValue\": \"2c\", \"noteElementId\": \"note-L9F1\"}, \"type\": \"single\"}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 4,
+		"created_at" : "2023-02-05 13:20:29",
+		"type" : "change_pitch",
+		"content" : "{\"body\": {\"col\": 0, \"row\": 8, \"newValue\": \"2CC\", \"oldValue\": \"2C\", \"noteElementId\": \"note-L9F1\"}, \"type\": \"single\"}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 5,
+		"created_at" : "2023-02-05 13:23:15",
+		"type" : "change_pitch",
+		"content" : "{\"body\": {\"col\": 0, \"row\": 13, \"newValue\": \"2ee\", \"oldValue\": \"2e\", \"noteElementId\": \"note-L14F1\"}, \"type\": \"single\"}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 6,
+		"created_at" : "2023-02-05 13:25:23",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L15F1\", \"line\": 15, \"field\": 1, \"token\": \"2gg\", \"oldToken\": \"2g\"}, {\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2aa\", \"oldToken\": \"2a\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2ccc\", \"oldToken\": \"2cc\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2ddd\", \"oldToken\": \"2dd\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2eee-\", \"oldToken\": \"2ee-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2eee\", \"oldToken\": \"2ee\"}]}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 7,
+		"created_at" : "2023-02-05 13:25:36",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 11, \"newValue\": \"2E-\", \"oldValue\": \"2e-\", \"noteElementId\": \"note-L12F1\"}}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 8,
+		"created_at" : "2023-02-05 13:34:10",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 17, \"newValue\": \"2ccc\", \"oldValue\": \"2cc\", \"noteElementId\": \"note-L18F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 9,
+		"created_at" : "2023-02-05 13:35:41",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L9F1\", \"line\": 9, \"field\": 1, \"token\": \"2cc\", \"oldToken\": \"2c\"}, {\"id\": \"note-L11F1\", \"line\": 11, \"field\": 1, \"token\": \"2dd\", \"oldToken\": \"2d\"}, {\"id\": \"note-L12F1\", \"line\": 12, \"field\": 1, \"token\": \"2ee-\", \"oldToken\": \"2e-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 10,
+		"created_at" : "2023-02-05 19:45:32",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F6\", \"line\": 20, \"field\": 6, \"token\": \"2cc\", \"oldToken\": \"2c\"}, {\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.cccL]\", \"oldToken\": \"8.ccL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16aanJk\", \"oldToken\": \"16anJk\"}, {\"id\": \"note-L20F2\", \"line\": 20, \"field\": 2, \"token\": \"4Rff\\\\\", \"oldToken\": \"4Rf\\\\\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rccc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L19F3\", \"line\": 19, \"field\": 3, \"token\": \"16Rfff\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L20F3\", \"line\": 20, \"field\": 3, \"token\": \"4Rfff\/\", \"oldToken\": \"4Rff\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rfff\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rfff\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"4g\", \"oldToken\": \"4G\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4e-\", \"oldToken\": \"4E-\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1ee-\", \"oldToken\": \"1e-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4bb-\", \"oldToken\": \"[4b-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.bb-L]\", \"oldToken\": \"8.b-L]\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1c 1G\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1g\", \"oldToken\": \"1G\"}, {\"id\": \"note-L25F2\", \"line\": 25, \"field\": 2, \"token\": \"4Rff\\\\\", \"oldToken\": \"4Rf\\\\\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4Rccc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4Rfff\/\", \"oldToken\": \"4Rff\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.Rfff\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L25F1\", \"line\": 25, \"field\": 1, \"token\": \"4c\", \"oldToken\": \"4C\"}, {\"id\": \"note-L26F1\", \"line\": 26, \"field\": 1, \"token\": \"4e-\", \"oldToken\": \"4E-\"}]}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 11,
+		"created_at" : "2023-02-05 19:45:32",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F6\", \"line\": 20, \"field\": 6, \"token\": \"2ccc\", \"oldToken\": \"2cc\"}, {\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.ccccL]\", \"oldToken\": \"8.cccL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16aaanJk\", \"oldToken\": \"16aanJk\"}, {\"id\": \"note-L20F2\", \"line\": 20, \"field\": 2, \"token\": \"4Rfff\\\\\", \"oldToken\": \"4Rff\\\\\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rcccc\/\", \"oldToken\": \"4Rccc\/\"}, {\"id\": \"note-L19F3\", \"line\": 19, \"field\": 3, \"token\": \"16Rffff\/Jk\", \"oldToken\": \"16Rfff\/Jk\"}, {\"id\": \"note-L20F3\", \"line\": 20, \"field\": 3, \"token\": \"4Rffff\/\", \"oldToken\": \"4Rfff\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rffff\/L\", \"oldToken\": \"8.Rfff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rffff\/Jk\", \"oldToken\": \"16Rfff\/Jk\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"4gg\", \"oldToken\": \"4g\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4ee-\", \"oldToken\": \"4e-\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1eee-\", \"oldToken\": \"1ee-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4bbb-\", \"oldToken\": \"[4bb-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.bbb-L]\", \"oldToken\": \"8.bb-L]\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1c 1g\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1gg\", \"oldToken\": \"1g\"}, {\"id\": \"note-L25F2\", \"line\": 25, \"field\": 2, \"token\": \"4Rfff\\\\\", \"oldToken\": \"4Rff\\\\\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4Rcccc\/\", \"oldToken\": \"4Rccc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4Rffff\/\", \"oldToken\": \"4Rfff\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.Rffff\/L\", \"oldToken\": \"8.Rfff\/L\"}, {\"id\": \"note-L25F1\", \"line\": 25, \"field\": 1, \"token\": \"4cc\", \"oldToken\": \"4c\"}, {\"id\": \"note-L26F1\", \"line\": 26, \"field\": 1, \"token\": \"4ee-\", \"oldToken\": \"4e-\"}]}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 12,
+		"created_at" : "2023-02-05 19:45:52",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 1, \"row\": 32, \"newValue\": \"4RF\\\\\", \"oldValue\": \"4Rf\\\\\", \"noteElementId\": \"note-L33F2\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 13,
+		"created_at" : "2023-02-05 19:45:52",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 1, \"row\": 32, \"newValue\": \"4RFF\\\\\", \"oldValue\": \"4RF\\\\\", \"noteElementId\": \"note-L33F2\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 14,
+		"created_at" : "2023-02-06 19:44:57",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L9F1\", \"line\": 9, \"field\": 1, \"token\": \"2C\", \"oldToken\": \"2c\"}, {\"id\": \"note-L11F1\", \"line\": 11, \"field\": 1, \"token\": \"2D\", \"oldToken\": \"2d\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 15,
+		"created_at" : "2023-02-06 19:59:50",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 16,
+		"created_at" : "2023-02-06 19:59:50",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 17,
+		"created_at" : "2023-02-06 20:01:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 18,
+		"created_at" : "2023-02-06 20:01:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 19,
+		"created_at" : "2023-02-06 20:01:59",
+		"type" : "disconnect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 20,
+		"created_at" : "2023-02-06 20:02:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 21,
+		"created_at" : "2023-02-06 20:02:18",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L11F1\", \"line\": 11, \"field\": 1, \"token\": \"2D\", \"oldToken\": \"2d\"}, {\"id\": \"note-L12F1\", \"line\": 12, \"field\": 1, \"token\": \"2E-\", \"oldToken\": \"2e-\"}, {\"id\": \"note-L14F1\", \"line\": 14, \"field\": 1, \"token\": \"2E\", \"oldToken\": \"2e\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 22,
+		"created_at" : "2023-02-06 20:03:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 23,
+		"created_at" : "2023-02-06 20:03:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 24,
+		"created_at" : "2023-02-06 20:09:17",
+		"type" : "comments",
+		"content" : "{\"userId\": 1, \"content\": \"Deleted: 2368fcf3-26fa-4813-8505-d9a17e36bc4b\", \"courseId\": 1}",
+		"username" : "milios",
+		"filename" : null,
+		"course" : "bluesag"
+	},
+	{
+		"id" : 25,
+		"created_at" : "2023-02-06 20:11:58",
+		"type" : "comments",
+		"content" : "{\"userId\": 1, \"content\": \"Deleted: 2368fcf3-26fa-4813-8505-d9a17e36bc4b\", \"courseId\": 1}",
+		"username" : "milios",
+		"filename" : null,
+		"course" : "bluesag"
+	},
+	{
+		"id" : 27,
+		"created_at" : "2023-02-06 20:36:34",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 28,
+		"created_at" : "2023-02-06 20:36:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 29,
+		"created_at" : "2023-02-06 20:37:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 30,
+		"created_at" : "2023-02-06 20:37:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 31,
+		"created_at" : "2023-02-06 20:37:47",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 32,
+		"created_at" : "2023-02-06 20:37:47",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 33,
+		"created_at" : "2023-02-06 20:38:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 34,
+		"created_at" : "2023-02-06 20:38:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 35,
+		"created_at" : "2023-02-06 21:02:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 36,
+		"created_at" : "2023-02-06 21:02:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 37,
+		"created_at" : "2023-02-06 21:02:28",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 36}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 38,
+		"created_at" : "2023-02-06 21:02:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 35}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 39,
+		"created_at" : "2023-02-06 21:03:02",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 40,
+		"created_at" : "2023-02-06 21:03:11",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 39}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 41,
+		"created_at" : "2023-02-06 21:04:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 42,
+		"created_at" : "2023-02-06 21:06:28",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 41}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 43,
+		"created_at" : "2023-02-06 21:06:29",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 44,
+		"created_at" : "2023-02-06 21:06:31",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 45,
+		"created_at" : "2023-02-06 21:06:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 44}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 46,
+		"created_at" : "2023-02-06 21:06:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 43}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 47,
+		"created_at" : "2023-02-06 21:06:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 48,
+		"created_at" : "2023-02-06 21:06:53",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 49,
+		"created_at" : "2023-02-06 21:07:02",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 48}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 50,
+		"created_at" : "2023-02-06 21:07:03",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 47}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 51,
+		"created_at" : "2023-02-06 21:07:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 52,
+		"created_at" : "2023-02-06 21:07:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 53,
+		"created_at" : "2023-02-06 21:10:09",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : null
+	},
+	{
+		"id" : 54,
+		"created_at" : "2023-02-06 21:10:09",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 55,
+		"created_at" : "2023-02-07 12:44:15",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 56,
+		"created_at" : "2023-02-07 12:44:21",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 8, \"newValue\": \"2C\", \"oldValue\": \"2c\", \"noteElementId\": \"note-L9F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 57,
+		"created_at" : "2023-02-07 12:48:02",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 13, \"newValue\": \"2ee\", \"oldValue\": \"2e\", \"noteElementId\": \"note-L14F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 58,
+		"created_at" : "2023-02-07 12:57:35",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 55}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 59,
+		"created_at" : "2023-02-07 12:57:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 60,
+		"created_at" : "2023-02-07 13:10:13",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 59}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 61,
+		"created_at" : "2023-02-07 14:18:47",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 62,
+		"created_at" : "2023-02-07 14:19:23",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 19, \"newValue\": \"4GG\", \"oldValue\": \"4G\", \"noteElementId\": \"note-L20F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 63,
+		"created_at" : "2023-02-07 14:19:24",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 19, \"newValue\": \"4GGG\", \"oldValue\": \"4GG\", \"noteElementId\": \"note-L20F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 64,
+		"created_at" : "2023-02-07 14:19:25",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 19, \"newValue\": \"4GG\", \"oldValue\": \"4GGG\", \"noteElementId\": \"note-L20F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 65,
+		"created_at" : "2023-02-07 14:19:25",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 19, \"newValue\": \"4G\", \"oldValue\": \"4GG\", \"noteElementId\": \"note-L20F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 66,
+		"created_at" : "2023-02-07 14:20:53",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.cccL]\", \"oldToken\": \"8.ccL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16aanJk\", \"oldToken\": \"16anJk\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rccc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rfff\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rfff\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1ee-\", \"oldToken\": \"1e-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4bb-\", \"oldToken\": \"[4b-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.bb-L]\", \"oldToken\": \"8.b-L]\"}, {\"id\": \"note-L27F7\", \"line\": 27, \"field\": 7, \"token\": \"16aanJk\", \"oldToken\": \"16anJk\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1c 1G\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1g\", \"oldToken\": \"1G\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4Rccc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4Rfff\/\", \"oldToken\": \"4Rff\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.Rfff\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L27F3\", \"line\": 27, \"field\": 3, \"token\": \"16Rfff\/Jk\", \"oldToken\": \"16Rff\/Jk\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 67,
+		"created_at" : "2023-02-07 14:20:54",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.ccccL]\", \"oldToken\": \"8.cccL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16aaanJk\", \"oldToken\": \"16aanJk\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rcccc\/\", \"oldToken\": \"4Rccc\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rffff\/L\", \"oldToken\": \"8.Rfff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rffff\/Jk\", \"oldToken\": \"16Rfff\/Jk\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1eee-\", \"oldToken\": \"1ee-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4bbb-\", \"oldToken\": \"[4bb-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.bbb-L]\", \"oldToken\": \"8.bb-L]\"}, {\"id\": \"note-L27F7\", \"line\": 27, \"field\": 7, \"token\": \"16aaanJk\", \"oldToken\": \"16aanJk\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1c 1g\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1gg\", \"oldToken\": \"1g\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4Rcccc\/\", \"oldToken\": \"4Rccc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4Rffff\/\", \"oldToken\": \"4Rfff\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.Rffff\/L\", \"oldToken\": \"8.Rfff\/L\"}, {\"id\": \"note-L27F3\", \"line\": 27, \"field\": 3, \"token\": \"16Rffff\/Jk\", \"oldToken\": \"16Rfff\/Jk\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 68,
+		"created_at" : "2023-02-07 14:20:54",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.cccccL]\", \"oldToken\": \"8.ccccL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16aaaanJk\", \"oldToken\": \"16aaanJk\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rccccc\/\", \"oldToken\": \"4Rcccc\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rfffff\/L\", \"oldToken\": \"8.Rffff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rfffff\/Jk\", \"oldToken\": \"16Rffff\/Jk\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1eeee-\", \"oldToken\": \"1eee-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4bbbb-\", \"oldToken\": \"[4bbb-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.bbbb-L]\", \"oldToken\": \"8.bbb-L]\"}, {\"id\": \"note-L27F7\", \"line\": 27, \"field\": 7, \"token\": \"16aaaanJk\", \"oldToken\": \"16aaanJk\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1c 1gg\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1ggg\", \"oldToken\": \"1gg\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4Rccccc\/\", \"oldToken\": \"4Rcccc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4Rfffff\/\", \"oldToken\": \"4Rffff\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.Rfffff\/L\", \"oldToken\": \"8.Rffff\/L\"}, {\"id\": \"note-L27F3\", \"line\": 27, \"field\": 3, \"token\": \"16Rfffff\/Jk\", \"oldToken\": \"16Rffff\/Jk\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 69,
+		"created_at" : "2023-02-07 14:23:23",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 70,
+		"created_at" : "2023-02-07 14:23:34",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 71,
+		"created_at" : "2023-02-07 14:24:12",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 72,
+		"created_at" : "2023-02-07 14:24:12",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 73,
+		"created_at" : "2023-02-07 14:26:27",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 72}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 74,
+		"created_at" : "2023-02-07 14:26:27",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 71}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 75,
+		"created_at" : "2023-02-07 14:26:27",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 76,
+		"created_at" : "2023-02-07 14:26:28",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 77,
+		"created_at" : "2023-02-07 14:26:53",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 78,
+		"created_at" : "2023-02-07 14:26:53",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 79,
+		"created_at" : "2023-02-07 14:29:50",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 78}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 80,
+		"created_at" : "2023-02-07 14:29:50",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 77}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 81,
+		"created_at" : "2023-02-07 14:29:51",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 82,
+		"created_at" : "2023-02-07 14:29:51",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 83,
+		"created_at" : "2023-02-07 14:30:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 82}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 84,
+		"created_at" : "2023-02-07 14:30:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 81}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 85,
+		"created_at" : "2023-02-07 14:30:57",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 86,
+		"created_at" : "2023-02-07 14:30:57",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 87,
+		"created_at" : "2023-02-07 14:32:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 86}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 88,
+		"created_at" : "2023-02-07 14:32:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 85}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 89,
+		"created_at" : "2023-02-07 14:32:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 90,
+		"created_at" : "2023-02-07 14:32:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 91,
+		"created_at" : "2023-02-07 14:32:54",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 89}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 92,
+		"created_at" : "2023-02-07 14:32:54",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 90}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 93,
+		"created_at" : "2023-02-07 14:32:55",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 94,
+		"created_at" : "2023-02-07 14:32:55",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 95,
+		"created_at" : "2023-02-07 14:32:59",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 17, \"newValue\": \"4EE-\", \"oldValue\": \"4E-\", \"noteElementId\": \"note-L18F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 96,
+		"created_at" : "2023-02-07 14:34:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 97,
+		"created_at" : "2023-02-07 14:34:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 98,
+		"created_at" : "2023-02-07 14:34:20",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 97}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 99,
+		"created_at" : "2023-02-07 14:34:20",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 96}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 100,
+		"created_at" : "2023-02-07 14:34:21",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 101,
+		"created_at" : "2023-02-07 14:34:21",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 102,
+		"created_at" : "2023-02-07 14:34:25",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"single\", \"change\": {\"col\": 0, \"row\": 20, \"newValue\": \"4e-\", \"oldValue\": \"4E-\", \"noteElementId\": \"note-L21F1\"}}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 103,
+		"created_at" : "2023-02-07 14:36:31",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 104,
+		"created_at" : "2023-02-07 14:36:44",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L18F2\", \"line\": 18, \"field\": 2, \"token\": \"4Rc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L20F2\", \"line\": 20, \"field\": 2, \"token\": \"4RF\\\\\", \"oldToken\": \"4Rf\\\\\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L18F3\", \"line\": 18, \"field\": 3, \"token\": \"8.Rf\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L19F3\", \"line\": 19, \"field\": 3, \"token\": \"16Rf\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L20F3\", \"line\": 20, \"field\": 3, \"token\": \"4Rf\/\", \"oldToken\": \"4Rff\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rf\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rf\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"4EE-\", \"oldToken\": \"4E-\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"4GG\", \"oldToken\": \"4G\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4E-\", \"oldToken\": \"4e-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 105,
+		"created_at" : "2023-02-07 14:36:45",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L18F2\", \"line\": 18, \"field\": 2, \"token\": \"4RC\/\", \"oldToken\": \"4Rc\/\"}, {\"id\": \"note-L20F2\", \"line\": 20, \"field\": 2, \"token\": \"4RFF\\\\\", \"oldToken\": \"4RF\\\\\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4RC\/\", \"oldToken\": \"4Rc\/\"}, {\"id\": \"note-L18F3\", \"line\": 18, \"field\": 3, \"token\": \"8.RF\/L\", \"oldToken\": \"8.Rf\/L\"}, {\"id\": \"note-L19F3\", \"line\": 19, \"field\": 3, \"token\": \"16RF\/Jk\", \"oldToken\": \"16Rf\/Jk\"}, {\"id\": \"note-L20F3\", \"line\": 20, \"field\": 3, \"token\": \"4RF\/\", \"oldToken\": \"4Rf\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.RF\/L\", \"oldToken\": \"8.Rf\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16RF\/Jk\", \"oldToken\": \"16Rf\/Jk\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"4EEE-\", \"oldToken\": \"4EE-\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"4GGG\", \"oldToken\": \"4GG\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4EE-\", \"oldToken\": \"4E-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 106,
+		"created_at" : "2023-02-07 14:36:45",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L18F2\", \"line\": 18, \"field\": 2, \"token\": \"4RCC\/\", \"oldToken\": \"4RC\/\"}, {\"id\": \"note-L20F2\", \"line\": 20, \"field\": 2, \"token\": \"4RFFF\\\\\", \"oldToken\": \"4RFF\\\\\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4RCC\/\", \"oldToken\": \"4RC\/\"}, {\"id\": \"note-L18F3\", \"line\": 18, \"field\": 3, \"token\": \"8.RFF\/L\", \"oldToken\": \"8.RF\/L\"}, {\"id\": \"note-L19F3\", \"line\": 19, \"field\": 3, \"token\": \"16RFF\/Jk\", \"oldToken\": \"16RF\/Jk\"}, {\"id\": \"note-L20F3\", \"line\": 20, \"field\": 3, \"token\": \"4RFF\/\", \"oldToken\": \"4RF\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.RFF\/L\", \"oldToken\": \"8.RF\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16RFF\/Jk\", \"oldToken\": \"16RF\/Jk\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"4EEEE-\", \"oldToken\": \"4EEE-\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"4GGGG\", \"oldToken\": \"4GGG\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4EEE-\", \"oldToken\": \"4EE-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 107,
+		"created_at" : "2023-02-07 14:37:49",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 108,
+		"created_at" : "2023-02-07 15:14:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 107}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 109,
+		"created_at" : "2023-02-07 15:14:18",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 110,
+		"created_at" : "2023-02-07 15:30:27",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 109}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 111,
+		"created_at" : "2023-02-07 15:31:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 112,
+		"created_at" : "2023-02-07 15:32:26",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 111}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 113,
+		"created_at" : "2023-02-07 15:32:27",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 114,
+		"created_at" : "2023-02-07 15:33:07",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 113}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 115,
+		"created_at" : "2023-02-07 15:33:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 116,
+		"created_at" : "2023-02-07 15:35:17",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 115}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 117,
+		"created_at" : "2023-02-07 15:35:18",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 118,
+		"created_at" : "2023-02-07 15:36:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 117}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 119,
+		"created_at" : "2023-02-07 15:36:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 120,
+		"created_at" : "2023-02-07 15:37:42",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 119}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 121,
+		"created_at" : "2023-02-07 15:37:43",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 122,
+		"created_at" : "2023-02-07 15:37:50",
+		"type" : "add_comment",
+		"content" : "\"{\\\"id\\\":\\\"1963fabf-ab32-48cc-a322-b5389cb0ecc1\\\",\\\"parentCommentId\\\":null,\\\"content\\\":\\\"This is my comment\\\",\\\"createdAt\\\":\\\"2023-02-07T13:37:50.400Z\\\",\\\"multiSelectElements\\\":\\\"note-L25F6,note-L25F7,note-L26F7,note-L27F7,note-L28F7,note-L29F7,note-L30F7,note-L25F4S1,note-L25F4S2\\\"}\"",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 123,
+		"created_at" : "2023-02-07 15:38:53",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 121}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 124,
+		"created_at" : "2023-02-07 15:38:54",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 125,
+		"created_at" : "2023-02-07 15:44:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 124}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 126,
+		"created_at" : "2023-02-07 15:44:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 127,
+		"created_at" : "2023-02-07 15:45:32",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 126}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 128,
+		"created_at" : "2023-02-07 15:45:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 129,
+		"created_at" : "2023-02-07 15:47:24",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 128}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 130,
+		"created_at" : "2023-02-07 15:47:25",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 131,
+		"created_at" : "2023-02-07 15:47:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 130}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 132,
+		"created_at" : "2023-02-07 15:47:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 133,
+		"created_at" : "2023-02-07 15:48:21",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 132}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 134,
+		"created_at" : "2023-02-07 15:48:23",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 135,
+		"created_at" : "2023-02-07 15:52:17",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 134}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 136,
+		"created_at" : "2023-02-07 15:52:18",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 137,
+		"created_at" : "2023-02-07 15:53:07",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 136}",
+		"username" : "milios",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : null
+	},
+	{
+		"id" : 138,
+		"created_at" : "2023-02-07 16:37:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 139,
+		"created_at" : "2023-02-07 16:37:42",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.cL]\", \"oldToken\": \"8.ccL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16AnJk\", \"oldToken\": \"16anJk\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4Rc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.Rf\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16Rf\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4EE-\", \"oldToken\": \"4E-\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1E-\", \"oldToken\": \"1e-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4B-\", \"oldToken\": \"[4b-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.B-L]\", \"oldToken\": \"8.b-L]\"}, {\"id\": \"note-L27F7\", \"line\": 27, \"field\": 7, \"token\": \"16AnJk\", \"oldToken\": \"16anJk\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1CC 1G\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1GG\", \"oldToken\": \"1G\"}, {\"id\": \"note-L25F2\", \"line\": 25, \"field\": 2, \"token\": \"4RF\\\\\", \"oldToken\": \"4Rf\\\\\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4Rc\/\", \"oldToken\": \"4Rcc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4Rf\/\", \"oldToken\": \"4Rff\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.Rf\/L\", \"oldToken\": \"8.Rff\/L\"}, {\"id\": \"note-L27F3\", \"line\": 27, \"field\": 3, \"token\": \"16Rf\/Jk\", \"oldToken\": \"16Rff\/Jk\"}, {\"id\": \"note-L25F1\", \"line\": 25, \"field\": 1, \"token\": \"4CC\", \"oldToken\": \"4C\"}, {\"id\": \"note-L26F1\", \"line\": 26, \"field\": 1, \"token\": \"4EE-\", \"oldToken\": \"4E-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 140,
+		"created_at" : "2023-02-07 16:37:42",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.CL]\", \"oldToken\": \"8.cL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16AAnJk\", \"oldToken\": \"16AnJk\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4RC\/\", \"oldToken\": \"4Rc\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.RF\/L\", \"oldToken\": \"8.Rf\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16RF\/Jk\", \"oldToken\": \"16Rf\/Jk\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4EEE-\", \"oldToken\": \"4EE-\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1EE-\", \"oldToken\": \"1E-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4BB-\", \"oldToken\": \"[4B-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.BB-L]\", \"oldToken\": \"8.B-L]\"}, {\"id\": \"note-L27F7\", \"line\": 27, \"field\": 7, \"token\": \"16AAnJk\", \"oldToken\": \"16AnJk\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1CC 1GG\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1GGG\", \"oldToken\": \"1GG\"}, {\"id\": \"note-L25F2\", \"line\": 25, \"field\": 2, \"token\": \"4RFF\\\\\", \"oldToken\": \"4RF\\\\\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4RC\/\", \"oldToken\": \"4Rc\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4RF\/\", \"oldToken\": \"4Rf\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.RF\/L\", \"oldToken\": \"8.Rf\/L\"}, {\"id\": \"note-L27F3\", \"line\": 27, \"field\": 3, \"token\": \"16RF\/Jk\", \"oldToken\": \"16Rf\/Jk\"}, {\"id\": \"note-L25F1\", \"line\": 25, \"field\": 1, \"token\": \"4CCC\", \"oldToken\": \"4CC\"}, {\"id\": \"note-L26F1\", \"line\": 26, \"field\": 1, \"token\": \"4EEE-\", \"oldToken\": \"4EE-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 141,
+		"created_at" : "2023-02-07 16:37:42",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L21F7\", \"line\": 21, \"field\": 7, \"token\": \"8.CCL]\", \"oldToken\": \"8.CL]\"}, {\"id\": \"note-L22F7\", \"line\": 22, \"field\": 7, \"token\": \"16AAAnJk\", \"oldToken\": \"16AAnJk\"}, {\"id\": \"note-L21F2\", \"line\": 21, \"field\": 2, \"token\": \"4RCC\/\", \"oldToken\": \"4RC\/\"}, {\"id\": \"note-L21F3\", \"line\": 21, \"field\": 3, \"token\": \"8.RFF\/L\", \"oldToken\": \"8.RF\/L\"}, {\"id\": \"note-L22F3\", \"line\": 22, \"field\": 3, \"token\": \"16RFF\/Jk\", \"oldToken\": \"16RF\/Jk\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"4EEEE-\", \"oldToken\": \"4EEE-\"}, {\"id\": \"note-L25F6\", \"line\": 25, \"field\": 6, \"token\": \"1EEE-\", \"oldToken\": \"1EE-\"}, {\"id\": \"note-L25F7\", \"line\": 25, \"field\": 7, \"token\": \"[4BBB-\", \"oldToken\": \"[4BB-\"}, {\"id\": \"note-L26F7\", \"line\": 26, \"field\": 7, \"token\": \"8.BBB-L]\", \"oldToken\": \"8.BB-L]\"}, {\"id\": \"note-L27F7\", \"line\": 27, \"field\": 7, \"token\": \"16AAAnJk\", \"oldToken\": \"16AAnJk\"}, {\"id\": \"note-L25F4S1\", \"line\": 25, \"field\": 4, \"token\": \"1CC 1GGG\", \"oldToken\": \"1C\"}, {\"id\": \"note-L25F4S2\", \"line\": 25, \"field\": 4, \"token\": \"1C 1GGGG\", \"oldToken\": \"1GGG\"}, {\"id\": \"note-L25F2\", \"line\": 25, \"field\": 2, \"token\": \"4RFFF\\\\\", \"oldToken\": \"4RFF\\\\\"}, {\"id\": \"note-L26F2\", \"line\": 26, \"field\": 2, \"token\": \"4RCC\/\", \"oldToken\": \"4RC\/\"}, {\"id\": \"note-L25F3\", \"line\": 25, \"field\": 3, \"token\": \"4RFF\/\", \"oldToken\": \"4RF\/\"}, {\"id\": \"note-L26F3\", \"line\": 26, \"field\": 3, \"token\": \"8.RFF\/L\", \"oldToken\": \"8.RF\/L\"}, {\"id\": \"note-L27F3\", \"line\": 27, \"field\": 3, \"token\": \"16RFF\/Jk\", \"oldToken\": \"16RF\/Jk\"}, {\"id\": \"note-L26F1\", \"line\": 26, \"field\": 1, \"token\": \"4EEEE-\", \"oldToken\": \"4EEE-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 142,
+		"created_at" : "2023-02-07 16:37:55",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 138}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 143,
+		"created_at" : "2023-02-07 16:38:06",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 144,
+		"created_at" : "2023-02-07 16:44:11",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 145,
+		"created_at" : "2023-02-07 16:44:32",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 144}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 146,
+		"created_at" : "2023-02-07 16:44:53",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 147,
+		"created_at" : "2023-02-07 16:45:06",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 148,
+		"created_at" : "2023-02-07 16:45:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 146}",
+		"username" : "kalohr",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 149,
+		"created_at" : "2023-02-07 16:46:02",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 147}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 150,
+		"created_at" : "2023-02-08 10:01:23",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 151,
+		"created_at" : "2023-02-08 10:01:39",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 150}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 152,
+		"created_at" : "2023-02-09 09:58:13",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 153,
+		"created_at" : "2023-02-09 09:59:36",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 152}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 154,
+		"created_at" : "2023-02-09 09:59:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 155,
+		"created_at" : "2023-02-09 10:01:23",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 154}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 156,
+		"created_at" : "2023-02-09 10:01:23",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 157,
+		"created_at" : "2023-02-09 10:09:37",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 156}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 158,
+		"created_at" : "2023-02-09 10:09:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 159,
+		"created_at" : "2023-02-09 10:16:06",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 158}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 160,
+		"created_at" : "2023-02-09 10:16:07",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 161,
+		"created_at" : "2023-02-09 10:16:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 160}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 162,
+		"created_at" : "2023-02-09 10:16:38",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 163,
+		"created_at" : "2023-02-09 13:20:45",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 164,
+		"created_at" : "2023-02-09 13:20:46",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 163}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 165,
+		"created_at" : "2023-02-09 13:20:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 166,
+		"created_at" : "2023-02-09 13:22:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 165}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 167,
+		"created_at" : "2023-02-09 13:22:18",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 168,
+		"created_at" : "2023-02-09 13:23:46",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 167}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 169,
+		"created_at" : "2023-02-09 13:23:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 170,
+		"created_at" : "2023-02-09 13:25:47",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 169}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 171,
+		"created_at" : "2023-02-09 13:25:47",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 172,
+		"created_at" : "2023-02-09 13:26:29",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 171}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 173,
+		"created_at" : "2023-02-09 13:26:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 174,
+		"created_at" : "2023-02-09 13:28:58",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 173}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 175,
+		"created_at" : "2023-02-09 13:28:58",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 176,
+		"created_at" : "2023-02-09 13:37:50",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 175}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 177,
+		"created_at" : "2023-02-09 13:37:50",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 178,
+		"created_at" : "2023-02-09 13:38:23",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 177}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 179,
+		"created_at" : "2023-02-09 13:38:23",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 180,
+		"created_at" : "2023-02-09 13:38:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 179}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 181,
+		"created_at" : "2023-02-09 13:38:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 182,
+		"created_at" : "2023-02-09 13:38:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 181}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 183,
+		"created_at" : "2023-02-09 13:38:57",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 184,
+		"created_at" : "2023-02-09 13:39:16",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 183}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 185,
+		"created_at" : "2023-02-09 13:39:16",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 186,
+		"created_at" : "2023-02-09 13:40:33",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 185}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 187,
+		"created_at" : "2023-02-09 13:40:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 188,
+		"created_at" : "2023-02-09 13:41:26",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 187}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 189,
+		"created_at" : "2023-02-09 13:41:27",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 190,
+		"created_at" : "2023-02-09 13:49:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 189}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 191,
+		"created_at" : "2023-02-09 13:49:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 192,
+		"created_at" : "2023-02-10 09:19:36",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 193,
+		"created_at" : "2023-02-10 09:19:45",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2eee\", \"oldToken\": \"2ee\"}, {\"id\": \"note-L24F1\", \"line\": 24, \"field\": 1, \"token\": \"2ggg\", \"oldToken\": \"2gg\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 194,
+		"created_at" : "2023-02-10 09:35:06",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 192}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 195,
+		"created_at" : "2023-02-10 09:55:29",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 196,
+		"created_at" : "2023-02-10 09:55:29",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 195}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 197,
+		"created_at" : "2023-02-10 09:55:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 198,
+		"created_at" : "2023-02-10 09:55:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 197}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 199,
+		"created_at" : "2023-02-10 09:55:57",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 200,
+		"created_at" : "2023-02-10 10:03:13",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2A\", \"oldToken\": \"2a\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2c\", \"oldToken\": \"2cc\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2d\", \"oldToken\": \"2dd\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2e-\", \"oldToken\": \"2ee-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2ee\", \"oldToken\": \"2eee\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 201,
+		"created_at" : "2023-02-10 10:03:14",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2AA\", \"oldToken\": \"2A\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2C\", \"oldToken\": \"2c\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2D\", \"oldToken\": \"2d\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2E-\", \"oldToken\": \"2e-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2e\", \"oldToken\": \"2ee\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 202,
+		"created_at" : "2023-02-10 10:03:14",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2AAA\", \"oldToken\": \"2AA\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2CC\", \"oldToken\": \"2C\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2DD\", \"oldToken\": \"2D\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2EE-\", \"oldToken\": \"2E-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2E\", \"oldToken\": \"2e\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 203,
+		"created_at" : "2023-02-10 10:03:14",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2AAAA\", \"oldToken\": \"2AAA\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2CCC\", \"oldToken\": \"2CC\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2DDD\", \"oldToken\": \"2DD\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2EEE-\", \"oldToken\": \"2EE-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2EE\", \"oldToken\": \"2E\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 204,
+		"created_at" : "2023-02-10 10:03:14",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2DDDD\", \"oldToken\": \"2DDD\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2EEEE-\", \"oldToken\": \"2EEE-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2EEE\", \"oldToken\": \"2EE\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 205,
+		"created_at" : "2023-02-10 10:19:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 199}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 206,
+		"created_at" : "2023-02-10 10:19:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 207,
+		"created_at" : "2023-02-10 10:20:03",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2AAA\", \"oldToken\": \"2AAAA\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2CC\", \"oldToken\": \"2CCC\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 208,
+		"created_at" : "2023-02-10 10:20:47",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2AA\", \"oldToken\": \"2AAA\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2C\", \"oldToken\": \"2CC\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2DDD\", \"oldToken\": \"2DDDD\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2EEE-\", \"oldToken\": \"2EEEE-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2EE\", \"oldToken\": \"2EEE\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 209,
+		"created_at" : "2023-02-10 10:20:47",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2A\", \"oldToken\": \"2AA\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2c\", \"oldToken\": \"2C\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2DD\", \"oldToken\": \"2DDD\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2EE-\", \"oldToken\": \"2EEE-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2E\", \"oldToken\": \"2EE\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 210,
+		"created_at" : "2023-02-10 10:20:47",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L17F1\", \"line\": 17, \"field\": 1, \"token\": \"2a\", \"oldToken\": \"2A\"}, {\"id\": \"note-L18F1\", \"line\": 18, \"field\": 1, \"token\": \"2cc\", \"oldToken\": \"2c\"}, {\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2D\", \"oldToken\": \"2DD\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2E-\", \"oldToken\": \"2EE-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2e\", \"oldToken\": \"2E\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 211,
+		"created_at" : "2023-02-10 10:22:28",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 206}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 212,
+		"created_at" : "2023-02-10 10:22:28",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 213,
+		"created_at" : "2023-02-10 10:22:35",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2DD\", \"oldToken\": \"2D\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2EE-\", \"oldToken\": \"2E-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2E\", \"oldToken\": \"2e\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 214,
+		"created_at" : "2023-02-10 10:22:39",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2D\", \"oldToken\": \"2DD\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2E-\", \"oldToken\": \"2EE-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2e\", \"oldToken\": \"2E\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 215,
+		"created_at" : "2023-02-10 10:25:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 212}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 216,
+		"created_at" : "2023-02-10 10:25:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 217,
+		"created_at" : "2023-02-10 10:25:15",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2d\", \"oldToken\": \"2D\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2e-\", \"oldToken\": \"2E-\"}, {\"id\": \"note-L23F1\", \"line\": 23, \"field\": 1, \"token\": \"2ee\", \"oldToken\": \"2e\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 218,
+		"created_at" : "2023-02-10 10:25:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 216}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 219,
+		"created_at" : "2023-02-10 10:25:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 220,
+		"created_at" : "2023-02-10 10:25:46",
+		"type" : "change_pitch",
+		"content" : "{\"type\": \"multi\", \"change\": [{\"id\": \"note-L20F1\", \"line\": 20, \"field\": 1, \"token\": \"2dd\", \"oldToken\": \"2d\"}, {\"id\": \"note-L21F1\", \"line\": 21, \"field\": 1, \"token\": \"2ee-\", \"oldToken\": \"2e-\"}]}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 221,
+		"created_at" : "2023-02-10 10:57:39",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 219}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 222,
+		"created_at" : "2023-02-10 10:57:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 223,
+		"created_at" : "2023-02-10 10:57:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 222}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 224,
+		"created_at" : "2023-02-10 10:57:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 225,
+		"created_at" : "2023-02-10 11:29:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 226,
+		"created_at" : "2023-02-10 11:30:55",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 225}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 227,
+		"created_at" : "2023-02-10 11:30:55",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 228,
+		"created_at" : "2023-02-10 11:32:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 227}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 229,
+		"created_at" : "2023-02-10 11:32:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 230,
+		"created_at" : "2023-02-10 11:32:43",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 229}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 231,
+		"created_at" : "2023-02-10 11:32:44",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 232,
+		"created_at" : "2023-02-10 11:35:22",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 231}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 233,
+		"created_at" : "2023-02-10 11:35:22",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 234,
+		"created_at" : "2023-02-10 11:36:06",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 233}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 235,
+		"created_at" : "2023-02-10 11:36:06",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 236,
+		"created_at" : "2023-02-10 11:45:47",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 235}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 237,
+		"created_at" : "2023-02-10 11:45:47",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 238,
+		"created_at" : "2023-02-10 11:48:46",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 237}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 239,
+		"created_at" : "2023-02-10 11:48:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 240,
+		"created_at" : "2023-02-10 11:50:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 239}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 241,
+		"created_at" : "2023-02-10 11:50:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 242,
+		"created_at" : "2023-02-10 11:53:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 241}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 243,
+		"created_at" : "2023-02-10 11:53:58",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 244,
+		"created_at" : "2023-02-10 12:01:22",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 243}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 245,
+		"created_at" : "2023-02-10 12:01:22",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 246,
+		"created_at" : "2023-02-10 12:01:27",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 245}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 247,
+		"created_at" : "2023-02-10 12:01:27",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 248,
+		"created_at" : "2023-02-10 12:04:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 247}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 249,
+		"created_at" : "2023-02-10 12:04:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 250,
+		"created_at" : "2023-02-10 12:04:25",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 251,
+		"created_at" : "2023-02-10 12:50:07",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 250}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 252,
+		"created_at" : "2023-02-10 12:50:07",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 249}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 253,
+		"created_at" : "2023-02-10 12:50:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 254,
+		"created_at" : "2023-02-10 12:50:09",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 255,
+		"created_at" : "2023-02-10 12:54:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 254}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 256,
+		"created_at" : "2023-02-10 12:54:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 253}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 257,
+		"created_at" : "2023-02-10 12:54:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 258,
+		"created_at" : "2023-02-10 12:54:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 259,
+		"created_at" : "2023-02-10 12:56:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 258}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 260,
+		"created_at" : "2023-02-10 12:56:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 257}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 261,
+		"created_at" : "2023-02-10 12:56:53",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 262,
+		"created_at" : "2023-02-10 12:56:54",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 263,
+		"created_at" : "2023-02-10 12:57:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 261}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 264,
+		"created_at" : "2023-02-10 12:57:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 262}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 265,
+		"created_at" : "2023-02-10 12:57:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 266,
+		"created_at" : "2023-02-10 12:57:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 267,
+		"created_at" : "2023-02-10 12:59:35",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 266}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 268,
+		"created_at" : "2023-02-10 12:59:35",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 265}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 269,
+		"created_at" : "2023-02-10 12:59:36",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 270,
+		"created_at" : "2023-02-10 12:59:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 271,
+		"created_at" : "2023-02-10 13:00:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 270}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 272,
+		"created_at" : "2023-02-10 13:00:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 269}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 273,
+		"created_at" : "2023-02-10 13:00:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 274,
+		"created_at" : "2023-02-10 13:00:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 275,
+		"created_at" : "2023-02-10 13:00:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 273}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 276,
+		"created_at" : "2023-02-10 13:00:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 274}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 277,
+		"created_at" : "2023-02-10 13:00:19",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 278,
+		"created_at" : "2023-02-10 13:00:20",
+		"type" : "connect",
+		"content" : null,
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 279,
+		"created_at" : "2023-02-10 13:01:24",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 277}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 280,
+		"created_at" : "2023-02-10 13:01:24",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 281,
+		"created_at" : "2023-02-10 13:11:23",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 278}",
+		"username" : "kalohr",
+		"filename" : "music-files\/test_pauses.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 282,
+		"created_at" : "2023-02-10 13:12:25",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 280}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 283,
+		"created_at" : "2023-02-10 13:12:26",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 284,
+		"created_at" : "2023-02-10 13:13:36",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 283}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 285,
+		"created_at" : "2023-02-10 13:13:36",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 286,
+		"created_at" : "2023-02-10 13:30:16",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 285}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 287,
+		"created_at" : "2023-02-10 13:30:17",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 288,
+		"created_at" : "2023-02-10 14:10:39",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 287}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 289,
+		"created_at" : "2023-02-10 14:10:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 290,
+		"created_at" : "2023-02-10 14:12:53",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 289}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 291,
+		"created_at" : "2023-02-10 14:12:54",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 292,
+		"created_at" : "2023-02-10 14:14:49",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 291}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 293,
+		"created_at" : "2023-02-10 14:14:50",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 294,
+		"created_at" : "2023-02-10 14:15:59",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 293}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 295,
+		"created_at" : "2023-02-10 14:16:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 296,
+		"created_at" : "2023-02-10 14:20:19",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 295}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 297,
+		"created_at" : "2023-02-10 14:20:19",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 298,
+		"created_at" : "2023-02-10 14:20:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 297}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 299,
+		"created_at" : "2023-02-10 14:20:31",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 300,
+		"created_at" : "2023-02-10 14:21:46",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 299}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 301,
+		"created_at" : "2023-02-10 14:21:47",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 302,
+		"created_at" : "2023-02-10 14:25:30",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 301}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 303,
+		"created_at" : "2023-02-10 14:25:31",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 304,
+		"created_at" : "2023-02-10 14:27:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 303}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 305,
+		"created_at" : "2023-02-10 14:27:19",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 306,
+		"created_at" : "2023-02-10 14:28:48",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 305}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 307,
+		"created_at" : "2023-02-10 14:28:48",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 308,
+		"created_at" : "2023-02-10 14:33:47",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 307}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 309,
+		"created_at" : "2023-02-10 14:33:48",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 310,
+		"created_at" : "2023-02-10 14:39:42",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 309}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 311,
+		"created_at" : "2023-02-10 14:39:43",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 312,
+		"created_at" : "2023-02-10 14:40:11",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 311}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 313,
+		"created_at" : "2023-02-10 14:40:12",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 314,
+		"created_at" : "2023-02-10 14:41:11",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 313}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 315,
+		"created_at" : "2023-02-10 14:41:11",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 316,
+		"created_at" : "2023-02-10 14:42:33",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 315}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 317,
+		"created_at" : "2023-02-10 14:42:34",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 318,
+		"created_at" : "2023-02-10 14:42:59",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 317}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 319,
+		"created_at" : "2023-02-10 14:43:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 320,
+		"created_at" : "2023-02-10 14:47:21",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 319}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 321,
+		"created_at" : "2023-02-10 14:47:22",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 322,
+		"created_at" : "2023-02-10 14:48:45",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 321}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 323,
+		"created_at" : "2023-02-10 14:48:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 324,
+		"created_at" : "2023-02-10 14:49:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 323}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 325,
+		"created_at" : "2023-02-10 14:49:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 326,
+		"created_at" : "2023-02-10 14:49:34",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 325}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 327,
+		"created_at" : "2023-02-10 14:49:35",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 328,
+		"created_at" : "2023-02-10 14:53:01",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 327}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 329,
+		"created_at" : "2023-02-10 14:53:02",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 330,
+		"created_at" : "2023-02-10 14:53:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 329}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 331,
+		"created_at" : "2023-02-10 14:53:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 332,
+		"created_at" : "2023-02-10 14:53:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 331}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 333,
+		"created_at" : "2023-02-10 14:53:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 334,
+		"created_at" : "2023-02-10 14:55:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 333}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 335,
+		"created_at" : "2023-02-10 14:55:09",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 336,
+		"created_at" : "2023-02-10 14:57:23",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 335}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 337,
+		"created_at" : "2023-02-10 14:57:24",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 338,
+		"created_at" : "2023-02-10 14:58:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 337}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 339,
+		"created_at" : "2023-02-10 14:58:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 340,
+		"created_at" : "2023-02-10 14:59:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 339}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 341,
+		"created_at" : "2023-02-10 14:59:41",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 342,
+		"created_at" : "2023-02-10 15:01:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 341}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 343,
+		"created_at" : "2023-02-10 15:01:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 344,
+		"created_at" : "2023-02-10 15:02:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 343}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 345,
+		"created_at" : "2023-02-10 15:02:19",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 346,
+		"created_at" : "2023-02-10 15:03:45",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 345}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 347,
+		"created_at" : "2023-02-10 15:03:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 348,
+		"created_at" : "2023-02-10 15:04:02",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 347}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 349,
+		"created_at" : "2023-02-10 15:04:03",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 350,
+		"created_at" : "2023-02-10 15:46:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 349}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 351,
+		"created_at" : "2023-02-10 15:46:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 352,
+		"created_at" : "2023-02-10 15:47:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 351}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 353,
+		"created_at" : "2023-02-10 15:47:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 354,
+		"created_at" : "2023-02-12 11:01:40",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 355,
+		"created_at" : "2023-02-12 11:02:49",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 354}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 356,
+		"created_at" : "2023-02-12 11:02:49",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 357,
+		"created_at" : "2023-02-12 11:02:54",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 356}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 358,
+		"created_at" : "2023-02-12 11:02:54",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 359,
+		"created_at" : "2023-02-12 11:04:01",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 358}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 360,
+		"created_at" : "2023-02-12 11:04:01",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 361,
+		"created_at" : "2023-02-12 11:07:58",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 360}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 362,
+		"created_at" : "2023-02-12 11:07:59",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 363,
+		"created_at" : "2023-02-12 11:09:22",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 362}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 364,
+		"created_at" : "2023-02-12 11:09:22",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 365,
+		"created_at" : "2023-02-12 11:09:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 364}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 366,
+		"created_at" : "2023-02-12 11:09:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 367,
+		"created_at" : "2023-02-12 11:10:24",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 366}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 368,
+		"created_at" : "2023-02-12 11:10:25",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 369,
+		"created_at" : "2023-02-12 11:10:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 368}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 370,
+		"created_at" : "2023-02-12 11:10:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 371,
+		"created_at" : "2023-02-12 11:11:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 370}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 372,
+		"created_at" : "2023-02-12 11:11:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 373,
+		"created_at" : "2023-02-12 11:11:26",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 372}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 374,
+		"created_at" : "2023-02-12 11:11:26",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 375,
+		"created_at" : "2023-02-12 11:11:44",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 374}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 376,
+		"created_at" : "2023-02-12 11:11:45",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 377,
+		"created_at" : "2023-02-12 11:12:24",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 376}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 378,
+		"created_at" : "2023-02-12 11:12:25",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 379,
+		"created_at" : "2023-02-12 11:13:30",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 378}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 380,
+		"created_at" : "2023-02-12 11:13:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 381,
+		"created_at" : "2023-02-12 11:14:21",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 380}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 382,
+		"created_at" : "2023-02-12 11:14:21",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 383,
+		"created_at" : "2023-02-12 11:16:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 382}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 384,
+		"created_at" : "2023-02-12 11:16:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 385,
+		"created_at" : "2023-02-12 11:16:32",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 384}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 386,
+		"created_at" : "2023-02-12 11:16:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 387,
+		"created_at" : "2023-02-12 11:21:48",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 386}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 388,
+		"created_at" : "2023-02-12 11:21:48",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 389,
+		"created_at" : "2023-02-12 11:24:12",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 388}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 390,
+		"created_at" : "2023-02-12 11:24:13",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 391,
+		"created_at" : "2023-02-12 11:24:27",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 390}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 392,
+		"created_at" : "2023-02-12 11:24:27",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 393,
+		"created_at" : "2023-02-12 11:24:37",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 392}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 394,
+		"created_at" : "2023-02-12 11:24:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 395,
+		"created_at" : "2023-02-12 11:28:11",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 394}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 396,
+		"created_at" : "2023-02-12 11:28:11",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 397,
+		"created_at" : "2023-02-12 11:31:05",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 396}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 398,
+		"created_at" : "2023-02-12 11:31:06",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 399,
+		"created_at" : "2023-02-12 11:32:48",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 398}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 400,
+		"created_at" : "2023-02-12 11:32:48",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 401,
+		"created_at" : "2023-02-12 11:33:29",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 400}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 402,
+		"created_at" : "2023-02-12 11:33:29",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 403,
+		"created_at" : "2023-02-12 11:33:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 402}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 404,
+		"created_at" : "2023-02-12 11:33:41",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 405,
+		"created_at" : "2023-02-12 11:34:17",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 404}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 406,
+		"created_at" : "2023-02-12 11:34:18",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 407,
+		"created_at" : "2023-02-12 11:35:40",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 406}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 408,
+		"created_at" : "2023-02-12 11:35:41",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 409,
+		"created_at" : "2023-02-12 11:35:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 408}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 410,
+		"created_at" : "2023-02-12 11:35:57",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 411,
+		"created_at" : "2023-02-12 11:39:15",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 410}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 412,
+		"created_at" : "2023-02-12 11:39:16",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 413,
+		"created_at" : "2023-02-12 11:39:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 412}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 414,
+		"created_at" : "2023-02-12 11:39:38",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 415,
+		"created_at" : "2023-02-12 11:40:49",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 414}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 416,
+		"created_at" : "2023-02-12 11:40:49",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 417,
+		"created_at" : "2023-02-12 11:44:05",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 416}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 418,
+		"created_at" : "2023-02-12 11:44:06",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 419,
+		"created_at" : "2023-02-12 11:44:22",
+		"type" : "add_comment",
+		"content" : "{\"id\": \"99e4c4f5-7e23-46eb-8381-cc64485772cf\", \"content\": \"This is my comment\", \"createdAt\": \"2023-02-12T09:44:22.176Z\", \"parentCommentId\": null, \"multiSelectElements\": \"note-L53F6S1,note-L53F6S2,note-L53F6S3,note-L53F4,note-L67F6S1,note-L67F6S2,note-L67F6S3,note-L67F4\"}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 420,
+		"created_at" : "2023-02-12 11:45:23",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 418}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 421,
+		"created_at" : "2023-02-12 11:45:24",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 422,
+		"created_at" : "2023-02-12 11:46:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 421}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 423,
+		"created_at" : "2023-02-12 11:46:09",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 424,
+		"created_at" : "2023-02-12 11:46:30",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 423}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 425,
+		"created_at" : "2023-02-12 11:46:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 426,
+		"created_at" : "2023-02-12 11:47:15",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 425}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 427,
+		"created_at" : "2023-02-12 11:47:16",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 428,
+		"created_at" : "2023-02-12 11:48:07",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 427}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 429,
+		"created_at" : "2023-02-12 11:48:07",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 430,
+		"created_at" : "2023-02-12 11:48:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 429}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 431,
+		"created_at" : "2023-02-12 11:48:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 432,
+		"created_at" : "2023-02-12 11:49:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 431}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 433,
+		"created_at" : "2023-02-12 11:49:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 434,
+		"created_at" : "2023-02-12 11:49:24",
+		"type" : "add_comment",
+		"content" : "{\"id\": \"c7634b1e-b0c4-4fbe-95f0-85779917c489\", \"content\": \"This is my comment\", \"createdAt\": \"2023-02-12T09:49:24.202Z\", \"parentCommentId\": null, \"multiSelectElements\": \"note-L53F6S1,note-L53F6S2,note-L53F6S3,note-L53F4,note-L67F6S1,note-L67F6S2,note-L67F6S3,note-L67F4\"}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 435,
+		"created_at" : "2023-02-12 12:04:39",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 433}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 436,
+		"created_at" : "2023-02-12 12:04:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 437,
+		"created_at" : "2023-02-12 12:04:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 436}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 438,
+		"created_at" : "2023-02-12 12:04:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 439,
+		"created_at" : "2023-02-12 12:08:05",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 438}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 440,
+		"created_at" : "2023-02-12 12:08:06",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 441,
+		"created_at" : "2023-02-12 12:08:25",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 440}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 442,
+		"created_at" : "2023-02-12 12:08:26",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 443,
+		"created_at" : "2023-02-12 12:09:58",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 442}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 444,
+		"created_at" : "2023-02-12 12:09:59",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 445,
+		"created_at" : "2023-02-12 12:10:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 444}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 446,
+		"created_at" : "2023-02-12 12:10:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 447,
+		"created_at" : "2023-02-12 12:10:55",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 446}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 448,
+		"created_at" : "2023-02-12 12:10:56",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 449,
+		"created_at" : "2023-02-12 12:13:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 448}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 450,
+		"created_at" : "2023-02-12 12:13:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 451,
+		"created_at" : "2023-02-12 12:13:45",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 450}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 452,
+		"created_at" : "2023-02-12 12:13:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 453,
+		"created_at" : "2023-02-12 12:13:59",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 452}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 454,
+		"created_at" : "2023-02-12 12:14:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 455,
+		"created_at" : "2023-02-12 12:14:53",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 454}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 456,
+		"created_at" : "2023-02-12 12:14:54",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 457,
+		"created_at" : "2023-02-12 12:15:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 456}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 458,
+		"created_at" : "2023-02-12 12:15:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 459,
+		"created_at" : "2023-02-12 12:15:24",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 458}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 460,
+		"created_at" : "2023-02-12 12:15:25",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 461,
+		"created_at" : "2023-02-12 12:15:34",
+		"type" : "add_comment",
+		"content" : "{\"id\": \"045be0bc-3cb9-41bf-91ef-5be821f3796f\", \"content\": \"This is my comment\", \"createdAt\": \"2023-02-12T10:15:34.880Z\", \"parentCommentId\": null, \"multiSelectElements\": \"note-L67F6S1,note-L67F6S2,note-L67F6S3,note-L67F4\"}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 462,
+		"created_at" : "2023-02-12 12:16:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 460}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 463,
+		"created_at" : "2023-02-12 12:16:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 464,
+		"created_at" : "2023-02-12 12:18:08",
+		"type" : "add_comment",
+		"content" : "{\"id\": \"84888694-d0fe-4ea6-8189-4bdccb173a63\", \"content\": \"This is my comment\", \"createdAt\": \"2023-02-12T10:18:08.619Z\", \"parentCommentId\": null, \"multiSelectElements\": \"note-L105F6S1,note-L105F6S3,note-L105F6S4,note-L105F6S5,note-L105F4\"}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 465,
+		"created_at" : "2023-02-12 12:19:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 463}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 466,
+		"created_at" : "2023-02-12 12:19:19",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 467,
+		"created_at" : "2023-02-12 12:19:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 466}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 468,
+		"created_at" : "2023-02-12 12:19:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 469,
+		"created_at" : "2023-02-12 12:20:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 468}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 470,
+		"created_at" : "2023-02-12 12:20:10",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 471,
+		"created_at" : "2023-02-12 12:48:14",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 470}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 472,
+		"created_at" : "2023-02-12 12:48:15",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 473,
+		"created_at" : "2023-02-12 12:53:33",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 472}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 474,
+		"created_at" : "2023-02-12 12:53:34",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 475,
+		"created_at" : "2023-02-12 12:54:34",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 474}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 476,
+		"created_at" : "2023-02-12 12:54:34",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 477,
+		"created_at" : "2023-02-12 12:54:52",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 476}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 478,
+		"created_at" : "2023-02-12 12:54:52",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 479,
+		"created_at" : "2023-02-12 12:55:21",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 478}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 480,
+		"created_at" : "2023-02-12 12:55:22",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 481,
+		"created_at" : "2023-02-12 12:55:36",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 480}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 482,
+		"created_at" : "2023-02-12 12:55:36",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 483,
+		"created_at" : "2023-02-12 12:55:43",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 482}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 484,
+		"created_at" : "2023-02-12 12:55:43",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 485,
+		"created_at" : "2023-02-12 12:55:50",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 484}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 486,
+		"created_at" : "2023-02-12 12:55:50",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 487,
+		"created_at" : "2023-02-12 12:59:00",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 486}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 488,
+		"created_at" : "2023-02-12 12:59:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 489,
+		"created_at" : "2023-02-12 13:01:17",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 488}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 490,
+		"created_at" : "2023-02-12 13:01:17",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 491,
+		"created_at" : "2023-02-12 13:02:45",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 490}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 492,
+		"created_at" : "2023-02-12 13:02:46",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 493,
+		"created_at" : "2023-02-12 13:02:56",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 492}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 494,
+		"created_at" : "2023-02-12 13:02:56",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 495,
+		"created_at" : "2023-02-12 13:04:02",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 494}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 496,
+		"created_at" : "2023-02-12 13:04:02",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 497,
+		"created_at" : "2023-02-12 13:05:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 496}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 498,
+		"created_at" : "2023-02-12 13:05:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 499,
+		"created_at" : "2023-02-12 13:05:29",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 498}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 500,
+		"created_at" : "2023-02-12 13:05:29",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 501,
+		"created_at" : "2023-02-12 13:05:50",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 500}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 502,
+		"created_at" : "2023-02-12 13:05:50",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 503,
+		"created_at" : "2023-02-12 13:06:21",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 502}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 504,
+		"created_at" : "2023-02-12 13:06:21",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 505,
+		"created_at" : "2023-02-12 13:06:32",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 504}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 506,
+		"created_at" : "2023-02-12 13:06:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 507,
+		"created_at" : "2023-02-12 13:07:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 506}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 508,
+		"created_at" : "2023-02-12 13:07:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 509,
+		"created_at" : "2023-02-12 13:09:55",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 508}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 510,
+		"created_at" : "2023-02-12 13:09:56",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 511,
+		"created_at" : "2023-02-12 13:16:34",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 510}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 512,
+		"created_at" : "2023-02-12 13:16:34",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 513,
+		"created_at" : "2023-02-13 09:41:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 514,
+		"created_at" : "2023-02-13 09:46:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 513}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 515,
+		"created_at" : "2023-02-13 09:46:09",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 516,
+		"created_at" : "2023-02-13 09:47:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 515}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 517,
+		"created_at" : "2023-02-13 09:47:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 518,
+		"created_at" : "2023-02-13 09:53:21",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 517}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 519,
+		"created_at" : "2023-02-13 09:53:21",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 520,
+		"created_at" : "2023-02-13 09:54:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 519}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 521,
+		"created_at" : "2023-02-13 09:54:38",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 522,
+		"created_at" : "2023-02-13 09:57:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 521}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 523,
+		"created_at" : "2023-02-13 09:57:51",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 524,
+		"created_at" : "2023-02-13 10:03:33",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 523}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 525,
+		"created_at" : "2023-02-13 10:03:33",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 526,
+		"created_at" : "2023-02-13 10:04:02",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 525}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 527,
+		"created_at" : "2023-02-13 10:04:03",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 528,
+		"created_at" : "2023-02-13 10:06:49",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 527}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 529,
+		"created_at" : "2023-02-13 10:06:51",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 530,
+		"created_at" : "2023-02-13 10:07:54",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 529}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 531,
+		"created_at" : "2023-02-13 10:07:55",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 532,
+		"created_at" : "2023-02-13 10:09:42",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 531}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 533,
+		"created_at" : "2023-02-13 10:09:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 534,
+		"created_at" : "2023-02-13 10:43:27",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 533}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 535,
+		"created_at" : "2023-02-13 10:43:28",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 536,
+		"created_at" : "2023-02-13 10:43:29",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 535}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 537,
+		"created_at" : "2023-02-13 10:43:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 538,
+		"created_at" : "2023-02-13 10:52:09",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 537}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 539,
+		"created_at" : "2023-02-13 13:11:58",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 540,
+		"created_at" : "2023-02-13 13:37:29",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 539}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 541,
+		"created_at" : "2023-02-13 13:37:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 542,
+		"created_at" : "2023-02-13 13:39:38",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 541}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 543,
+		"created_at" : "2023-02-13 13:39:38",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 544,
+		"created_at" : "2023-02-13 13:43:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 543}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 545,
+		"created_at" : "2023-02-13 13:43:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 546,
+		"created_at" : "2023-02-13 13:43:43",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 545}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 547,
+		"created_at" : "2023-02-13 13:43:43",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 548,
+		"created_at" : "2023-02-13 13:43:59",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 547}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 549,
+		"created_at" : "2023-02-13 13:43:59",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 550,
+		"created_at" : "2023-02-13 13:44:28",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 549}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 551,
+		"created_at" : "2023-02-13 13:44:29",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 552,
+		"created_at" : "2023-02-13 13:46:08",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 551}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 553,
+		"created_at" : "2023-02-13 13:46:08",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 554,
+		"created_at" : "2023-02-13 13:46:36",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 553}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 555,
+		"created_at" : "2023-02-13 13:46:36",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 556,
+		"created_at" : "2023-02-13 13:47:36",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 555}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 557,
+		"created_at" : "2023-02-13 13:47:37",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 558,
+		"created_at" : "2023-02-13 13:48:41",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 557}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 559,
+		"created_at" : "2023-02-13 13:48:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 560,
+		"created_at" : "2023-02-13 13:49:25",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 559}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 561,
+		"created_at" : "2023-02-13 13:49:26",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 562,
+		"created_at" : "2023-02-13 13:51:39",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 561}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 563,
+		"created_at" : "2023-02-13 13:51:39",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 564,
+		"created_at" : "2023-02-13 13:51:50",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 563}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 565,
+		"created_at" : "2023-02-13 13:51:51",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 566,
+		"created_at" : "2023-02-13 13:53:40",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 565}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 567,
+		"created_at" : "2023-02-13 13:53:41",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 568,
+		"created_at" : "2023-02-13 13:53:53",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 567}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 569,
+		"created_at" : "2023-02-13 13:53:53",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 570,
+		"created_at" : "2023-02-13 13:53:59",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 569}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 571,
+		"created_at" : "2023-02-13 13:54:00",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 572,
+		"created_at" : "2023-02-13 13:54:51",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 571}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 573,
+		"created_at" : "2023-02-13 13:54:51",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 574,
+		"created_at" : "2023-02-13 13:57:05",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 573}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 575,
+		"created_at" : "2023-02-13 13:57:05",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 576,
+		"created_at" : "2023-02-13 14:00:25",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 575}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 577,
+		"created_at" : "2023-02-13 14:00:25",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 578,
+		"created_at" : "2023-02-13 14:02:16",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 577}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 579,
+		"created_at" : "2023-02-13 14:02:17",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 580,
+		"created_at" : "2023-02-13 14:03:04",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 579}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 581,
+		"created_at" : "2023-02-13 14:03:04",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 582,
+		"created_at" : "2023-02-13 14:03:26",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 581}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 583,
+		"created_at" : "2023-02-13 14:03:26",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 584,
+		"created_at" : "2023-02-13 14:04:59",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 583}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 585,
+		"created_at" : "2023-02-13 14:04:59",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 586,
+		"created_at" : "2023-02-13 14:05:35",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 585}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 587,
+		"created_at" : "2023-02-13 14:05:35",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 588,
+		"created_at" : "2023-02-13 14:07:35",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 587}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 589,
+		"created_at" : "2023-02-13 14:07:35",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 590,
+		"created_at" : "2023-02-13 14:08:31",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 589}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 591,
+		"created_at" : "2023-02-13 14:08:32",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 592,
+		"created_at" : "2023-02-13 14:08:55",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 591}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 593,
+		"created_at" : "2023-02-13 14:08:55",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 594,
+		"created_at" : "2023-02-13 14:13:42",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 593}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 595,
+		"created_at" : "2023-02-13 14:13:42",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 596,
+		"created_at" : "2023-02-13 14:13:48",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 595}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 597,
+		"created_at" : "2023-02-13 14:13:49",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 598,
+		"created_at" : "2023-02-13 14:13:57",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 597}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 599,
+		"created_at" : "2023-02-13 14:13:58",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 600,
+		"created_at" : "2023-02-13 14:27:26",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 599}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 601,
+		"created_at" : "2023-02-13 14:27:26",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 602,
+		"created_at" : "2023-02-13 14:27:48",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 601}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 603,
+		"created_at" : "2023-02-13 14:27:49",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 604,
+		"created_at" : "2023-02-13 14:28:45",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 603}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 605,
+		"created_at" : "2023-02-13 14:28:45",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 606,
+		"created_at" : "2023-02-13 14:39:18",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 605}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 607,
+		"created_at" : "2023-02-13 14:39:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 608,
+		"created_at" : "2023-02-13 14:39:30",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 607}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 609,
+		"created_at" : "2023-02-13 14:39:30",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 610,
+		"created_at" : "2023-02-13 14:39:40",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 609}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 611,
+		"created_at" : "2023-02-13 15:54:15",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 612,
+		"created_at" : "2023-02-13 15:54:15",
+		"type" : "disconnect",
+		"content" : "{\"connectId\": 611}",
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	},
+	{
+		"id" : 613,
+		"created_at" : "2023-02-13 15:54:16",
+		"type" : "connect",
+		"content" : null,
+		"username" : "milios",
+		"filename" : "music-files\/a blues scale.krn",
+		"course" : "bluesag"
+	}
+]}

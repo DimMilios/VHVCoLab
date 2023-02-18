@@ -17,6 +17,7 @@ import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentRep
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
 import { CommentService } from '../api/CommentService.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
+import { renderActions } from '../templates/actionHistory.js';
 
 let DEBUG = false;
 function log(text) {
@@ -177,6 +178,8 @@ export function updateHandler(clients = defaultClients()) {
   // console.log({ clientID, allUsers, connectedUsers, disconnectedUsers });
 
   renderCollabMenuSidebar();
+
+  renderActions();
 }
 
 // export function renderUserAwareness() {
