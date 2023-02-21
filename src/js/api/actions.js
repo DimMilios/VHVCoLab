@@ -92,3 +92,41 @@ export async function sendAction(payload) {
     console.error(`Failed to send comment action`, error);
   }
 }
+
+export async function getActions() {
+  if (!featureIsEnabled('actions')) {
+    console.warn(
+      'Tried to send an action request, but "actions" feature is disabled. You must enable "actions" feature on features.json for actions to be sent.'
+    );
+    return;
+  }
+
+  try {
+    const { filename, course } = getQueryData();
+
+    const res = await fetch(
+      `${baseUrl}api/actions?filename=${filename}&course=${course}`,
+      {
+        headers: {
+          Accept: 'application/json',
+        },
+      }
+    );
+    const json = await res.json();
+    console.log(`Received:`, json);
+    return json.map(
+      ({ id, created_at, type, content, username, course, filename }) =>
+        new ActionResponse({
+          id,
+          created_at,
+          type,
+          content,
+          username,
+          course,
+          filename,
+        })
+    );
+  } catch (error) {
+    console.error(`Failed to send comment action`, error);
+  }
+}

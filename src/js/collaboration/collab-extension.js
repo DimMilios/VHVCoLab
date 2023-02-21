@@ -179,7 +179,7 @@ export function updateHandler(clients = defaultClients()) {
 
   renderCollabMenuSidebar();
 
-  renderActions();
+  // renderActions();
 }
 
 // export function renderUserAwareness() {

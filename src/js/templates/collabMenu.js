@@ -1,5 +1,7 @@
 import { html, render } from 'lit-html';
+import { getActions } from '../api/actions';
 import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap';
+import { renderActions } from './actionHistory';
 
 const userList = () => {
   return html`
@@ -28,10 +30,15 @@ export const collabMenuSideBar = () => {
     renderCollabMenuSidebar();
   };
 
-  const handleActionHistoryToggle = () => {
-    document
+  const handleActionHistoryToggle = async () => {
+    let isOpen = document
       .getElementById('action-history-container')
       ?.classList.toggle('open');
+
+    if (isOpen) {
+      const actions = await getActions();
+      renderActions(actions);
+    }
   };
 
   return html`${userList()}
