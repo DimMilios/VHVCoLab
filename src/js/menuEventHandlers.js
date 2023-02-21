@@ -6,6 +6,7 @@ import { ClassWatcher } from './collaboration/ClassWatcher.js';
 const menu = getMenu();
 
 document.querySelector('#load-from-repository__submenu-item').addEventListener('click', () => menu.loadFromRepository());
+document.querySelector('#export-to-my-private-files__submenu-item').addEventListener('click', () => menu.exportToPrivateFiles());
 document.querySelector('#open__submenu-item').addEventListener('click', () => menu.openScoreFileFromDisk());
 document.querySelector('#save-editor-contents__submenu-item').addEventListener('click', () => menu.saveTextEditorContents());
 document.querySelector('#save-as-midi__submenu-item').addEventListener('click', () => menu.saveAsMIDI());

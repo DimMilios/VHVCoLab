@@ -82,7 +82,7 @@ import {
 import { saveEditorContents } from './saving.js';
 import { generatePdfFull, generatePdfSnapshot } from './pdf.js';
 import { getMenu } from '../menu.js';
-import { yProvider } from '../yjs-setup.js';
+import { yProvider, yUndoManager } from '../yjs-setup.js';
 import { featureIsEnabled } from '../bootstrap.js';
 
 // window.HIDEMENU = false;
@@ -113,13 +113,9 @@ import { loadEditorFontSizes } from './verovio-options.js';
 import { setupDropArea } from '../drop.js';
 import { inSvgImage } from './utility-svg.js';
 
-import { unfocusCommentHighlights } from '../collaboration/util-collab.js';
 import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
-import { loadKernScoresFile } from './loading.js';
-import { Base64 } from './utility.js';
-import { time } from 'lib0';
-import { setupSynchronizeHandlers } from '../sync.js';
+import { ActionPayload, sendAction } from '../api/actions.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -152,8 +148,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   getAceEditor()._dispatchEvent('ready');
   setupDropArea();
-
-
 
   displayNotation();
 
@@ -222,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 if (!featureIsEnabled('collaboration')) {
-  document.addEventListener('load', () => {
+  window.addEventListener('load', () => {
     // Load kern file from URL only if editor content is empty
     const contentLength = Number(getAceEditor()?.getSession()?.getLength());
     if (!Number.isNaN(contentLength) && contentLength < 10) {
@@ -292,6 +286,29 @@ function transposeMultiSelect(state, amount) {
 // keydown event listener -- Notation editor listener.
 //
 
+/**
+ *
+ * @param {} changePitchAction
+ * @param {'single' | 'multi'} changePitchType
+ */
+function sendChangePitchAction(changePitchAction, changePitchType = 'single') {
+  console.log({ transposedNote: changePitchAction });
+
+  if (changePitchAction) {
+    sendAction(
+      new ActionPayload({
+        type: 'change_pitch',
+        content: JSON.stringify({
+          type: changePitchType,
+          change: changePitchAction,
+        }),
+      })
+    )
+      .then(() => console.log(`change_pitch action was sent.`))
+      .catch(() => console.error(`Failed to send change_pitch action`));
+  }
+}
+
 function processNotationKeyCommand(event) {
   if (!event.preventDefault) {
     event.preventDefault = function () {};
@@ -312,7 +329,15 @@ function processNotationKeyCommand(event) {
     if (!editor) {
       throw new Error('Ace Editor is undefined');
     }
-    editor.undo();
+
+    if (featureIsEnabled('collaboration')) {
+      // Collaborative undo
+      yUndoManager?.undo();
+    } else {
+      // Non-collaborative undo
+      editor.undo();
+    }
+
     return;
   }
 
@@ -322,16 +347,20 @@ function processNotationKeyCommand(event) {
     // FIX: If the global CursorNote is defined, and we then try to transpose a multi-selected area
     // the CursorNote is re-assigned to one of the multi-selected note elements
     if (event.code === UpKey && event.shiftKey) {
-      transposeMultiSelect(localState, 1);
+      const action = transposeMultiSelect(localState, 1);
+      sendChangePitchAction(action, 'multi');
       return;
     } else if (event.code === DownKey && event.shiftKey) {
-      transposeMultiSelect(localState, -1);
+      const action = transposeMultiSelect(localState, -1);
+      sendChangePitchAction(action, 'multi');
       return;
     } else if (event.code === UpKey && event.ctrlKey) {
-      transposeMultiSelect(localState, 7);
+      const action = transposeMultiSelect(localState, 7);
+      sendChangePitchAction(action, 'multi');
       return;
     } else if (event.code === DownKey && event.ctrlKey) {
-      transposeMultiSelect(localState, -7);
+      const action = transposeMultiSelect(localState, -7);
+      sendChangePitchAction(action, 'multi');
       return;
     }
   }
@@ -537,13 +566,21 @@ function processNotationKeyCommand(event) {
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
           console.log('Shift + Up, Current note: ', global_cursor.CursorNote);
-          processNotationKey('transpose-up-step', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-up-step',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
         event.preventDefault();
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
-          processNotationKey('transpose-up-octave', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-up-octave',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else {
         event.preventDefault();
@@ -557,13 +594,21 @@ function processNotationKeyCommand(event) {
         event.preventDefault();
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
-          processNotationKey('transpose-down-step', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-down-step',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
         event.preventDefault();
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
-          processNotationKey('transpose-down-octave', global_cursor.CursorNote);
+          const action = processNotationKey(
+            'transpose-down-octave',
+            global_cursor.CursorNote
+          );
+          sendChangePitchAction(action);
         }
       } else {
         event.preventDefault();
@@ -1091,38 +1136,36 @@ getAceEditor()
     let kernFile = editor.getSession().getValue();
     //extracting tempo
     if (!kernFile) {
-      console.log("Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted");
+      console.log(
+        "Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted"
+      );
       return;
     }
     let tempoInput = document.getElementById('tempo-input');
-    let tempo = kernFile
-      .match(/\*MM(\d+)/)?.[1];
-    
+    let tempo = kernFile.match(/\*MM(\d+)/)?.[1];
+
     if (!tempo) {
       window.TEMPO = 200;
-      let exIntLine = kernFile.
-        match(/^\*\*.*\n/m)[0];
-      let tempoLine = exIntLine.
-        replaceAll(/\*\*[^\t]*/g , `*MM${window.TEMPO}`);
-      let tempo_incKern = kernFile.
-        replace(exIntLine, exIntLine + tempoLine + '\n');
-
-        
+      let exIntLine = kernFile.match(/^\*\*.*\n/m)[0];
+      let tempoLine = exIntLine.replaceAll(/\*\*[^\t]*/g, `*MM${window.TEMPO}`);
+      let tempo_incKern = kernFile.replace(
+        exIntLine,
+        exIntLine + tempoLine + '\n'
+      );
 
       editor.setValue(tempo_incKern);
       tempoInput.placeholder = window.TEMPO;
     } else {
       window.TEMPO = parseInt(tempo);
       tempoInput.placeholder = window.TEMPO;
-    }     
-    
+    }
+
     //extracting time signature
-    let timeSignature = kernFile
-      .match(/\*M(\d)\/\d/)?.[1]
+    let timeSignature = kernFile.match(/\*M(\d)\/\d/)?.[1];
 
     if (!timeSignature) {
-      console.log('Time signature has not been encoded in kern file')
-    } else   window.BEATSPERMEASURE = parseInt(timeSignature);
+      console.log('Time signature has not been encoded in kern file');
+    } else window.BEATSPERMEASURE = parseInt(timeSignature);
   });
 
 document.getElementById('change-tempo').addEventListener('click', () => {
@@ -1132,7 +1175,6 @@ document.getElementById('change-tempo').addEventListener('click', () => {
   let newKern = kernFile
     .replaceAll(/MM\d+/g, `MM${newTempo}`)
     .replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
-
 
   getAceEditor().getSession().setValue(newKern, 0);
 });

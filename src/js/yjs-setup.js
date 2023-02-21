@@ -6,7 +6,6 @@ import {
 } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import { multiSelectCoords } from './collaboration/templates.js';
 import Cookies from 'js-cookie';
 
 import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo } from './api/util.js';
@@ -39,8 +38,6 @@ let name = oneOf(names);
 let userData = {
   name,
   color: oneOf(colors),
-  email: name + '@test.com',
-  id: 1,
 };
 
 /** @type{WebsocketProvider} */
@@ -49,11 +46,19 @@ export let yProvider;
 /** @type {Y.Doc} */
 export let ydoc;
 
+/** @type {Y.UndoManager} */
+export let yUndoManager;
+
+/** @type {Y.PermanentUserData} */
+export let permanentUserData;
+
+let binding;
+
 export async function setupCollaboration() {
   if (typeof ydoc == 'undefined') {
     ydoc = new Y.Doc();
 
-    const type = ydoc.getText('ace');
+    // const type = ydoc.getText('ace');
 
     const commentsList = ydoc.getArray('comments');
     commentsList.observe((event) => {
@@ -81,7 +86,7 @@ export async function setupCollaboration() {
   }
 
   if (typeof yProvider == 'undefined') {
-    const { file, user } = getURLInfo();
+    const { file, user, course } = getURLInfo();
 
     let room = file ?? 'test-room';
     // let roomData;
@@ -91,46 +96,58 @@ export async function setupCollaboration() {
     room = roomData?.room ?? room;
   }
   */
+    permanentUserData = new Y.PermanentUserData(ydoc);
+    permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
 
-    yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc); // local
+    yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
+      params: { username: user, file, course: course ?? null },
+    }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
-      const editor = getAceEditor();
-      if (!editor) {
-        throw new Error('Ace Editor is undefined');
+      if (event.status === 'connected') {
+        document.title = document.title.replace('🔴', '🟢');
+      } else if (event.status === 'disconnected') {
+        document.title = document.title.replace('🟢', '🔴');
       }
+    });
 
-      const yUndoManager = new Y.UndoManager(ydoc.getText('ace'));
+    const editor = getAceEditor();
+    if (!editor) {
+      throw new Error('Ace Editor is undefined');
+    }
 
-      const binding = new AceBinding(
-        ydoc.getText('ace'),
-        editor,
-        yProvider.awareness,
-        {
-          yUndoManager,
-        }
-      );
+    yUndoManager = new Y.UndoManager(ydoc.getText('ace'), {
+      captureTimeout: 100,
+    });
 
+    binding = new AceBinding(ydoc.getText('ace'), editor, yProvider.awareness, {
+      yUndoManager,
     });
 
     yProvider.on('synced', (event) => {
       console.log('Yjs content was synced with the WebSocket server');
       const contentLength = Number(getAceEditor()?.getSession()?.getLength());
       if (!Number.isNaN(contentLength) && contentLength < 10) {
-        loadFileFromURLParam().then((f) =>
-          console.log(`Editor content was nearly empty. Fetched and initialized editor from repository with: ${f}`)
-        );
+        loadFileFromURLParam().then((f) => {
+          console.log(
+            `Editor content was nearly empty. Fetched and initialized editor from repository with: ${f}`
+          );
+        });
       }
     });
 
-    yProvider.awareness.on('change', updateHandler);
-    // yProvider.awareness.on('update', updateHandler);
+    // yProvider.awareness.on('change', updateHandler);
+    yProvider.awareness.on('update', updateHandler);
 
-    setUserAwarenessData(user);
+    setUserAwarenessData(user, course);
   }
 
   window.example = { yProvider, ydoc, type: ydoc.getText('ace') };
   window.awareness = yProvider.awareness;
+  window.yUndoManager = yUndoManager;
+  window.binding = binding;
+  window.Y = Y;
+  window.permanentUserData = permanentUserData;
 
   // setupSSE(DOC_ID);
 }
@@ -144,8 +161,7 @@ export function getCommentsList() {
   return ydoc.getArray('comments');
 }
 
-function setUserAwarenessData(user) {
-  console.log({ user });
+function setUserAwarenessData(user, course) {
   let appUser = Cookies.get('user');
   if (appUser) {
     let user = JSON.parse(appUser);
@@ -162,6 +178,7 @@ function setUserAwarenessData(user) {
 
   if (user) {
     userData.name = user;
+    userData.course = course;
   }
   yProvider.awareness.setLocalStateField('user', userData);
 }

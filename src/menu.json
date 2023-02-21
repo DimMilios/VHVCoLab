@@ -12,6 +12,12 @@
           },
           {
             "TEXT": {
+              "DEFAULT": "Export to my Private files",
+              "ACTION": "MENU.exportToPrivateFiles()"
+            }
+          },
+          {
+            "TEXT": {
               "DEFAULT": "Open",
               "ACTION": "MENU.openScoreFileFromDisk()"
             },

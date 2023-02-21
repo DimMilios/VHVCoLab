@@ -1,5 +1,8 @@
 import { getAceEditor } from './setup.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { featureIsEnabled } from '../bootstrap.js';
+import { yUndoManager } from '../yjs-setup.js';
+import { getURLInfo } from '../api/util.js';
 
 const ACCEPTED_FORMATS = '.xml,.musicxml,.mei,.krn';
 
@@ -69,6 +72,45 @@ export async function saveContentAsMIDI() {
   document.body.removeChild(element);
 }
 
+export function exportKernToPrivateFiles() {
+  const content = getAceEditor()?.session.getValue();
+  if (content === undefined || content.length === 0) {
+    console.error('Failed to export empty Kern content');
+    return;
+  }
+
+  const { file: filenameFromURL } = getURLInfo();
+  let scoreName = filenameFromURL;
+  const scoreMeta = sessionStorage.getItem('score-metadata');
+  if (scoreMeta === null) {
+    console.warn('Could not find metadata for this score. Using URL filename as title.');
+  } else {
+    let title = JSON.parse(scoreMeta).title;
+    scoreName = title.split(' ').join('_') + '.krn';
+  }
+
+  let fd = new FormData();
+  let file = new File([content], scoreName, { type: 'text/plain' });
+  fd.append('f', file);
+  fd.append('action', 'upload');
+  fd.append('ufolder', 'private');
+
+  const ajax = new XMLHttpRequest();
+  ajax.addEventListener('load', () => {
+    alert('File has been exported to your private files!');
+  });
+  ajax.addEventListener('error', () => {
+    alert('Failed to export score to your private files');
+  });
+
+  ajax.open(
+    'post',
+    'https://musicolab.hmu.gr/apprepository/uploadFileResAjax.php',
+    true
+  );
+  ajax.send(fd);
+}
+
 export async function loadFileFromURLParam() {
   let params = new URLSearchParams(window.location.search);
   if (!params.has('file')) {
@@ -88,10 +130,14 @@ export async function loadFileFromURLParam() {
     file = await loadFileFromRepository(params.get('file'));
   }
 
-  // if (file) {
-  getAceEditor()?.session.setValue(file);
-  return params.get('file');
-  // }
+  if (file) {
+    getAceEditor()?.session.setValue(file);
+    if (featureIsEnabled('collaboration')) {
+      // Reset collaborative undo stack for this initialization from file
+      yUndoManager.clear();
+    }
+    return params.get('file');
+  }
 }
 
 export async function promptForFile() {
