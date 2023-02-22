@@ -34,7 +34,9 @@ class JitsiAPI {
     let startJitsi = document.getElementById('start-jitsi-meet-btn');
     let meetRoomForm = document.getElementById('meet-room-form');
 
-    startJitsi.addEventListener('click', (event) => {});
+    startJitsi.addEventListener('click', (event) => {
+	    startJitsi.style.color='red';
+    });
     meetRoomForm.addEventListener('submit', (event) => {
       event.preventDefault();
       let formData = new FormData(event.target);
