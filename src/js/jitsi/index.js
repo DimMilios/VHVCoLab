@@ -31,9 +31,15 @@ class JitsiAPI {
   }
 
   setup() {
-    let startJitsi = document.getElementById('start-jitsi-meet-btn');
+    let startJitsi   = document.getElementById('start-jitsi-meet-btn');
     let meetRoomForm = document.getElementById('meet-room-form');
+    let btnCloseCallJoin = document.getElementById('btnCloseCallJoin');
 
+    btnCloseCallJoin.addEventListener('click', (event) => {
+	    startJitsi.style.color='green';
+	    this.destroy();
+	    this.hide();
+    });
     startJitsi.addEventListener('click', (event) => {
 	    startJitsi.style.color='red';
     });
