@@ -4,6 +4,18 @@ import { yProvider } from '../yjs-setup';
 import { baseUrl, getURLParams } from './util';
 
 /** @typedef { 'change_pitch' | 'change_chord' | 'add_comment' | 'undo' | 'transpose' | 'connect' | 'disconnect' | 'export'} ActionType */
+
+export const ACTION_TYPES = {
+  change_pitch: 'change_pitch',
+  change_chord: 'change_chord',
+  add_comment: 'add_comment',
+  undo: 'undo',
+  transpose: 'transpose',
+  connect: 'connect',
+  disconnect: 'disconnect',
+  export: 'export',
+};
+
 export class ActionPayload {
   /**
    * @param {{ type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined }} payload

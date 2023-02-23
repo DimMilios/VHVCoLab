@@ -1,16 +1,11 @@
 import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
-import { ActionResponse } from '../api/actions';
-import DUMMY_ACTIONS from '../collaboration/actions_dummy.json?raw';
-import { renderHighlightLayer } from '../collaboration/collab-extension';
+import { ActionResponse, ACTION_TYPES } from '../api/actions';
 import { multiSelectCoords } from '../collaboration/templates';
 import { timeSince } from '../collaboration/util-collab';
 import { yProvider } from '../yjs-setup';
-const ACTIONS = JSON.parse(DUMMY_ACTIONS)
-  .actions.slice(0, 20)
-  .map((action) => new ActionResponse(action));
 
-const closeBtn = () => {
+const actionPanelHeaderTemplate = () => {
   const handleClose = () => {
     document
       .getElementById('action-history-container')
@@ -22,12 +17,63 @@ const closeBtn = () => {
   >
     <div class="card-header py-0">
       <button
-        class="btn btn-lg action-history-close font-weight-bold"
+        type="button"
+        class="btn btn-lg"
+        data-toggle="collapse"
+        data-target="#header-collapse"
+        aria-expanded="false"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-chevron-down"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+          />
+        </svg>
+      </button>
+      <button
+        class="btn btn-lg action-history-close font-weight-bold float-right"
         type="button"
         @click=${handleClose}
       >
         X
       </button>
+    </div>
+    <div
+      id="header-collapse"
+      class="collapse"
+      aria-labelledby="heading-header-collapse"
+    >
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-8">
+              <select name="action-type" required class="form-control">
+                ${Object.values(ACTION_TYPES).map(
+                  (at) =>
+                    html`<option>
+                      <div class="badge badge-primary">
+                        ${at.replace('_', ' ')}
+                      </div>
+                    </option>`
+                )}
+              </select>
+            </div>
+            <button
+              type="button"
+              class="col-4 align-self-baseline btn btn-primary"
+            >
+              Apply
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>`;
 };
@@ -48,17 +94,14 @@ function formatDate(date) {
 
   let dMillis = Date.parse(d);
   let tenDays = 1000 * 60 * 60 * 60 * 24 * 10;
-  let lessThanTenDays = Date.now() - dMillis > tenDays;
+  let lessThanTenDays = Date.now() - dMillis > 1000 * 60;
 
   if (lessThanTenDays) {
     const parts = d.split(' ');
     return `${parts[1]} ${parts[2]} ${parts[3]}, ${parts[4]}`;
   }
 
-  return timeSince(dMillis);
-
-  // d = d.split(' ');
-  // const formatted = `${d[1]} ${d[2]} ${d[3]}, ${d[4]}`;
+  return timeSince(dMillis) + ' ago';
 }
 
 /**
@@ -123,14 +166,14 @@ const actionEntry = (action, userColor = '#dc3545') => {
             @click=${handleClick}
           >
             <div style="flex: 0 0 20ch;">
-              <div>${createdAt}</div>
-              <div class="text-muted">
+              <div style="font-size: 1.1rem;">
                 <span
                   class="user-color-index mr-1"
                   style="background-color: ${userColor};"
                 ></span
                 >${action.username}
               </div>
+              <div class="text-muted">${createdAt}</div>
             </div>
 
             <div class="badge ${classMap(badgeStyling)}">${type}</div>
@@ -158,11 +201,16 @@ const actionEntry = (action, userColor = '#dc3545') => {
  * @param {Array<{action: ActionResponse, color: string}>} actions
  */
 const actionHistoryTemplate = (actions) => {
-  return html`${closeBtn()}
-  ${actions.map(({ action, color }) => {
+  return html` ${actions.map(({ action, color }) => {
     return html`${actionEntry(action, color)}`;
   })}`;
 };
+
+// Uncomment to use dummy data from JSON file (use ACTIONS variable on function renderActions below as well)
+// import DUMMY_ACTIONS from '../collaboration/actions_dummy.json?raw';
+// const ACTIONS = JSON.parse(DUMMY_ACTIONS)
+//   .actions.slice(0, 20)
+//   .map((action) => new ActionResponse(action));
 
 /**
  *
@@ -181,7 +229,9 @@ export const renderActions = (actions) => {
     color: userColorMapping[action.username],
   }));
   const actionsContainer = document.getElementById('action-history-accordion');
+  const actionsHeader = document.getElementById('action-history-header');
   if (actionsContainer) {
     render(actionHistoryTemplate(withColor), actionsContainer);
+    render(actionPanelHeaderTemplate(), actionsHeader);
   }
 };
