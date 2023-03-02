@@ -1,3 +1,4 @@
+kalohr test
 ## Initial score loading
 The initial `krn` file loaded from Verovio Humdrum Viewer is set in the `index.md` file located
 in the project's root directory. The `splash` attribute is used to load the specified `krn` file.
