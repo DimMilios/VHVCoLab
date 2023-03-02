@@ -105,7 +105,7 @@ export async function sendAction(payload) {
   }
 }
 
-export async function getActions() {
+export async function getActions(params = {}) {
   if (!featureIsEnabled('actions')) {
     console.warn(
       'Tried to send an action request, but "actions" feature is disabled. You must enable "actions" feature on features.json for actions to be sent.'
@@ -116,14 +116,18 @@ export async function getActions() {
   try {
     const { filename, course } = getQueryData();
 
-    const res = await fetch(
-      `${baseUrl}api/actions?filename=${filename}&course=${course}`,
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      }
-    );
+    const reqUrl = new URL(`${baseUrl}api/actions`);
+    reqUrl.searchParams.set('filename', filename);
+    reqUrl.searchParams.set('course', course);
+    for (let [k, v] of Object.entries(params)) {
+      reqUrl.searchParams.set(k, v);
+    }
+
+    const res = await fetch(reqUrl, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
     const json = await res.json();
     console.log(`Received:`, json);
     return json.map(

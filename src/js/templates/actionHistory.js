@@ -1,9 +1,52 @@
 import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
-import { ActionResponse, ACTION_TYPES } from '../api/actions';
+import { until } from 'lit-html/directives/until.js';
+import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
 import { multiSelectCoords } from '../collaboration/templates';
 import { timeSince } from '../collaboration/util-collab';
 import { yProvider } from '../yjs-setup';
+
+const queryParams = {
+  actionType: 'null',
+  pageSize: 20,
+  lastActionId: null,
+};
+
+const actionHeaderFilters = () => {
+  const handleChange = (e) => {
+    let value = e.target.value;
+    if (value) {
+      queryParams.actionType = value;
+      queryParams.lastActionId = null;
+      actions.splice(0, actions.length);
+      renderActions();
+    }
+  };
+
+  return html`
+    <form>
+      <div class="form-group row align-items-center">
+        <label for="action-type" class="col-sm-4 p-0 my-0 mr-0 ml-2"
+          >Action Type:</label
+        >
+        <select
+          name="action-type"
+          required
+          class="form-control col-sm-7"
+          @change=${handleChange}
+        >
+          <option selected value="null">all</option>
+          ${Object.values(ACTION_TYPES).map(
+            (at) =>
+              html`<option value=${at}>
+                <div class="badge badge-primary">${at.replace('_', ' ')}</div>
+              </option>`
+          )}
+        </select>
+      </div>
+    </form>
+  `;
+};
 
 const actionPanelHeaderTemplate = () => {
   const handleClose = () => {
@@ -50,30 +93,7 @@ const actionPanelHeaderTemplate = () => {
       class="collapse"
       aria-labelledby="heading-header-collapse"
     >
-      <div class="card-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-8">
-              <select name="action-type" required class="form-control">
-                ${Object.values(ACTION_TYPES).map(
-                  (at) =>
-                    html`<option>
-                      <div class="badge badge-primary">
-                        ${at.replace('_', ' ')}
-                      </div>
-                    </option>`
-                )}
-              </select>
-            </div>
-            <button
-              type="button"
-              class="col-4 align-self-baseline btn btn-primary"
-            >
-              Apply
-            </button>
-          </div>
-        </form>
-      </div>
+      <div class="card-body">${actionHeaderFilters()}</div>
     </div>
   </div>`;
 };
@@ -93,40 +113,35 @@ function formatDate(date) {
   }
 
   let dMillis = Date.parse(d);
-  let tenDays = 1000 * 60 * 60 * 60 * 24 * 10;
-  let lessThanTenDays = Date.now() - dMillis > 1000 * 60;
-
-  if (lessThanTenDays) {
+  let lessThanADay = Date.now() - dMillis > 1000 * 60 * 60 * 24;
+  if (lessThanADay) {
     const parts = d.split(' ');
     return `${parts[1]} ${parts[2]} ${parts[3]}, ${parts[4]}`;
   }
 
-  return timeSince(dMillis) + ' ago';
+  const time = timeSince(dMillis);
+  return (time[0] === '1' ? time.slice(0, time.length - 1) : time) + ' ago';
 }
 
 /**
  *
  * @param {ActionResponse} action
- * @param {string} userColor
+ * @param {{ [username: string]: string }} userColorMapping
  */
-const actionEntry = (action, userColor = '#dc3545') => {
+const actionEntry = (action, userColorMapping) => {
+  const defaultColor = '#dc3545';
   const badgeStyling = {
     'badge-success': action.type === 'connect',
     'badge-danger': action.type === 'disconnect',
     'badge-primary': action.type !== 'connect' && action.type !== 'disconnect',
   };
 
-  // const date = new Date(action.createdAt).toString().split(' ');
-  // const createdAt = `${date[1]} ${date[2]} ${date[3]}, ${date[4]}`;
   const createdAt = formatDate(action.createdAt);
-
-  const formatted = action.type.split('_').join(' ');
-  const type = formatted[0].toUpperCase() + formatted.slice(1);
+  const type = action.type.split('_').join(' ');
 
   const handleClick = () => {
     try {
       console.log({ content: action.content });
-      // const content = JSON.parse(action.content);
       const content = action.content;
       if (content === null) {
         console.log('Failed to parse action content from server');
@@ -159,9 +174,9 @@ const actionEntry = (action, userColor = '#dc3545') => {
             class="action-history-btn btn text-left d-flex align-items-baseline"
             type="button"
             data-toggle="collapse"
-            data-target=${'#collapse-' + action.id}
+            data-target=${'#collapse-action-' + action.id}
             aria-expanded="true"
-            aria-controls=${'#collapse-' + action.id}
+            aria-controls=${'#collapse-action-' + action.id}
             data-action-id=${action.id}
             @click=${handleClick}
           >
@@ -169,7 +184,9 @@ const actionEntry = (action, userColor = '#dc3545') => {
               <div style="font-size: 1.1rem;">
                 <span
                   class="user-color-index mr-1"
-                  style="background-color: ${userColor};"
+                  style="background-color: ${userColorMapping[
+                    action.username
+                  ]};"
                 ></span
                 >${action.username}
               </div>
@@ -182,7 +199,7 @@ const actionEntry = (action, userColor = '#dc3545') => {
       </div>
 
       <div
-        id=${'collapse-' + action.id}
+        id=${'collapse-action-' + action.id}
         class="collapse"
         aria-labelledby=${'heading' + action.id}
         data-parent="#action-history-accordion"
@@ -190,20 +207,53 @@ const actionEntry = (action, userColor = '#dc3545') => {
         <div class="card-body">
           Some placeholder content for the first accordion panel. This panel is
           shown by default, thanks to the <code>.show</code> class.
+          <div>${action.id}</div>
         </div>
       </div>
     </div>
   `;
 };
 
+let actions = [];
+
 /**
  *
- * @param {Array<{action: ActionResponse, color: string}>} actions
+ * @param {{[username: string]: string}} userColorMapping
  */
-const actionHistoryTemplate = (actions) => {
-  return html` ${actions.map(({ action, color }) => {
-    return html`${actionEntry(action, color)}`;
-  })}`;
+const actionHistoryTemplate = (userColorMapping) => {
+  const handleLoadMore = () => {
+    renderActions();
+    const scrollContainer = document.getElementById('action-history-container');
+    const accordion = document.getElementById('action-history-accordion');
+    scrollContainer.scrollBy(0, accordion.getBoundingClientRect().height);
+  };
+
+  const actionsTemplate = getActions(queryParams).then((fetchedActions) => {
+    if (Array.isArray(fetchedActions) && fetchedActions.length > 0) {
+      queryParams.lastActionId = fetchedActions[fetchedActions.length - 1].id;
+      actions = actions.concat(fetchedActions);
+      console.log({ queryParams, actions });
+    }
+    return html`${actions.map(
+        (action) => html`${actionEntry(action, userColorMapping)}`
+      )}
+      <div>
+        <button @click=${handleLoadMore} class="btn btn-primary w-100">
+          <h5>Load more</h5>
+          <div class="text-small">(${actions.length} loaded)</div>
+        </button>
+      </div>`;
+  });
+
+  const loader = html`
+    <div class="d-flex justify-content-center mt-3">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  `;
+
+  return html`${until(actionsTemplate, loader)}`;
 };
 
 // Uncomment to use dummy data from JSON file (use ACTIONS variable on function renderActions below as well)
@@ -212,11 +262,7 @@ const actionHistoryTemplate = (actions) => {
 //   .actions.slice(0, 20)
 //   .map((action) => new ActionResponse(action));
 
-/**
- *
- * @param {ActionResponse[]} actions
- */
-export const renderActions = (actions) => {
+export const renderActions = () => {
   const awStates = Array.from(yProvider.awareness.getStates().values());
   const userColorMapping = awStates
     .map((state) => state.user)
@@ -224,14 +270,10 @@ export const renderActions = (actions) => {
       return curr.name in prev ? prev : { ...prev, [curr.name]: curr.color };
     }, {});
 
-  const withColor = actions.map((action) => ({
-    action,
-    color: userColorMapping[action.username],
-  }));
   const actionsContainer = document.getElementById('action-history-accordion');
   const actionsHeader = document.getElementById('action-history-header');
   if (actionsContainer) {
-    render(actionHistoryTemplate(withColor), actionsContainer);
     render(actionPanelHeaderTemplate(), actionsHeader);
+    render(actionHistoryTemplate(userColorMapping), actionsContainer);
   }
 };

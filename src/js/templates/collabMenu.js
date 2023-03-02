@@ -1,5 +1,4 @@
 import { html, render } from 'lit-html';
-import { getActions } from '../api/actions';
 import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap';
 import { renderActions } from './actionHistory';
 
@@ -30,14 +29,13 @@ export const collabMenuSideBar = () => {
     renderCollabMenuSidebar();
   };
 
-  const handleActionHistoryToggle = async () => {
+  const handleActionHistoryToggle = () => {
     let isOpen = document
       .getElementById('action-history-container')
       ?.classList.toggle('open');
 
     if (isOpen) {
-      const actions = await getActions();
-      renderActions(actions);
+      renderActions();
     }
   };
 
@@ -91,11 +89,6 @@ export const collabMenuSideBar = () => {
               />
             </svg>
             <span class="ml-1 text-nowrap">Action History</span>
-          </button>
-        </li>
-        <li class="collab-menu-toolbar-item d-flex justify-content-center">
-          <button class="btn btn-outline-light p-3 rounded-lg w-75">
-            Test
           </button>
         </li>
       </ul>
