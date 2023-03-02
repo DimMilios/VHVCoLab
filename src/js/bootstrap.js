@@ -229,6 +229,7 @@ export function toggleCommentsVisibility(commentsVisible) {
 
   COMMENTS_VISIBLE = !COMMENTS_VISIBLE;
   commentsObserver();
+  return COMMENTS_VISIBLE;
 }
 
 function initForm(config) {

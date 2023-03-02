@@ -5,7 +5,7 @@ body.waiting * {
 body {
   /* prevent accidentally leaving page in chrome */
   overscroll-behavior-x: none;
-  overflow-y: scroll !important;
+  overflow-y: scroll;
 }
 
 body {
@@ -243,11 +243,11 @@ div#index {
 }
 
 @font-face {
-	font-family: "SVG_fonts";
-	
-	src: url("/styles/SVG_fonts.otf");
-	font-style: normal;
-	font-weight: normal
+  font-family: 'SVG_fonts';
+
+  src: url('/styles/SVG_fonts.otf');
+  font-style: normal;
+  font-weight: normal;
 }
 
 @font-face {
@@ -346,7 +346,7 @@ div#index {
 /* alx */
 #output g.harm tspan.text {
   font-family: 'SVG_fonts';
-  font-size: 600px
+  font-size: 600px;
 }
 
 /* .nav-link {

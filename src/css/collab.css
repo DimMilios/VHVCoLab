@@ -366,3 +366,160 @@
   cursor: move;
 }
 /* Draggable SVG items */
+
+/* Collaborative menu */
+/* #collaborative-menu-hover-area {
+  position: sticky;
+  left: 100%;
+  bottom: 0%;
+  width: 20vw;
+  height: 100vh;
+  margin: 0;
+  pointer-events: none;
+} */
+
+#collab-menu-toolbar-toggle {
+  opacity: 1;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  cursor: pointer;
+
+  transform: translateX(-2.5rem) rotate(180deg);
+  transition: transform 200ms ease-out;
+}
+
+.collab-menu-toolbar-toggle-open {
+  transform: translateX(15rem) rotate(0) !important;
+}
+
+#collab-menu-toolbar-toggle svg {
+  width: 5rem;
+  height: 5rem;
+}
+
+.collab-actions-buttons {
+  width: 100%;
+}
+.shown {
+  opacity: 1 !important;
+  transform: translateX(0%) !important;
+}
+
+#collaborative-menu-toolbar {
+  opacity: 0;
+  transform: translateX(-100%);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 15rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.1rem;
+  background-color: rgba(34, 34, 34, 0.9);
+
+  z-index: calc(var(--collab-layer-zIndex) * 2);
+
+  transition: opacity 300ms ease-out;
+  transition: transform 300ms ease-out;
+}
+
+.user-connection-status-container {
+  width: 100%;
+}
+
+.user-connection-status-list {
+  margin-block-end: 3rem;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-connection-status-item {
+  position: relative;
+  color: #f2f2f2;
+}
+
+.collab-menu-toolbar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.collab-menu-toolbar-item button {
+  transition: transform 200ms ease-out;
+}
+
+.collab-menu-toolbar-item button:hover {
+  transform: translateX(0.5rem) scale(1.03);
+}
+/* Collaborative menu */
+
+/* Action History */
+#action-history-container {
+  opacity: 0;
+  transform: translateX(100%);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  overflow-y: scroll;
+
+  background-color: white;
+
+  z-index: calc(var(--collab-layer-zIndex) * 2);
+
+  transition: opacity 300ms ease-in-out;
+  transition: transform 300ms ease-in-out;
+}
+
+/* Hide body scrollbar while action history is open */
+body:has(#action-history-container.open) {
+  overflow-y: hidden !important;
+}
+
+#action-history-container.open {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+.action-history-btn:focus {
+  box-shadow: none !important;
+}
+
+.action-history-close {
+  background-color: transparent;
+  border: none;
+}
+
+.action-entry-header > h2 {
+  transform: translateY(0);
+  transition: transform 200ms ease-out;
+}
+
+.action-entry-header > h2:hover {
+  transform: translateY(-5%);
+}
+
+.user-color-index {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+/* Action History */

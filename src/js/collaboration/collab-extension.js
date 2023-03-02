@@ -16,9 +16,9 @@ import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
 import { CommentService } from '../api/CommentService.js';
-import { decolorizeSelections, isEditing } from '../vhv-scripts/chords.js';
+import { isEditing } from '../vhv-scripts/chords.js';
 import { showChordEditor } from '../vhv-scripts/chords.js';
-import { all } from 'lib0/map.js';
+import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 
 let DEBUG = false;
 function log(text) {
@@ -96,56 +96,56 @@ function parseQuarterTime(quarterTime) {
   return quarterTime.includes('_') ? qTimeValue / divisor : qTimeValue;
 }
 
-function shareChordEdit (editInProgress) {
-  const [, {
-    chordEdit: {
-      selection
+function shareChordEdit(editInProgress) {
+  const [
+    ,
+    {
+      chordEdit: { selection },
+      user: { color, name },
     },
-    user: {
-      color,
-      name
-    }
-  }] = editInProgress;
+  ] = editInProgress;
 
-  if (!selection)   return;
+  if (!selection) return;
 
-  const {component, text} = selection;
-  console.log(component+' '+text+' '+color+' '+name);
+  const { component, text } = selection;
+  console.log(component + ' ' + text + ' ' + color + ' ' + name);
 
-  if (!isEditing) {    
-    const allSelections = Array.
-      from(document.querySelectorAll(`.${component}`));
-    const currentSelection = allSelections.
-      find((element) => element.innerText == text);
-      console.log(allSelections);
-    const prevSelection = allSelections.
-      find((element) => element.classList.contains('collab-selected'));
+  if (!isEditing) {
+    const allSelections = Array.from(
+      document.querySelectorAll(`.${component}`)
+    );
+    const currentSelection = allSelections.find(
+      (element) => element.innerText == text
+    );
+    console.log(allSelections);
+    const prevSelection = allSelections.find((element) =>
+      element.classList.contains('collab-selected')
+    );
 
     if (prevSelection) {
       $('.collab-selected').popover('dispose');
       prevSelection.classList.remove('collab-selected');
-      prevSelection.style.color = 'white';    
+      prevSelection.style.color = 'white';
     }
 
     currentSelection.style.color = color;
-    currentSelection.classList.add('collab-selected');    
+    currentSelection.classList.add('collab-selected');
     $('.collab-selected').popover({
       placement: 'top',
-      content: `${name}`
+      content: `${name}`,
     });
     $('.collab-selected').popover('show');
   }
 }
 
-function wrapChordEdit () {
+function wrapChordEdit() {
   if (isEditing) {
     setTimeout(() => {
-      yProvider.awareness.
-        setLocalStateField('chordEdit', {
-          isDisplayed: null,
-          selection: null       
-      })
-    }, 1500)
+      yProvider.awareness.setLocalStateField('chordEdit', {
+        isDisplayed: null,
+        selection: null,
+      });
+    }, 1500);
   } else {
     $('.collab-selected').css('color', 'white');
     $('.collab-selected').popover('dispose');
@@ -153,28 +153,26 @@ function wrapChordEdit () {
     $('#show-chord-editor').modal('hide');
   }
 }
-  
 
-function toggleChordEditor(allStates) { 
+function toggleChordEditor(allStates) {
   let isOn;
   //checking if any chordEdit status has been set true or false
-  let editState = allStates
-    .find( ([client, state]) =>
-      typeof (state.chordEdit?.isDisplayed) == 'boolean' );
+  let editState = allStates.find(
+    ([client, state]) => typeof state.chordEdit?.isDisplayed == 'boolean'
+  );
 
-  if (!editState)  return;
-  else             isOn = editState[1].chordEdit.isDisplayed;
-    
+  if (!editState) return;
+  else isOn = editState[1].chordEdit.isDisplayed;
+
   if (!isOn) {
     wrapChordEdit();
   } else {
-    if(!isEditing) {
+    if (!isEditing) {
       showChordEditor();
       return editState;
     }
-  }  
-}  
-
+  }
+}
 
 function defaultClients() {
   return {
@@ -195,7 +193,6 @@ export function updateHandler(clients = defaultClients()) {
     collabContainer.id = 'collab';
     document.querySelector('#output')?.prepend(collabContainer);
   }
-
 
   // console.log('Updating awareness');
 
@@ -241,16 +238,15 @@ export function updateHandler(clients = defaultClients()) {
   // ${renderHighlightLayer(highlights, commentsGroup)} `,
 
   const editInProgress = toggleChordEditor(awStates);
-     
+
   if (editInProgress) {
     shareChordEdit(editInProgress);
-  }  
+  }
 
   render(
     html`${collabLayer(multiSelects, singleSelects, userAwareness)}`,
     collabContainer
   );
-
 
   // Display connection status (online/offline) for the users sharing the current document
   // renderUserAwareness();
@@ -265,6 +261,10 @@ export function updateHandler(clients = defaultClients()) {
   //   ([cid, _username]) => !onlineClientIDs.includes(cid)
   // );
   // console.log({ clientID, allUsers, connectedUsers, disconnectedUsers });
+
+  renderCollabMenuSidebar();
+
+  // renderActions();
 }
 
 // export function renderUserAwareness() {
