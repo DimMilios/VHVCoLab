@@ -6,12 +6,14 @@ export function getURLParams(keys = []) {
 
 export function getURLInfo() {
   let urlParams = getURLParams();
-  let file = urlParams?.file;
+  let file = atob(urlParams?.file);
 
   // Extract the file name for the file passed from URL
   // The file is stored in MusiCoLab's file repository
   if (file && isValidHttpUrl(file)) {
-    file = Object.fromEntries(new URL(file).searchParams)?.f;
+    let p = Object.fromEntries(new URL(file).searchParams);
+    file = `f=${p.f}&u=${p.u}`;
+    console.log({ file, p });
   }
   // console.log({ ...urlParams, file });
 

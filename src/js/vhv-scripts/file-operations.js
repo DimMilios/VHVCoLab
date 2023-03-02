@@ -85,12 +85,12 @@ export function exportKernToPrivateFiles() {
   if (scoreMeta === null) {
     console.warn('Could not find metadata for this score. Using URL filename as title.');
   } else {
-    let title = JSON.parse(scoreMeta).title;
-    scoreName = title.split(' ').join('_') + '.krn';
+    scoreName = JSON.parse(scoreMeta).title + '.krn';
+    // scoreName = title.split(' ').join('_') + '.krn';
   }
 
   let fd = new FormData();
-  let file = new File([content], scoreName, { type: 'text/plain' });
+  let file = new File([content], scoreName);
   fd.append('f', file);
   fd.append('action', 'upload');
   fd.append('ufolder', 'private');
@@ -127,7 +127,7 @@ export async function loadFileFromURLParam() {
     }
   } else {
     // Load file from remote repository
-    file = await loadFileFromRepository(params.get('file'));
+    file = await loadFileFromRepository(atob(params.get('file')));
   }
 
   if (file) {
@@ -143,7 +143,7 @@ export async function loadFileFromURLParam() {
 export async function promptForFile() {
   let params = new URLSearchParams(window.location.search);
   // Initialize with repository URL for kern file if present on the browser URL
-  let defaultUrl = params.has('file') ? params.get('file') : '';
+  let defaultUrl = params.has('file') ? atob(params.get('file')) : '';
 
   let url = window.prompt('Enter the URL of a krn file:', defaultUrl);
 
