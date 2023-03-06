@@ -31,8 +31,8 @@ export function getCoordinatesWithOffset(target, offsetElem) {
   let scrollTop = window.scrollY;
 
   return {
-    staffX: staffBounds.x ?? targetBounds.x,
-    staffY: staffBounds.y ?? targetBounds.y,
+    staffX: staffBounds?.x ?? targetBounds.x,
+    staffY: staffBounds?.y ?? targetBounds.y,
     targetX: targetBounds.x - offsetElem.offsetWidth,
     targetY: targetBounds.y - offsetElem.offsetTop + scrollTop,
     targetBounds,

@@ -114,9 +114,10 @@ function initializeVerovioToolkit() {
       const { row, column } = editor.selection.getCursor();
       const item = humdrumDataNoteIntoView(row, column);
       // console.log('changeCursor event', { row, column, item })
-      if (item && item.classList.contains('note')) {
-        markItem(item);
-
+      const noteOrHarmItem = item?.classList.contains('note') || 
+        item?.classList.contains('harm');
+      if (noteOrHarmItem) {
+        //markItem(item);
         // createNewEditorSession({ item, row, column });
         // createDraggableContainer(item);
 

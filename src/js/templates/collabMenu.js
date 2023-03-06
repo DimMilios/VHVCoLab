@@ -1,6 +1,6 @@
 import { html, render } from 'lit-html';
 import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap';
-import { userListTemplate } from './userList';
+import { renderActions } from './actionHistory';
 
 const userList = () => {
   //alx
@@ -31,9 +31,13 @@ export const collabMenuSideBar = () => {
   };
 
   const handleActionHistoryToggle = () => {
-    document
+    let isOpen = document
       .getElementById('action-history-container')
       ?.classList.toggle('open');
+
+    if (isOpen) {
+      renderActions();
+    }
   };
 
   return html`
@@ -85,11 +89,6 @@ export const collabMenuSideBar = () => {
               />
             </svg>
             <span class="ml-1 text-nowrap">Action History</span>
-          </button>
-        </li>
-        <li class="collab-menu-toolbar-item d-flex justify-content-center">
-          <button class="btn btn-outline-light p-3 rounded-lg w-75">
-            Test
           </button>
         </li>
       </ul>

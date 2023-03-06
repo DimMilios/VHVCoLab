@@ -31,10 +31,18 @@ class JitsiAPI {
   }
 
   setup() {
-    let startJitsi = document.getElementById('start-jitsi-meet-btn');
+    let startJitsi   = document.getElementById('start-jitsi-meet-btn');
     let meetRoomForm = document.getElementById('meet-room-form');
+    let btnCloseCallJoin = document.getElementById('btnCloseCallJoin');
 
-    startJitsi.addEventListener('click', (event) => {});
+    btnCloseCallJoin.addEventListener('click', (event) => {
+	    startJitsi.style.color='green';
+	    this.destroy();
+	    this.hide();
+    });
+    startJitsi.addEventListener('click', (event) => {
+	    startJitsi.style.color='red';
+    });
     meetRoomForm.addEventListener('submit', (event) => {
       event.preventDefault();
       let formData = new FormData(event.target);
@@ -84,6 +92,8 @@ class JitsiAPI {
           'Jitsi call has ended. Jitsi iframe will be hidden and the API will be destroyed.'
         );
 
+    	let startJitsi = document.getElementById('start-jitsi-meet-btn');
+	startJitsi.style.color='green';
         this.destroy();
         this.hide();
       });
@@ -112,7 +122,9 @@ class JitsiAPI {
       return;
     }
 
-    $('#jitsi-meeting-container').slideUp('slow', () => {});
+    $('#jitsi-meeting-container').slideUp('slow', () => {
+	//startJitsi.style.color='red';
+    });
   }
 }
 
