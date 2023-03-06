@@ -1,5 +1,5 @@
 import { assign, createMachine, interpret } from 'xstate';
-import { updateHandler } from '../collaboration/collab-extension';
+import { stateChangeHandler } from '../collaboration/collab-extension';
 import { renderComments, uiCoords } from '../collaboration/templates';
 import { displayNotation } from '../vhv-scripts/misc';
 import { yProvider } from '../yjs-setup';
@@ -190,7 +190,7 @@ export const layoutMachine = createMachine({
             }),
             ({ inputCol, outputCol, commentsCol }) => {
               resize(inputCol, outputCol, commentsCol)()
-              updateHandler({ updated: [...yProvider.awareness.getStates().keys()], added: [], removed: [] });
+              stateChangeHandler({ updated: [...yProvider.awareness.getStates().keys()], added: [], removed: [] });
             },
           ],
         },
@@ -220,7 +220,7 @@ export const layoutMachine = createMachine({
             }),
             ({ inputCol, outputCol, commentsCol }) => {
               resize(inputCol, outputCol, commentsCol)()
-              updateHandler({ updated: [...yProvider.awareness.getStates().keys()], added: [], removed: [] });
+              stateChangeHandler({ updated: [...yProvider.awareness.getStates().keys()], added: [], removed: [] });
             },
           ],
         },

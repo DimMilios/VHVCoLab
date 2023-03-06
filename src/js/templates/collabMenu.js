@@ -1,7 +1,9 @@
 import { html, render } from 'lit-html';
 import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap';
+import { userListTemplate } from './userList';
 
 const userList = () => {
+  //alx
   return html`
     <div class="user-connection-status-container">
       <ul class="user-connection-status-list">
@@ -34,8 +36,7 @@ export const collabMenuSideBar = () => {
       ?.classList.toggle('open');
   };
 
-  return html`${userList()}
-    <div class="collab-actions-buttons">
+  return html`
       <ul class="collab-menu-toolbar-list">
         <li class="collab-menu-toolbar-item d-flex justify-content-center">
           <button
@@ -94,12 +95,14 @@ export const collabMenuSideBar = () => {
       </ul>
     </div>`;
 };
-
+///*
 export const renderCollabMenuSidebar = () => {
-  const collabMenuContainer = document.getElementById(
-    'collaborative-menu-toolbar'
+  const collabActionsContainer = document.getElementById(
+    'collab-actions-buttons'
   );
-  if (collabMenuContainer) {
-    render(html`${collabMenuSideBar()}`, collabMenuContainer);
+
+  if (collabActionsContainer) {
+    render(html`${collabMenuSideBar()}`, collabActionsContainer);
   }
 };
+//*/

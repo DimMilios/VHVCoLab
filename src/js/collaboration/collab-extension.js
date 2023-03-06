@@ -7,7 +7,7 @@ import {
   singleSelectTemplate,
   userAwarenessTemplate,
 } from '../templates/userAwareness';
-import { userListTemplate } from '../templates/userList.js';
+import { renderUserList, userListTemplate } from '../templates/userList.js';
 import {
   highlightLayerTemplate,
   highlightTemplate,
@@ -19,6 +19,8 @@ import { CommentService } from '../api/CommentService.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 import { renderActions } from '../templates/actionHistory.js';
 
+//alx
+let prevStates;
 let DEBUG = false;
 function log(text) {
   if (DEBUG) {
@@ -103,7 +105,7 @@ function defaultClients() {
   };
 }
 
-export function updateHandler(clients = defaultClients()) {
+export function stateChangeHandler(clients = defaultClients()) {
   const awStates = Array.from(yProvider.awareness.getStates().entries());
   let collabContainer = document.querySelector('#output #collab');
   if (!collabContainer) {
@@ -163,41 +165,37 @@ export function updateHandler(clients = defaultClients()) {
     collabContainer
   );
 
-  // Display connection status (online/offline) for the users sharing the current document
-  // renderUserAwareness();
-  // const clientID = permanentUserData.doc.clientID;
-  // const allUsers = permanentUserData.clients;
-
-  // const onlineClientIDs = Array.from(yProvider.awareness.getStates().keys());
-  // const connectedUsers = Array.from(allUsers.entries()).filter(
-  //   ([cid, _username]) => onlineClientIDs.includes(cid)
-  // );
-  // const disconnectedUsers = Array.from(allUsers.entries()).filter(
-  //   ([cid, _username]) => !onlineClientIDs.includes(cid)
-  // );
-  // console.log({ clientID, allUsers, connectedUsers, disconnectedUsers });
-
   renderCollabMenuSidebar();
 
   renderActions();
 }
+//alx
+export function awaranessUpdateHandler() {
+  const usersToRender = formatUserList();
+  renderUserList(usersToRender);
+}
 
-// export function renderUserAwareness() {
-//   let onlineElem = document.querySelector('#online-users');
-//   if (onlineElem) {
-//     let connectedIds = [...yProvider.awareness.getStates().values()].map(
-//       (s) => s.user.id
-//     );
+function formatUserList() {
+  const currentStates = yProvider.awareness.getStates();
+  
+  const connectedUsers = [...currentStates.entries()].
+    map(e => e = e[1].user);
+  connectedUsers.forEach(user => user.online = true);
 
-//     render(html`${userListTemplate()}`, onlineElem);
-//     // Initialize bootstrap tooltips
-//     $('[data-toggle="tooltip"]').tooltip();
-//   } else {
-//     console.log(
-//       'Element div#online-users is not found. Cannot display online user info.'
-//     );
-//   }
-// }
+  if (!prevStates) {
+    prevStates = [...currentStates];
+    return connectedUsers;
+  }
+
+  const disconnectedUser = prevStates.
+    filter(el => !currentStates.has( el[0] )).
+    map(e => e = e[1].user);
+  disconnectedUser.forEach(user => user.online = false);
+
+  prevStates = [...currentStates];
+  console.log(connectedUsers, disconnectedUser);
+  return [...connectedUsers, ...disconnectedUser];
+}
 
 function collabLayer(...children) {
   let output = document.querySelector('#output');

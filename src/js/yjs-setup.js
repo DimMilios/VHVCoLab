@@ -1,8 +1,9 @@
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import {
+  awaranessUpdateHandler,
   commentsObserver,
-  updateHandler,
+  stateChangeHandler,
 } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
@@ -33,12 +34,26 @@ const colors = [
 ];
 
 const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
-
 let name = oneOf(names);
 let userData = {
   name,
   color: oneOf(colors),
-};
+ };
+
+//alx. tsek
+(async (userName) => {
+  const origin = window.location.origin; //me i xwris to port?
+  const defaultImage = new URL(origin + `/src/images/defaultUser.svg`); //desto path
+  const userImage = new URL(origin + `/src/images/${userName}.*`); //desto path kai to wildcard
+
+  const response = await fetch(userImage, {
+    method: "HEAD"
+  });
+  
+  if (!response.ok) {
+    userData.userImageUrl =  defaultImage.toString();
+  } else userData.userImageUrl = userImage.toString();
+}) ();
 
 /** @type{WebsocketProvider} */
 export let yProvider;
@@ -135,9 +150,9 @@ export async function setupCollaboration() {
         });
       }
     });
-
-    // yProvider.awareness.on('change', updateHandler);
-    yProvider.awareness.on('update', updateHandler);
+    //alx
+    yProvider.awareness.on('change', stateChangeHandler);
+    yProvider.awareness.on('update', awaranessUpdateHandler);
 
     setUserAwarenessData(user, course);
   }

@@ -243,10 +243,6 @@
   z-index: 1000;
 }
 
-.users-online {
-  list-style: none;
-}
-
 .offline-status {
   background-color: red;
   /* color: rgb(142, 255, 76); */
@@ -284,8 +280,8 @@
 
   position: absolute;
   box-sizing: border-box;
-  bottom: 14%;
-  right: 14%;
+  bottom: 10px;
+  left: 43px;
 
   min-width: 8px;
   padding: 0px;
@@ -398,9 +394,11 @@
   height: 5rem;
 }
 
-.collab-actions-buttons {
+#collab-actions-buttons, #online-users {
+  border: 2px dotted white;
   width: 100%;
 }
+
 .shown {
   opacity: 1 !important;
   transform: translateX(0%) !important;
@@ -418,8 +416,8 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-evenly;
   border-radius: 0.1rem;
   background-color: rgba(34, 34, 34, 0.9);
 
@@ -429,25 +427,25 @@
   transition: transform 300ms ease-out;
 }
 
-.user-connection-status-container {
-  width: 100%;
-}
-
 .user-connection-status-list {
-  margin-block-end: 3rem;
+  margin: 0;
   padding: 0;
   list-style: none;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
+  border: 2px solid rgb(153, 0, 255);
 }
 
 .user-connection-status-item {
   position: relative;
-  color: #f2f2f2;
+}
+
+.image-container {
+  display: flex;
 }
 
 .collab-menu-toolbar-list {

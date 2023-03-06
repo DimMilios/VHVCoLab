@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 import { setState, state } from '../state/comments.js';
 import { yProvider } from '../yjs-setup.js';
-import { updateHandler } from '../collaboration/collab-extension.js';
+import { stateChangeHandler } from '../collaboration/collab-extension.js';
 import * as commentService from '../api/comments.js';
 import { getURLParams } from '../api/util.js';
 import { timeSince } from '../collaboration/util-collab.js';
@@ -37,7 +37,7 @@ export let commentTemplate = (commentId, username, content, createdAt, imgUrl, p
         setState({
           comments: state.comments.filter(c => c.id != commentId)
         });
-        updateHandler();
+        stateChangeHandler();
       }
     });
   };
