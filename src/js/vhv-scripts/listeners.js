@@ -115,7 +115,7 @@ import { inSvgImage } from './utility-svg.js';
 
 import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
-import { ActionPayload, sendAction } from '../api/actions.js';
+import { sendAction } from '../api/actions.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -302,22 +302,20 @@ function transposeMultiSelect(state, amount) {
 
 /**
  *
- * @param {} changePitchAction
+ * @param {{}} changePitchAction
  * @param {'single' | 'multi'} changePitchType
  */
 function sendChangePitchAction(changePitchAction, changePitchType = 'single') {
   console.log({ transposedNote: changePitchAction });
 
   if (changePitchAction) {
-    sendAction(
-      new ActionPayload({
-        type: 'change_pitch',
-        content: JSON.stringify({
-          type: changePitchType,
-          change: changePitchAction,
-        }),
-      })
-    )
+    sendAction({
+      type: 'change_pitch',
+      content: JSON.stringify({
+        type: changePitchType,
+        change: changePitchAction,
+      }),
+    })
       .then(() => console.log(`change_pitch action was sent.`))
       .catch(() => console.error(`Failed to send change_pitch action`));
   }
@@ -345,8 +343,18 @@ function processNotationKeyCommand(event) {
     }
 
     if (featureIsEnabled('collaboration')) {
+      let oldValue = editor.session.getValue();
       // Collaborative undo
-      yUndoManager?.undo();
+      let stackItem = yUndoManager?.undo();
+      let newValue = editor.session.getValue();
+      if (stackItem !== null) {
+        sendAction({
+          type: 'undo',
+          content: JSON.stringify({ oldValue, newValue }),
+        })
+          .then(() => console.log(`undo action was sent.`))
+          .catch(() => console.error(`Failed to send undo action`));
+      }
     } else {
       // Non-collaborative undo
       editor.undo();

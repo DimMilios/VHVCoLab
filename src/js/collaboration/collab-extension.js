@@ -1,4 +1,4 @@
-import { permanentUserData, yProvider } from '../yjs-setup.js';
+import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
 import { collabTemplate, multiSelectCoords, uiCoords } from './templates.js';
@@ -7,7 +7,7 @@ import {
   singleSelectTemplate,
   userAwarenessTemplate,
 } from '../templates/userAwareness';
-import { renderUserList, userListTemplate } from '../templates/userList.js';
+import { renderUserList } from '../templates/userList.js';
 import {
   highlightLayerTemplate,
   highlightTemplate,
@@ -251,8 +251,6 @@ export function stateChangeHandler(clients = defaultClients()) {
   );
 
   renderCollabMenuSidebar();
-
-  // renderActions();
 }
 //alx
 export function awaranessUpdateHandler() {
@@ -262,20 +260,21 @@ export function awaranessUpdateHandler() {
 
 function formatUserList() {
   const currentStates = yProvider.awareness.getStates();
-  
-  const connectedUsers = [...currentStates.entries()].
-    map(e => e = e[1].user);
-  connectedUsers.forEach(user => user.online = true);
+
+  const connectedUsers = [...currentStates.entries()].map(
+    (e) => (e = e[1].user)
+  );
+  connectedUsers.forEach((user) => (user.online = true));
 
   if (!prevStates) {
     prevStates = [...currentStates];
     return connectedUsers;
   }
 
-  const disconnectedUser = prevStates.
-    filter(el => !currentStates.has( el[0] )).
-    map(e => e = e[1].user);
-  disconnectedUser.forEach(user => user.online = false);
+  const disconnectedUser = prevStates
+    .filter((el) => !currentStates.has(el[0]))
+    .map((e) => (e = e[1].user));
+  disconnectedUser.forEach((user) => (user.online = false));
 
   prevStates = [...currentStates];
   console.log(connectedUsers, disconnectedUser);

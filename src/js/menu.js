@@ -40,7 +40,8 @@ import {
   promptForFile,
   saveContentAsMIDI,
 } from './vhv-scripts/file-operations.js';
-import { toggleCommentsVisibility } from './bootstrap.js';
+import { featureIsEnabled, toggleCommentsVisibility } from './bootstrap.js';
+import { sendAction } from './api/actions.js';
 
 class MenuInterface {
   constructor() {
@@ -315,7 +316,7 @@ class MenuInterface {
     displayNotation();
   }
 
-  applyFilter(filter, data, callback) {
+  applyFilter(filter, data, callback, label) {
     var contents = '';
     if (!data) {
       contents = editor.getValue().replace(/^\s+|\s+$/g, '');
@@ -344,6 +345,17 @@ class MenuInterface {
       editor.setValue(newdata, -1);
       if (callback) {
         callback(newdata);
+      }
+      console.log({ filter, data });
+      if (filter.startsWith('transpose') && featureIsEnabled('actions')) {
+        sendAction({
+          type: 'transpose',
+          content: JSON.stringify({ text: label }),
+        })
+          .then(() => console.log('transpose action was sent to the server'))
+          .catch(() =>
+            console.log('failed to send transpose action the server')
+          );
       }
     });
   }

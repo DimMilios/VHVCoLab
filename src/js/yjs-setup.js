@@ -55,6 +55,8 @@ let userData = {
   } else userData.userImageUrl = userImage.toString();
 }) ();
 
+export const messageActionsReset = 100;
+
 /** @type{WebsocketProvider} */
 export let yProvider;
 
@@ -104,7 +106,10 @@ export async function setupCollaboration() {
     const { file, user, course } = getURLInfo();
 
     let searchParams = new URLSearchParams(file);
-    let room = searchParams.get('f') ?? 'test-room';
+    let room = file ?? 'test-room';
+    if (searchParams.has('f')) {
+      room = searchParams.get('f');
+    }
     // let roomData;
     /*
   if (file && user) {
@@ -116,7 +121,7 @@ export async function setupCollaboration() {
     permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
-	    params: { username: user, file, course: course ?? null },
+      params: { username: user, file, course: course ?? null },
     }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
@@ -126,6 +131,10 @@ export async function setupCollaboration() {
         document.title = document.title.replace('🟢', '🔴');
       }
     });
+
+    yProvider.messageHandlers[messageActionsReset] = () => {
+      document.dispatchEvent(new Event('actions_reset'));
+    };
 
     const editor = getAceEditor();
     if (!editor) {
