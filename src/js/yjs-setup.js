@@ -9,7 +9,7 @@ import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import Cookies from 'js-cookie';
 
-import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo } from './api/util.js';
+import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo, getURLParams } from './api/util.js';
 import { loadFileFromURLParam } from './vhv-scripts/file-operations.js';
 
 const names = [
@@ -33,27 +33,29 @@ const colors = [
   '#1be7ff',
 ];
 
+function setUserImageUrl () {
+  const {id} = getURLParams();
+  //TODO: replace baseUrl in base.
+  //baseUrl cannot be accessed before initialization. pws fortwnontai ta js? stin html de deixnei.
+  const base = "https://musicolab.hmu.gr";
+
+  if (id) {
+    return new URL(
+      `/moodle/pluginfile.php/${id}/user/icon/fordson/f2`, base).
+      toString();
+  } else { 
+    return new URL(
+      `/images/defaultUser.svg`, base).toString();
+  }
+}
+
 const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
 let name = oneOf(names);
 let userData = {
   name,
   color: oneOf(colors),
+  image: setUserImageUrl()
  };
-
-//alx. tsek
-(async (userName) => {
-  const origin = window.location.origin; //me i xwris to port?
-  const defaultImage = new URL(origin + `/src/images/defaultUser.svg`); //desto path
-  const userImage = new URL(origin + `/src/images/${userName}.*`); //desto path kai to wildcard
-
-  const response = await fetch(userImage, {
-    method: "HEAD"
-  });
-  
-  if (!response.ok) {
-    userData.userImageUrl =  defaultImage.toString();
-  } else userData.userImageUrl = userImage.toString();
-}) ();
 
 /** @type{WebsocketProvider} */
 export let yProvider;
@@ -101,7 +103,7 @@ export async function setupCollaboration() {
   }
 
   if (typeof yProvider == 'undefined') {
-    const { file, user, course } = getURLInfo();
+    const { file, user, course, id } = getURLInfo();
 
     let searchParams = new URLSearchParams(file);
     let room = searchParams.get('f') ?? 'test-room';
@@ -151,7 +153,7 @@ export async function setupCollaboration() {
         });
       }
     });
-    //alx
+
     yProvider.awareness.on('change', stateChangeHandler);
     yProvider.awareness.on('update', awaranessUpdateHandler);
 

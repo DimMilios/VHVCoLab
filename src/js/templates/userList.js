@@ -1,7 +1,5 @@
 import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
-import { yProvider } from '../yjs-setup';
-
 
 export let userListTemplate = (users) => {
   return html`
@@ -17,7 +15,7 @@ let onlineUserTemplate = (user) => {
     class="user-connection-status-item"
     >
       <img
-      src="/src/images/defaultUser.svg"
+      src=${user.image}
       alt="user profile icon"
       width="55"
       height="55"

@@ -250,7 +250,7 @@ export function stateChangeHandler(clients = defaultClients()) {
     collabContainer
   );
 
-  renderCollabMenuSidebar();
+  renderCollabMenuSidebar(); //
 
   // renderActions();
 }
@@ -278,7 +278,6 @@ function formatUserList() {
   disconnectedUser.forEach(user => user.online = false);
 
   prevStates = [...currentStates];
-  console.log(connectedUsers, disconnectedUser);
   return [...connectedUsers, ...disconnectedUser];
 }
 

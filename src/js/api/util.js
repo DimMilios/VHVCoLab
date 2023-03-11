@@ -61,7 +61,7 @@ const isSecure = (protocol = 'https') => {
 let productionOrigin = 'musicolab.hmu.gr:8080/';
 // let productionOrigin = '147.95.40.74:8080';
 export let baseUrl = import.meta.env.DEV
-  ? 'http://localhost:8080/'
+  ? 'http://localhost:5001/apprepository/vhvWs'
   : `${isSecure() ? 'https' : 'http'}://${productionOrigin}`;
 
 export let wsBaseUrl = import.meta.env.DEV
