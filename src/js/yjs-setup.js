@@ -41,7 +41,7 @@ function setUserImageUrl () {
 
   if (id) {
     return new URL(
-      `/moodle/pluginfile.php/${id}/user/icon/fordson/f2`, base).
+      `/user/pix.php/${id}/f1.jpg`, base).
       toString();
   } else { 
     return new URL(
