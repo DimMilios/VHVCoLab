@@ -2,7 +2,6 @@ import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
 import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
-import { multiSelectCoords } from '../collaboration/templates';
 import { timeSince } from '../collaboration/util-collab';
 import { yProvider } from '../yjs-setup';
 
@@ -113,15 +112,160 @@ function formatDate(date) {
   }
 
   let dMillis = Date.parse(d);
-  let lessThanADay = Date.now() - dMillis > 1000 * 60 * 60 * 24;
-  if (lessThanADay) {
+  let diff = Date.now() - dMillis;
+  let moreThanADay = diff > 1000 * 60 * 60 * 24;
+  if (moreThanADay) {
     const parts = d.split(' ');
     return `${parts[1]} ${parts[2]} ${parts[3]}, ${parts[4]}`;
   }
 
   const time = timeSince(dMillis);
+  if (diff <= 1000 * 10) {
+    return 'Now';
+  }
   return (time[0] === '1' ? time.slice(0, time.length - 1) : time) + ' ago';
 }
+
+const TYPES_WITH_CONTENT = [
+  ACTION_TYPES.add_comment,
+  ACTION_TYPES.change_pitch,
+  ACTION_TYPES.change_chord,
+  ACTION_TYPES.export,
+  ACTION_TYPES.transpose,
+];
+Object.freeze(TYPES_WITH_CONTENT);
+const isTypeSupported = (type) => {
+  return TYPES_WITH_CONTENT.includes(type);
+};
+
+/**
+ *
+ * @param {ActionResponse} action
+ */
+const content = (action) => {
+  switch (action.type) {
+    case 'add_comment':
+      return action.content.content;
+    case 'export':
+      return action.content.file;
+    case 'transpose':
+      return action.content.text;
+    case 'change_pitch': {
+      if (action.content.type === 'single') {
+        const changes = action.content.changes;
+        if (!Array.isArray(changes)) {
+          return null;
+        }
+
+        const oldest = changes[0].oldValue;
+        const newest = changes[changes.length - 1].newValue;
+
+        return html`
+          <div>
+            <table class="table table-bordered table-sm m-0 text-center">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">Measure</th>
+                  <td>OLD_M</td>
+                  <td>NEW_M</td>
+                </tr>
+                <tr>
+                  <th scope="row">Beat</th>
+                  <td>OLD_BEAT</td>
+                  <td>NEW_BEAT</td>
+                </tr>
+                <tr>
+                  <th scope="row">Humdrum</th>
+                  <td>${oldest}</td>
+                  <td>${newest}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (action.content.type === 'multi') {
+        const changes = action.content.changes;
+        if (!Array.isArray(changes)) {
+          return null;
+        }
+
+        const multiChanges = {};
+        for (let oldestChange of changes[0]) {
+          const oldest = oldestChange.oldToken;
+          multiChanges[oldestChange.id] = { oldest };
+        }
+        for (let newestChange of changes[changes.length - 1]) {
+          const newest = newestChange.token;
+          multiChanges[newestChange.id].newest = newest;
+        }
+
+        const values = Object.values(multiChanges);
+
+        return html`
+          <div>
+            <table class="table table-bordered table-sm m-0 text-center">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">Measure</th>
+                  <td>OLD_M</td>
+                  <td>NEW_M</td>
+                </tr>
+                <tr>
+                  <th scope="row">Beat</th>
+                  <td>OLD_BEAT</td>
+                  <td>NEW_BEAT</td>
+                </tr>
+                <tr>
+                  <th scope="row">Humdrum</th>
+                  <td>
+                    ${values.map((change) => html`<div>${change.oldest}</div>`)}
+                  </td>
+                  <td>
+                    ${values.map((change) => html`<div>${change.newest}</div>`)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+    }
+  }
+};
+
+const extraInfo = (/** @type {ActionResponse} */ action) => {
+  if (isTypeSupported(action.type)) {
+    return html`
+      <div
+        id=${'collapse-action-' + action.id}
+        class="collapse"
+        aria-labelledby=${'heading' + action.id}
+        data-parent="#action-history-accordion"
+      >
+        <div class="card-body">
+          <div>${content(action)}</div>
+        </div>
+      </div>
+    `;
+  }
+  return null;
+};
 
 /**
  *
@@ -139,33 +283,6 @@ const actionEntry = (action, userColorMapping) => {
   const createdAt = formatDate(action.createdAt);
   const type = action.type.split('_').join(' ');
 
-  const handleClick = () => {
-    try {
-      console.log({ content: action.content });
-      const content = action.content;
-      if (content === null) {
-        console.log('Failed to parse action content from server');
-        return;
-      }
-
-      switch (action.type) {
-        case 'add_comment': {
-          const elemIds = content.multiSelectElements
-            ?.split(',')
-            .map((id) => '#' + id);
-          const elems = document.querySelectorAll(elemIds.join(','));
-          const coords = multiSelectCoords(
-            content.multiSelectElements.split(',')
-          );
-          console.log({ elems, coords });
-          break;
-        }
-      }
-    } catch (e) {
-      console.error('Faile to parse action content from server', e);
-    }
-  };
-
   return html`
     <div class="card border-bottom border-top-0 border-right-0 border-left-0">
       <div class="card-header action-entry-header" id=${'heading' + action.id}>
@@ -174,14 +291,14 @@ const actionEntry = (action, userColorMapping) => {
             class="action-history-btn btn text-left d-flex align-items-baseline"
             type="button"
             data-toggle="collapse"
-            data-target=${'#collapse-action-' + action.id}
+            data-target=${`#collapse-action-${action.id}`}
             aria-expanded="true"
             aria-controls=${'#collapse-action-' + action.id}
             data-action-id=${action.id}
-            @click=${handleClick}
           >
             <div style="flex: 0 0 20ch;">
               <div style="font-size: 1.1rem;">
+                <span ?hidden=${!import.meta.env.DEV}>${action.id}</span>
                 <span
                   class="user-color-index mr-1"
                   style="background-color: ${userColorMapping[
@@ -198,21 +315,27 @@ const actionEntry = (action, userColorMapping) => {
         </h2>
       </div>
 
-      <div
-        id=${'collapse-action-' + action.id}
-        class="collapse"
-        aria-labelledby=${'heading' + action.id}
-        data-parent="#action-history-accordion"
-      >
-        <div class="card-body">
-          Some placeholder content for the first accordion panel. This panel is
-          shown by default, thanks to the <code>.show</code> class.
-          <div>${action.id}</div>
-        </div>
-      </div>
+      ${extraInfo(action)}
     </div>
   `;
 };
+
+document.addEventListener('actions_fetch', (e) => {
+  if (Array.isArray(e.detail.fetchedActions)) {
+    actions = actions.concat(e.detail.fetchedActions);
+    queryParams.lastActionId = e.detail.lastActionId;
+  }
+});
+
+document.addEventListener('actions_reset', (e) => {
+  console.log(`[${new Date().toISOString()}]: actions_reset event`);
+  queryParams.lastActionId = null;
+  actions.splice(0, actions.length);
+  // prettier-ignore
+  if (document.getElementById('action-history-container')?.classList.contains('open')) {
+    renderActions();
+  }
+});
 
 let actions = [];
 
@@ -223,21 +346,25 @@ let actions = [];
 const actionHistoryTemplate = (userColorMapping) => {
   const handleLoadMore = () => {
     renderActions();
-    const scrollContainer = document.getElementById('action-history-container');
-    const accordion = document.getElementById('action-history-accordion');
-    scrollContainer.scrollBy(0, accordion.getBoundingClientRect().height);
+    // const scrollContainer = document.getElementById('action-history-container');
+    // const accordion = document.getElementById('action-history-accordion');
+    // scrollContainer.scrollBy(0, accordion.getBoundingClientRect().height);
   };
 
   const actionsTemplate = getActions(queryParams).then((fetchedActions) => {
     if (Array.isArray(fetchedActions) && fetchedActions.length > 0) {
-      queryParams.lastActionId = fetchedActions[fetchedActions.length - 1].id;
-      actions = actions.concat(fetchedActions);
-      console.log({ queryParams, actions });
+      let lastActionId = fetchedActions[fetchedActions.length - 1].id;
+      document.dispatchEvent(
+        new CustomEvent('actions_fetch', {
+          detail: { fetchedActions, lastActionId },
+        })
+      );
     }
+
     return html`${actions.map(
         (action) => html`${actionEntry(action, userColorMapping)}`
       )}
-      <div>
+      <div ?hidden=${actions.length < queryParams.pageSize}>
         <button @click=${handleLoadMore} class="btn btn-primary w-100">
           <h5>Load more</h5>
           <div class="text-small">(${actions.length} loaded)</div>
@@ -255,12 +382,6 @@ const actionHistoryTemplate = (userColorMapping) => {
 
   return html`${until(actionsTemplate, loader)}`;
 };
-
-// Uncomment to use dummy data from JSON file (use ACTIONS variable on function renderActions below as well)
-// import DUMMY_ACTIONS from '../collaboration/actions_dummy.json?raw';
-// const ACTIONS = JSON.parse(DUMMY_ACTIONS)
-//   .actions.slice(0, 20)
-//   .map((action) => new ActionResponse(action));
 
 export const renderActions = () => {
   const awStates = Array.from(yProvider.awareness.getStates().values());

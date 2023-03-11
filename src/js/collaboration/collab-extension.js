@@ -1,4 +1,4 @@
-import { permanentUserData, yProvider } from '../yjs-setup.js';
+import { yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
 import { collabTemplate, multiSelectCoords, uiCoords } from './templates.js';
@@ -7,7 +7,7 @@ import {
   singleSelectTemplate,
   userAwarenessTemplate,
 } from '../templates/userAwareness';
-import { renderUserList, userListTemplate } from '../templates/userList.js';
+import { renderUserList } from '../templates/userList.js';
 import {
   highlightLayerTemplate,
   highlightTemplate,
@@ -19,6 +19,7 @@ import { CommentService } from '../api/CommentService.js';
 import { isEditing } from '../vhv-scripts/chords.js';
 import { showChordEditor } from '../vhv-scripts/chords.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
+import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
 
 //alx
 let prevStates;
@@ -252,7 +253,7 @@ export function stateChangeHandler(clients = defaultClients()) {
 
   renderCollabMenuSidebar(); //
 
-  // renderActions();
+  sendGroupedChangePitchActionIfChanged(clients);
 }
 //alx
 export function awaranessUpdateHandler() {
@@ -262,20 +263,21 @@ export function awaranessUpdateHandler() {
 
 function formatUserList() {
   const currentStates = yProvider.awareness.getStates();
-  
-  const connectedUsers = [...currentStates.entries()].
-    map(e => e = e[1].user);
-  connectedUsers.forEach(user => user.online = true);
+
+  const connectedUsers = [...currentStates.entries()].map(
+    (e) => (e = e[1].user)
+  );
+  connectedUsers.forEach((user) => (user.online = true));
 
   if (!prevStates) {
     prevStates = [...currentStates];
     return connectedUsers;
   }
 
-  const disconnectedUser = prevStates.
-    filter(el => !currentStates.has( el[0] )).
-    map(e => e = e[1].user);
-  disconnectedUser.forEach(user => user.online = false);
+  const disconnectedUser = prevStates
+    .filter((el) => !currentStates.has(el[0]))
+    .map((e) => (e = e[1].user));
+  disconnectedUser.forEach((user) => (user.online = false));
 
   prevStates = [...currentStates];
   return [...connectedUsers, ...disconnectedUser];
@@ -419,11 +421,14 @@ export function addListenersToOutput(outputTarget) {
         .filter((id) => /^note/g.test(id));
 
       if (multiSelectedNotes.length > 0) {
-        yProvider?.awareness?.setLocalStateField(
-          'multiSelect',
-          multiSelectedNotes
+        let oldStateCopy = structuredClone(
+          yProvider?.awareness?.getLocalState()
         );
-        yProvider?.awareness?.setLocalStateField('singleSelect', null);
+        yProvider?.awareness?.setLocalState({
+          ...oldStateCopy,
+          singleSelect: null,
+          multiSelect: multiSelectedNotes,
+        });
       }
 
       shouldMultiSelect = false;

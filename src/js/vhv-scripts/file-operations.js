@@ -3,6 +3,7 @@ import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
 import { featureIsEnabled } from '../bootstrap.js';
 import { yUndoManager } from '../yjs-setup.js';
 import { getURLInfo } from '../api/util.js';
+import { sendAction } from '../api/actions.js';
 
 const ACCEPTED_FORMATS = '.xml,.musicxml,.mei,.krn';
 
@@ -83,7 +84,9 @@ export function exportKernToPrivateFiles() {
   let scoreName = filenameFromURL;
   const scoreMeta = sessionStorage.getItem('score-metadata');
   if (scoreMeta === null) {
-    console.warn('Could not find metadata for this score. Using URL filename as title.');
+    console.warn(
+      'Could not find metadata for this score. Using URL filename as title.'
+    );
   } else {
     scoreName = JSON.parse(scoreMeta).title + '.krn';
     // scoreName = title.split(' ').join('_') + '.krn';
@@ -98,6 +101,12 @@ export function exportKernToPrivateFiles() {
   const ajax = new XMLHttpRequest();
   ajax.addEventListener('load', () => {
     alert('File has been exported to your private files!');
+    sendAction({
+      type: 'export',
+      content: JSON.stringify({ file: scoreName }),
+    }).catch((err) => {
+      console.error('Failed to send export action', err);
+    });
   });
   ajax.addEventListener('error', () => {
     alert('Failed to export score to your private files');

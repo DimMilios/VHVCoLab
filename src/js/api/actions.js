@@ -1,6 +1,6 @@
-import { createRelativePositionFromJSON } from 'yjs';
+import { encoding } from 'lib0';
 import { featureIsEnabled } from '../bootstrap';
-import { yProvider } from '../yjs-setup';
+import { messageActionsReset, yProvider } from '../yjs-setup';
 import { baseUrl, getURLParams } from './util';
 
 /** @typedef { 'change_pitch' | 'change_chord' | 'add_comment' | 'undo' | 'transpose' | 'connect' | 'disconnect' | 'export'} ActionType */
@@ -53,7 +53,7 @@ export class ActionResponse {
 }
 
 function getQueryData() {
-  const { user } = yProvider.awareness.getLocalState();
+  const { user } = yProvider?.awareness?.getLocalState();
   if (user) {
     return {
       username: user.name,
@@ -72,12 +72,13 @@ function getQueryData() {
   }
 }
 
+const encoder = encoding.createEncoder();
 /**
  *
- * @param {ActionPayload} payload
+ * @param {Partial<ActionPayload>} payload
  */
 export async function sendAction(payload) {
-  if (!featureIsEnabled('actions')) {
+  if (!featureIsEnabled('actions') || !featureIsEnabled('collaboration')) {
     console.warn(
       'Tried to send an action request, but "actions" feature is disabled. You must enable "actions" feature on features.json for actions to be sent.'
     );
@@ -100,6 +101,12 @@ export async function sendAction(payload) {
     });
     const json = await res.json();
     console.log(`Received:`, json);
+
+    // Invalidate pagination
+    encoding.writeVarUint(encoder, messageActionsReset);
+    if (encoding.length(encoder) >= 1) {
+      yProvider.ws.send(encoding.toUint8Array(encoder));
+    }
   } catch (error) {
     console.error(`Failed to send comment action`, error);
   }

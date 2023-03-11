@@ -8,26 +8,31 @@ const menuJSON = fs.readFileSync(path.resolve('src/menu.json'), 'utf-8');
 
 const clickHandlers = [];
 
-(function() {
+(function () {
   const { template, handlers } = createMenuItems(JSON.parse(menuJSON));
 
   try {
     console.log('Loading index.html...');
-    let htmlToEdit = fs.readFileSync(path.resolve("index.html"), { encoding: 'utf-8' });
-    
+    let htmlToEdit = fs.readFileSync(path.resolve('index.html'), {
+      encoding: 'utf-8',
+    });
+
     let lines = htmlToEdit.split('\n');
-    let start = lines.findIndex(s => s.trim() === MENU_START);
-    let end = lines.findIndex(s => s.trim() === MENU_END);
-    
-    let updatedTemplate = lines.slice(0, start + 1).concat(template, lines.slice(end)).join('\n');
-    
+    let start = lines.findIndex((s) => s.trim() === MENU_START);
+    let end = lines.findIndex((s) => s.trim() === MENU_END);
+
+    let updatedTemplate = lines
+      .slice(0, start + 1)
+      .concat(template, lines.slice(end))
+      .join('\n');
+
     fs.writeFileSync(path.resolve('index.html'), updatedTemplate);
     console.log('Successfully updated index.html with new menu.');
   } catch (error) {
     console.log('Failed to create menu files', error);
     return;
   }
-  
+
   try {
     fs.writeFileSync(path.resolve('src/js/menuEventHandlers.js'), handlers);
     console.log('Successfully created menu event handlers file.');
@@ -47,7 +52,7 @@ const menu = getMenu();
 
 `;
 
-const classWatcher = `
+  const classWatcher = `
 
 document.querySelectorAll('li.dropdown').forEach(
   (item) =>
@@ -77,8 +82,11 @@ document.querySelectorAll('li.dropdown').forEach(
       </div>
 
     </nav>
-  `
-  return { template: navBarTemplate, handlers: headers + clickHandlers.join('\n') + classWatcher };
+  `;
+  return {
+    template: navBarTemplate,
+    handlers: headers + clickHandlers.join('\n') + classWatcher,
+  };
 }
 
 function menuItems(menuJSON) {
@@ -88,10 +96,12 @@ function menuItems(menuJSON) {
     const submenu = entry.SUBMENU.ENTRY;
 
     const submenuItem = createSubmenu(submenu);
-    let li = `<li id="${(textValue + '__menu-item').toLowerCase()}" class="nav-item dropdown mr-2">
+    let li = `<li id="${(
+      textValue + '__menu-item'
+    ).toLowerCase()}" class="nav-item dropdown mr-2">
       <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-expanded="false">${textValue}</a>
       ${submenuItem ? submenuItem : ''}
-    </li>`
+    </li>`;
 
     listItems.push(li);
   }
@@ -105,7 +115,7 @@ function createSubmenu(submenuJSON, nested = false) {
   return submenu;
 }
 
-function submenuContent (submenuJSON) {
+function submenuContent(submenuJSON) {
   let children = [];
   if (isIterable(submenuJSON)) {
     for (const entry of submenuJSON) {
@@ -121,8 +131,8 @@ function nestedSubmenu(entry) {
   if (entry?.SUBMENU?.ENTRY) {
     return createSubmenu(entry.SUBMENU.ENTRY, true);
   }
-  
-  return "";
+
+  return '';
 }
 
 function createSubmenuItem(entry) {
@@ -131,21 +141,38 @@ function createSubmenuItem(entry) {
   const rightText = entry?.RIGHT_TEXT;
 
   let withRightText = () => {
-    return rightText?.DEFAULT?.length > 0 ? `<small class="ml-3 text-nowrap"><strong>${rightText.DEFAULT}</strong></small>` : ''
-  }
+    return rightText?.DEFAULT?.length > 0
+      ? `<small class="ml-3 text-nowrap"><strong>${rightText.DEFAULT}</strong></small>`
+      : '';
+  };
 
-  let liId = (defaultText?.split(/\W/).join('-') + '__submenu-item').toLowerCase();
+  let liId = (
+    defaultText?.split(/\W/).join('-') + '__submenu-item'
+  ).toLowerCase();
 
   let li = `<li id="${liId}" class="dropdown-item d-flex justify-content-between text-dark">
-    <a class="text-decoration-none text-dark">${defaultText} ${entry?.SUBMENU ? '»' : ''}</a>
+    <a class="text-decoration-none text-dark">${defaultText} ${
+    entry?.SUBMENU ? '»' : ''
+  }</a>
     ${withRightText()}
     ${nestedSubmenu(entry)}
   </li>`;
 
   if (action) {
-    clickHandlers.push(
-      `document.querySelector('#${liId}').addEventListener('click', () => ${action.replaceAll('MENU', 'menu')});`
-    );
+    let funcBody = action.replaceAll('MENU', 'menu');
+    if (action.includes('transpose')) {
+      let closingParenIndex = funcBody.lastIndexOf(')');
+      funcBody =
+        funcBody.slice(0, closingParenIndex) +
+        ', null, null, e.target.textContent.trim())';
+      clickHandlers.push(
+        `document.querySelector('#${liId}').addEventListener('click', (e) => ${funcBody});`
+      );
+    } else {
+      clickHandlers.push(
+        `document.querySelector('#${liId}').addEventListener('click', () => ${funcBody});`
+      );
+    }
   }
 
   return li;

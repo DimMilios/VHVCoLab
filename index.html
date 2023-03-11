@@ -2,10 +2,12 @@
 <html lang="en">
 
 <head>
-  <title>🔴 MusiCoLab | VHV</title>
+  <title>MusiCoLab | VHV</title>
   <meta charset="UTF-8">
 
   <link rel="stylesheet" href="/styles/bootstrap-4.6/bootstrap.min.css">
+
+  <link rel='icon' type='image/x-icon' href='/musicolab.ico'>
 
   <script src="/styles/bootstrap-4.6/jquery-3.5.1.min.js"></script>
   <script src="/styles/bootstrap-4.6/bootstrap.bundle.min.js"></script>
@@ -297,7 +299,8 @@
                 minlength="5">
             </div>
             <div class="form-group d-flex justify-content-end">
-              <button type="button" class="btn btn-danger" id='btnCloseCallJoin' data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" id='btnCloseCallJoin'
+                data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-success ml-1">
                 <div class="d-flex align-items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f9f9f9"
@@ -338,8 +341,7 @@
 
           <!-- Edit button toggle Chord editor display -->
           <div id="show-edit-suggest-buttons">
-            <button class="btn btn-secondary" id="edit-btn" data-toggle="modal"
-              >Edit</button>
+            <button class="btn btn-secondary" id="edit-btn" data-toggle="modal">Edit</button>
             <button class="btn btn-secondary" id="suggest-btn" data-toggle="modal"
               data-target="#suggest-new-chord">Suggest</button>
           </div>
@@ -2156,7 +2158,7 @@
   </div>
 
   <!-- Collaborative menu sidebar -->
-  <div id="collab-menu-toolbar-toggle">
+  <div id="collab-menu-toolbar-toggle" class="hidden action-container">
     <div class="p-2" role="button">
       <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-caret-left-fill"
         viewBox="0 0 16 16">
@@ -2166,13 +2168,13 @@
     </div>
   </div>
 
-  <div id="collaborative-menu-toolbar">
+  <div id="collaborative-menu-toolbar" class="hidden action-container">
     <div id="online-users"></div>
-    <div id="collab-actions-buttons" ></div>
+    <div id="collab-actions-buttons"></div>
   </div>
   <!-- Collaborative menu sidebar END -->
 
-  <section id="action-history-container">
+  <section id="action-history-container" class="hidden action-container">
     <div style="width: clamp(40ch, 20ch, 50ch);">
       <div id="action-history-header"></div>
       <div class="accordion" id="action-history-accordion"></div>

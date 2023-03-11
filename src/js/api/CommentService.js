@@ -1,8 +1,7 @@
 import * as Y from 'yjs';
 import { getCommentsList, ydoc } from '../yjs-setup';
 import { Comment } from '../collaboration/Comment';
-import { baseUrl } from './util';
-import { ActionPayload, sendAction } from './actions';
+import { sendAction } from './actions';
 
 export class CommentService {
   /** @type {Y.Array<string>} */
@@ -35,12 +34,7 @@ export class CommentService {
 
     this._commentsList.push([commentToAdd.toJSON()]);
 
-    sendAction(
-      new ActionPayload({
-        type: 'add_comment',
-        content: commentToAdd.toAction(),
-      })
-    )
+    sendAction({ type: 'add_comment', content: commentToAdd.toAction() })
       .then(() =>
         console.log(`Action for comment with id: ${commentToAdd.id} was sent.`)
       )

@@ -75,14 +75,20 @@ export const collabMenuSideBar = () => {
       </ul>
     </div>`;
 };
-///*
+
+const showActionContainers = () => {
+  document
+    .querySelectorAll('.hidden.action-container')
+    .forEach((elem) => elem.classList.remove('hidden'));
+};
+
 export const renderCollabMenuSidebar = () => {
   const collabActionsContainer = document.getElementById(
     'collab-actions-buttons'
   );
 
   if (collabActionsContainer) {
+    showActionContainers();
     render(html`${collabMenuSideBar()}`, collabActionsContainer);
   }
 };
-//*/
