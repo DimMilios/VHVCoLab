@@ -134,6 +134,138 @@ const TYPES_WITH_CONTENT = [
   ACTION_TYPES.transpose,
 ];
 Object.freeze(TYPES_WITH_CONTENT);
+const isTypeSupported = (type) => {
+  return TYPES_WITH_CONTENT.includes(type);
+};
+
+/**
+ *
+ * @param {ActionResponse} action
+ */
+const content = (action) => {
+  switch (action.type) {
+    case 'add_comment':
+      return action.content.content;
+    case 'export':
+      return action.content.file;
+    case 'transpose':
+      return action.content.text;
+    case 'change_pitch': {
+      if (action.content.type === 'single') {
+        const changes = action.content.changes;
+        if (!Array.isArray(changes)) {
+          return null;
+        }
+
+        const oldest = changes[0].oldValue;
+        const newest = changes[changes.length - 1].newValue;
+
+        return html`
+          <div>
+            <table class="table table-bordered table-sm m-0 text-center">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">Measure</th>
+                  <td>OLD_M</td>
+                  <td>NEW_M</td>
+                </tr>
+                <tr>
+                  <th scope="row">Beat</th>
+                  <td>OLD_BEAT</td>
+                  <td>NEW_BEAT</td>
+                </tr>
+                <tr>
+                  <th scope="row">Humdrum</th>
+                  <td>${oldest}</td>
+                  <td>${newest}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (action.content.type === 'multi') {
+        const changes = action.content.changes;
+        if (!Array.isArray(changes)) {
+          return null;
+        }
+
+        const multiChanges = {};
+        for (let oldestChange of changes[0]) {
+          const oldest = oldestChange.oldToken;
+          multiChanges[oldestChange.id] = { oldest };
+        }
+        for (let newestChange of changes[changes.length - 1]) {
+          const newest = newestChange.token;
+          multiChanges[newestChange.id].newest = newest;
+        }
+
+        const values = Object.values(multiChanges);
+
+        return html`
+          <div>
+            <table class="table table-bordered table-sm m-0 text-center">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">Measure</th>
+                  <td>OLD_M</td>
+                  <td>NEW_M</td>
+                </tr>
+                <tr>
+                  <th scope="row">Beat</th>
+                  <td>OLD_BEAT</td>
+                  <td>NEW_BEAT</td>
+                </tr>
+                <tr>
+                  <th scope="row">Humdrum</th>
+                  <td>
+                    ${values.map((change) => html`<div>${change.oldest}</div>`)}
+                  </td>
+                  <td>
+                    ${values.map((change) => html`<div>${change.newest}</div>`)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+    }
+  }
+};
+
+const extraInfo = (/** @type {ActionResponse} */ action) => {
+  if (isTypeSupported(action.type)) {
+    return html`
+      <div
+        id=${'collapse-action-' + action.id}
+        class="collapse"
+        aria-labelledby=${'heading' + action.id}
+        data-parent="#action-history-accordion"
+      >
+        <div class="card-body">
+          <div>${content(action)}</div>
+        </div>
+      </div>
+    `;
+  }
+  return null;
+};
 
 /**
  *
@@ -151,65 +283,6 @@ const actionEntry = (action, userColorMapping) => {
   const createdAt = formatDate(action.createdAt);
   const type = action.type.split('_').join(' ');
 
-  const handleClick = () => {
-    try {
-      console.log({ content: action.content });
-      const content = action.content;
-      if (content === null) {
-        console.log('Failed to parse action content from server');
-        return;
-      }
-    } catch (e) {
-      console.error('Faile to parse action content from server', e);
-    }
-  };
-
-  /**
-   *
-   * @param {ActionResponse} action
-   */
-  const content = (action) => {
-    switch (action.type) {
-      case 'add_comment':
-        return action.content.content;
-      case 'export':
-        return action.content.file;
-      case 'transpose':
-        return action.content.text;
-      case 'change_pitch':
-        const changePitchType = action.content.type;
-        if (changePitchType === 'single') {
-          return `${action.content.change.oldValue} was changed to ${action.content.change.newValue}`;
-        } else if (changePitchType === 'multi') {
-          return action.content.change.map(
-            (a) => html`<div>${a.oldToken} to ${a.token}</div>`
-          );
-        }
-    }
-  };
-
-  const isTypeSupported = (type) => {
-    return TYPES_WITH_CONTENT.includes(type);
-  };
-
-  const extraInfo = (/** @type {ActionResponse} */ action) => {
-    if (isTypeSupported(action.type)) {
-      return html`
-        <div
-          id=${'collapse-action-' + action.id}
-          class="collapse"
-          aria-labelledby=${'heading' + action.id}
-          data-parent="#action-history-accordion"
-        >
-          <div class="card-body">
-            <div>${content(action)}</div>
-          </div>
-        </div>
-      `;
-    }
-    return null;
-  };
-
   return html`
     <div class="card border-bottom border-top-0 border-right-0 border-left-0">
       <div class="card-header action-entry-header" id=${'heading' + action.id}>
@@ -222,7 +295,6 @@ const actionEntry = (action, userColorMapping) => {
             aria-expanded="true"
             aria-controls=${'#collapse-action-' + action.id}
             data-action-id=${action.id}
-            @click=${isTypeSupported(action.type) ? handleClick : null}
           >
             <div style="flex: 0 0 20ch;">
               <div style="font-size: 1.1rem;">
@@ -310,12 +382,6 @@ const actionHistoryTemplate = (userColorMapping) => {
 
   return html`${until(actionsTemplate, loader)}`;
 };
-
-// Uncomment to use dummy data from JSON file (use ACTIONS variable on function renderActions below as well)
-// import DUMMY_ACTIONS from '../collaboration/actions_dummy.json?raw';
-// const ACTIONS = JSON.parse(DUMMY_ACTIONS)
-//   .actions.slice(0, 20)
-//   .map((action) => new ActionResponse(action));
 
 export const renderActions = () => {
   const awStates = Array.from(yProvider.awareness.getStates().values());

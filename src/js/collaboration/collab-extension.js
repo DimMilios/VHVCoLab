@@ -19,6 +19,7 @@ import { CommentService } from '../api/CommentService.js';
 import { isEditing } from '../vhv-scripts/chords.js';
 import { showChordEditor } from '../vhv-scripts/chords.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
+import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
 
 //alx
 let prevStates;
@@ -251,6 +252,8 @@ export function stateChangeHandler(clients = defaultClients()) {
   );
 
   renderCollabMenuSidebar();
+
+  sendGroupedChangePitchActionIfChanged(clients);
 }
 //alx
 export function awaranessUpdateHandler() {
@@ -277,7 +280,6 @@ function formatUserList() {
   disconnectedUser.forEach((user) => (user.online = false));
 
   prevStates = [...currentStates];
-  console.log(connectedUsers, disconnectedUser);
   return [...connectedUsers, ...disconnectedUser];
 }
 
@@ -419,11 +421,14 @@ export function addListenersToOutput(outputTarget) {
         .filter((id) => /^note/g.test(id));
 
       if (multiSelectedNotes.length > 0) {
-        yProvider?.awareness?.setLocalStateField(
-          'multiSelect',
-          multiSelectedNotes
+        let oldStateCopy = structuredClone(
+          yProvider?.awareness?.getLocalState()
         );
-        yProvider?.awareness?.setLocalStateField('singleSelect', null);
+        yProvider?.awareness?.setLocalState({
+          ...oldStateCopy,
+          singleSelect: null,
+          multiSelect: multiSelectedNotes,
+        });
       }
 
       shouldMultiSelect = false;

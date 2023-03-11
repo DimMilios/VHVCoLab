@@ -116,6 +116,7 @@ import { inSvgImage } from './utility-svg.js';
 import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { sendAction } from '../api/actions.js';
+import { addChangePitchActionToGroup } from '../collaboration/sendGroupedActions.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -305,20 +306,13 @@ function transposeMultiSelect(state, amount) {
  * @param {{}} changePitchAction
  * @param {'single' | 'multi'} changePitchType
  */
-function sendChangePitchAction(changePitchAction, changePitchType = 'single') {
-  console.log({ transposedNote: changePitchAction });
+function addChangePitchAction(changePitchAction, changePitchType = 'single') {
+  const key =
+    changePitchType === 'single'
+      ? changePitchAction?.noteElementId
+      : changePitchAction?.map((entry) => entry.id).join(',');
 
-  if (changePitchAction) {
-    sendAction({
-      type: 'change_pitch',
-      content: JSON.stringify({
-        type: changePitchType,
-        change: changePitchAction,
-      }),
-    })
-      .then(() => console.log(`change_pitch action was sent.`))
-      .catch(() => console.error(`Failed to send change_pitch action`));
-  }
+  addChangePitchActionToGroup(key, changePitchAction, changePitchType);
 }
 
 function processNotationKeyCommand(event) {
@@ -370,19 +364,19 @@ function processNotationKeyCommand(event) {
     // the CursorNote is re-assigned to one of the multi-selected note elements
     if (event.code === UpKey && event.shiftKey) {
       const action = transposeMultiSelect(localState, 1);
-      sendChangePitchAction(action, 'multi');
+      addChangePitchAction(action, 'multi');
       return;
     } else if (event.code === DownKey && event.shiftKey) {
       const action = transposeMultiSelect(localState, -1);
-      sendChangePitchAction(action, 'multi');
+      addChangePitchAction(action, 'multi');
       return;
     } else if (event.code === UpKey && event.ctrlKey) {
       const action = transposeMultiSelect(localState, 7);
-      sendChangePitchAction(action, 'multi');
+      addChangePitchAction(action, 'multi');
       return;
     } else if (event.code === DownKey && event.ctrlKey) {
       const action = transposeMultiSelect(localState, -7);
-      sendChangePitchAction(action, 'multi');
+      addChangePitchAction(action, 'multi');
       return;
     }
   }
@@ -592,7 +586,7 @@ function processNotationKeyCommand(event) {
             'transpose-up-step',
             global_cursor.CursorNote
           );
-          sendChangePitchAction(action);
+          addChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
         event.preventDefault();
@@ -602,7 +596,7 @@ function processNotationKeyCommand(event) {
             'transpose-up-octave',
             global_cursor.CursorNote
           );
-          sendChangePitchAction(action);
+          addChangePitchAction(action);
         }
       } else {
         event.preventDefault();
@@ -620,7 +614,7 @@ function processNotationKeyCommand(event) {
             'transpose-down-step',
             global_cursor.CursorNote
           );
-          sendChangePitchAction(action);
+          addChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
         event.preventDefault();
@@ -630,7 +624,7 @@ function processNotationKeyCommand(event) {
             'transpose-down-octave',
             global_cursor.CursorNote
           );
-          sendChangePitchAction(action);
+          addChangePitchAction(action);
         }
       } else {
         event.preventDefault();
@@ -683,7 +677,7 @@ function processNotationKeyCommand(event) {
       event.preventDefault();
       event.stopPropagation();
 
-      yProvider.awareness.setLocalStateField('singleSelect', { elemId: null });
+      yProvider.awareness.setLocalStateField('singleSelect', null);
 
       processNotationKey('esc', global_cursor.CursorNote);
       break;

@@ -2,25 +2,6 @@ import { html, render } from 'lit-html';
 import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap';
 import { renderActions } from './actionHistory';
 
-const userList = () => {
-  //alx
-  return html`
-    <div class="user-connection-status-container">
-      <ul class="user-connection-status-list">
-        <li class="user-connection-status-item">
-          <span>🔴</span><span>User1</span>
-        </li>
-        <li class="user-connection-status-item">
-          <span>🟢</span><span>User2</span>
-        </li>
-        <li class="user-connection-status-item">
-          <span>🟢</span><span>User3</span>
-        </li>
-      </ul>
-    </div>
-  `;
-};
-
 export const collabMenuSideBar = () => {
   let commentBtnText = COMMENTS_VISIBLE ? 'Hide Comments' : 'Show Comments';
 
@@ -94,14 +75,20 @@ export const collabMenuSideBar = () => {
       </ul>
     </div>`;
 };
-///*
+
+const showActionContainers = () => {
+  document
+    .querySelectorAll('.hidden.action-container')
+    .forEach((elem) => elem.classList.remove('hidden'));
+};
+
 export const renderCollabMenuSidebar = () => {
   const collabActionsContainer = document.getElementById(
     'collab-actions-buttons'
   );
 
   if (collabActionsContainer) {
+    showActionContainers();
     render(html`${collabMenuSideBar()}`, collabActionsContainer);
   }
 };
-//*/

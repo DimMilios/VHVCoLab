@@ -78,7 +78,7 @@ const encoder = encoding.createEncoder();
  * @param {Partial<ActionPayload>} payload
  */
 export async function sendAction(payload) {
-  if (!featureIsEnabled('actions')) {
+  if (!featureIsEnabled('actions') || !featureIsEnabled('collaboration')) {
     console.warn(
       'Tried to send an action request, but "actions" feature is disabled. You must enable "actions" feature on features.json for actions to be sent.'
     );
