@@ -79,10 +79,9 @@ const encoder = encoding.createEncoder();
  */
 export async function sendAction(payload) {
   if (!featureIsEnabled('actions') || !featureIsEnabled('collaboration')) {
-    console.warn(
+    return Promise.reject(
       'Tried to send an action request, but "actions" feature is disabled. You must enable "actions" feature on features.json for actions to be sent.'
     );
-    return;
   }
 
   try {
@@ -95,7 +94,7 @@ export async function sendAction(payload) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify(payload),
     });
@@ -108,16 +107,15 @@ export async function sendAction(payload) {
       yProvider.ws.send(encoding.toUint8Array(encoder));
     }
   } catch (error) {
-    console.error(`Failed to send comment action`, error);
+    return Promise.reject(`Failed to send action, error: ${error}`);
   }
 }
 
 export async function getActions(params = {}) {
-  if (!featureIsEnabled('actions')) {
-    console.warn(
+  if (!featureIsEnabled('actions') || !featureIsEnabled('collaboration')) {
+    return Promise.reject(
       'Tried to send an action request, but "actions" feature is disabled. You must enable "actions" feature on features.json for actions to be sent.'
     );
-    return;
   }
 
   try {
@@ -150,6 +148,6 @@ export async function getActions(params = {}) {
         })
     );
   } catch (error) {
-    console.error(`Failed to send comment action`, error);
+    return Promise.reject(`Failed to send action, error: ${error}`);
   }
 }

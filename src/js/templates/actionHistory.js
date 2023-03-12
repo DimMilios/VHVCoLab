@@ -150,6 +150,23 @@ const content = (action) => {
       return action.content.file;
     case 'transpose':
       return action.content.text;
+    case 'change_chord':
+      return html`
+          <div>
+            <table class="table table-bordered table-sm m-0 text-center">
+              <tbody>
+                <tr>
+                  <th scope="row">From</th>
+                  <td>${action.content.prevValue}</td>
+                </tr>
+                <tr>
+                  <th scope="row">To</th>
+                  <td>${action.content.newValue}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
     case 'change_pitch': {
       if (action.content.type === 'single') {
         const changes = action.content.changes;
