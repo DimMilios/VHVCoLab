@@ -44,8 +44,7 @@ function setUserImageUrl () {
       `/user/pix.php/${id}/f1.jpg`, base).
       toString();
   } else { 
-    return new URL(
-      `/images/defaultUser.svg`, base).toString();
+    return "./images/defaultUser.svg";
   }
 }
 

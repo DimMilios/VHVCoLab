@@ -131,6 +131,5 @@ export const send_mapping = {
     "C":"Suspended thirteenth",
     "w":"Suspended seventh flat thirteenth",
     "A":"Suspended seventh",
-    "G":"Augmented"
-    
+    "G":"Augmented"    
 } 
