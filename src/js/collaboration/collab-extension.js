@@ -251,7 +251,7 @@ export function stateChangeHandler(clients = defaultClients()) {
     collabContainer
   );
 
-  renderCollabMenuSidebar(); //
+  renderCollabMenuSidebar(); //TODO: isws xreiazetai na kaleitai 1 fora kapou allou. outws i allws to user list ananewnetai me ton update handler
 
   sendGroupedChangePitchActionIfChanged(clients);
 }

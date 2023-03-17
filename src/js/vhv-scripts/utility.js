@@ -410,7 +410,7 @@ function convertLineToCsv(line) {
 // convertTokenToCsv --
 //
 
-function convertTokenToCsv(token) {
+export function convertTokenToCsv(token) {
   var output = '';
   if (token.match(/,/) || token.match(/"/)) {
     output += '"';
@@ -420,4 +420,31 @@ function convertTokenToCsv(token) {
   } else {
     return token;
   }
+}
+
+export function getMusicalParameters (note) {
+  const measureNo = +[...note.closest('.measure').classList].
+    find(token => /m-\d+/.test(token)).
+    match(/\d+/)?.[0];
+  const voice = +note.closest('.layer')?.
+    id.match(/N(\d+)/)[1];
+  let whileStaff = note.closest(".staff");
+  let whileNote = 
+    note.closest('.chord')?
+      note.closest('.chord'):
+      note;
+  let order = 1;
+  let staff = 1;
+
+  while( /staff/.test(whileStaff.previousElementSibling?.id) ) {
+    staff++;
+    whileStaff = whileStaff.previousElementSibling;
+  }
+  
+  while( /note|chord/.test(whileNote.previousElementSibling?.id) ) {
+    order++;
+    whileNote = whileNote.previousElementSibling;
+  }
+
+  return {measureNo, voice, order, staff};
 }

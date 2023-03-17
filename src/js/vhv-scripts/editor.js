@@ -1707,7 +1707,7 @@ export function transposeNote(id, line, field, subfield, amount) {
 // id, line, field, subfield, amount
 export function transposeNotes(noteDescriptions) {
   const transposedNotes = [];
-  for (let { id, line, field, subfield, amount } of noteDescriptions) {
+  for (let { id, line, field, subfield, amount, order, voice, staff, measureNo } of noteDescriptions) {
     let token = getEditorContents(line, field);
     amount = parseInt(amount);
 
@@ -1746,6 +1746,10 @@ export function transposeNotes(noteDescriptions) {
         oldToken: token,
         token: newtoken,
         id,
+        order,
+        voice,
+        staff,
+        measureNo
       });
     }
   }

@@ -116,6 +116,7 @@ function requestChordEdit(reqURL, editor) {
         `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
         'send'
       );
+    const chordElementId = `L${chordLocation.line}F${chordLocation.column}`;
 
     sendAction(
       new ActionPayload({
@@ -123,6 +124,7 @@ function requestChordEdit(reqURL, editor) {
         content: JSON.stringify({
           prevValue,
           newValue,
+          chordElementId
         }),
       })
     )
