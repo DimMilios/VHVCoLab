@@ -44,6 +44,25 @@
   <script src="/scripts/pdfkit/pdfkit.js" type="text/javascript"></script>
   <script src="/scripts/pdfkit/source.js" type="text/javascript"></script>
 
+  <!--swing player-->
+  
+  <!--downloaded-->
+  <script src='/scripts/swing_player/downloaded/WebAudioFontPLayer.js' type="text/javascript"></script>
+  <script src='/scripts/swing_player/downloaded/0000_JCLive_sf2_file.js' type="text/javascript"></script>
+  <script src='/scripts/swing_player/downloaded/0320_Aspirin_sf2_file.js' type="text/javascript"></script>
+
+  <script type="text/javascript" src="/scripts/swing_player/gjt_player.js"></script>
+  <!-- workbench initialises audio manager -->
+  <script type="text/javascript" src="/scripts/swing_player/audioManager.js"></script>
+  <!-- workbench also needs to initialise audio sources -->
+  <script type="text/javascript" src="/scripts/swing_player/audioSources.js"></script>
+  <!-- workbench loads metronome -->
+  <script type="text/javascript" src="/scripts/swing_player/metronome_js/metronome.js"></script>
+  <script type="text/javascript" src="/scripts/swing_player/main.js"></script>
+  
+  <script type="text/javascript" src="/scripts/swing_player/sp_setup.js" defer></script>
+
+
   <link rel="stylesheet" href="/src/css/main.css" />
   <link rel="stylesheet" href="/src/css/midiplayer.css" />
   <link rel="stylesheet" href="/src/css/collab.css" />
@@ -346,6 +365,19 @@
               data-target="#suggest-new-chord">Suggest</button>
           </div>
 
+        <div class="swing-player-container align-self-end">
+          <button class="btn btn-primary swing-player-button">Play - Stop</button>
+          <div>
+            <span id='chord_span'> Chord: </span>
+            <span id='chord'> -- </span>
+            <span id='chord1_span'>  |  </span>
+            <span id='chord1'> -- </span>
+            <span id='chord2_span'>  |  </span>
+            <span id='chord2'> -- </span>
+            <span id='chord3_span'>  |  </span>
+            <span id='chord3'> -- </span>
+          </div>
+        </div>
           <div xmlns="http://www.w3.org/1999/xhtml" class="nav-play-button mr-5">
             <div style="cursor:pointer;" title="Play music" id="play-button">
               <span class="fas fa-play"></span>

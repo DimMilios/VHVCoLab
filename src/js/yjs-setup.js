@@ -44,7 +44,7 @@ function setUserImageUrl () {
       `moodle/user/pix.php/${id}/f1.jpg`, base).
       toString();
   } else { 
-    return "./images/defaultUser.svg";
+    return "/defaultUser.svg";
   }
 }
 

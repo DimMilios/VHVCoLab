@@ -1149,8 +1149,9 @@ export function verovioCallback(data) {
 getAceEditor()
   .getSession()
   .on('change', function () {
-    let editor = getAceEditor();
-    let kernFile = editor.getSession().getValue();
+    const editor = getAceEditor();
+    const kernFile = editor.getSession().getValue();
+    kern_string = kernFile;
     //extracting tempo
     if (!kernFile) {
       console.log(
@@ -1163,14 +1164,14 @@ getAceEditor()
 
     if (!tempo) {
       window.TEMPO = 200;
-      let exIntLine = kernFile.match(/^\*\*.*\n/m)[0];
-      let tempoLine = exIntLine.replaceAll(/\*\*[^\t]*/g, `*MM${window.TEMPO}`);
-      let tempo_incKern = kernFile.replace(
+      const exIntLine = kernFile?.match(/^\*\*.*\n/m)[0];
+      const tempoLine = exIntLine?.replaceAll(/\*\*[^\t]*/g, `*MM${window.TEMPO}`);
+      const tempo_incKern = kernFile?.replace(
         exIntLine,
         exIntLine + tempoLine + '\n'
       );
+      if (tempo_incKern)  editor.setValue(tempo_incKern);
 
-      editor.setValue(tempo_incKern);
       tempoInput.placeholder = window.TEMPO;
     } else {
       window.TEMPO = parseInt(tempo);
@@ -1178,7 +1179,7 @@ getAceEditor()
     }
 
     //extracting time signature
-    let timeSignature = kernFile.match(/\*M(\d)\/\d/)?.[1];
+    const timeSignature = kernFile.match(/\*M(\d)\/\d/)?.[1];
 
     if (!timeSignature) {
       console.log('Time signature has not been encoded in kern file');
@@ -1186,10 +1187,10 @@ getAceEditor()
   });
 
 document.getElementById('change-tempo').addEventListener('click', () => {
-  let kernFile = getAceEditor().getSession().getValue();
-  let newTempo = document.getElementById('tempo-input').value;
+  const kernFile = getAceEditor().getSession().getValue();
+  const newTempo = document.getElementById('tempo-input').value;
 
-  let newKern = kernFile
+  const newKern = kernFile
     .replaceAll(/MM\d+/g, `MM${newTempo}`)
     .replaceAll(/t=\[quarter\]=\d+/g, `t=[quarter]=${newTempo}`);
 
