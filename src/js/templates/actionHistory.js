@@ -303,10 +303,6 @@ const actionEntry = (action, userColorMapping) => {
   function handleView () {
     yProvider.awareness.setLocalStateField('referenceAction', {
       actionsDisplayed: true,
-      selection: {
-        component,
-        text: selection.innerText,
-      },
     });
   
   }
