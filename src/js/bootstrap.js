@@ -104,21 +104,25 @@ export function featureIsEnabled(featureName) {
 }
 
 function getCollabStatus() {
-  const { course, collab } = getURLInfo();
+  const urlParams = getURLInfo();
 
   // `course` URL search parameter
-  if (typeof course == 'string' && course.length > 0 && collab !== 'false') {
+  if (
+    typeof urlParams.course == 'string' &&
+    urlParams.course.length > 0 &&
+    urlParams.collab !== 'false'
+  ) {
     return {
       enabled: true,
-      reason: `course search parameter specified with value: ${course}`,
+      reason: `course search parameter specified with value: ${urlParams.course}`,
     };
   }
 
   // `collab` URL search parameter
-  if (typeof collab != 'undefined') {
+  if (typeof urlParams.collab != 'undefined') {
     return {
-      enabled: collab === 'true',
-      reason: `collab search parameter specified with value: ${collab}`,
+      enabled: urlParams.collab === 'true',
+      reason: `collab search parameter specified with value: ${urlParams.collab}`,
     };
   }
 
@@ -131,13 +135,17 @@ function getCollabStatus() {
 }
 
 function actionStatus() {
-  const { course, collab } = getURLInfo();
+  const urlParams = getURLInfo();
 
   // `course` URL search parameter
-  if (typeof course == 'string' && course.length > 0 && collab !== 'false') {
+  if (
+    typeof urlParams.course == 'string' &&
+    urlParams.course.length > 0 &&
+    urlParams.collab !== 'false'
+  ) {
     return {
       enabled: true,
-      reason: `course search parameter specified with value: ${course}`,
+      reason: `course search parameter specified with value: ${urlParams.course}`,
     };
   }
 

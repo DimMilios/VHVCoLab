@@ -11,20 +11,27 @@ export function getURLInfo() {
     return urlParams;
   }
 
-  let file = atob(urlParams?.file);
-  // Extract the file name for the file passed from URL
-  // The file is stored in MusiCoLab's file repository
-  if (file && isValidHttpUrl(file)) {
-    let params = new URL(file).searchParams;
-    file = `f=${params.get('f')}&u=${params.get('u')}`;
-    console.log({ file, params: params.toString() });
+  try {
+    let file = atob(urlParams?.file);
+    // Extract the file name for the file passed from URL
+    // The file is stored in MusiCoLab's file repository
+    if (file && isValidHttpUrl(file)) {
+      let params = new URL(file).searchParams;
+      file = `f=${params.get('f')}&u=${params.get('u')}`;
+      console.log({ file, params: params.toString() });
+    }
+    // console.log({ ...urlParams, file });
+    return {
+      ...urlParams,
+      file,
+    };
+  } catch (error) {
+    console.error(
+      'Failed to parse url parameters. Will return empty object. Original error: ',
+      error
+    );
   }
-  // console.log({ ...urlParams, file });
-
-  return {
-    ...urlParams,
-    file,
-  };
+  return {};
 }
 
 export async function fetchRoom(file, username) {
