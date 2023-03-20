@@ -288,10 +288,13 @@ function transposeMultiSelect(state, amount) {
   const notes = Array.from(
     document.querySelectorAll(state.multiSelect.map((el) => '#' + el).join(','))
   )
-    .map((note) => ({...extractEditorPosition(note), ...getMusicalParameters(note)}) )
+    .map((note) => ({
+      ...extractEditorPosition(note),
+      ...getMusicalParameters(note),
+    }))
     .filter(Boolean)
-    .map((note) => ({ ...note, amount}));
-  
+    .map((note) => ({ ...note, amount }));
+
   const transposedNotes = transposeNotes(notes);
   setEditorContentsMany(transposedNotes);
   return transposedNotes;
@@ -584,9 +587,12 @@ function processNotationKeyCommand(event) {
         if (global_cursor.CursorNote.id.match('note-')) {
           console.log('Shift + Up, Current note: ', global_cursor.CursorNote);
           const action = {
-            ...processNotationKey('transpose-up-step',global_cursor.CursorNote),
-            ...getMusicalParameters(global_cursor.CursorNote)
-          };        
+            ...processNotationKey(
+              'transpose-up-step',
+              global_cursor.CursorNote
+            ),
+            ...getMusicalParameters(global_cursor.CursorNote),
+          };
           addChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
@@ -594,9 +600,12 @@ function processNotationKeyCommand(event) {
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
           const action = {
-            ...processNotationKey('transpose-up-octave',global_cursor.CursorNote),
-            ...getMusicalParameters(global_cursor.CursorNote)
-          };       
+            ...processNotationKey(
+              'transpose-up-octave',
+              global_cursor.CursorNote
+            ),
+            ...getMusicalParameters(global_cursor.CursorNote),
+          };
           addChangePitchAction(action);
         }
       } else {
@@ -612,9 +621,12 @@ function processNotationKeyCommand(event) {
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
           const action = {
-            ...processNotationKey('transpose-down-step',global_cursor.CursorNote),
-            ...getMusicalParameters(global_cursor.CursorNote)
-          };       
+            ...processNotationKey(
+              'transpose-down-step',
+              global_cursor.CursorNote
+            ),
+            ...getMusicalParameters(global_cursor.CursorNote),
+          };
           addChangePitchAction(action);
         }
       } else if (event.ctrlKey) {
@@ -622,9 +634,12 @@ function processNotationKeyCommand(event) {
         event.stopPropagation();
         if (global_cursor.CursorNote.id.match('note-')) {
           const action = {
-            ...processNotationKey('transpose-down-octave',global_cursor.CursorNote),
-            ...getMusicalParameters(global_cursor.CursorNote)
-          };       
+            ...processNotationKey(
+              'transpose-down-octave',
+              global_cursor.CursorNote
+            ),
+            ...getMusicalParameters(global_cursor.CursorNote),
+          };
           addChangePitchAction(action);
         }
       } else {

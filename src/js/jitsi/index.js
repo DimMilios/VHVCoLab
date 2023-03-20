@@ -2,7 +2,7 @@ import { yProvider } from '../yjs-setup';
 import { featureIsEnabled } from '../bootstrap.js';
 import { getURLParams } from '../api/util';
 
-const JITSI_DOMAIN = '147.95.32.219:8443';
+const JITSI_DOMAIN = 'jitsi-musicolab.hmu.gr:8443';
 // const JITSI_DOMAIN = 'meet.jit.si';
 const JITSI_DEFAULT_OPTIONS = {
   roomName: 'MusiCoLab Demo',
@@ -12,6 +12,24 @@ const JITSI_DEFAULT_OPTIONS = {
     prejoinPageEnabled: true,
   },
 };
+
+//CONFIG TO BE ADDED
+//config.analytics.disabled=true
+//config.prejoinPageEnabled=true
+//config.p2p.enabled=false
+//config.disableAP=true
+//config.disableAEC=false
+//config.disableNS=true
+//config.disableAGC=true
+//config.disableHPF=true
+//config.stereo=false
+//config.opusMaxAverageBitrate=10000
+//config.enableOpusRed=false
+//config.enableNoAudioDetection=false
+//config.enableNoisyMicDetection=false
+//config.disableAudioLevels=true
+//config.disableSimulcast=true
+//config.enableLayerSuspension=true
 
 class JitsiAPI {
   api = null;

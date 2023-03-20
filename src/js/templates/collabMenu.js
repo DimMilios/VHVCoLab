@@ -1,5 +1,9 @@
 import { html, render } from 'lit-html';
-import { COMMENTS_VISIBLE, toggleCommentsVisibility } from '../bootstrap';
+import {
+  COMMENTS_VISIBLE,
+  featureIsEnabled,
+  toggleCommentsVisibility,
+} from '../bootstrap';
 import { renderActions } from './actionHistory';
 
 export const collabMenuSideBar = () => {
@@ -50,6 +54,7 @@ export const collabMenuSideBar = () => {
           <button
             class="btn btn-outline-light p-3 rounded-lg w-75 d-flex"
             @click=${handleActionHistoryToggle}
+            ?disabled=${!featureIsEnabled('actions')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
