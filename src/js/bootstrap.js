@@ -109,7 +109,7 @@ function getCollabStatus() {
   // `course` URL search parameter
   if (typeof course == 'string' && course.length > 0 && collab !== 'false') {
     return {
-      enable: true,
+      enabled: true,
       reason: `course search parameter specified with value: ${course}`,
     };
   }
@@ -117,16 +117,33 @@ function getCollabStatus() {
   // `collab` URL search parameter
   if (typeof collab != 'undefined') {
     return {
-      enable: collab === 'true',
+      enabled: collab === 'true',
       reason: `collab search parameter specified with value: ${collab}`,
     };
   }
 
   // Fallback to features.json file config
   return {
-    enable: featureToggler.featureIsEnabled('collaboration'),
+    enabled: featureToggler.featureIsEnabled('collaboration'),
     reason:
       'Relevant search parameters not specified. Falling back to "features.json" config file',
+  };
+}
+
+function actionStatus() {
+  const { course, collab } = getURLInfo();
+
+  // `course` URL search parameter
+  if (typeof course == 'string' && course.length > 0 && collab !== 'false') {
+    return {
+      enabled: true,
+      reason: `course search parameter specified with value: ${course}`,
+    };
+  }
+
+  return {
+    enabled: false,
+    reason: `course search parameter must be provided to enable actions`,
   };
 }
 
@@ -138,12 +155,17 @@ async function bootstrap() {
 
   const collabStatus = getCollabStatus();
   console.log(collabStatus.reason);
-  if (collabStatus.enable) {
+  if (collabStatus.enabled) {
     await featureToggler.setFeature('collaboration', true);
     handleCollabSetup();
     disableOption('collaboration', options);
   } else {
     await featureToggler.setFeature('collaboration', false);
+  }
+
+  // Disable actions if course is not present in the URL
+  if (!actionStatus().enabled) {
+    await featureToggler.setFeature('actions', false);
   }
 
   if (featureToggler.featureIsEnabled('videoConference')) {

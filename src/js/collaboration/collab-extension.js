@@ -20,6 +20,8 @@ import { isEditing } from '../vhv-scripts/chords.js';
 import { showChordEditor } from '../vhv-scripts/chords.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
+import { getActionById } from '../templates/actionHistory.js';
+import { crossReferenceSingleTemplate } from '../templates/crossReferencingActions.js';
 
 //alx
 let prevStates;
@@ -246,8 +248,44 @@ export function stateChangeHandler(clients = defaultClients()) {
     shareChordEdit(editInProgress);
   }
 
+  // Actions cross referencing
+  const crossReferences = html`${awStates
+    .filter(([_, state]) => state.referenceAction?.actionId != null)
+    .map(([clientId, state]) => {
+      let action = getActionById(state.referenceAction.actionId);
+      if (action === undefined || action.content === undefined) {
+        return null;
+      }
+
+      switch (action.type) {
+        case 'change_pitch': {
+          if (action.content.type === 'single') {
+            return crossReferenceSingleTemplate(
+              clientId,
+              action.content.changes[0].noteElementId,
+              state.user.color
+            );
+          } else if (action.content.type === 'multi') {
+            // let obj = {
+            //   clientId,
+            //   color: state.user.color,
+            //   type: action.content.type,
+            //   noteElementIds: action.content.changes[0].map((el) => el.id).join(','),
+            // };
+          }
+        }
+        case 'change_chord':
+        case 'change_comment':
+      }
+    })}`;
+
   render(
-    html`${collabLayer(multiSelects, singleSelects, userAwareness)}`,
+    html`${collabLayer(
+      multiSelects,
+      singleSelects,
+      userAwareness,
+      crossReferences
+    )}`,
     collabContainer
   );
 

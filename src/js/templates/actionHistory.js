@@ -123,7 +123,9 @@ function formatDate(date) {
   if (diff <= 1000 * 10) {
     return 'Now';
   }
-  return (time[0] === '1' ? time.slice(0, time.length - 1) : time) + ' ago';
+  return (
+    (time.slice(0, 2) === '1 ' ? time.slice(0, time.length - 1) : time) + ' ago'
+  );
 }
 
 const TYPES_WITH_CONTENT = [
@@ -152,21 +154,21 @@ const content = (action) => {
       return action.content.text;
     case 'change_chord':
       return html`
-          <div>
-            <table class="table table-bordered table-sm m-0 text-center">
-              <tbody>
-                <tr>
-                  <th scope="row">From</th>
-                  <td>${action.content.prevValue}</td>
-                </tr>
-                <tr>
-                  <th scope="row">To</th>
-                  <td>${action.content.newValue}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        `;
+        <div>
+          <table class="table table-bordered table-sm m-0 text-center">
+            <tbody>
+              <tr>
+                <th scope="row">From</th>
+                <td>${action.content.prevValue}</td>
+              </tr>
+              <tr>
+                <th scope="row">To</th>
+                <td>${action.content.newValue}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
     case 'change_pitch': {
       if (action.content.type === 'single') {
         const changes = action.content.changes;
@@ -174,36 +176,52 @@ const content = (action) => {
           return null;
         }
 
-        const oldest = changes[0].oldValue;
-        const newest = changes[changes.length - 1].newValue;
+        const oldest = changes[0];
+        const newest = changes[changes.length - 1];
+
+        const actionData = [
+          { header: 'Measure', key: 'measureNo' },
+          { header: 'Order', key: 'order' },
+          { header: 'Staff', key: 'staff' },
+          { header: 'Voice', key: 'voice' },
+          { header: 'Hum. Old', key: 'oldValue' },
+          { header: 'Hum. New', key: 'newValue' },
+        ];
+
+        const val = (header, key) => {
+          if (header === 'Hum. Old') {
+            return oldest.oldValue;
+          } else if (header === 'Hum. New') {
+            return newest.newValue;
+          }
+          return oldest[key];
+        };
 
         return html`
           <div>
             <table class="table table-bordered table-sm m-0 text-center">
               <thead>
                 <tr>
-                  <th></th>
-                  <th scope="col">From</th>
-                  <th scope="col">To</th>
+                  <th
+                    style="width: ${Math.max(
+                      ...actionData.map((d) => d.header.length)
+                    )}rem"
+                  >
+                    Single sel.
+                  </th>
+                  <th scope="col">Value</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <th scope="row">Measure</th>
-                  <td>OLD_M</td>
-                  <td>NEW_M</td>
-                </tr>
-                <tr>
-                  <th scope="row">Beat</th>
-                  <td>OLD_BEAT</td>
-                  <td>NEW_BEAT</td>
-                </tr>
-                <tr>
-                  <th scope="row">Humdrum</th>
-                  <td>${oldest}</td>
-                  <td>${newest}</td>
-                </tr>
+                ${actionData.map(
+                  ({ header, key }) => html`
+                    <tr>
+                      <th scope="row">${header}</th>
+                      <td>${val(header, key)}</td>
+                    </tr>
+                  `
+                )}
               </tbody>
             </table>
           </div>
@@ -216,47 +234,52 @@ const content = (action) => {
 
         const multiChanges = {};
         for (let oldestChange of changes[0]) {
-          const oldest = oldestChange.oldToken;
-          multiChanges[oldestChange.id] = { oldest };
+          multiChanges[oldestChange.id] = { oldest: oldestChange };
         }
         for (let newestChange of changes[changes.length - 1]) {
-          const newest = newestChange.token;
-          multiChanges[newestChange.id].newest = newest;
+          multiChanges[newestChange.id].newest = newestChange;
         }
 
         const values = Object.values(multiChanges);
 
+        const actionData = [
+          { header: 'Measure', key: 'measureNo' },
+          { header: 'Order', key: 'order' },
+          { header: 'Staff', key: 'staff' },
+          { header: 'Voice', key: 'voice' },
+          { header: 'Hum. Old', key: 'oldToken' },
+          { header: 'Hum. New', key: 'token' },
+        ];
+
         return html`
-          <div>
+          <div class="table-responsive">
             <table class="table table-bordered table-sm m-0 text-center">
               <thead>
                 <tr>
-                  <th></th>
-                  <th scope="col">From</th>
-                  <th scope="col">To</th>
+                  <th style="width: 3rem">Multi sel.</th>
+                  ${values.map(
+                    (_, idx) => html`<th scope="col">#${idx + 1}</th>`
+                  )}
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <th scope="row">Measure</th>
-                  <td>OLD_M</td>
-                  <td>NEW_M</td>
-                </tr>
-                <tr>
-                  <th scope="row">Beat</th>
-                  <td>OLD_BEAT</td>
-                  <td>NEW_BEAT</td>
-                </tr>
-                <tr>
-                  <th scope="row">Humdrum</th>
-                  <td>
-                    ${values.map((change) => html`<div>${change.oldest}</div>`)}
-                  </td>
-                  <td>
-                    ${values.map((change) => html`<div>${change.newest}</div>`)}
-                  </td>
-                </tr>
+                ${actionData.map(
+                  ({ header, key }) =>
+                    html`<tr>
+                      <th scope="row">${header}</th>
+                      ${values.map(
+                        (v) =>
+                          html`
+                            <td>
+                              ${key === 'token'
+                                ? v.newest.token
+                                : v.oldest[key]}
+                            </td>
+                          `
+                      )}
+                    </tr>`
+                )}
               </tbody>
             </table>
           </div>
@@ -300,16 +323,27 @@ const actionEntry = (action, userColorMapping) => {
   const createdAt = formatDate(action.createdAt);
   const type = action.type.split('_').join(' ');
 
-  function handleView () {
-    yProvider.awareness.setLocalStateField('referenceAction', {
-      actionsDisplayed: true,
-    });
-  
+  function handleView() {
+    let collapse = $(`#collapse-action-${action.id}`);
+
+    if (collapse[0] && $._data(collapse[0], 'events') === undefined) {
+      collapse.on('show.bs.collapse', () => {
+        yProvider.awareness.setLocalStateField('referenceAction', {
+          actionId: action.id,
+        });
+      });
+
+      collapse.on('hide.bs.collapse', () => {
+        yProvider.awareness.setLocalStateField('referenceAction', {
+          actionId: null,
+        });
+      });
+    }
+
+    collapse.collapse('toggle');
   }
 
-  function handleReplay () {
-    
-  }
+  function handleReplay() {}
 
   return html`
     <div class="card border-bottom border-top-0 border-right-0 border-left-0">
@@ -318,10 +352,6 @@ const actionEntry = (action, userColorMapping) => {
           <button
             class="action-history-btn btn text-left d-flex align-items-baseline"
             type="button"
-            data-toggle="collapse"
-            data-target=${`#collapse-action-${action.id}`}
-            aria-expanded="true"
-            aria-controls=${'#collapse-action-' + action.id}
             data-action-id=${action.id}
           >
             <div style="flex: 0 0 20ch;">
@@ -341,9 +371,11 @@ const actionEntry = (action, userColorMapping) => {
             <div class="badge ${classMap(badgeStyling)}">${type}</div>
           </button>
           <div class="d-flex align-self-end">
-            <button class="btn"
+            <button
+              class="btn"
               type="button"
               @click=${handleView}
+              ?disabled=${!isTypeSupported(action.type)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -353,13 +385,15 @@ const actionEntry = (action, userColorMapping) => {
                 class="bi bi-eye"
                 viewBox="0 0 16 16"
               >
-                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/> <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                <path
+                  d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"
+                />
+                <path
+                  d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"
+                />
               </svg>
             </button>
-            <button class="btn"
-              type="button"
-              @click=${handleReplay}
-            >
+            <button class="btn" type="button" @click=${handleReplay}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -368,7 +402,13 @@ const actionEntry = (action, userColorMapping) => {
                 class="bi bi-arrow-repeat"
                 viewBox="0 0 16 16"
               >
-                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                <path
+                  d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+                />
               </svg>
             </button>
           </div>
@@ -398,6 +438,9 @@ document.addEventListener('actions_reset', (e) => {
 });
 
 let actions = [];
+export function getActionById(actionId) {
+  return actions.find((a) => a.id === actionId);
+}
 
 /**
  *
