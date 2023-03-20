@@ -10,6 +10,22 @@ const JITSI_DEFAULT_OPTIONS = {
   height: '100%',
   configOverwrite: {
     prejoinPageEnabled: true,
+	  //analytics.disabled=true,
+	  //prejoinPageEnabled=true,
+	  //p2p.enabled=false,
+	  //disableAP=true,
+	  //disableAEC=false,
+	  //disableNS=true,
+	  //disableAGC=true,
+	  //disableHPF=true,
+	  //stereo=false,
+	  //opusMaxAverageBitrate=10000,
+	  //enableOpusRed=false,
+	  //enableNoAudioDetection=false,
+	  //enableNoisyMicDetection=false,
+	  //disableAudioLevels=true,
+	  //disableSimulcast=true,
+	  //enableLayerSuspension=true,
   },
 };
 
