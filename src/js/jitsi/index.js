@@ -13,6 +13,24 @@ const JITSI_DEFAULT_OPTIONS = {
   },
 };
 
+//CONFIG TO BE ADDED
+//config.analytics.disabled=true
+//config.prejoinPageEnabled=true
+//config.p2p.enabled=false
+//config.disableAP=true
+//config.disableAEC=false
+//config.disableNS=true
+//config.disableAGC=true
+//config.disableHPF=true
+//config.stereo=false
+//config.opusMaxAverageBitrate=10000
+//config.enableOpusRed=false
+//config.enableNoAudioDetection=false
+//config.enableNoisyMicDetection=false
+//config.disableAudioLevels=true
+//config.disableSimulcast=true
+//config.enableLayerSuspension=true
+
 class JitsiAPI {
   api = null;
 
