@@ -3,6 +3,10 @@ import { classMap } from 'lit-html/directives/class-map.js';
 import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
 import { timeSince } from '../collaboration/util-collab';
+import {
+  getMusicalParameters,
+  extractEditorPosition,
+} from '../vhv-scripts/utility';
 import { yProvider } from '../yjs-setup';
 
 const queryParams = {
@@ -140,6 +144,15 @@ const isTypeSupported = (type) => {
   return TYPES_WITH_CONTENT.includes(type);
 };
 
+const singleSelectValue = (oldest, newest) => (header, key) => {
+  if (header === 'Hum. Old') {
+    return oldest.oldValue;
+  } else if (header === 'Hum. New') {
+    return newest.newValue;
+  }
+  return oldest[key];
+};
+
 /**
  *
  * @param {ActionResponse} action
@@ -147,7 +160,7 @@ const isTypeSupported = (type) => {
 const content = (action) => {
   switch (action.type) {
     case 'add_comment':
-      return action.content.content;
+      return displayAddComment(action);
     case 'export':
       return action.content.file;
     case 'transpose':
@@ -171,67 +184,21 @@ const content = (action) => {
       `;
     case 'change_pitch': {
       if (action.content.type === 'single') {
-        const changes = action.content.changes;
-        if (!Array.isArray(changes)) {
+        if (!Array.isArray(action.content.changes)) {
           return null;
         }
-
-        const oldest = changes[0];
-        const newest = changes[changes.length - 1];
-
-        const actionData = [
-          { header: 'Measure', key: 'measureNo' },
-          { header: 'Order', key: 'order' },
-          { header: 'Staff', key: 'staff' },
-          { header: 'Voice', key: 'voice' },
-          { header: 'Hum. Old', key: 'oldValue' },
-          { header: 'Hum. New', key: 'newValue' },
-        ];
-
-        const val = (header, key) => {
-          if (header === 'Hum. Old') {
-            return oldest.oldValue;
-          } else if (header === 'Hum. New') {
-            return newest.newValue;
-          }
-          return oldest[key];
-        };
-
-        return html`
-          <div>
-            <table class="table table-bordered table-sm m-0 text-center">
-              <thead>
-                <tr>
-                  <th
-                    style="width: ${Math.max(
-                      ...actionData.map((d) => d.header.length)
-                    )}rem"
-                  >
-                    Single sel.
-                  </th>
-                  <th scope="col">Value</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                ${actionData.map(
-                  ({ header, key }) => html`
-                    <tr>
-                      <th scope="row">${header}</th>
-                      <td>${val(header, key)}</td>
-                    </tr>
-                  `
-                )}
-              </tbody>
-            </table>
-          </div>
-        `;
+        const oldest = action.content.changes[0];
+        const newest =
+          action.content.changes[action.content.changes.length - 1];
+        return displaySingleSelectData(
+          singleSelectValue(oldest, newest),
+          SINGLE_ACTION_DATA
+        );
       } else if (action.content.type === 'multi') {
         const changes = action.content.changes;
         if (!Array.isArray(changes)) {
           return null;
         }
-
         const multiChanges = {};
         for (let oldestChange of changes[0]) {
           multiChanges[oldestChange.id] = { oldest: oldestChange };
@@ -239,55 +206,141 @@ const content = (action) => {
         for (let newestChange of changes[changes.length - 1]) {
           multiChanges[newestChange.id].newest = newestChange;
         }
-
         const values = Object.values(multiChanges);
-
-        const actionData = [
-          { header: 'Measure', key: 'measureNo' },
-          { header: 'Order', key: 'order' },
-          { header: 'Staff', key: 'staff' },
-          { header: 'Voice', key: 'voice' },
-          { header: 'Hum. Old', key: 'oldToken' },
-          { header: 'Hum. New', key: 'token' },
-        ];
-
-        return html`
-          <div class="table-responsive">
-            <table class="table table-bordered table-sm m-0 text-center">
-              <thead>
-                <tr>
-                  <th style="width: 3rem">Multi sel.</th>
-                  ${values.map(
-                    (_, idx) => html`<th scope="col">#${idx + 1}</th>`
-                  )}
-                </tr>
-              </thead>
-
-              <tbody>
-                ${actionData.map(
-                  ({ header, key }) =>
-                    html`<tr>
-                      <th scope="row">${header}</th>
-                      ${values.map(
-                        (v) =>
-                          html`
-                            <td>
-                              ${key === 'token'
-                                ? v.newest.token
-                                : v.oldest[key]}
-                            </td>
-                          `
-                      )}
-                    </tr>`
-                )}
-              </tbody>
-            </table>
-          </div>
-        `;
+        console.table(values);
+        return displayMultiSelectData(values);
       }
     }
   }
 };
+
+const SINGLE_ACTION_DATA = [
+  { header: 'Measure', key: 'measureNo' },
+  { header: 'Order', key: 'order' },
+  { header: 'Staff', key: 'staff' },
+  { header: 'Voice', key: 'voice' },
+  { header: 'Hum. Old', key: 'oldValue' },
+  { header: 'Hum. New', key: 'newValue' },
+];
+
+function displayAddComment(action) {
+  const refElems = Array.from(
+    document.querySelectorAll(
+      action.content?.multiSelectElements
+        ?.split(',')
+        .map((id) => '#' + id)
+        .join(',')
+    )
+  );
+  const data = refElems
+    .map((note) => ({
+      ...extractEditorPosition(note),
+      ...getMusicalParameters(note),
+    }))
+    .filter(Boolean);
+
+  let selectData;
+  if (data.length === 1) {
+    selectData = html`${displaySingleSelectData(
+      (_, k) => data[0][k] ?? '-',
+      SINGLE_ACTION_DATA.slice(0, SINGLE_ACTION_DATA.length - 2)
+    )}`;
+  } else if (data.length > 1) {
+    selectData = html`${displayMultiSelectData(
+      data,
+      MULTI_ACTION_DATA.slice(0, MULTI_ACTION_DATA.length - 2),
+      (k, i) => html` <td>${data[i][k] ?? '-'}</td> `
+    )}`;
+  }
+  return html` <h5>Comment</h5>
+    <div>${action.content.content}</div>
+    <h5 class="mt-4">Note information</h5>
+    <div>${selectData}</div>`;
+}
+
+/**
+ *
+ * @param {(header: string, key: string) => any} dataFunc
+ * @param {{ header: string, key: string}[]} headers
+ */
+function displaySingleSelectData(dataFunc, headers = SINGLE_ACTION_DATA) {
+  return html`
+    <div>
+      <table class="table table-bordered table-sm m-0 text-center">
+        <thead>
+          <tr>
+            <th
+              style="width: ${Math.max(
+                ...headers.map((d) => d.header.length)
+              )}rem"
+            >
+              Single sel.
+            </th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${headers.map(
+            ({ header, key }) => html`
+              <tr>
+                <th scope="row">${header}</th>
+                <td>${dataFunc(header, key)}</td>
+              </tr>
+            `
+          )}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+const MULTI_ACTION_DATA = [
+  { header: 'Measure', key: 'measureNo' },
+  { header: 'Order', key: 'order' },
+  { header: 'Staff', key: 'staff' },
+  { header: 'Voice', key: 'voice' },
+  { header: 'Hum. Old', key: 'oldToken' },
+  { header: 'Hum. New', key: 'token' },
+];
+
+function displayMultiSelectData(
+  multiSelectValues,
+  headers = MULTI_ACTION_DATA,
+  addCommentValueFunc
+) {
+  const changePitchValueFunc = (key, v) =>
+    html` <td>${key === 'token' ? v.newest.token : v.oldest[key]}</td> `;
+
+  return html`
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm m-0 text-center">
+        <thead>
+          <tr>
+            <th style="width: 3rem">Multi sel.</th>
+            ${multiSelectValues.map(
+              (_, idx) => html`<th scope="col">#${idx + 1}</th>`
+            )}
+          </tr>
+        </thead>
+
+        <tbody>
+          ${headers.map(
+            ({ header, key }) =>
+              html`<tr>
+                <th scope="row">${header}</th>
+                ${multiSelectValues.map((v, idx) =>
+                  addCommentValueFunc !== undefined
+                    ? addCommentValueFunc(key, idx)
+                    : changePitchValueFunc(key, v)
+                )}
+              </tr>`
+          )}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
 
 const extraInfo = (/** @type {ActionResponse} */ action) => {
   if (isTypeSupported(action.type)) {

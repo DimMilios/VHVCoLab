@@ -422,29 +422,66 @@ export function convertTokenToCsv(token) {
   }
 }
 
-export function getMusicalParameters (note) {
-  const measureNo = +[...note.closest('.measure').classList].
-    find(token => /m-\d+/.test(token)).
-    match(/\d+/)?.[0];
-  const voice = +note.closest('.layer')?.
-    id.match(/N(\d+)/)[1];
-  let whileStaff = note.closest(".staff");
-  let whileNote = 
-    note.closest('.chord')?
-      note.closest('.chord'):
-      note;
+export function getMusicalParameters(note) {
+  const measureNo = +[...note.closest('.measure').classList]
+    .find((token) => /m-\d+/.test(token))
+    .match(/\d+/)?.[0];
+  const voice = +note.closest('.layer')?.id.match(/N(\d+)/)[1];
+  let whileStaff = note.closest('.staff');
+  let whileNote = note.closest('.chord') ? note.closest('.chord') : note;
   let order = 1;
   let staff = 1;
 
-  while( /staff/.test(whileStaff.previousElementSibling?.id) ) {
+  while (/staff/.test(whileStaff.previousElementSibling?.id)) {
     staff++;
     whileStaff = whileStaff.previousElementSibling;
   }
-  
-  while( /note|chord/.test(whileNote.previousElementSibling?.id) ) {
+
+  while (/note|chord/.test(whileNote.previousElementSibling?.id)) {
     order++;
     whileNote = whileNote.previousElementSibling;
   }
 
-  return {measureNo, voice, order, staff};
+  return { measureNo, voice, order, staff };
+}
+
+export function extractEditorPosition(element) {
+  var id = element.id;
+  var matches;
+
+  if ((matches = id.match(/L(\d+)/))) {
+    var line = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/F(\d+)/))) {
+    var field = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/S(\d+)/))) {
+    var subfield = parseInt(matches[1]);
+  } else {
+    subfield = null;
+  }
+
+  if ((matches = id.match(/N(\d+)/))) {
+    var number = parseInt(matches[1]);
+  } else {
+    number = 1;
+  }
+
+  if ((matches = id.match(/^([a-z]+)-/))) {
+    var name = matches[1];
+  } else {
+    return; // required
+  }
+
+  if (line < 1 || field < 1) {
+    return;
+  }
+
+  return { id, line, field, subfield };
 }
