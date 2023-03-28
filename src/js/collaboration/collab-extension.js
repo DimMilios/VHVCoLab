@@ -20,8 +20,8 @@ import { isEditing } from '../vhv-scripts/chords.js';
 import { showChordEditor } from '../vhv-scripts/chords.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
-import { getActionById } from '../templates/actionHistory.js';
-import { crossReferenceSingleTemplate } from '../templates/crossReferencingActions.js';
+import { getActionById, renderActions } from '../templates/actionHistory.js';
+import { crossReferenceMultiTemplate, crossReferenceSingleTemplate } from '../templates/crossReferencingActions.js';
 
 //alx
 let prevStates;
@@ -109,12 +109,9 @@ function shareChordEdit(editInProgress) {
       user: { color, name },
     },
   ] = editInProgress;
-
   if (!selection) return;
 
   const { component, text } = selection;
-  console.log(component + ' ' + text + ' ' + color + ' ' + name);
-
   if (!isEditing) {
     const allSelections = Array.from(
       document.querySelectorAll(`.${component}`)
@@ -122,7 +119,6 @@ function shareChordEdit(editInProgress) {
     const currentSelection = allSelections.find(
       (element) => element.innerText == text
     );
-    console.log(allSelections);
     const prevSelection = allSelections.find((element) =>
       element.classList.contains('collab-selected')
     );
@@ -243,17 +239,22 @@ export function stateChangeHandler(clients = defaultClients()) {
   // ${renderHighlightLayer(highlights, commentsGroup)} `,
 
   const editInProgress = toggleChordEditor(awStates);
-
   if (editInProgress) {
     shareChordEdit(editInProgress);
   }
-
+      
+  displayActionPanel(awStates);
+  const finalRefs = selectActionsOnPanel(awStates);
+  console.log(finalRefs);
   // Actions cross referencing
-  const crossReferences = html`${awStates
-    .filter(([_, state]) => state.referenceAction?.actionId != null)
-    .map(([clientId, state]) => {
-      let action = getActionById(state.referenceAction.actionId);
-      if (action === undefined || action.content === undefined) {
+  const crossReferences = html`${finalRefs
+    .map(([actionId, selectionInfo]) => {
+
+      const action = getActionById(+actionId);      
+      if (
+        action === undefined||
+        action.content === undefined
+      ) {
         return null;
       }
 
@@ -261,9 +262,9 @@ export function stateChangeHandler(clients = defaultClients()) {
         case 'change_pitch': {
           if (action.content.type === 'single') {
             return crossReferenceSingleTemplate(
-              clientId,
+              selectionInfo.ids,
               action.content.changes[0].noteElementId,
-              state.user.color
+              selectionInfo.color
             );
           } else if (action.content.type === 'multi') {
             // let obj = {
@@ -275,7 +276,6 @@ export function stateChangeHandler(clients = defaultClients()) {
           }
         }
         case 'change_chord':
-        case 'change_comment':
       }
     })}`;
 
@@ -283,8 +283,9 @@ export function stateChangeHandler(clients = defaultClients()) {
     html`${collabLayer(
       multiSelects,
       singleSelects,
+      crossReferences,
       userAwareness,
-      crossReferences
+
     )}`,
     collabContainer
   );
@@ -297,6 +298,94 @@ export function stateChangeHandler(clients = defaultClients()) {
 export function awaranessUpdateHandler() {
   const usersToRender = formatUserList();
   renderUserList(usersToRender);
+}
+function selectActionsOnPanel(allStates) {
+  clearActionSelections();  
+  //rendering current selections
+  const actionsContainer = document.getElementById(
+    'action-history-container'
+  );
+  const actionsSelected = allStates
+    .filter( ([_, state]) => state.referenceAction?.actionId != null )
+    .map(
+      el => {
+        return {
+          id : el[1].user.id,
+          name : el[1].user.name,
+          color: el[1].user.color,
+          actionId : el[1].referenceAction.actionId,
+      } 
+    })
+    .reduce((prev, curr) => {
+      return curr.id in prev?
+        prev:
+        {...prev,
+         [curr.id]: {name:curr.name, actionId:curr.actionId, color: curr.color}
+        }
+      },
+    {});
+  console.log(actionsSelected);
+  let finalRefs = {};  
+  for (const [id, selection] of Object.entries(actionsSelected)) {
+    const cssSelector = `button[data-action-id="${selection.actionId}"]`;
+    const actionEntry = document.querySelector(cssSelector);
+
+    if(!actionEntry) return; //TODO: se auton pou den exei anoixei to panel, to function ekteleitai prin prolavei na ginei to renderActions kai stamataei edw. sti deuteri ektelesi(actionPanelDiaplyes:false) ekteleitai oli.
+    
+    console.log({actionEntry});
+    const thisSelector = `${id}-${selection.name}-${selection.color}`;
+    (actionEntry.dataset.selectors=='null' || actionEntry.dataset.selectors===undefined) ?
+      actionEntry.dataset.selectors = `${thisSelector}`:
+      actionEntry.dataset.selectors += `, ${thisSelector}`;
+
+
+    const allSelectors = actionEntry.dataset.selectors;
+    const names = allSelectors
+      .replace(/\d+-([^-]*)-[^,]*/g, '$1')
+    const ids = allSelectors
+      .replace(/(\d+)-[^-]*-[^,]*/g, '$1')
+    const color = !names.includes(',') ?
+      allSelectors.match(/#[^,]*/)?.[0] :
+      'black';      
+    console.log({color, ids, names});
+
+    actionEntry.classList.add('action-selected');
+    actionEntry.dataset.content = names;
+    actionEntry.closest('h2').style.border = `medium dashed ${color}`;
+    $(cssSelector).popover({
+      placement: 'top',
+      container: actionsContainer,
+    });
+    $(cssSelector).popover('show');
+
+    finalRefs[selection.actionId] = {ids, color};
+  }
+  return [...Object.entries(finalRefs)];
+}
+
+function clearActionSelections() {
+  $('.action-selected').popover('dispose');
+  document.querySelectorAll('.action-selected')
+    .forEach(prevSelection => {
+      prevSelection.classList.remove('action-selected');
+      prevSelection.dataset.selectors = null;
+      prevSelection.closest('h2').style.border = 'none';
+    });
+}
+
+function displayActionPanel (allStates) {
+  const panelDisplayStates = allStates
+    .find( ([id, state]) => state.referenceAction?.ActionPanelDisplayed );
+  const actionsContainer = document.getElementById(
+    'action-history-container'
+  );
+  const alreadyDisplayed = actionsContainer.classList.contains('open');
+
+  if (panelDisplayStates && !alreadyDisplayed) {
+    console.log('open')
+    actionsContainer.classList.toggle('open', true);
+    renderActions();
+  }
 }
 
 function formatUserList() {
@@ -325,7 +414,7 @@ function collabLayer(...children) {
   let output = document.querySelector('#output');
   let renderBefore = document.querySelector('#output > svg');
   uiCoords.svgHeight = renderBefore?.height.baseVal.value ?? window.innerHeight;
-
+  
   return collabTemplate(uiCoords.svgHeight, ...children);
 }
 

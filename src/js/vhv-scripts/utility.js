@@ -429,12 +429,26 @@ export function getMusicalParameters (note) {
   const voice = +note.closest('.layer')?.
     id.match(/N(\d+)/)[1];
   let whileStaff = note.closest(".staff");
-  let whileNote = 
+  let whileNote;
+    
+  let order = 1;
+  let staff = 1;
+  const parent = note.closest('.chord') ?? note.closest('.beam');
+  if ( parent.classList.contains('chord') ) {
+    whileNote = parent;
+  } else if ( parent.classList.contains('beam') ) {
+    whileNote = parent;
+    order = 
+  }
+
     note.closest('.chord')?
       note.closest('.chord'):
       note;
-  let order = 1;
-  let staff = 1;
+  whileNote = 
+    note.closest('.beam')?
+      note.closest('.beam')?:
+      note;
+
 
   while( /staff/.test(whileStaff.previousElementSibling?.id) ) {
     staff++;

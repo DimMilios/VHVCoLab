@@ -49,6 +49,10 @@ const actionHeaderFilters = () => {
 
 const actionPanelHeaderTemplate = () => {
   const handleClose = () => {
+    yProvider.awareness.setLocalStateField('referenceAction', {
+      ActionPanelDisplayed: null,
+      actionId: null,
+    });
     document
       .getElementById('action-history-container')
       ?.classList.remove('open');
@@ -128,16 +132,26 @@ function formatDate(date) {
   );
 }
 
-const TYPES_WITH_CONTENT = [
-  ACTION_TYPES.add_comment,
-  ACTION_TYPES.change_pitch,
-  ACTION_TYPES.change_chord,
-  ACTION_TYPES.export,
-  ACTION_TYPES.transpose,
-];
-Object.freeze(TYPES_WITH_CONTENT);
-const isTypeSupported = (type) => {
-  return TYPES_WITH_CONTENT.includes(type);
+const TYPES = {
+  WITH_CONTENT : [
+    ACTION_TYPES.add_comment,
+    ACTION_TYPES.change_pitch,
+    ACTION_TYPES.change_chord,
+    ACTION_TYPES.export,
+    ACTION_TYPES.transpose,
+  ],
+  REFERENCEABLE : [
+    ACTION_TYPES.change_pitch,
+    ACTION_TYPES.change_chord,
+    ACTION_TYPES.transpose
+  ]
+};
+Object.freeze(TYPES);
+const isThereContent = (type) => {
+  return TYPES.WITH_CONTENT.includes(type);
+};
+const isReferenceable = (type) => {
+  return TYPES.REFERENCEABLE.includes(type);
 };
 
 /**
@@ -181,9 +195,9 @@ const content = (action) => {
 
         const actionData = [
           { header: 'Measure', key: 'measureNo' },
-          { header: 'Order', key: 'order' },
           { header: 'Staff', key: 'staff' },
           { header: 'Voice', key: 'voice' },
+          { header: 'Order', key: 'order' },
           { header: 'Hum. Old', key: 'oldValue' },
           { header: 'Hum. New', key: 'newValue' },
         ];
@@ -244,9 +258,9 @@ const content = (action) => {
 
         const actionData = [
           { header: 'Measure', key: 'measureNo' },
-          { header: 'Order', key: 'order' },
           { header: 'Staff', key: 'staff' },
           { header: 'Voice', key: 'voice' },
+          { header: 'Order', key: 'order' },
           { header: 'Hum. Old', key: 'oldToken' },
           { header: 'Hum. New', key: 'token' },
         ];
@@ -290,7 +304,7 @@ const content = (action) => {
 };
 
 const extraInfo = (/** @type {ActionResponse} */ action) => {
-  if (isTypeSupported(action.type)) {
+  if (isThereContent(action.type)) {
     return html`
       <div
         id=${'collapse-action-' + action.id}
@@ -326,18 +340,30 @@ const actionEntry = (action, userColorMapping) => {
   function handleView() {
     let collapse = $(`#collapse-action-${action.id}`);
 
-    if (collapse[0] && $._data(collapse[0], 'events') === undefined) {
-      collapse.on('show.bs.collapse', () => {
-        yProvider.awareness.setLocalStateField('referenceAction', {
-          actionId: action.id,
+    if ( isReferenceable(action.type) ) {
+      if (collapse[0] && $._data(collapse[0], 'events') === undefined) {
+        collapse.on('show.bs.collapse', () => {
+          yProvider.awareness.setLocalStateField('referenceAction', {
+            ActionPanelDisplayed: true,
+            actionId: action.id
+          });
         });
-      });
-
-      collapse.on('hide.bs.collapse', () => {
-        yProvider.awareness.setLocalStateField('referenceAction', {
-          actionId: null,
+  
+        setTimeout(() => 
+          yProvider.awareness.setLocalStateField('referenceAction', {
+            ActionPanelDisplayed: false,
+            actionId: action.id
+          })
+        , 500);
+  
+        collapse.on('hide.bs.collapse', () => {
+          yProvider.awareness.setLocalStateField('referenceAction', {
+            ActionPanelDisplayed: null,
+            actionId: null,
+          });
         });
-      });
+      }
+  
     }
 
     collapse.collapse('toggle');
@@ -375,7 +401,7 @@ const actionEntry = (action, userColorMapping) => {
               class="btn"
               type="button"
               @click=${handleView}
-              ?disabled=${!isTypeSupported(action.type)}
+              ?disabled=${!isThereContent(action.type)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
