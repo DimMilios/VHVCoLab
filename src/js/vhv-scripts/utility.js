@@ -423,42 +423,50 @@ export function convertTokenToCsv(token) {
 }
 
 export function getMusicalParameters (note) {
-  const measureNo = +[...note.closest('.measure').classList].
+  const containingMeasure = note.closest('.measure');
+  const measureNo = +[...containingMeasure.classList].
     find(token => /m-\d+/.test(token)).
     match(/\d+/)?.[0];
   const voice = +note.closest('.layer')?.
     id.match(/N(\d+)/)[1];
-  let whileStaff = note.closest(".staff");
-  let whileNote;
-    
-  let order = 1;
-  let staff = 1;
-  const parent = note.closest('.chord') ?? note.closest('.beam');
-  if ( parent.classList.contains('chord') ) {
-    whileNote = parent;
-  } else if ( parent.classList.contains('beam') ) {
-    whileNote = parent;
-    order = 
-  }
 
-    note.closest('.chord')?
-      note.closest('.chord'):
-      note;
-  whileNote = 
-    note.closest('.beam')?
-      note.closest('.beam')?:
-      note;
+  const indexOfContainingStaff = [...containingMeasure.children]
+    .findIndex( child => child.id == note.closest('.staff').id )
+  const staff = [...containingMeasure.children]
+    .filter(child => child.classList.contains('staff'))
+    .slice(0, indexOfContainingStaff)
+    .length
+    +1;
 
+  let order;
+  const containingBeam = note.closest('.beam');
+  if (containingBeam) {
+    const indexOfNoteInBeam = [...containingBeam.children]
+      .findIndex( child => child.id == note.id );
+    order = [...containingBeam.children]
+      .filter(child => child.classList.contains('note')||
+                       child.classList.contains('chord') )
+      .slice(0, indexOfNoteInBeam)
+      .length;
+    note = containingBeam;
+  } else              order = 1;
 
-  while( /staff/.test(whileStaff.previousElementSibling?.id) ) {
-    staff++;
-    whileStaff = whileStaff.previousElementSibling;
-  }
-  
-  while( /note|chord/.test(whileNote.previousElementSibling?.id) ) {
-    order++;
-    whileNote = whileNote.previousElementSibling;
-  }
+  const container = note.closest('.layer') ?? note.closest('.staff');
+  const indexOfNoteInContainer = [...container.children]
+    .findIndex( child => child.id == note.id );
+  const siblings = [...container.children]
+    .slice(0, indexOfNoteInContainer);
+  order += siblings
+    .filter( sibling => sibling.classList.contains('note') ||
+                        sibling.classList.contains('chord')  )
+    .length
+  siblings
+    .filter( sibling => sibling.classList.contains('beam') )
+    .forEach( beam => {
+      order += [...beam.children]
+        .filter( child => child.classList.contains('note') )
+        .length;
+  });
 
   return {measureNo, voice, order, staff};
 }
