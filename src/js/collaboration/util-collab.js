@@ -1,4 +1,5 @@
 import { global_cursor } from '../vhv-scripts/global-variables';
+import { getAceEditor } from '../vhv-scripts/setup';
 // import { handleCommentsMessage } from "../yjs-setup";
 
 export const MULTI_SELECT_ALPHA = 0.3;
@@ -192,4 +193,84 @@ export function clearCursorHighlight() {
     global_cursor.CursorNote.setAttribute('class', outclass);
     global_cursor.CursorNote = null;
   }
+}
+
+export function setEditorContents(line, field, token) {
+  let editor = getAceEditor();
+
+  var i;
+  var linecontent = editor.session.getLine(line - 1);
+  var range = new Range(line - 1, 0, line - 1, linecontent.length);
+
+  var components = linecontent.split(/\t+/);
+  components[field - 1] = token;
+
+  // count tabs between fields
+  var tabs = [];
+  for (i = 0; i < components.length + 1; i++) {
+    tabs[i] = '';
+  }
+  var pos = 0;
+  if (linecontent[0] != '\t') {
+    pos++;
+  }
+  for (i = 1; i < linecontent.length; i++) {
+    if (linecontent[i] == '\t') {
+      tabs[pos] += '\t';
+    } else if (linecontent[i] != '\t' && linecontent[i - 1] == '\t') {
+      pos++;
+    }
+  }
+
+  var newlinecontent = '';
+  for (i = 0; i < tabs.length; i++) {
+    newlinecontent += tabs[i];
+    if (components[i]) {
+      newlinecontent += components[i];
+    }
+  }
+
+  var column = 0;
+  for (i = 0; i < field - 1; i++) {
+    column += components[i].length;
+    column += tabs[i].length;
+  }
+
+  editor.session.replace(range, newlinecontent);
+  // displayNotation();
+}
+
+export function getEditorContents(line, field) {
+  let editor = getAceEditor();
+  var token = '';
+
+  var linecontent = editor.session.getLine(line - 1);
+
+  var col = 0;
+  if (field > 1) {
+    var tabcount = 0;
+    for (let i = 0; i < linecontent.length; i++) {
+      col++;
+      if (linecontent[i] == '\t') {
+        if (i > 0 && linecontent[i - 1] != '\t') {
+          tabcount++;
+        }
+      }
+      if (tabcount == field - 1) {
+        break;
+      }
+    }
+  }
+  for (var c = col; c < linecontent.length; c++) {
+    if (linecontent[c] == '\t') {
+      break;
+    }
+    if (linecontent[c] == undefined) {
+      console.log('undefined index', c);
+      break;
+    }
+    token += linecontent[c];
+  }
+
+  return token;
 }

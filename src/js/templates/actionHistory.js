@@ -2,7 +2,11 @@ import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
 import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
-import { timeSince } from '../collaboration/util-collab';
+import {
+  getEditorContents,
+  setEditorContents,
+  timeSince,
+} from '../collaboration/util-collab';
 import {
   getMusicalParameters,
   extractEditorPosition,
@@ -144,6 +148,16 @@ const isTypeSupported = (type) => {
   return TYPES_WITH_CONTENT.includes(type);
 };
 
+const REPLAY_TYPES = [
+  ACTION_TYPES.change_pitch,
+  ACTION_TYPES.change_chord,
+  ACTION_TYPES.transpose,
+];
+Object.freeze(REPLAY_TYPES);
+const isTypeReplayable = (type) => {
+  return REPLAY_TYPES.includes(type);
+};
+
 const singleSelectValue = (oldest, newest) => (header, key) => {
   if (header === 'Hum. Old') {
     return oldest.oldValue;
@@ -207,7 +221,6 @@ const content = (action) => {
           multiChanges[newestChange.id].newest = newestChange;
         }
         const values = Object.values(multiChanges);
-        console.table(values);
         return displayMultiSelectData(values);
       }
     }
@@ -360,6 +373,43 @@ const extraInfo = (/** @type {ActionResponse} */ action) => {
   return null;
 };
 
+const replayMap = new Map();
+
+function updateSingleSelection(elemId, timeout) {
+  let update = () => {
+    const oldStateCopy = structuredClone(yProvider?.awareness?.getLocalState());
+    yProvider?.awareness?.setLocalState(
+      Object.assign(oldStateCopy, {
+        singleSelect: { elemId },
+        multiSelect: null,
+      })
+    );
+  };
+
+  if (timeout !== undefined) {
+    return setTimeout(update, timeout);
+  }
+
+  update();
+}
+
+function updateMultiSelection(multiSelect, timeout) {
+  let update = () => {
+    let oldStateCopy = structuredClone(yProvider?.awareness?.getLocalState());
+    yProvider?.awareness?.setLocalState(
+      Object.assign(oldStateCopy, {
+        singleSelect: null,
+        multiSelect,
+      })
+    );
+  };
+  if (timeout !== undefined) {
+    return setTimeout(update, timeout);
+  }
+
+  update();
+}
+
 /**
  *
  * @param {ActionResponse} action
@@ -396,7 +446,69 @@ const actionEntry = (action, userColorMapping) => {
     collapse.collapse('toggle');
   }
 
-  function handleReplay() {}
+  function handleReplay() {
+    if (
+      !Array.isArray(action.content.changes) ||
+      action.content.changes.length === 0
+    ) {
+      console.warn('Could not find changes for action %d', action.id);
+      return;
+    }
+
+    switch (action.type) {
+      case ACTION_TYPES.change_pitch: {
+        if (action.content.type === 'single') {
+          let replay = createSingleReplay(action);
+          replaySingleSelect(replay);
+        } else if (action.content.type === 'multi') {
+          let replay = createMultiReplay(action);
+          replayMultiSelect(replay);
+        }
+      }
+    }
+  }
+
+  function handleRollbackReplay() {
+    let replay = replayMap.get(action.id);
+    if (replay === undefined || replay === null) {
+      if (action.content?.type === 'single') {
+        replay = createSingleReplay(action);
+        replayMap.set(action.id, replay);
+      } else if (action.content?.type === 'multi') {
+        replay = createMultiReplay(action);
+        replayMap.set(action.id, replay);
+      }
+    }
+
+    if (action.content?.type === 'single') {
+      let current = getEditorContents(replay.row, replay.col);
+      if (current === replay.after) {
+        updateSingleSelection(replay.elemId, 100);
+        return;
+      }
+
+      setEditorContents(replay.row, replay.col, replay.after);
+      updateSingleSelection(replay.elemId, 100);
+    } else if (action.content?.type === 'multi') {
+      // Compare Humdrum values before action is applied to current values in text editor
+      let shouldApply = false;
+      for (let change of replay.changes) {
+        const curr = getEditorContents(change.newest.line, change.newest.field);
+        if (change.newest.token !== curr) {
+          shouldApply = true;
+          break;
+        }
+      }
+
+      if (shouldApply) {
+        replay.changes.forEach(({ newest }) => {
+          setEditorContents(newest.line, newest.field, newest.token);
+        });
+      }
+
+      updateMultiSelection(replay.multiSelect, 100);
+    }
+  }
 
   return html`
     <div class="card border-bottom border-top-0 border-right-0 border-left-0">
@@ -428,7 +540,7 @@ const actionEntry = (action, userColorMapping) => {
               class="btn"
               type="button"
               @click=${handleView}
-              ?disabled=${!isTypeSupported(action.type)}
+              ?hidden=${!isTypeSupported(action.type)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -446,21 +558,50 @@ const actionEntry = (action, userColorMapping) => {
                 />
               </svg>
             </button>
-            <button class="btn" type="button" @click=${handleReplay}>
+            <button
+              class="btn"
+              type="button"
+              @click=${handleReplay}
+              ?hidden=${!isTypeReplayable(action.type)}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="bi bi-arrow-repeat"
+                class="bi bi-arrow-counterclockwise"
                 viewBox="0 0 16 16"
               >
                 <path
-                  d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"
+                  fill-rule="evenodd"
+                  d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"
                 />
                 <path
+                  d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"
+                />
+              </svg>
+            </button>
+
+            <button
+              class="btn"
+              type="button"
+              @click=${handleRollbackReplay}
+              ?hidden=${!isTypeReplayable(action.type)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-arrow-clockwise"
+                viewBox="0 0 16 16"
+              >
+                <path
                   fill-rule="evenodd"
-                  d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+                  d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+                />
+                <path
+                  d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"
                 />
               </svg>
             </button>
@@ -473,12 +614,107 @@ const actionEntry = (action, userColorMapping) => {
   `;
 };
 
-document.addEventListener('actions_fetch', (e) => {
-  if (Array.isArray(e.detail.fetchedActions)) {
-    actions = actions.concat(e.detail.fetchedActions);
-    queryParams.lastActionId = e.detail.lastActionId;
+function createSingleReplay(action) {
+  if (replayMap.has(action.id)) {
+    const existingReplay = replayMap.get(action.id);
+    const currEditorValue = getEditorContents(
+      existingReplay.row,
+      existingReplay.col
+    );
+
+    let replay = {
+      ...existingReplay,
+      current: currEditorValue,
+    };
+    replayMap.set(action.id, replay);
+    return replay;
   }
-});
+
+  const oldestChange = action.content.changes[0];
+  const newest = action.content.changes[action.content.changes.length - 1];
+
+  const currEditorValue = getEditorContents(
+    oldestChange.row + 1,
+    oldestChange.col + 1
+  );
+
+  let replay = {
+    row: oldestChange.row + 1,
+    col: oldestChange.col + 1,
+    before: oldestChange.oldValue,
+    current: currEditorValue,
+    after: newest.newValue,
+    elemId: oldestChange.noteElementId,
+  };
+  replayMap.set(action.id, replay);
+  return replay;
+}
+
+function replaySingleSelect(replay) {
+  if (replay.current === replay.before) {
+    updateSingleSelection(replay.elemId, 100);
+    return;
+  }
+  setEditorContents(replay.row, replay.col, replay.before);
+  updateSingleSelection(replay.elemId, 100);
+}
+
+function createMultiReplay(action) {
+  const changes = action.content.changes;
+  const multiChanges = {};
+  const multiSelectIds = [];
+  for (let oldestChange of changes[0]) {
+    multiChanges[oldestChange.id] = {
+      oldest: oldestChange,
+      current: {
+        line: oldestChange.line,
+        field: oldestChange.field,
+        token: getEditorContents(oldestChange.line, oldestChange.field),
+      },
+    };
+    multiSelectIds.push(oldestChange.id);
+  }
+  for (let newestChange of changes[changes.length - 1]) {
+    multiChanges[newestChange.id].newest = newestChange;
+  }
+
+  let replay = {
+    multiSelect: multiSelectIds,
+    changes: Object.values(multiChanges),
+  };
+  replayMap.set(action.id, replay);
+  return replay;
+}
+
+function replayMultiSelect(replay) {
+  // Compare Humdrum values before action is applied to current values in text editor
+  let shouldApply = false;
+  for (let ch of replay.changes) {
+    if (ch.oldest.oldToken !== ch.current.token) {
+      shouldApply = true;
+      break;
+    }
+  }
+
+  if (shouldApply) {
+    replay.changes.forEach(({ oldest }) => {
+      setEditorContents(oldest.line, oldest.field, oldest.oldToken);
+    });
+  }
+  updateMultiSelection(replay.multiSelect, 100);
+}
+
+document.addEventListener(
+  'actions_fetch',
+  (
+    /** @type {CustomEvent<{ fetchedActions: ActionResponse[], lastActionId: number }>}} */ e
+  ) => {
+    if (Array.isArray(e.detail.fetchedActions)) {
+      actions = actions.concat(e.detail.fetchedActions);
+      queryParams.lastActionId = e.detail.lastActionId;
+    }
+  }
+);
 
 document.addEventListener('actions_reset', (e) => {
   console.log(`[${new Date().toISOString()}]: actions_reset event`);
@@ -490,6 +726,7 @@ document.addEventListener('actions_reset', (e) => {
   }
 });
 
+/** @type {ActionResponse[]} */
 let actions = [];
 export function getActionById(actionId) {
   return actions.find((a) => a.id === actionId);
