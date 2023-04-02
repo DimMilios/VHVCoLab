@@ -2,6 +2,7 @@ import { getAceEditor } from './setup';
 import { yProvider } from '../yjs-setup';
 import { display_mapping, send_mapping } from './chord_mappings.js';
 import { ActionPayload, sendAction } from '../api/actions';
+import { global_interface } from './global-variables';
 
 //defining variables and functions to be used
 const chordEditor = document.getElementById('chord-editor');
@@ -97,6 +98,10 @@ function mapChord(chordText, mapType) {
 
 function requestChordEdit(reqURL, editor) {
   //initializing, configuring and sending the request
+
+  const freezeBackup = global_interface.FreezeRendering
+  global_interface.FreezeRendering = true;
+
   const xhttp = new XMLHttpRequest();
   xhttp.open('GET', reqURL);
   xhttp.responseType = 'json';
@@ -130,7 +135,8 @@ function requestChordEdit(reqURL, editor) {
     )
       .then(() => console.log(`change_chord action was sent.`))
       .catch(() => console.error(`Failed to send change_chord action`));
-
+    
+    global_interface.FreezeRendering = freezeBackup;
     editor.setValue(jsonResponse.new);
   };
 }
@@ -155,6 +161,7 @@ function editChord() {
   };
   //setting the url to be used and performing xhttp request
   setURLParams(reqUrl, chordEditInfo);
+
   requestChordEdit(reqUrl, edtr);
 
   if (this == suggestBtn) {

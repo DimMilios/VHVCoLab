@@ -38,14 +38,10 @@ function setUserImageUrl () {
   //TODO: replace baseUrl in base.
   //baseUrl cannot be accessed before initialization. pws fortwnontai ta js? stin html de deixnei.
   const base = "https://musicolab.hmu.gr";
-
-  if (id) {
-    return new URL(
-      `moodle/user/pix.php/${id}/f1.jpg`, base).
-      toString();
-  } else { 
-    return "/defaultUser.svg";
-  }
+  const path = id? 
+    `moodle/user/pix.php/${id}/f1.jpg`:
+    'apprepository/vhvWs/defaultUser.svg'
+  return new URL(path, base).toString();
 }
 
 const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
@@ -53,8 +49,10 @@ let name = oneOf(names);
 let userData = {
   name,
   color: oneOf(colors),
-  image: setUserImageUrl()
+  image: setUserImageUrl(),
+  id: getURLParams().id
  };
+ console.log(userData)
 
 export const messageActionsReset = 100;
 
