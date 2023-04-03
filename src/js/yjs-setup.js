@@ -120,7 +120,7 @@ export async function setupCollaboration() {
     permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
-      params: { username: user, file, course: course ?? null },
+	    params: { username: user, file: room, course: course ?? null },
     }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
