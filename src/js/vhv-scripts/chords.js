@@ -2,7 +2,8 @@ import { getAceEditor } from './setup';
 import { yProvider } from '../yjs-setup';
 import { display_mapping, send_mapping } from './chord_mappings.js';
 import { ActionPayload, sendAction } from '../api/actions';
-import { global_interface } from './global-variables';
+import { global_cursor, global_interface } from './global-variables';
+import { getMusicalParameters } from './utility';
 
 //defining variables and functions to be used
 const chordEditor = document.getElementById('chord-editor');
@@ -121,15 +122,18 @@ function requestChordEdit(reqURL, editor) {
         `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
         'send'
       );
-    const chordElementId = `L${chordLocation.line}F${chordLocation.column}`;
-
+    const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
+    const measureNo = getMusicalParameters (
+      global_cursor.CursorNote
+    );
     sendAction(
       new ActionPayload({
         type: 'change_chord',
         content: JSON.stringify({
           prevValue,
           newValue,
-          chordElementId
+          chordElementId,
+          measureNo
         }),
       })
     )
@@ -163,6 +167,30 @@ function editChord() {
   setURLParams(reqUrl, chordEditInfo);
 
   requestChordEdit(reqUrl, edtr);
+
+  const prevValue = mapChord(chord.current, 'display');
+  const newValue =
+    chord.new.root +
+    mapChord(
+      `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
+      'send'
+    );
+  const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
+  const measureNo = getMusicalParameters (global_cursor.CursorNote);
+
+  sendAction(
+    new ActionPayload({
+      type: 'change_chord',
+      content: JSON.stringify({
+        prevValue,
+        newValue,
+        chordElementId,
+        measureNo
+      }),
+    })
+  )
+    .then(() => console.log(`change_chord action was sent.`))
+    .catch(() => console.error(`Failed to send change_chord action`));
 
   if (this == suggestBtn) {
     chord.reharmonize = false;
@@ -209,9 +237,7 @@ editBtn.addEventListener('click', (event) => {
     selection: null,
   });
 });
-
 //suggest click
 suggestBtn.addEventListener('click', editChord);
-
 //done click
 doneBtn.addEventListener('click', editChord);

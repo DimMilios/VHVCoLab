@@ -185,6 +185,7 @@ function defaultClients() {
 
 export function stateChangeHandler(clients = defaultClients()) {
   const awStates = Array.from(yProvider.awareness.getStates().entries());
+  console.log({awStates});
   let collabContainer = document.querySelector('#output #collab');
   if (!collabContainer) {
     console.log(
@@ -245,10 +246,10 @@ export function stateChangeHandler(clients = defaultClients()) {
       
   displayActionPanel(awStates);
   const finalRefs = selectActionsOnPanel(awStates);
-  console.log(finalRefs);
+  console.log({finalRefs});
   // Actions cross referencing
   const crossReferences = html`${finalRefs
-    .map(([actionId, selectionInfo]) => {
+    ?.map( ([actionId, selectionInfo]) => {
 
       const action = getActionById(+actionId);      
       if (
@@ -257,25 +258,32 @@ export function stateChangeHandler(clients = defaultClients()) {
       ) {
         return null;
       }
-
+      
       switch (action.type) {
         case 'change_pitch': {
           if (action.content.type === 'single') {
             return crossReferenceSingleTemplate(
+              actionId,
               selectionInfo.ids,
-              action.content.changes[0].noteElementId,
+              action.content.changes[0]?.noteElementId,
               selectionInfo.color
             );
           } else if (action.content.type === 'multi') {
-            // let obj = {
-            //   clientId,
-            //   color: state.user.color,
-            //   type: action.content.type,
-            //   noteElementIds: action.content.changes[0].map((el) => el.id).join(','),
-            // };
+            return crossReferenceMultiTemplate(
+              actionId,
+              selectionInfo.ids,
+              action.content.changes[0].map((el) => el.id),
+              selectionInfo.color
+            );
           }
         }
         case 'change_chord':
+          return crossReferenceSingleTemplate(
+            actionId,
+            selectionInfo.ids,
+            action.content.chordElementId,
+            selectionInfo.color
+          );
       }
     })}`;
 
@@ -324,15 +332,15 @@ function selectActionsOnPanel(allStates) {
         }
       },
     {});
-  console.log(actionsSelected);
+  console.log({actionsSelected});
   let finalRefs = {};  
   for (const [id, selection] of Object.entries(actionsSelected)) {
     const cssSelector = `button[data-action-id="${selection.actionId}"]`;
     const actionEntry = document.querySelector(cssSelector);
+    console.log({actionEntry});
 
     if(!actionEntry) return; //TODO: se auton pou den exei anoixei to panel, to function ekteleitai prin prolavei na ginei to renderActions kai stamataei edw. sti deuteri ektelesi(actionPanelDiaplyes:false) ekteleitai oli.
-    
-    console.log({actionEntry});
+
     const thisSelector = `${id}-${selection.name}-${selection.color}`;
     (actionEntry.dataset.selectors=='null' || actionEntry.dataset.selectors===undefined) ?
       actionEntry.dataset.selectors = `${thisSelector}`:
@@ -363,7 +371,10 @@ function selectActionsOnPanel(allStates) {
   return [...Object.entries(finalRefs)];
 }
 
-function clearActionSelections() {
+export function clearActionSelections() {
+  let actionsSel = $('.action-selected');
+  console.log({actionsSel});
+  console.log(document.querySelectorAll('.action-selected'));
   $('.action-selected').popover('dispose');
   document.querySelectorAll('.action-selected')
     .forEach(prevSelection => {
@@ -376,11 +387,13 @@ function clearActionSelections() {
 function displayActionPanel (allStates) {
   const panelDisplayStates = allStates
     .find( ([id, state]) => state.referenceAction?.ActionPanelDisplayed );
+  console.log({panelDisplayStates});
   const actionsContainer = document.getElementById(
     'action-history-container'
   );
+  console.log({actionsContainer});
   const alreadyDisplayed = actionsContainer.classList.contains('open');
-
+  console.log({alreadyDisplayed});
   if (panelDisplayStates && !alreadyDisplayed) {
     console.log('open')
     actionsContainer.classList.toggle('open', true);

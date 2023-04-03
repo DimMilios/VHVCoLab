@@ -4,6 +4,7 @@ import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
 import { timeSince } from '../collaboration/util-collab';
 import { yProvider } from '../yjs-setup';
+import { clearActionSelections } from '../collaboration/collab-extension';
 
 const queryParams = {
   actionType: 'null',
@@ -49,13 +50,15 @@ const actionHeaderFilters = () => {
 
 const actionPanelHeaderTemplate = () => {
   const handleClose = () => {
+    console.log('closing');
+    document
+      .getElementById('action-history-container')
+      ?.classList.remove('open');
+    clearActionSelections();
     yProvider.awareness.setLocalStateField('referenceAction', {
       ActionPanelDisplayed: null,
       actionId: null,
     });
-    document
-      .getElementById('action-history-container')
-      ?.classList.remove('open');
   };
 
   return html`<div

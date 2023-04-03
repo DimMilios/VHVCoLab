@@ -422,16 +422,19 @@ export function convertTokenToCsv(token) {
   }
 }
 
-export function getMusicalParameters (note) {
-  const containingMeasure = note.closest('.measure');
+export function getMusicalParameters (musicElement) {
+  const containingMeasure = musicElement.closest('.measure');
   const measureNo = +[...containingMeasure.classList].
     find(token => /m-\d+/.test(token)).
     match(/\d+/)?.[0];
-  const voice = +note.closest('.layer')?.
+  
+  if ( musicElement.classList.contains('harm') )   return measureNo;
+
+  const voice = +musicElement.closest('.layer')?.
     id.match(/N(\d+)/)[1];
 
   const indexOfContainingStaff = [...containingMeasure.children]
-    .findIndex( child => child.id == note.closest('.staff').id )
+    .findIndex( child => child.id == musicElement.closest('.staff').id )
   const staff = [...containingMeasure.children]
     .filter(child => child.classList.contains('staff'))
     .slice(0, indexOfContainingStaff)
@@ -439,21 +442,21 @@ export function getMusicalParameters (note) {
     +1;
 
   let order;
-  const containingBeam = note.closest('.beam');
+  const containingBeam = musicElement.closest('.beam');
   if (containingBeam) {
     const indexOfNoteInBeam = [...containingBeam.children]
-      .findIndex( child => child.id == note.id );
+      .findIndex( child => child.id == musicElement.id );
     order = [...containingBeam.children]
       .filter(child => child.classList.contains('note')||
                        child.classList.contains('chord') )
       .slice(0, indexOfNoteInBeam)
       .length;
-    note = containingBeam;
+    musicElement = containingBeam;
   } else              order = 1;
 
-  const container = note.closest('.layer') ?? note.closest('.staff');
+  const container = musicElement.closest('.layer') ?? musicElement.closest('.staff');
   const indexOfNoteInContainer = [...container.children]
-    .findIndex( child => child.id == note.id );
+    .findIndex( child => child.id == musicElement.id );
   const siblings = [...container.children]
     .slice(0, indexOfNoteInContainer);
   order += siblings
