@@ -464,12 +464,53 @@ export function getMusicalParameters (musicElement) {
                         sibling.classList.contains('chord')  )
     .length
   siblings
-    .filter( sibling => sibling.classList.contains('beam') )
-    .forEach( beam => {
-      order += [...beam.children]
-        .filter( child => child.classList.contains('note') )
-        .length;
-  });
+    .filter((sibling) => sibling.classList.contains('beam'))
+    .forEach((beam) => {
+      order += [...beam.children].filter((child) =>
+        child.classList.contains('note')
+      ).length;
+    });
 
-  return {measureNo, voice, order, staff};
+  return { measureNo, voice, order, staff };
+}
+
+export function extractEditorPosition(element) {
+  var id = element.id;
+  var matches;
+
+  if ((matches = id.match(/L(\d+)/))) {
+    var line = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/F(\d+)/))) {
+    var field = parseInt(matches[1]);
+  } else {
+    return; // required
+  }
+
+  if ((matches = id.match(/S(\d+)/))) {
+    var subfield = parseInt(matches[1]);
+  } else {
+    subfield = null;
+  }
+
+  if ((matches = id.match(/N(\d+)/))) {
+    var number = parseInt(matches[1]);
+  } else {
+    number = 1;
+  }
+
+  if ((matches = id.match(/^([a-z]+)-/))) {
+    var name = matches[1];
+  } else {
+    return; // required
+  }
+
+  if (line < 1 || field < 1) {
+    return;
+  }
+
+  return { id, line, field, subfield };
 }

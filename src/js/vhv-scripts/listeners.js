@@ -1180,12 +1180,15 @@ getAceEditor()
     if (!tempo) {
       window.TEMPO = 200;
       const exIntLine = kernFile?.match(/^\*\*.*\n/m)[0];
-      const tempoLine = exIntLine?.replaceAll(/\*\*[^\t]*/g, `*MM${window.TEMPO}`);
+      const tempoLine = exIntLine?.replaceAll(
+        /\*\*[^\t]*/g,
+        `*MM${window.TEMPO}`
+      );
       const tempo_incKern = kernFile?.replace(
         exIntLine,
         exIntLine + tempoLine + '\n'
       );
-      if (tempo_incKern)  editor.setValue(tempo_incKern);
+      if (tempo_incKern) editor.setValue(tempo_incKern);
 
       tempoInput.placeholder = window.TEMPO;
     } else {
