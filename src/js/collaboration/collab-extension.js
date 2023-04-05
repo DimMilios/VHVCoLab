@@ -244,48 +244,13 @@ export function stateChangeHandler(clients = defaultClients()) {
     shareChordEdit(editInProgress);
   }
       
-  displayActionPanel(awStates);
-  const finalRefs = selectActionsOnPanel(awStates);
+  const panelIsDiplayed = displayActionPanel(awStates);
+  clearPrevSelections();
+  const finalRefs = panelIsDiplayed ?
+    selectActionsOnPanel(awStates) :
+    null;
   console.log({finalRefs});
-  // Actions cross referencing
-  const crossReferences = html`${finalRefs
-    ?.map( ([actionId, selectionInfo]) => {
-
-      const action = getActionById(+actionId);      
-      if (
-        action === undefined||
-        action.content === undefined
-      ) {
-        return null;
-      }
-      
-      switch (action.type) {
-        case 'change_pitch': {
-          if (action.content.type === 'single') {
-            return crossReferenceSingleTemplate(
-              actionId,
-              selectionInfo.ids,
-              action.content.changes[0]?.noteElementId,
-              selectionInfo.color
-            );
-          } else if (action.content.type === 'multi') {
-            return crossReferenceMultiTemplate(
-              actionId,
-              selectionInfo.ids,
-              action.content.changes[0].map((el) => el.id),
-              selectionInfo.color
-            );
-          }
-        }
-        case 'change_chord':
-          return crossReferenceSingleTemplate(
-            actionId,
-            selectionInfo.ids,
-            action.content.chordElementId,
-            selectionInfo.color
-          );
-      }
-    })}`;
+  const crossReferences = html`${ finalRefs?.map( mapCrossRefs ) }`;
 
   render(
     html`${collabLayer(
@@ -307,9 +272,43 @@ export function awaranessUpdateHandler() {
   const usersToRender = formatUserList();
   renderUserList(usersToRender);
 }
+function mapCrossRefs ( [actionId, selectionInfo] ) {
+  const action = getActionById(+actionId);      
+  if (
+    action === undefined||
+    action.content === undefined
+  ) {
+    return null;
+  }
+  
+  switch (action.type) {
+    case 'change_pitch': {
+      if (action.content.type === 'single') {
+        return crossReferenceSingleTemplate(
+          actionId,
+          selectionInfo.ids,
+          action.content.changes[0]?.noteElementId,
+          selectionInfo.color
+        );
+      } else if (action.content.type === 'multi') {
+        return crossReferenceMultiTemplate(
+          actionId,
+          selectionInfo.ids,
+          action.content.changes[0].map((el) => el.id),
+          selectionInfo.color
+        );
+      }
+    }
+    case 'change_chord':
+      return crossReferenceSingleTemplate(
+        actionId,
+        selectionInfo.ids,
+        action.content.chordElementId,
+        selectionInfo.color
+      );
+  }
+}
 function selectActionsOnPanel(allStates) {
-  clearActionSelections();  
-  //rendering current selections
   const actionsContainer = document.getElementById(
     'action-history-container'
   );
@@ -371,7 +370,7 @@ function selectActionsOnPanel(allStates) {
   return [...Object.entries(finalRefs)];
 }
 
-export function clearActionSelections() {
+export function clearPrevSelections() {
   let actionsSel = $('.action-selected');
   console.log({actionsSel});
   console.log(document.querySelectorAll('.action-selected'));
@@ -399,6 +398,7 @@ function displayActionPanel (allStates) {
     actionsContainer.classList.toggle('open', true);
     renderActions();
   }
+  return actionsContainer.classList.contains('open');
 }
 
 function formatUserList() {

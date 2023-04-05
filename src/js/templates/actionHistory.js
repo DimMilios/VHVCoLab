@@ -4,7 +4,7 @@ import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
 import { timeSince } from '../collaboration/util-collab';
 import { yProvider } from '../yjs-setup';
-import { clearActionSelections } from '../collaboration/collab-extension';
+import { clearPrevSelections } from '../collaboration/collab-extension';
 
 const queryParams = {
   actionType: 'null',
@@ -54,11 +54,12 @@ const actionPanelHeaderTemplate = () => {
     document
       .getElementById('action-history-container')
       ?.classList.remove('open');
-    clearActionSelections();
     yProvider.awareness.setLocalStateField('referenceAction', {
       ActionPanelDisplayed: null,
       actionId: null,
     });
+    //case where 'referenceAction' field properties are already null so an update is not emitted
+    clearPrevSelections();
   };
 
   return html`<div

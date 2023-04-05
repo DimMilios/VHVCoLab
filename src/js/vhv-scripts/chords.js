@@ -165,36 +165,11 @@ function editChord() {
   };
   //setting the url to be used and performing xhttp request
   setURLParams(reqUrl, chordEditInfo);
-
   requestChordEdit(reqUrl, edtr);
-
-  const prevValue = mapChord(chord.current, 'display');
-  const newValue =
-    chord.new.root +
-    mapChord(
-      `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
-      'send'
-    );
-  const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
-  const measureNo = getMusicalParameters (global_cursor.CursorNote);
-
-  sendAction(
-    new ActionPayload({
-      type: 'change_chord',
-      content: JSON.stringify({
-        prevValue,
-        newValue,
-        chordElementId,
-        measureNo
-      }),
-    })
-  )
-    .then(() => console.log(`change_chord action was sent.`))
-    .catch(() => console.error(`Failed to send change_chord action`));
 
   if (this == suggestBtn) {
     chord.reharmonize = false;
-    chordBtns.style.display = 'none';
+    chordBtns.style.visibility = 'hidden';
   } else if (this == doneBtn) {
     cleanUpSelections();
 
