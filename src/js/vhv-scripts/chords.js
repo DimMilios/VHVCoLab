@@ -10,8 +10,8 @@ const chordEditor = document.getElementById('chord-editor');
 const chordBtns = document.getElementById('show-edit-suggest-buttons');
 const editBtn = document.getElementById('edit-btn');
 const suggestBtn = document.getElementById('suggest-btn');
-const doneBtn = document.getElementById('done-btn');
-const backBtn = document.getElementById('back-btn');
+export const doneBtn = document.getElementById('done-btn');
+export const backBtn = document.getElementById('back-btn');
 
 export let chord = {
   current: null,
@@ -30,11 +30,16 @@ const GJTBaseUrl = 'https://maxim.mus.auth.gr:6001/sending_kern';
 
 export function showChordEditor() {
   chordBtns.style.visibility = 'hidden';
+
+  $('#show-chord-editor').modal({
+    backdrop: 'static',
+    keyboard: false
+  });
   $('#show-chord-editor').modal('show');
 
-  doneBtn.style.display = 'none';
+  doneBtn.style.visibility = 'hidden';
 
-  if (!isEditing) backBtn.style.display = 'none';
+  if (!isEditing) backBtn.style.visibility = 'hidden';
 }
 
 function setURLParams(reqURL, chordEditInfo) {
@@ -46,7 +51,9 @@ function setURLParams(reqURL, chordEditInfo) {
 }
 
 function cleanUpSelections() {
-  Object.values(chord.new).forEach((value) => (value = null));
+  Object.keys(chord.new).forEach(
+     key => chord.new[key] = null
+  );
 
   decolorizeSelections();
 }
@@ -64,7 +71,7 @@ function select(selection, component) {
   });
 
   if (chord.new.root && chord.new.variation) {
-    doneBtn.style.display = 'block';
+    doneBtn.style.visibility = 'visible';
   }
 }
 
@@ -177,6 +184,8 @@ function editChord() {
       isDisplayed: false,
       selection: null,
     });
+
+    isEditing = false;
   }
 }
 

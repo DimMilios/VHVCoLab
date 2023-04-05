@@ -117,7 +117,7 @@ import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { sendAction } from '../api/actions.js';
 import { addChangePitchActionToGroup } from '../collaboration/sendGroupedActions.js';
-import { getMusicalParameters } from './utility.js';
+import { determineAnacrusis, getMusicalParameters } from './utility.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -1166,6 +1166,8 @@ getAceEditor()
   .on('change', function () {
     const editor = getAceEditor();
     const kernFile = editor.getSession().getValue();
+
+    determineAnacrusis(kernFile);
     kern_string = kernFile;
     //extracting tempo
     if (!kernFile) {

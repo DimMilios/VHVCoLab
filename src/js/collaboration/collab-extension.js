@@ -16,8 +16,7 @@ import { global_cursor } from '../vhv-scripts/global-variables.js';
 import { fixedCommentReplyContainerTemplate } from '../templates/fixedCommentReplyContainer.js';
 import { COMMENTS_VISIBLE } from '../bootstrap.js';
 import { CommentService } from '../api/CommentService.js';
-import { isEditing } from '../vhv-scripts/chords.js';
-import { showChordEditor } from '../vhv-scripts/chords.js';
+import { isEditing, showChordEditor, backBtn, doneBtn } from '../vhv-scripts/chords.js';
 import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
 import { getActionById, renderActions } from '../templates/actionHistory.js';
@@ -148,6 +147,9 @@ function wrapChordEdit() {
       });
     }, 1500);
   } else {
+    backBtn.style.visibility = 'visible';
+    doneBtn.style.visibility = 'visible';
+    
     $('.collab-selected').css('color', 'white');
     $('.collab-selected').popover('dispose');
     $('.collab-selected').removeClass('collab-selected');
@@ -185,7 +187,6 @@ function defaultClients() {
 
 export function stateChangeHandler(clients = defaultClients()) {
   const awStates = Array.from(yProvider.awareness.getStates().entries());
-  console.log({awStates});
   let collabContainer = document.querySelector('#output #collab');
   if (!collabContainer) {
     console.log(
@@ -249,7 +250,6 @@ export function stateChangeHandler(clients = defaultClients()) {
   const finalRefs = panelIsDiplayed ?
     selectActionsOnPanel(awStates) :
     null;
-  console.log({finalRefs});
   const crossReferences = html`${ finalRefs?.map( mapCrossRefs ) }`;
 
   render(
@@ -331,12 +331,10 @@ function selectActionsOnPanel(allStates) {
         }
       },
     {});
-  console.log({actionsSelected});
   let finalRefs = {};  
   for (const [id, selection] of Object.entries(actionsSelected)) {
     const cssSelector = `button[data-action-id="${selection.actionId}"]`;
     const actionEntry = document.querySelector(cssSelector);
-    console.log({actionEntry});
 
     if(!actionEntry) return; //TODO: se auton pou den exei anoixei to panel, to function ekteleitai prin prolavei na ginei to renderActions kai stamataei edw. sti deuteri ektelesi(actionPanelDiaplyes:false) ekteleitai oli.
 
@@ -354,7 +352,6 @@ function selectActionsOnPanel(allStates) {
     const color = !names.includes(',') ?
       allSelectors.match(/#[^,]*/)?.[0] :
       'black';      
-    console.log({color, ids, names});
 
     actionEntry.classList.add('action-selected');
     actionEntry.dataset.content = names;
@@ -372,8 +369,6 @@ function selectActionsOnPanel(allStates) {
 
 export function clearPrevSelections() {
   let actionsSel = $('.action-selected');
-  console.log({actionsSel});
-  console.log(document.querySelectorAll('.action-selected'));
   $('.action-selected').popover('dispose');
   document.querySelectorAll('.action-selected')
     .forEach(prevSelection => {
@@ -386,15 +381,12 @@ export function clearPrevSelections() {
 function displayActionPanel (allStates) {
   const panelDisplayStates = allStates
     .find( ([id, state]) => state.referenceAction?.ActionPanelDisplayed );
-  console.log({panelDisplayStates});
+
   const actionsContainer = document.getElementById(
     'action-history-container'
   );
-  console.log({actionsContainer});
   const alreadyDisplayed = actionsContainer.classList.contains('open');
-  console.log({alreadyDisplayed});
   if (panelDisplayStates && !alreadyDisplayed) {
-    console.log('open')
     actionsContainer.classList.toggle('open', true);
     renderActions();
   }

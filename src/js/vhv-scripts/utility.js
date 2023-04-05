@@ -514,3 +514,7 @@ export function extractEditorPosition(element) {
 
   return { id, line, field, subfield };
 }
+
+export function determineAnacrusis (kern) {
+
+}
