@@ -4,6 +4,7 @@ import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
 import {
   getEditorContents,
+  scoreTransposition,
   setEditorContents,
   timeSince,
 } from '../collaboration/util-collab';
@@ -13,6 +14,8 @@ import {
 } from '../vhv-scripts/utility';
 import { yProvider } from '../yjs-setup';
 import { clearPrevSelections } from '../collaboration/collab-extension';
+import { compareHexHashes, crc32, digestMessage } from '../vhv-scripts/hash';
+import { getAceEditor } from '../vhv-scripts/setup';
 
 const queryParams = {
   actionType: 'null',
@@ -152,11 +155,7 @@ const TYPES = {
     ACTION_TYPES.export,
     ACTION_TYPES.transpose,
   ],
-  REFERENCEABLE: [
-    ACTION_TYPES.change_pitch,
-    ACTION_TYPES.change_chord,
-    ACTION_TYPES.transpose,
-  ],
+  REFERENCEABLE: [ACTION_TYPES.change_pitch, ACTION_TYPES.change_chord],
 };
 Object.freeze(TYPES);
 const isThereContent = (type) => {
@@ -477,23 +476,50 @@ const actionEntry = (action, userColorMapping) => {
     collapse.collapse('toggle');
   }
 
-  function handleReplay() {
-    if (
-      !Array.isArray(action.content.changes) ||
-      action.content.changes.length === 0
-    ) {
-      console.warn('Could not find changes for action %d', action.id);
-      return;
-    }
-
+  async function handleReplay() {
     switch (action.type) {
       case ACTION_TYPES.change_pitch: {
+        if (
+          !Array.isArray(action.content.changes) ||
+          action.content.changes.length === 0
+        ) {
+          console.warn('Could not find changes for action %d', action.id);
+          return;
+        }
         if (action.content.type === 'single') {
           let replay = createSingleReplay(action);
           replaySingleSelect(replay);
         } else if (action.content.type === 'multi') {
           let replay = createMultiReplay(action);
           replayMultiSelect(replay);
+        }
+      }
+      case ACTION_TYPES.transpose: {
+        const words = action.content.text.toLowerCase().split(' ');
+        const elemId = words.join('-') + '__submenu-item';
+        const oppositeId =
+          words[0] === 'up' ? 'down' + elemId.slice(2) : elemId;
+        const menuElem = document.getElementById(oppositeId);
+
+        const filter = menuElem.querySelector('small')?.textContent?.trim();
+        if (!filter?.includes('transpose')) return;
+
+        const editor = getAceEditor();
+        if (!editor) return;
+
+        const currChecksum = crc32(editor.session.getValue());
+        if (currChecksum === action.content.checksum) {
+          const currHash = await digestMessage(editor.session.getValue());
+          if (compareHexHashes(currHash, action.content.hash)) {
+            // SHA-1 hashes match, we can replay this transposition
+            scoreTransposition(filter);
+            replayMap.set(action.id, {
+              reverseFilter: document
+                .getElementById(elemId)
+                .querySelector('small')
+                ?.textContent?.trim(),
+            });
+          }
         }
       }
     }
@@ -509,6 +535,11 @@ const actionEntry = (action, userColorMapping) => {
         replay = createMultiReplay(action);
         replayMap.set(action.id, replay);
       }
+    }
+
+    if (action.type === ACTION_TYPES.transpose && replay?.reverseFilter) {
+      scoreTransposition(replay.reverseFilter);
+      replayMap.delete(action.id);
     }
 
     if (action.content?.type === 'single') {

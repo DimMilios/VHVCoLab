@@ -1767,8 +1767,9 @@ import { getMode } from './utility-ace.js';
 import { getAceEditor } from './setup.js';
 import { getMenu } from '../menu.js';
 import splitter from './splitter.js';
-import { getURLParams } from '../api/util.js';
-import { yProvider } from '../yjs-setup.js';
+import { featureIsEnabled } from '../bootstrap.js';
+import { sendAction } from '../api/actions.js';
+import { crc32, digestMessage } from './hash.js';
 
 export function updateEditorMode() {
   if (!editor) {
@@ -1947,4 +1948,54 @@ export function cleanFont(font) {
     font = 'Leland';
   }
   return font;
+}
+
+export async function applyFilterToKern(filter, data, callback, label) {
+  let contents = '';
+  if (!data) {
+    contents = editor.getValue().replace(/^\s+|\s+$/g, '');
+  } else {
+    contents = data.replace(/^\s+|\s+$/g, '');
+  }
+  let options = humdrumToSvgOptions();
+  let dataWithFilter = contents + '\n!!!filter: ' + filter + '\n';
+
+  try {
+    let newdata = await vrvWorker.filterData(
+      options,
+      dataWithFilter,
+      'humdrum'
+    );
+    newdata = newdata.replace(/\s+$/m, '');
+    let lines = newdata.match(/[^\r\n]+/g);
+    for (let i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].match(/^!!!Xfilter:/)) {
+        lines[i] = '';
+        break;
+      }
+    }
+    newdata = '';
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i] === '') {
+        continue;
+      }
+      newdata += lines[i] + '\n';
+    }
+    editor.setValue(newdata, -1);
+    if (callback) {
+      callback(newdata);
+    }
+
+    if (filter.startsWith('transpose') && featureIsEnabled('actions')) {
+      const checksum = crc32(newdata); // Calculate checksum of humdrum data after filter application
+      const hash = await digestMessage(newdata); // Calculate SHA-1 hash of humdrum data after filter application
+      await sendAction({
+        type: 'transpose',
+        content: JSON.stringify({ text: label, checksum, hash }),
+      });
+      console.log('transpose action was sent to the server');
+    }
+  } catch (error) {
+    console.error('failed to send transpose action the server', error);
+  }
 }

@@ -13,10 +13,10 @@ import {
   replaceEditorContentWithHumdrumFile,
   getTextFromEditorNoCsvProcessing,
   toggleHumdrumCsvTsv,
+  applyFilterToKern,
 } from './vhv-scripts/misc.js';
 import { loadKernScoresFile } from './vhv-scripts/loading.js';
 
-import { humdrumToSvgOptions } from './vhv-scripts/verovio-options.js';
 import { getVrvWorker } from './humdrum-notation-plugin-worker.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import {
@@ -40,8 +40,7 @@ import {
   promptForFile,
   saveContentAsMIDI,
 } from './vhv-scripts/file-operations.js';
-import { featureIsEnabled, toggleCommentsVisibility } from './bootstrap.js';
-import { sendAction } from './api/actions.js';
+import { toggleCommentsVisibility } from './bootstrap.js';
 
 class MenuInterface {
   constructor() {
@@ -317,47 +316,7 @@ class MenuInterface {
   }
 
   applyFilter(filter, data, callback, label) {
-    var contents = '';
-    if (!data) {
-      contents = editor.getValue().replace(/^\s+|\s+$/g, '');
-    } else {
-      contents = data.replace(/^\s+|\s+$/g, '');
-    }
-    var options = humdrumToSvgOptions();
-    var data = contents + '\n!!!filter: ' + filter + '\n';
-    // window.vrvWorker.filterData(options, data, "humdrum")
-    vrvWorker.filterData(options, data, 'humdrum').then(function (newdata) {
-      newdata = newdata.replace(/\s+$/m, '');
-      var lines = newdata.match(/[^\r\n]+/g);
-      for (var i = lines.length - 1; i >= 0; i--) {
-        if (lines[i].match(/^!!!Xfilter:/)) {
-          lines[i] = '';
-          break;
-        }
-      }
-      newdata = '';
-      for (var i = 0; i < lines.length; i++) {
-        if (lines[i] === '') {
-          continue;
-        }
-        newdata += lines[i] + '\n';
-      }
-      editor.setValue(newdata, -1);
-      if (callback) {
-        callback(newdata);
-      }
-      console.log({ filter, data });
-      if (filter.startsWith('transpose') && featureIsEnabled('actions')) {
-        sendAction({
-          type: 'transpose',
-          content: JSON.stringify({ text: label }),
-        })
-          .then(() => console.log('transpose action was sent to the server'))
-          .catch(() =>
-            console.log('failed to send transpose action the server')
-          );
-      }
-    });
+    applyFilterToKern(filter, data, callback, label);
   }
 
   insertLocalCommentLine() {

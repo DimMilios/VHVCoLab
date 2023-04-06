@@ -1,5 +1,7 @@
+import { getVrvWorker } from '../humdrum-notation-plugin-worker';
 import { global_cursor } from '../vhv-scripts/global-variables';
 import { getAceEditor } from '../vhv-scripts/setup';
+import { humdrumToSvgOptions } from '../vhv-scripts/verovio-options';
 // import { handleCommentsMessage } from "../yjs-setup";
 
 export const MULTI_SELECT_ALPHA = 0.3;
@@ -273,4 +275,40 @@ export function getEditorContents(line, field) {
   }
 
   return token;
+}
+
+export function scoreTransposition(filter) {
+  var contents = '';
+  const editor = getAceEditor();
+  if (!editor) return;
+
+  var data;
+  if (!data) {
+    contents = editor.session.getValue().replace(/^\s+|\s+$/g, '');
+  } else {
+    contents = data.replace(/^\s+|\s+$/g, '');
+  }
+  var options = humdrumToSvgOptions();
+  data = contents + '\n!!!filter: ' + filter + '\n';
+
+  getVrvWorker()
+    ?.filterData(options, data, 'humdrum')
+    .then(function (newdata) {
+      newdata = newdata.replace(/\s+$/m, '');
+      var lines = newdata.match(/[^\r\n]+/g);
+      for (var i = lines.length - 1; i >= 0; i--) {
+        if (lines[i].match(/^!!!Xfilter:/)) {
+          lines[i] = '';
+          break;
+        }
+      }
+      newdata = '';
+      for (var i = 0; i < lines.length; i++) {
+        if (lines[i] === '') {
+          continue;
+        }
+        newdata += lines[i] + '\n';
+      }
+      editor.setValue(newdata, -1);
+    });
 }
