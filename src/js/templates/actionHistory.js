@@ -155,7 +155,11 @@ const TYPES = {
     ACTION_TYPES.export,
     ACTION_TYPES.transpose,
   ],
-  REFERENCEABLE: [ACTION_TYPES.change_pitch, ACTION_TYPES.change_chord],
+  REFERENCEABLE: [
+    ACTION_TYPES.change_pitch,
+    ACTION_TYPES.change_chord,
+    ACTION_TYPES.add_comment,
+  ],
 };
 Object.freeze(TYPES);
 const isThereContent = (type) => {

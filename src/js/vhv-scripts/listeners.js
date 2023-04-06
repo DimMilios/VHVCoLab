@@ -1176,23 +1176,40 @@ getAceEditor()
       );
       return;
     }
-    let tempoInput = document.getElementById('tempo-input');
-    let tempo = kernFile.match(/\*MM(\d+)/)?.[1];
+    const tempoInput = document.getElementById('tempo-input');
+    const tempo = kernFile.match(/\*MM(\d+)/)?.[1];
 
     if (!tempo) {
+      //adding tempo in kern and on score
       window.TEMPO = 200;
-      const exIntLine = kernFile?.match(/^\*\*.*\n/m)[0];
+      const exIntLine = kernFile
+        ?.match(/^\*\*.*\n/m)[0];
       const tempoLine = exIntLine?.replaceAll(
         /\*\*[^\t]*/g,
         `*MM${window.TEMPO}`
       );
+
+      const firstMusicEventsLine = kernFile
+        ?.match(/^(\d+[^\t]*\t)+.*$/m)?.[0];
+      const tempoMarkingLine = firstMusicEventsLine
+        ?.replaceAll(/.+?(\t|$)/g, '!\t')
+        ?.replace(/!\t!\t$/,'!LO:TX:a:t=[quarter]=140.0\t!');
+      
+    
       const tempo_incKern = kernFile?.replace(
         exIntLine,
         exIntLine + tempoLine + '\n'
+      ).replace(
+        firstMusicEventsLine,
+        tempoMarkingLine + '\n' + firstMusicEventsLine + '\n'
       );
-      if (tempo_incKern) editor.setValue(tempo_incKern);
+
+      tempo_incKern?
+        editor.setValue(tempo_incKern) :
+        null;
 
       tempoInput.placeholder = window.TEMPO;
+      
     } else {
       window.TEMPO = parseInt(tempo);
       tempoInput.placeholder = window.TEMPO;
