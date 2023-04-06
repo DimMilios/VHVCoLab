@@ -50,9 +50,7 @@ let userData = {
   name,
   color: oneOf(colors),
   image: setUserImageUrl(),
-  id: getURLParams().id
  };
- console.log(userData)
 
 export const messageActionsReset = 100;
 

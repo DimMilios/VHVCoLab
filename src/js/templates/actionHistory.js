@@ -155,7 +155,8 @@ const TYPES = {
   REFERENCEABLE: [
     ACTION_TYPES.change_pitch,
     ACTION_TYPES.change_chord,
-    ACTION_TYPES.transpose,
+    ACTION_TYPES.add_comment,
+
   ],
 };
 Object.freeze(TYPES);

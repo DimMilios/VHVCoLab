@@ -286,14 +286,14 @@ function mapCrossRefs ( [actionId, selectionInfo] ) {
       if (action.content.type === 'single') {
         return crossReferenceSingleTemplate(
           actionId,
-          selectionInfo.ids,
+          selectionInfo.names,
           action.content.changes[0]?.noteElementId,
           selectionInfo.color
         );
       } else if (action.content.type === 'multi') {
         return crossReferenceMultiTemplate(
           actionId,
-          selectionInfo.ids,
+          selectionInfo.names,
           action.content.changes[0].map((el) => el.id),
           selectionInfo.color
         );
@@ -302,10 +302,18 @@ function mapCrossRefs ( [actionId, selectionInfo] ) {
     case 'change_chord':
       return crossReferenceSingleTemplate(
         actionId,
-        selectionInfo.ids,
+        selectionInfo.names,
         action.content.chordElementId,
         selectionInfo.color
       );
+    case 'add_comment':
+      return crossReferenceSingleTemplate(
+        actionId,
+        selectionInfo.names,
+        action.content.id,
+        selectionInfo.color,
+        action.type
+      )
   }
 }
 function selectActionsOnPanel(allStates) {
@@ -317,28 +325,27 @@ function selectActionsOnPanel(allStates) {
     .map(
       el => {
         return {
-          id : el[1].user.id,
           name : el[1].user.name,
           color: el[1].user.color,
           actionId : el[1].referenceAction.actionId,
       } 
     })
     .reduce((prev, curr) => {
-      return curr.id in prev?
+      return curr.name in prev?
         prev:
         {...prev,
-         [curr.id]: {name:curr.name, actionId:curr.actionId, color: curr.color}
+         [curr.name]: {actionId:curr.actionId, color: curr.color}
         }
       },
     {});
   let finalRefs = {};  
-  for (const [id, selection] of Object.entries(actionsSelected)) {
+  for (const [user, selection] of Object.entries(actionsSelected)) {
     const cssSelector = `button[data-action-id="${selection.actionId}"]`;
     const actionEntry = document.querySelector(cssSelector);
 
     if(!actionEntry) return; //TODO: se auton pou den exei anoixei to panel, to function ekteleitai prin prolavei na ginei to renderActions kai stamataei edw. sti deuteri ektelesi(actionPanelDiaplyes:false) ekteleitai oli.
 
-    const thisSelector = `${id}-${selection.name}-${selection.color}`;
+    const thisSelector = `${user}-${selection.color}`;
     (actionEntry.dataset.selectors=='null' || actionEntry.dataset.selectors===undefined) ?
       actionEntry.dataset.selectors = `${thisSelector}`:
       actionEntry.dataset.selectors += `, ${thisSelector}`;
@@ -346,9 +353,7 @@ function selectActionsOnPanel(allStates) {
 
     const allSelectors = actionEntry.dataset.selectors;
     const names = allSelectors
-      .replace(/\d+-([^-]*)-[^,]*/g, '$1')
-    const ids = allSelectors
-      .replace(/(\d+)-[^-]*-[^,]*/g, '$1')
+      .replace(/([^-]*)-[^,]*/g, '$1')
     const color = !names.includes(',') ?
       allSelectors.match(/#[^,]*/)?.[0] :
       'black';      
@@ -362,7 +367,7 @@ function selectActionsOnPanel(allStates) {
     });
     $(cssSelector).popover('show');
 
-    finalRefs[selection.actionId] = {ids, color};
+    finalRefs[selection.actionId] = {names, color};
   }
   return [...Object.entries(finalRefs)];
 }

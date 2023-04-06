@@ -1,8 +1,12 @@
 import { html } from 'lit-html';
 import { multiSelectCoords } from '../collaboration/templates';
 
-export let crossReferenceSingleTemplate = (actionId, userIds, elemRefId, color) => {
-  let el = document.getElementById(elemRefId);
+export let crossReferenceSingleTemplate = (actionId, userNames, elemRefId, color, actionType) => {
+  const el = (actionType == 'add_comment') ?
+    document.querySelector(`div.select-area-button[data-comment-id="${elemRefId}"]`) :
+    document.getElementById(elemRefId);
+  console.log(el);
+
   if (!el) return html`<div class="cross-reference-single"></div>`;
 
   const { targetBottom, targetTop, targetX, targetBounds } = getSelectionCoordsWithOffset(
@@ -17,13 +21,13 @@ export let crossReferenceSingleTemplate = (actionId, userIds, elemRefId, color) 
       background-color: transparent;
       border: medium dashed ${color}
     "
-    data-user-ids=${userIds}
+    data-users=${userNames}
     data-ref-id=${elemRefId}
     data-ref-action=${actionId}
   ></div>`;
 };
 
-export let crossReferenceMultiTemplate = (actionId, userIds, selectedNotes, color) => {
+export let crossReferenceMultiTemplate = (actionId, userNames, selectedNotes, color) => {
   const coords = multiSelectCoords(selectedNotes);
 
   return html`<div
@@ -33,7 +37,7 @@ export let crossReferenceMultiTemplate = (actionId, userIds, selectedNotes, colo
         height: ${coords.height + 10}px;
         border: medium dashed ${color};
       "
-      data-user-ids=${userIds}
+      data-user-ids=${userNames}
       data-ref-action=${actionId}
     ></div>`;  
 };
