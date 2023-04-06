@@ -45,11 +45,14 @@
   <script src="/scripts/pdfkit/source.js" type="text/javascript"></script>
 
   <!--swing player-->
-  
+
   <!--downloaded-->
-  <script src='/scripts/swing_player/downloaded/WebAudioFontPLayer.js' type="text/javascript"></script>
-  <script src='/scripts/swing_player/downloaded/0000_JCLive_sf2_file.js' type="text/javascript"></script>
-  <script src='/scripts/swing_player/downloaded/0320_Aspirin_sf2_file.js' type="text/javascript"></script>
+  <script src='/scripts/swing_player/downloaded/WebAudioFontPLayer.js'
+    type="text/javascript"></script>
+  <script src='/scripts/swing_player/downloaded/0000_JCLive_sf2_file.js'
+    type="text/javascript"></script>
+  <script src='/scripts/swing_player/downloaded/0320_Aspirin_sf2_file.js'
+    type="text/javascript"></script>
 
   <script type="text/javascript" src="/scripts/swing_player/gjt_player.js"></script>
   <!-- workbench initialises audio manager -->
@@ -59,7 +62,7 @@
   <!-- workbench loads metronome -->
   <script type="text/javascript" src="/scripts/swing_player/metronome_js/metronome.js"></script>
   <script type="text/javascript" src="/scripts/swing_player/main.js"></script>
-  
+
   <script type="text/javascript" src="/scripts/swing_player/sp_setup.js" defer></script>
 
 
@@ -314,7 +317,8 @@
               <label for="meet-room">
                 <span>Jitsi meeting room</span>
               </label>
-              <input class="form-control" type="text" name="meet-room" id="meet-room" required value='test-room' minlength="5">
+              <input class="form-control" type="text" name="meet-room" id="meet-room" required
+                value='test-room' minlength="5">
             </div>
             <div class="form-group d-flex justify-content-end">
               <button type="button" class="btn btn-danger" id='btnCloseCallJoin'
@@ -359,15 +363,14 @@
 
           <!-- Edit button toggle Chord editor display -->
           <div id="show-edit-suggest-buttons">
-            <button
-              class="btn btn-secondary" id="edit-btn" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-            >Edit</button>
+            <button class="btn btn-secondary" id="edit-btn" data-toggle="modal"
+              data-backdrop="static" data-keyboard="false">Edit</button>
             <button class="btn btn-secondary" id="suggest-btn">Suggest</button>
           </div>
 
-        <div class="swing-player-container align-self-end">
-          <button class="btn btn-primary swing-player-button">Play - Stop</button>
-        </div>
+          <div class="swing-player-container align-self-end">
+            <button class="btn btn-primary swing-player-button">Play - Stop</button>
+          </div>
           <div xmlns="http://www.w3.org/1999/xhtml" class="nav-play-button mr-5">
             <div style="cursor:pointer;" title="Play music" id="play-button">
               <span class="fas fa-play"></span>
@@ -1146,96 +1149,10 @@
                         class="dropdown-item d-flex justify-content-between text-dark">
                         <a class="text-decoration-none text-dark">Split beams by lyrics </a>
                         <small class="ml-3 text-nowrap"><strong>autobeam -l</strong></small>
-
                       </li>
                     </ul>
                   </li>
-                  <li id="transpose-by-key--if-data-contains-key-__submenu-item"
-                    class="dropdown-item d-flex justify-content-between text-dark">
-                    <a class="text-decoration-none text-dark">Transpose by key (if data contains
-                      key) »</a>
 
-                    <ul class="dropdown-menu p-0 dropdown-submenu">
-                      <li id="tonic-to-c__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to C </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k c</strong></small>
-
-                      </li>
-                      <li id="tonic-to-c-sharp-__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to C&sharp; </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k c#</strong></small>
-
-                      </li>
-                      <li id="tonic-to-d-flat-__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to D&flat; </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k d-</strong></small>
-
-                      </li>
-                      <li id="tonic-to-d__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to D </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k d</strong></small>
-
-                      </li>
-                      <li id="tonic-to-e-flat-__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to E&flat; </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k e-</strong></small>
-
-                      </li>
-                      <li id="tonic-to-e__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to E </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k e</strong></small>
-
-                      </li>
-                      <li id="tonic-to-f__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to F </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k f</strong></small>
-
-                      </li>
-                      <li id="tonic-to-f-sharp-__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to F&sharp; </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k f#</strong></small>
-
-                      </li>
-                      <li id="tonic-to-g__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to G </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k g</strong></small>
-
-                      </li>
-                      <li id="tonic-to-a-flat-__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to A&flat; </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k a-</strong></small>
-
-                      </li>
-                      <li id="tonic-to-a__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to A </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k a</strong></small>
-
-                      </li>
-                      <li id="tonic-to-b-flat-__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to B&flat; </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k b-</strong></small>
-
-                      </li>
-                      <li id="tonic-to-b__submenu-item"
-                        class="dropdown-item d-flex justify-content-between text-dark">
-                        <a class="text-decoration-none text-dark">Tonic to B </a>
-                        <small class="ml-3 text-nowrap"><strong>transpose -k b</strong></small>
-
-                      </li>
-                    </ul>
-                  </li>
                   <li id="transpose-by-up-interval__submenu-item"
                     class="dropdown-item d-flex justify-content-between text-dark">
                     <a class="text-decoration-none text-dark">Transpose by up interval »</a>
@@ -2014,9 +1931,12 @@
           <div class="controls">
             <center>
               <div id="control_section_buttons">
-                <button id="start-jitsi-meet-btn" class="px-2 mr-3" data-toggle="modal" data-target="#enter-jitsi-meet-room">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z" />
+                <button id="start-jitsi-meet-btn" class="px-2 mr-3" data-toggle="modal"
+                  data-target="#enter-jitsi-meet-room">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                    class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z" />
                   </svg>
                 </button>
 
@@ -2241,7 +2161,6 @@
   <script src="/src/js/audio/synchronize.js" type="module"></script>
    -->
   <script src="/src/js/sync.js" type="module"></script>
-
 </body>
 
 </html>
