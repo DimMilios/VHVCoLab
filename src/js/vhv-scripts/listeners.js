@@ -1193,7 +1193,7 @@ getAceEditor()
         ?.match(/^(\d+[^\t]*\t)+.*$/m)?.[0];
       const tempoMarkingLine = firstMusicEventsLine
         ?.replaceAll(/.+?(\t|$)/g, '!\t')
-        ?.replace(/!\t!\t$/,'!LO:TX:a:t=[quarter]=140.0\t!');
+        ?.replace(/!\t!\t$/,`!LO:TX:a:t=[quarter]=${window.TEMPO}\t!`);
       
     
       const tempo_incKern = kernFile?.replace(
@@ -1209,7 +1209,7 @@ getAceEditor()
         null;
 
       tempoInput.placeholder = window.TEMPO;
-      
+
     } else {
       window.TEMPO = parseInt(tempo);
       tempoInput.placeholder = window.TEMPO;
