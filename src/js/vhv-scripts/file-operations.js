@@ -92,8 +92,32 @@ export function exportKernToPrivateFiles() {
     // scoreName = title.split(' ').join('_') + '.krn';
   }
 
+  let firstTry = true;
+  let nameFromPrompt = '';
+  while (nameFromPrompt !== null && !nameFromPrompt.endsWith('.krn')) {
+    if (firstTry) {
+      nameFromPrompt = window.prompt(
+        'Enter a name for your private file (must have a .krn extension)',
+        scoreName
+      );
+      firstTry = false;
+    } else {
+      nameFromPrompt = window.prompt(
+        'The name you provided was not correct.\nEnter a new name for your private file (must have a .krn extension)',
+        nameFromPrompt + '.krn'
+      );
+    }
+  }
+
+  if (nameFromPrompt === null) {
+    console.warn(
+      'Prompt was cancelled or a valid file name was not provided. Skipping file exporting'
+    );
+    return;
+  }
+
   let fd = new FormData();
-  let file = new File([content], scoreName);
+  let file = new File([content], nameFromPrompt);
   fd.append('f', file);
   fd.append('action', 'upload');
   fd.append('ufolder', 'private');
