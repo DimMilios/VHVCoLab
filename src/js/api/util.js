@@ -7,8 +7,16 @@ export function getURLParams(keys = []) {
 export function getURLInfo() {
   let urlParams = getURLParams();
   if (import.meta.env.DEV) {
-    console.log(urlParams);
-    return urlParams;
+    let file = urlParams.file;
+    if (urlParams?.course) {
+      file = `filename=${urlParams.file}&course=${urlParams.course}`;
+    }
+    console.log({ file, urlParams });
+    return {
+      ...urlParams,
+      file,
+    };
+    // return urlParams;
   }
 
   try {
