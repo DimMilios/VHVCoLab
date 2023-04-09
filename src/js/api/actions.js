@@ -54,11 +54,15 @@ export class ActionResponse {
 
 function getQueryData() {
   const { user } = yProvider?.awareness?.getLocalState();
+  let params = new URLSearchParams(yProvider.roomname);
+  let filename = params.has('filename')
+    ? params.get('filename')
+    : yProvider.roomname;
   if (user) {
     return {
       username: user.name,
       course: user.course ?? null,
-      filename: yProvider.roomname,
+      filename,
     };
   }
 
@@ -67,7 +71,7 @@ function getQueryData() {
     return {
       username,
       course: course ?? null,
-      filename: yProvider.roomname ?? null,
+      filename: filename ?? null,
     };
   }
 }
