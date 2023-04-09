@@ -17,10 +17,13 @@ export function getURLInfo() {
     // The file is stored in MusiCoLab's file repository
     if (file && isValidHttpUrl(file)) {
       let params = new URL(file).searchParams;
-      file = `f=${params.get('f')}&u=${params.get('u')}`;
+      if (urlParams?.course) {
+        file = `filename=${params.get('f')}&course=${urlParams.course}`;
+      } else {
+        file = params.get('f');
+      }
       console.log({ file, params: params.toString() });
     }
-    // console.log({ ...urlParams, file });
     return {
       ...urlParams,
       file,

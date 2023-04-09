@@ -100,25 +100,24 @@ export async function setupCollaboration() {
   }
 
   if (typeof yProvider == 'undefined') {
-    const { file, user, course, id } = getURLInfo();
+    const { file, user, course } = getURLInfo();
 
-    let searchParams = new URLSearchParams(file);
     let room = file ?? 'test-room';
-    if (searchParams.has('f')) {
-      room = searchParams.get('f');
+    let filename;
+    const fileParams = new URLSearchParams(file);	  
+    if (fileParams.has('course')) { // Loaded from Moodle
+	room = file;
+	filename = fileParams.get('filename');
+    } else { // Loaded from public repository
+	room = file;
+	filename = file;
     }
-    // let roomData;
-    /*
-  if (file && user) {
-    roomData = await fetchRoom(file, user);
-    room = roomData?.room ?? room;
-  }
-  */
+
     permanentUserData = new Y.PermanentUserData(ydoc);
     permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
-	    params: { username: user, file: room, course: course ?? null },
+	    params: { username: user, file: filename, course: course ?? null },
     }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
