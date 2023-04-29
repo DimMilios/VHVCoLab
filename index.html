@@ -91,6 +91,24 @@
     $(function () {
       $('[data-toggle="popover"]').popover()
     })
+
+    $(function () {
+      $('#freeze-interface').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      $('#freeze-interface').modal('hide');
+    });
+
+    $(function () {
+      $('#show-chord-editor').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      $('#show-chord-editor').modal('hide');
+    });
   </script>
 
   <div id="feature-toggle" style="display: none;">
@@ -140,6 +158,20 @@
       <button type="submit" class="btn btn-primary float-right">Apply</button>
     </form>
   </div>
+
+  <div class="modal" id="freeze-interface" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-body d-flex flex-xl-column justify-content-center align-items-center">
+          <div class="alert alert-primary notification-container" role="alert"></div>
+          <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="modal" id="show-chord-editor" tabindex="-1" aria-labelledby="showCordEditorLabel"
     aria-hidden="true">

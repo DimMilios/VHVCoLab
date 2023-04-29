@@ -4,6 +4,7 @@ import { display_mapping, send_mapping } from './chord_mappings.js';
 import { ActionPayload, sendAction } from '../api/actions';
 import { global_cursor, global_interface } from './global-variables';
 import { getMusicalParameters } from './utility';
+import { freezeInterface } from './utility-svg';
 
 //defining variables and functions to be used
 const chordEditor = document.getElementById('chord-editor');
@@ -31,10 +32,6 @@ const GJTBaseUrl = 'https://maxim.mus.auth.gr:6001/sending_kern';
 export function showChordEditor() {
   chordBtns.style.visibility = 'hidden';
 
-  $('#show-chord-editor').modal({
-    backdrop: 'static',
-    keyboard: false
-  });
   $('#show-chord-editor').modal('show');
 
   doneBtn.style.visibility = 'hidden';
@@ -63,7 +60,7 @@ function select(selection, component) {
   chord.new[component] = selection.innerText;
 
   yProvider.awareness.setLocalStateField('chordEdit', {
-    isDisplayed: true,
+    editorDisplayed: true,
     selection: {
       component,
       text: selection.innerText,
@@ -104,12 +101,35 @@ function mapChord(chordText, mapType) {
   return chordText;
 }
 
+function sendChordEditAction() {
+  const prevValue = mapChord(chord.current, 'display');
+  const newValue = chord.new.root +
+    mapChord(
+      `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
+      'send'
+    );
+  const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
+  const measureNo = getMusicalParameters(
+    global_cursor.CursorNote
+  );
+  sendAction(
+    new ActionPayload({
+      type: 'change_chord',
+      content: JSON.stringify({
+        prevValue,
+        newValue,
+        chordElementId,
+        measureNo
+      }),
+    })
+  )
+    .then(() => console.log(`change_chord action was sent.`))
+    .catch(() => console.error(`Failed to send change_chord action`));
+}
+
 function requestChordEdit(reqURL, editor) {
   //initializing, configuring and sending the request
-
-  const freezeBackup = global_interface.FreezeRendering
-  global_interface.FreezeRendering = true;
-
+  
   const xhttp = new XMLHttpRequest();
   xhttp.open('GET', reqURL);
   xhttp.responseType = 'json';
@@ -122,34 +142,26 @@ function requestChordEdit(reqURL, editor) {
     console.log(jsonResponse);
 
     //submitting change_chord action to server. TODO: suggest
-    const prevValue = mapChord(chord.current, 'display');
-    const newValue =
-      chord.new.root +
-      mapChord(
-        `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
-        'send'
-      );
-    const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
-    const measureNo = getMusicalParameters (
-      global_cursor.CursorNote
-    );
-    sendAction(
-      new ActionPayload({
-        type: 'change_chord',
-        content: JSON.stringify({
-          prevValue,
-          newValue,
-          chordElementId,
-          measureNo
-        }),
-      })
-    )
-      .then(() => console.log(`change_chord action was sent.`))
-      .catch(() => console.error(`Failed to send change_chord action`));
-    
-    global_interface.FreezeRendering = freezeBackup;
+    sendChordEditAction();
+
+    yProvider.awareness.setLocalStateField('chordEdit', {
+      editorDisplayed: null,
+      selection: null,
+      interfaceFreeze: false,
+    });
     editor.setValue(jsonResponse.new);
   };
+
+  xhttp.onerror = () => {
+    console.log('Chord edit failed!');
+    //TODO: isws na petaei kai mia eidopoisi tipou toast (pio omorfo) oti den egine
+    yProvider.awareness.setLocalStateField('chordEdit', {
+      editorDisplayed: null,
+      selection: null,
+      interfaceFreeze: false,
+    });
+  };
+  
 }
 
 function editChord() {
@@ -175,18 +187,24 @@ function editChord() {
   requestChordEdit(reqUrl, edtr);
 
   if (this == suggestBtn) {
+    yProvider.awareness.setLocalStateField('chordEdit', {
+      editorDisplayed: null,
+      selection: null,
+      interfaceFreeze: true,
+    });
     chord.reharmonize = false;
     chordBtns.style.visibility = 'hidden';
+
   } else if (this == doneBtn) {
     cleanUpSelections();
-
     yProvider.awareness.setLocalStateField('chordEdit', {
-      isDisplayed: false,
+      editorDisplayed: false,
       selection: null,
+      interfaceFreeze: true
     });
-
     isEditing = false;
   }
+  
 }
 
 chordEditor.addEventListener('click', (event) => {
@@ -204,7 +222,7 @@ backBtn.addEventListener('click', function (event) {
 
   if (event.isTrusted) {
     yProvider.awareness.setLocalStateField('chordEdit', {
-      isDisplayed: false,
+      editorDisplayed: false,
       selection: null,
     });
   }
@@ -217,7 +235,7 @@ editBtn.addEventListener('click', (event) => {
   isEditing = true;
   showChordEditor();
   yProvider.awareness.setLocalStateField('chordEdit', {
-    isDisplayed: true,
+    editorDisplayed: true,
     selection: null,
   });
 });

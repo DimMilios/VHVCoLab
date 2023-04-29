@@ -76,24 +76,27 @@ function stop_player(){
   playstop = false;
   metronome.toolSendsPlayStop(playstop);
 }
-
 function send_kern_request(url){
-  console.log('url:', url);
-  Http.open("GET", url);
 
-  // var name = url.split('name=')[1].replace('&r=', '_r~').replace('&h=', '_h~') + '.csv'
-  
-  Http.onreadystatechange = (e) => {
-    if (Http.readyState == 4 && Http.status == 200){
-      var jsonObj = JSON.parse( Http.responseText );
-      play_array( jsonObj['csv_array'], has_precount=false, has_chords=false, has_header=false );
-      playstop = !playstop;
-      console.log('playstop 1:', playstop);
-      metronome.toolSendsPlayStop(playstop);
+  playstop = !playstop;
+
+  if (playstop){
+    console.log('url:', url);
+    Http.open("GET", url);
+    Http.onreadystatechange = (e) => {
+      if (Http.readyState == 4 && Http.status == 200){
+        var jsonObj = JSON.parse( Http.responseText );
+        play_array( jsonObj['csv_array'], has_precount=false, has_chords=false, has_header=false );
+        console.log('playstop 1:', playstop);
+        metronome.toolSendsPlayStop(playstop);
+      }
     }
+    Http.send();
   }
-  Http.send();
+  console.log('playstop 1:', playstop);
+  metronome.toolSendsPlayStop(playstop);
 }
+
 
 function play_note_for_instrument(a, tempo){
   // console.log(' ======================================== ');

@@ -1707,8 +1707,11 @@ export function transposeNote(id, line, field, subfield, amount) {
 // id, line, field, subfield, amount
 export function transposeNotes(noteDescriptions) {
   const transposedNotes = [];
+  let chordToken;  
   for (let { id, line, field, subfield, amount, order, voice, staff, measureNo } of noteDescriptions) {
-    let token = getEditorContents(line, field);
+    let token = chordToken
+      ? chordToken
+      : getEditorContents(line, field);
     amount = parseInt(amount);
 
     let subtokens;
@@ -1735,7 +1738,7 @@ export function transposeNotes(noteDescriptions) {
 
     if (subfield) {
       subtokens[subfield - 1] = newtoken;
-      newtoken = subtokens.join(' ');
+      chordToken = subtokens.join(' ');
     }
 
     // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
@@ -3013,13 +3016,14 @@ export function setEditorContents(line, field, token, id, dontredraw) {
   }
 }
 
-function setEditorContents2(line, field, token, id) {
+function setEditorContents2(line, field, oldT, newT) {
   var i;
   var linecontent = editor.session.getLine(line - 1);
   var range = new Range(line - 1, 0, line - 1, linecontent.length);
 
   var components = linecontent.split(/\t+/);
-  components[field - 1] = token;
+  components[field - 1] = components[field-1]
+    .replace(oldT, newT);
 
   // count tabs between fields
   var tabs = [];
@@ -3051,8 +3055,42 @@ function setEditorContents2(line, field, token, id) {
 
 export function setEditorContentsMany(notes) {
   global_interface.FreezeRendering = true;
+
+  const notesSorted = notes.reduce( 
+    (prev, current) => {
+      const key = `${current.line},${current.field}`;
+      key in prev
+        ? prev[key] += `/${current.oldToken},${current.token}`
+        : prev[key] = `${current.oldToken},${current.token}`;
+      return prev;
+    },
+    {}
+  );
+
+  notes = [ ...Object.entries(notesSorted) ].map( (entry) => {
+    const {line, field} = entry[0]
+      .match(/(?<line>\d+),(?<field>\d+)/)
+      .groups;
+
+    let oldToken, newToken;
+    entry[1].split('/').forEach( (elem) => {
+      const {oldT, newT} = elem
+        .match(/(?<oldT>.+?),(?<newT>.+)/)
+        .groups;
+      oldToken
+        ? oldToken += ` ${oldT}`
+        : oldToken = oldT;
+      newToken
+        ? newToken += ` ${newT}`
+        : newToken = newT;
+    });
+
+    return {line, field, oldToken, newToken};
+  });
+
+
   notes.forEach((note) =>
-    setEditorContents2(note.line, note.field, note.token, note.id)
+    setEditorContents2(note.line, note.field, note.oldToken, note.newToken)
   );
   global_interface.FreezeRendering = false;
   displayNotation();

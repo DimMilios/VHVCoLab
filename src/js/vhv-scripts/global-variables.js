@@ -374,4 +374,4 @@ window.F12Key = 'F12'; // 123     "F12"
 window.TEMPO = 200;
 window.BEATSPERMEASURE;
 window.MEASURENO;
-window.correctionFactor;
+window.PICKUPBEATS;

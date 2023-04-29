@@ -428,7 +428,7 @@ export function getMusicalParameters (musicElement) {
     find(token => /m-\d+/.test(token)).
     match(/\d+/)?.[0];
   
-  if ( musicElement.classList.contains('harm') )   return measureNo;
+  if ( musicElement.classList.contains('harm') )   return {measureNo};
 
   const voice = +musicElement.closest('.layer')?.
     id.match(/N(\d+)/)[1];
@@ -515,6 +515,61 @@ export function extractEditorPosition(element) {
   return { id, line, field, subfield };
 }
 
-export function determineAnacrusis (kern) {
+export function calculateAnacrusis (kernFile, timeSignature) {
+  const pickupSpine = kernFile
+    .split( /=1/, 1 )?.[0]
+    .match( /^\d+.+?\t/gm );
+  if (!pickupSpine) {
+    window.PICKUPBEATS = 0;
+    return;
+  }
+  
+  const [nominator, denominator] = timeSignature
+    .match( /\d+/g );
+  
+  window.PICKUPBEATS = pickupSpine
+    .map(token => parseInt(token) )
+    .reduce( (accumulator, current) => accumulator+current,
+      0)
+    / denominator;
 
+  return;
+}
+
+export function getTimeSignature(kernFile) {
+  const [, timeSignature, beats] = kernFile.match(/\*M((\d)\/\d)/);
+  return {timeSignature, beats};
+}
+
+
+export function getTempo(kernFile) {
+  return kernFile.match(/\*MM(\d+)/)?.[1];
+}
+
+export function addTempo(kernFile, editor) {
+  window.TEMPO = 200;
+  const exIntLine = kernFile
+    ?.match(/^\*\*.*\n/m)[0];
+  const tempoLine = exIntLine?.replaceAll(
+    /\*\*[^\t]*/g,
+    `*MM${window.TEMPO}`
+  );
+
+  const firstMusicEventsLine = kernFile
+    ?.match(/^(\d+[^\t]*\t)+.*$/m)?.[0];
+  const tempoMarkingLine = firstMusicEventsLine
+    ?.replaceAll(/.+?(\t|$)/g, '!\t')
+    ?.replace(/!\t!\t$/, `!LO:TX:a:t=[quarter]=${window.TEMPO}\t!`);
+
+  const tempo_incKern = kernFile?.replace(
+    exIntLine,
+    exIntLine + tempoLine + '\n'
+  ).replace(
+    firstMusicEventsLine,
+    tempoMarkingLine + '\n' + firstMusicEventsLine
+  );
+  //TODO: poly atzamia. thelei kalyteri lysh
+  tempo_incKern
+    ? setTimeout(() => editor.setValue(tempo_incKern), 2000)
+    : null;
 }

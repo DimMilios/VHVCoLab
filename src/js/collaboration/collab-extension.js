@@ -21,6 +21,7 @@ import { renderCollabMenuSidebar } from '../templates/collabMenu.js';
 import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
 import { getActionById, renderActions } from '../templates/actionHistory.js';
 import { crossReferenceMultiTemplate, crossReferenceSingleTemplate } from '../templates/crossReferencingActions.js';
+import { freezeInterface } from '../vhv-scripts/utility-svg.js';
 
 //alx
 let prevStates;
@@ -139,33 +140,26 @@ function shareChordEdit(editInProgress) {
 }
 
 function wrapChordEdit() {
-  if (isEditing) {
-    setTimeout(() => {
-      yProvider.awareness.setLocalStateField('chordEdit', {
-        isDisplayed: null,
-        selection: null,
-      });
-    }, 1500);
-  } else {
-    backBtn.style.visibility = 'visible';
-    doneBtn.style.visibility = 'visible';
-    
-    $('.collab-selected').css('color', 'white');
-    $('.collab-selected').popover('dispose');
-    $('.collab-selected').removeClass('collab-selected');
-    $('#show-chord-editor').modal('hide');
-  }
+  if (isEditing) return;
+
+  backBtn.style.visibility = 'visible';
+  doneBtn.style.visibility = 'visible';
+  
+  $('.collab-selected').css('color', 'white');
+  $('.collab-selected').popover('dispose');
+  $('.collab-selected').removeClass('collab-selected');
+  $('#show-chord-editor').modal('hide');
 }
 
 function toggleChordEditor(allStates) {
   let isOn;
   //checking if any chordEdit status has been set true or false
   let editState = allStates.find(
-    ([client, state]) => typeof state.chordEdit?.isDisplayed == 'boolean'
+    ([client, state]) => typeof state.chordEdit?.editorDisplayed == 'boolean'
   );
 
   if (!editState) return;
-  else isOn = editState[1].chordEdit.isDisplayed;
+  else isOn = editState[1].chordEdit.editorDisplayed;
 
   if (!isOn) {
     wrapChordEdit();
@@ -174,6 +168,21 @@ function toggleChordEditor(allStates) {
       showChordEditor();
       return editState;
     }
+  }
+}
+
+function toggleInterfaceFreeze (states) {
+  const freezeState = states
+    .find(
+    ([client, state]) => state.chordEdit?.interfaceFreeze == true
+  );
+  const toBeFrozen = freezeState?.[1].chordEdit.interfaceFreeze;
+  if (toBeFrozen) {
+    freezeInterface('Chord edit');
+  } else {
+    $('#freeze-interface').hasClass('show')
+      ? $('#freeze-interface').modal('hide')
+      : null;
   }
 }
 
@@ -241,10 +250,11 @@ export function stateChangeHandler(clients = defaultClients()) {
   // ${renderHighlightLayer(highlights, commentsGroup)} `,
 
   const editInProgress = toggleChordEditor(awStates);
-  if (editInProgress) {
-    shareChordEdit(editInProgress);
-  }
-      
+  editInProgress
+    ? shareChordEdit(editInProgress)
+    : null;
+  toggleInterfaceFreeze(awStates);  
+  
   const panelIsDiplayed = displayActionPanel(awStates);
   clearPrevSelections();
   const finalRefs = panelIsDiplayed ?

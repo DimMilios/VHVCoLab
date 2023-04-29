@@ -33,3 +33,8 @@
 #close-chord-btn{
 	z-index: 15;
 }
+
+.notification-container{
+	font-size: 2rem;
+	border-radius: 30%;
+}

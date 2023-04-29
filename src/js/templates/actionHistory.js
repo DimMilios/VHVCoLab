@@ -498,6 +498,7 @@ const actionEntry = (action, userColorMapping) => {
           replayMultiSelect(replay);
         }
       }
+      break;
       case ACTION_TYPES.transpose: {
         const words = action.content.text.toLowerCase().split(' ');
         const elemId = words.join('-') + '__submenu-item';
@@ -526,6 +527,7 @@ const actionEntry = (action, userColorMapping) => {
           }
         }
       }
+      break;
     }
   }
 
@@ -552,23 +554,29 @@ const actionEntry = (action, userColorMapping) => {
         updateSingleSelection(replay.elemId, 100);
         return;
       }
-
-      setEditorContents(replay.row, replay.col, replay.after);
+      const insertion = determineSubstituteSingle(
+        replay.elemId, current, replay.after
+      );
+      setEditorContents(replay.row, replay.col, insertion);
       updateSingleSelection(replay.elemId, 100);
     } else if (action.content?.type === 'multi') {
       // Compare Humdrum values before action is applied to current values in text editor
       let shouldApply = false;
       for (let change of replay.changes) {
-        const curr = getEditorContents(change.newest.line, change.newest.field);
-        if (change.newest.token !== curr) {
+        const curr = getEditorContents(change.line, change.field);
+        if ( !curr.includes(change.newest) ) {
           shouldApply = true;
           break;
         }
       }
 
       if (shouldApply) {
-        replay.changes.forEach(({ newest }) => {
-          setEditorContents(newest.line, newest.field, newest.token);
+        replay.changes.forEach( change => {
+          const curr = getEditorContents(change.line, change.field);
+          const insertion = determineSubstituteMulti(
+            change, curr, change.newest
+          );
+          setEditorContents(change.line, change.field, insertion);
         });
       }
 
@@ -680,6 +688,25 @@ const actionEntry = (action, userColorMapping) => {
   `;
 };
 
+function determineSubstituteSingle(id, current, substitute) {
+  const { subfield } = id
+    .match(/S(?<subfield>\d+)/)
+    ?.groups;
+  let insertion;
+  if (subfield) {
+    const index = parseInt(subfield) - 1
+    const curTokens = current.split(' ');
+    substitute.includes(' ')
+      ? substitute = substitute.split(' ')[index]
+      : null;
+    curTokens[index] = substitute;
+    insertion = curTokens.join(' ');
+  } else {
+    insertion = substitute;
+  }
+  return insertion;
+}
+
 function createSingleReplay(action) {
   if (replayMap.has(action.id)) {
     const existingReplay = replayMap.get(action.id);
@@ -721,7 +748,10 @@ function replaySingleSelect(replay) {
     updateSingleSelection(replay.elemId, 100);
     return;
   }
-  setEditorContents(replay.row, replay.col, replay.before);
+  const insertion = determineSubstituteSingle(
+    replay.elemId, replay.current, replay.before
+  );
+  setEditorContents(replay.row, replay.col, insertion);
   updateSingleSelection(replay.elemId, 100);
 }
 
@@ -744,9 +774,33 @@ function createMultiReplay(action) {
     multiChanges[newestChange.id].newest = newestChange;
   }
 
+  const changesSorted = [ ...Object.entries(multiChanges) ].reduce( 
+    (prev, currEntry) => {
+      const {key, subfield} = currEntry[0]
+        .match(/(?<key>L\d+F\d+)S?(?<subfield>\d*)/)
+        .groups;
+      if (key in prev) {
+        prev[key].oldest += ` ${currEntry[1].oldest.oldToken}`;
+        prev[key].newest += ` ${currEntry[1].newest.token}`;
+        prev[key].subfields += ` ${subfield}`;
+      } else {
+        prev[key] = {
+          line: currEntry[1].current.line,
+          field: currEntry[1].current.field,
+          oldest: currEntry[1].oldest.oldToken,
+          current: currEntry[1].current.token,
+          newest: currEntry[1].newest.token,
+          subfields: subfield ?? null
+        }
+      }
+      return prev;
+    },
+    {}
+  );
+
   let replay = {
     multiSelect: multiSelectIds,
-    changes: Object.values(multiChanges),
+    changes: Object.values(changesSorted),
   };
   replayMap.set(action.id, replay);
   return replay;
@@ -756,16 +810,21 @@ function replayMultiSelect(replay) {
   // Compare Humdrum values before action is applied to current values in text editor
   let shouldApply = false;
   for (let ch of replay.changes) {
-    if (ch.oldest.oldToken !== ch.current.token) {
+    if ( !ch.current.includes(ch.oldest) ) {
       shouldApply = true;
       break;
     }
   }
 
   if (shouldApply) {
-    replay.changes.forEach(({ oldest }) => {
-      setEditorContents(oldest.line, oldest.field, oldest.oldToken);
-    });
+    replay.changes.forEach(
+      change => {
+        let insertion = determineSubstituteMulti(
+          change, change.current, change.oldest
+        );
+        setEditorContents(change.line, change.field, insertion);
+      }
+    );
   }
   updateMultiSelection(replay.multiSelect, 100);
 }
@@ -794,6 +853,21 @@ document.addEventListener('actions_reset', (e) => {
 
 /** @type {ActionResponse[]} */
 let actions = [];
+function determineSubstituteMulti(change, current, substitute) {
+  let insertion;
+  let subfields = change.subfields?.split(' ')
+    ?.map(s => s = parseInt(s));
+  if (subfields) {
+    const curTokens = current.split(' ');
+    const substituteTokens = substitute.split(' ');
+    subfields.forEach((s, i) => curTokens[s - 1] = substituteTokens[i]);
+    insertion = curTokens.join(' ');
+  } else {
+    insertion = substitute;
+  }
+  return insertion;
+}
+
 export function getActionById(actionId) {
   return actions.find((a) => a.id === actionId);
 }

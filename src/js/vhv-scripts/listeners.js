@@ -117,7 +117,7 @@ import { chordLocation } from './chords.js';
 import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { sendAction } from '../api/actions.js';
 import { addChangePitchActionToGroup } from '../collaboration/sendGroupedActions.js';
-import { determineAnacrusis, getMusicalParameters } from './utility.js';
+import { addTempo, calculateAnacrusis, getMusicalParameters, getTempo, getTimeSignature } from './utility.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -294,7 +294,7 @@ function transposeMultiSelect(state, amount) {
     }))
     .filter(Boolean)
     .map((note) => ({ ...note, amount }));
-
+  
   const transposedNotes = transposeNotes(notes);
   setEditorContentsMany(transposedNotes);
   return transposedNotes;
@@ -1167,63 +1167,39 @@ getAceEditor()
     const editor = getAceEditor();
     const kernFile = editor.getSession().getValue();
 
-    determineAnacrusis(kernFile);
-    kern_string = kernFile;
-    //extracting tempo
     if (!kernFile) {
       console.log(
-        "Kern file does not exist or hasn't yet loaded. Tempo cannot be extracted"
+        "Kern file does not exist or hasn't yet loaded. Tempo and time signature cannot be extracted"
       );
       return;
     }
-    const tempoInput = document.getElementById('tempo-input');
-    const tempo = kernFile.match(/\*MM(\d+)/)?.[1];
-
-    if (!tempo) {
-      //adding tempo in kern and on score
-      window.TEMPO = 200;
-      const exIntLine = kernFile
-        ?.match(/^\*\*.*\n/m)[0];
-      const tempoLine = exIntLine?.replaceAll(
-        /\*\*[^\t]*/g,
-        `*MM${window.TEMPO}`
-      );
-
-      const firstMusicEventsLine = kernFile
-        ?.match(/^(\d+[^\t]*\t)+.*$/m)?.[0];
-      const tempoMarkingLine = firstMusicEventsLine
-        ?.replaceAll(/.+?(\t|$)/g, '!\t')
-        ?.replace(/!\t!\t$/,`!LO:TX:a:t=[quarter]=${window.TEMPO}\t!`);
-      
     
-      const tempo_incKern = kernFile?.replace(
-        exIntLine,
-        exIntLine + tempoLine + '\n'
-      ).replace(
-        firstMusicEventsLine,
-        tempoMarkingLine + '\n' + firstMusicEventsLine + '\n'
-      );
+    kern_string = kernFile;
 
-      tempo_incKern?
-        editor.setValue(tempo_incKern) :
-        null;
-
-      tempoInput.placeholder = window.TEMPO;
-
+    const {timeSignature, beats} = getTimeSignature(kernFile);
+    if (timeSignature) {
+      window.BEATSPERMEASURE = parseInt(beats);
+      calculateAnacrusis(kernFile, timeSignature);
     } else {
-      window.TEMPO = parseInt(tempo);
-      tempoInput.placeholder = window.TEMPO;
+      window.BEATSPERMEASURE = 0;
+      console.log('Time signature has not been encoded in kern file');
     }
 
-    //extracting time signature
-    const timeSignature = kernFile.match(/\*M(\d)\/\d/)?.[1];
+    const tempo = getTempo(kernFile);
+    tempo
+       ? window.TEMPO = parseInt(tempo)
+       : addTempo(kernFile, editor);
 
-    if (!timeSignature) {
-      console.log('Time signature has not been encoded in kern file');
-    } else window.BEATSPERMEASURE = parseInt(timeSignature);
+    document.getElementById(
+      'tempo-input'
+    )
+      .placeholder = window.TEMPO;
   });
 
-document.getElementById('change-tempo').addEventListener('click', () => {
+document.getElementById(
+  'change-tempo'
+)
+  .addEventListener('click', () => {
   const kernFile = getAceEditor().getSession().getValue();
   const newTempo = document.getElementById('tempo-input').value;
 

@@ -920,3 +920,11 @@ export function highlightIdInEditor(id, source) {
   }
   //alx2_
 }
+
+export function freezeInterface (notification) {
+  const notificationContainer = document.querySelector(
+    '.notification-container'
+  );
+  notificationContainer.innerHTML = notification + ' pending...';
+  $('#freeze-interface').modal('show');  
+}
