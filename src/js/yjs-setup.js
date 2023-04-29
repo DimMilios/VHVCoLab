@@ -9,7 +9,13 @@ import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
 import Cookies from 'js-cookie';
 
-import { baseUrl, wsBaseUrl, fetchRoom, getURLInfo, getURLParams } from './api/util.js';
+import {
+  baseUrl,
+  wsBaseUrl,
+  fetchRoom,
+  getURLInfo,
+  getURLParams,
+} from './api/util.js';
 import { loadFileFromURLParam } from './vhv-scripts/file-operations.js';
 
 const names = [
@@ -33,14 +39,14 @@ const colors = [
   '#1be7ff',
 ];
 
-function setUserImageUrl () {
-  const {id} = getURLParams();
+function setUserImageUrl() {
+  const { id } = getURLParams();
   //TODO: replace baseUrl in base.
   //baseUrl cannot be accessed before initialization. pws fortwnontai ta js? stin html de deixnei.
-  const base = "https://musicolab.hmu.gr";
-  const path = id? 
-    `moodle/user/pix.php/${id}/f1.jpg`:
-    'apprepository/vhvWs/defaultUser.svg'
+  const base = 'https://musicolab.hmu.gr';
+  const path = id
+    ? `moodle/user/pix.php/${id}/f1.jpg`
+    : 'apprepository/vhvWs/defaultUser.svg';
   return new URL(path, base).toString();
 }
 
@@ -50,7 +56,7 @@ let userData = {
   name,
   color: oneOf(colors),
   image: setUserImageUrl(),
- };
+};
 
 export const messageActionsReset = 100;
 
@@ -100,25 +106,26 @@ export async function setupCollaboration() {
   }
 
   if (typeof yProvider == 'undefined') {
-    const { file, user, course, id } = getURLInfo();
+    const { file, user, course } = getURLInfo();
 
-    let searchParams = new URLSearchParams(file);
     let room = file ?? 'test-room';
-    if (searchParams.has('f')) {
-      room = searchParams.get('f');
+    let filename;
+    const fileParams = new URLSearchParams(file);
+    if (fileParams.has('course')) {
+      // Loaded from Moodle
+      room = file;
+      filename = fileParams.get('filename');
+    } else {
+      // Loaded from public repository
+      room = file;
+      filename = file;
     }
-    // let roomData;
-    /*
-  if (file && user) {
-    roomData = await fetchRoom(file, user);
-    room = roomData?.room ?? room;
-  }
-  */
+
     permanentUserData = new Y.PermanentUserData(ydoc);
     permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
-	    params: { username: user, file: room, course: course ?? null },
+      params: { username: user, file: filename, course: course ?? null },
     }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"

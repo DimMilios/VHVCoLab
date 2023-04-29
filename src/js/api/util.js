@@ -7,8 +7,16 @@ export function getURLParams(keys = []) {
 export function getURLInfo() {
   let urlParams = getURLParams();
   if (import.meta.env.DEV) {
-    console.log(urlParams);
-    return urlParams;
+    let file = urlParams.file;
+    if (urlParams?.course) {
+      file = `filename=${urlParams.file}&course=${urlParams.course}`;
+    }
+    console.log({ file, urlParams });
+    return {
+      ...urlParams,
+      file,
+    };
+    // return urlParams;
   }
 
   try {
@@ -17,10 +25,13 @@ export function getURLInfo() {
     // The file is stored in MusiCoLab's file repository
     if (file && isValidHttpUrl(file)) {
       let params = new URL(file).searchParams;
-      file = `f=${params.get('f')}&u=${params.get('u')}`;
+      if (urlParams?.course) {
+        file = `filename=${params.get('f')}&course=${urlParams.course}`;
+      } else {
+        file = params.get('f');
+      }
       console.log({ file, params: params.toString() });
     }
-    // console.log({ ...urlParams, file });
     return {
       ...urlParams,
       file,
