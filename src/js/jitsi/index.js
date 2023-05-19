@@ -76,7 +76,8 @@ class JitsiAPI {
     });
 
       this.jitsiContainer.style.resize="height";
-      this.jitsiContainer.style.minHeight = '100px'; 
+      this.jitsiContainer.style.minHeight = '100px';
+      this.jitsiContainer.style.maxHeight = '600px';
 
       $('#meet-room')[0].value = getURLParams().course ?? 'test-room';
   }
@@ -111,7 +112,7 @@ class JitsiAPI {
         );
 
     	let startJitsi = document.getElementById('start-jitsi-meet-btn');
-	startJitsi.style.color='green';
+	    startJitsi.style.color='green';
         this.destroy();
         this.hide();
       });

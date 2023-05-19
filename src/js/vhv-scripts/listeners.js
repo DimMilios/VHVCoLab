@@ -1182,7 +1182,6 @@ getAceEditor()
       calculateAnacrusis(kernFile, timeSignature);
     } else {
       window.BEATSPERMEASURE = 0;
-      console.log('Time signature has not been encoded in kern file');
     }
 
     const tempo = getTempo(kernFile);

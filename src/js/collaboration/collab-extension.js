@@ -172,6 +172,8 @@ function toggleChordEditor(allStates) {
 }
 
 function toggleInterfaceFreeze (states) {
+  if (isEditing)    return;
+  
   const freezeState = states
     .find(
     ([client, state]) => state.chordEdit?.interfaceFreeze == true
@@ -422,8 +424,11 @@ function formatUserList() {
   }
 
   const disconnectedUser = prevStates
-    .filter((el) => !currentStates.has(el[0]))
-    .map((e) => (e = e[1].user));
+    .filter( el =>  !connectedUsers
+        .map( user => user.name )
+        .includes( el[1].user.name )       
+    )
+      .map((e) => (e = e[1].user));
   disconnectedUser.forEach((user) => (user.online = false));
 
   prevStates = [...currentStates];

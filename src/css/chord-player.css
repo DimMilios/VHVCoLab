@@ -1,5 +1,5 @@
 /* Chord composition tables */
-.Chords {
+.root, .accidental {
 	font-family: Roots_Slashes;
 	font-size: 300%;
 	cursor: pointer;
@@ -9,7 +9,7 @@
 	background-color: rgba(255,255,255,.075);
 }
 
-#variations tbody {
+.variation {
 	font-family: Variations;
 	font-size: 300%;
 }

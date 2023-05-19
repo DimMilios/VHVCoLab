@@ -36,7 +36,9 @@ export function showChordEditor() {
 
   doneBtn.style.visibility = 'hidden';
 
-  if (!isEditing) backBtn.style.visibility = 'hidden';
+  !isEditing
+    ? backBtn.style.visibility = 'hidden'
+    : null ;
 }
 
 function setURLParams(reqURL, chordEditInfo) {
@@ -51,15 +53,13 @@ function cleanUpSelections() {
   Object.keys(chord.new).forEach(
      key => chord.new[key] = null
   );
-
-  decolorizeSelections();
 }
 
 function select(selection, component) {
   selection.style.color = 'tomato';
   chord.new[component] = selection.innerText;
 
-  yProvider.awareness.setLocalStateField('chordEdit', {
+  yProvider?.awareness?.setLocalStateField('chordEdit', {
     editorDisplayed: true,
     selection: {
       component,
@@ -84,12 +84,9 @@ function decolorizeSelections(selectionComponent) {
 }
 
 function mapChord(chordText, mapType) {
-  let mapping;
-  if (mapType == 'display') {
-    mapping = display_mapping;
-  } else {
-    mapping = send_mapping;
-  }
+  const mapping = (mapType == 'display')
+    ? display_mapping
+    : send_mapping;
 
   const encodingsInc = [...Object.keys(mapping)].filter((enc) =>
     chordText.includes(enc)
@@ -101,17 +98,21 @@ function mapChord(chordText, mapType) {
   return chordText;
 }
 
-function sendChordEditAction() {
-  const prevValue = mapChord(chord.current, 'display');
-  const newValue = chord.new.root +
+function sendChordEditAction(chordClone) {
+  const mapType = chordClone.reharmonize
+    ? 'display'
+    : 'send';
+  const newValue = chordClone.new.root +
     mapChord(
-      `${chord.new.accidental ?? ''}` + ' ' + chord.new.variation,
-      'send'
+      `${chordClone.new.accidental ?? ''}` + ' ' + chordClone.new.variation,
+      mapType
     );
+  const prevValue = mapChord(chordClone.current, 'display');
   const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
   const measureNo = getMusicalParameters(
     global_cursor.CursorNote
   );
+
   sendAction(
     new ActionPayload({
       type: 'change_chord',
@@ -124,10 +125,10 @@ function sendChordEditAction() {
     })
   )
     .then(() => console.log(`change_chord action was sent.`))
-    .catch(() => console.error(`Failed to send change_chord action`));
+    .catch(error => console.error(`Failed to send change_chord action. Error: ${error}`));
 }
 
-function requestChordEdit(reqURL, editor) {
+function requestChordEdit(reqURL, editor, chordClone) {
   //initializing, configuring and sending the request
   
   const xhttp = new XMLHttpRequest();
@@ -138,24 +139,33 @@ function requestChordEdit(reqURL, editor) {
   //defining response function
   xhttp.onload = function () {
     //retrieveing json sent from GJT server
-    let jsonResponse = xhttp.response;
+    const jsonResponse = xhttp.response;
     console.log(jsonResponse);
 
-    //submitting change_chord action to server. TODO: suggest
-    sendChordEditAction();
+    if (chordClone.reharmonize) {
+      chordClone.new = jsonResponse.newchord
+        .match (/(?<root>\w)(?<accidental>\+|&)? (?<variation>\S)/)
+        .groups;
+    }
 
-    yProvider.awareness.setLocalStateField('chordEdit', {
+    //submitting change_chord action to server. TODO: suggest
+    sendChordEditAction(chordClone);
+
+    $('#freeze-interface').modal('hide')
+    yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: null,
       selection: null,
       interfaceFreeze: false,
     });
+
     editor.setValue(jsonResponse.new);
   };
 
   xhttp.onerror = () => {
     console.log('Chord edit failed!');
-    //TODO: isws na petaei kai mia eidopoisi tipou toast (pio omorfo) oti den egine
-    yProvider.awareness.setLocalStateField('chordEdit', {
+    $('#freeze-interface').modal('hide')
+
+    yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: null,
       selection: null,
       interfaceFreeze: false,
@@ -175,19 +185,22 @@ function editChord() {
   let reqUrl = new URL(GJTBaseUrl);
 
   //setting the suggestion option true
-  if (this == suggestBtn) chord.reharmonize = true;
+  if (this == suggestBtn) {
+    chord.reharmonize = true;
+  }
 
+  //setting the url to be used and performing xhttp request
   const chordEditInfo = {
     kernfile,
     chordLocation,
     chord,
   };
-  //setting the url to be used and performing xhttp request
   setURLParams(reqUrl, chordEditInfo);
-  requestChordEdit(reqUrl, edtr);
+  requestChordEdit( reqUrl, edtr, structuredClone(chord) );
+  freezeInterface('Chord edit');
 
   if (this == suggestBtn) {
-    yProvider.awareness.setLocalStateField('chordEdit', {
+    yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: null,
       selection: null,
       interfaceFreeze: true,
@@ -196,15 +209,16 @@ function editChord() {
     chordBtns.style.visibility = 'hidden';
 
   } else if (this == doneBtn) {
-    cleanUpSelections();
-    yProvider.awareness.setLocalStateField('chordEdit', {
+    decolorizeSelections();
+    yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: false,
       selection: null,
       interfaceFreeze: true
     });
     isEditing = false;
   }
-  
+
+  cleanUpSelections();
 }
 
 chordEditor.addEventListener('click', (event) => {
@@ -219,9 +233,10 @@ chordEditor.addEventListener('click', (event) => {
 //back click
 backBtn.addEventListener('click', function (event) {
   cleanUpSelections();
+  decolorizeSelections();
 
   if (event.isTrusted) {
-    yProvider.awareness.setLocalStateField('chordEdit', {
+    yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: false,
       selection: null,
     });
@@ -234,7 +249,7 @@ backBtn.addEventListener('click', function (event) {
 editBtn.addEventListener('click', (event) => {
   isEditing = true;
   showChordEditor();
-  yProvider.awareness.setLocalStateField('chordEdit', {
+  yProvider?.awareness?.setLocalStateField('chordEdit', {
     editorDisplayed: true,
     selection: null,
   });

@@ -537,8 +537,13 @@ export function calculateAnacrusis (kernFile, timeSignature) {
 }
 
 export function getTimeSignature(kernFile) {
-  const [, timeSignature, beats] = kernFile.match(/\*M((\d)\/\d)/);
-  return {timeSignature, beats};
+  const rhythmMatches = kernFile.match(/\*M((\d)\/\d)/);
+  let timeSignature, beats;
+  rhythmMatches
+    ? ([, timeSignature, beats] = kernFile.match(/\*M((\d)\/\d)/))
+    : console.log('No time signature encoded');
+
+  return {timeSignature, beats}
 }
 
 
@@ -568,7 +573,7 @@ export function addTempo(kernFile, editor) {
     firstMusicEventsLine,
     tempoMarkingLine + '\n' + firstMusicEventsLine
   );
-  //TODO: poly atzamia. thelei kalyteri lysh
+  
   tempo_incKern
     ? setTimeout(() => editor.setValue(tempo_incKern), 2000)
     : null;
