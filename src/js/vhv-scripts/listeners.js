@@ -1160,7 +1160,6 @@ export function verovioCallback(data) {
   markup.loadSvg('svg');
 }
 
-//alx2
 getAceEditor()
   .getSession()
   .on('change', function () {
@@ -1209,4 +1208,18 @@ document.getElementById(
   getAceEditor().getSession().setValue(newKern, 0);
 });
 
-//alx2_
+document.addEventListener('barChangeEvent', e => {
+  //unhighlighting previously highlighted elements
+  Array.from(
+    document.querySelectorAll('.highlight')
+  )
+    .forEach( el => el.classList.remove('highlight') );
+  //highlighting current bar
+  if (e.detail.isPlaying) {
+    const barClass = `.m-${e.detail.barNo}`;
+    document
+      .querySelector(barClass)
+      .classList.add('highlight');
+  }
+})
+

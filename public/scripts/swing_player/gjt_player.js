@@ -27,6 +27,7 @@ var drumsKeys;
 var allChordSymbols = [];
 var currentChordIdx = 0;
 var i = 1;
+var t = -1;
 
 // load all drums
 function load_all_drums(){
@@ -37,7 +38,18 @@ function load_all_drums(){
     drumInfo.push( drums_player.loader.drumInfo(i) );
     dynamicallyLoadScript( drumInfo[drumInfo.length-1].url );
   }
-  console.log('drumInfo:', drumInfo);
+  //console.log('drumInfo:', drumInfo);
+}
+function prepare_instrument_player_with_index(idx){
+  var instrument_player = new WebAudioFontPlayer();
+  var info = instrument_player.loader.instrumentInfo(idx);
+			console.log('info.variable: ', info.variable);
+			console.log('info.url: ', info.url);
+			instrument_player.loader.startLoad(audioContext, info.url, info.variable);
+			instrument_player.loader.waitLoad(function() {
+				instrument_player.loader.decodeAfterLoading(audioContext, info.variable);
+			});
+    return instrument_player;
 }
 
 function get_chords_from_array( a ){
@@ -57,6 +69,7 @@ function send_GJT_request(url){
 
   Http.onreadystatechange = (e) => {
     var jsonObj = JSON.parse( Http.responseText );
+    console.log
     // var jsonObj = Http.responseText;
 
     // console.log( 'jsonObj:', jsonObj );
@@ -67,15 +80,20 @@ function send_GJT_request(url){
     // returning the array part
     play_array( jsonObj[name] );
     playstop = !playstop;
-		metronome.toolSendsPlayStop(playstop);
+    metronome.toolSendsPlayStop(playstop);
     // return jsonObj[name]
   }
 }
 
 function stop_player(){
   playstop = false;
+  const barChangeEvent = new CustomEvent ('barChangeEvent', {
+    detail: {isPlaying: false}
+  });
+  document.dispatchEvent(barChangeEvent);
   metronome.toolSendsPlayStop(playstop);
 }
+
 function send_kern_request(url){
 
   playstop = !playstop;
@@ -89,14 +107,25 @@ function send_kern_request(url){
         play_array( jsonObj['csv_array'], has_precount=false, has_chords=false, has_header=false );
         console.log('playstop 1:', playstop);
         metronome.toolSendsPlayStop(playstop);
+      }else if (Http.readyState == 4 && Http.status == 0){
+        document
+          .getElementById('play-button')
+          .dispatchEvent( new MouseEvent('click') );
       }
     }
     Http.send();
-  }
-  console.log('playstop 1:', playstop);
-  metronome.toolSendsPlayStop(playstop);
-}
+  }else{
+    console.log('playstop 1:', playstop);
+    playstop = false;
 
+    const barChangeEvent = new CustomEvent ('barChangeEvent', {
+      detail: {isPlaying: false}
+    });
+    document.dispatchEvent(barChangeEvent);
+
+    metronome.toolSendsPlayStop(playstop);
+  }
+}
 
 function play_note_for_instrument(a, tempo){
   // console.log(' ======================================== ');
@@ -106,10 +135,13 @@ function play_note_for_instrument(a, tempo){
   // console.log('volume: ', a[4]/127.0);
   if (a[0] == 'Piano'){
     piano_player.queueWaveTable(audioContext, audioContext.destination
-      , _tone_0000_JCLive_sf2_file, 0, a[1], a[3]*(60.0/tempo), (0.1*a[4])/127.0);
+      , _tone_0000_SBLive_sf2, 0, a[1], a[3]*(60.0/tempo), (0.1*a[4])/127.0);
+    console.log('PLAYING 2: ', a[1])
   }else if(a[0] == 'Bass'){
     bass_player.queueWaveTable(audioContext, audioContext.destination
       , _tone_0320_Aspirin_sf2_file, 0, a[1], a[3]*(60.0/tempo), (0.1*a[4])/127.0);
+  }else if(a[0] == 'Flute'){
+    flute_player.queueWaveTable(audioContext, audioContext.destination, _tone_0730_Chaos_sf2_file, 0, a[1], a[3]*(60.0/tempo), (0.1*a[4])/127.0);
   }else{
     var drum_variable =  '_drum_' + drumsKeys[drums_player.loader.findDrum( a[1] )];
     // console.log('drum_variable:', drum_variable);
@@ -135,6 +167,7 @@ function show_chord(a){
 }
 
 function play_array( a, has_precount=true, has_chords=true, has_header=true ){
+  // console.log('array: ', a)
   if (has_chords){
     get_chords_from_array( a );
   }
@@ -151,23 +184,45 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true ){
       i++;
     }
   }
-  var t = a[i][2];
+
+  const barChangeEvent = new CustomEvent ('barChangeEvent', {
+    detail: {isPlaying:true, barNo: '1'}
+  });
+  document.dispatchEvent(barChangeEvent);
+
+  t = a[i][2];
   document.addEventListener('beatTimeEvent', function (e){
     if ( i < a.length ){
+      console.log('e.metroBeatTimeStamp: ', e.metroBeatTimeStamp);
       while ( t < e.metroBeatTimeStamp - starting_onset ){
-        if ( a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro' ){
+        if (  a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Flute' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro'  ){
+          console.log('starting_onset: ', starting_onset);
+          console.log('i: ', i);
+          console.log('t: ', t);
+          console.log('PLAYING a[i]: ', a[i]);
           play_note_for_instrument(a[i], tempo);
           i++;
         }else if( a[i][0] == 'Chord' ){
           show_chord(a[i]);
           i++;
-        }else{
+        }else if(a[i][0].includes("Bar")){
+          var barForSVG = a[i][0].split("~")[1].split("@")[0];
+          console.log(barForSVG);
+
+          const barChangeEvent = new CustomEvent ('barChangeEvent', {
+            detail: {isPlaying: true, barNo: `${ parseInt(barForSVG)+1 }`}
+          });
+          document.dispatchEvent(barChangeEvent);
+
+          i++;
+        }
+        else{
           i++;
         }
         if ( i >= a.length ){
           break;
         }
-        if ( a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro' ){
+        if (  a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Flute' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro'  ){
           t = a[i][2];
         }else if( a[i][0] == 'Chord' ){
           t = a[i][3];
@@ -175,7 +230,13 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true ){
       }
       // i++;
     }else{
-      playstop = !playstop;
+      playstop = false;
+
+      const barChangeEvent = new CustomEvent ('barChangeEvent', {
+        detail: {isPlaying: false}
+      });
+      document.dispatchEvent(barChangeEvent);
+
       metronome.toolSendsPlayStop(playstop);
     }
       // document.getElementById('beatTime').innerHTML = e.metroBeatTimeStamp;

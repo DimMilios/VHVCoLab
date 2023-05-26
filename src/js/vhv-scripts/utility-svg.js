@@ -811,8 +811,7 @@ function unhighlightAllElements() {
 import { centerCursorHorizontallyInEditor } from './utility-ace.js';
 
 export function highlightIdInEditor(id, source) {
-  //alx_
-  unhighlightAllElements(id);
+  unhighlightAllElements();
 
   if (!id) {
     // no element (off of page or outside of musical range
@@ -870,9 +869,9 @@ export function highlightIdInEditor(id, source) {
 
   let col2 = col;
   var searchstring = linecontent[col2];
-  while (col2 < linecontent.length) {
+  while (col2 < linecontent.length-1) {
     col2++;
-    if (linecontent[col2] == ' ') {
+    if (linecontent[col2] == ' ' && !(etype == 'harm')) {
       break;
     } else if (linecontent[col2] == '\t') {
       break;
@@ -881,27 +880,15 @@ export function highlightIdInEditor(id, source) {
     }
   }
 
+  etype == 'harm'
+    ? chord.current = searchstring
+    : null;
+  
   global_cursor.CursorNote = document.querySelector('#' + id);
   // window.MENU.showCursorNoteMenu(global_cursor.CursorNote);
   getMenu().showCursorNoteMenu(global_cursor.CursorNote);
   editor.gotoLine(row, col);
-    
 
-
-  //alx     
-  let elmnt = document.getElementById(id);
-
-  if (elmnt.classList.contains("harm") && elmnt.classList.contains("highlight")) {
-    let line = editor.session.doc.getLine(row-1);
-    let stopIndex = col;
-    //alx2
-    while( stopIndex-col<line.length ) stopIndex++; 
-    //alx2_
-    chord.current = line.substring(col, stopIndex);
-  }
-  //alx_
-
- 
   // 0.5 = center the cursor vertically:
   editor.renderer.scrollCursorIntoView({ row: row - 1, column: col }, 0.5);
   centerCursorHorizontallyInEditor();

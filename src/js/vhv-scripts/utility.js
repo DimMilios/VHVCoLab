@@ -559,12 +559,15 @@ export function addTempo(kernFile, editor) {
     /\*\*[^\t]*/g,
     `*MM${window.TEMPO}`
   );
-
-  const firstMusicEventsLine = kernFile
-    ?.match(/^(\d+[^\t]*\t)+.*$/m)?.[0];
-  const tempoMarkingLine = firstMusicEventsLine
-    ?.replaceAll(/.+?(\t|$)/g, '!\t')
-    ?.replace(/!\t!\t$/, `!LO:TX:a:t=[quarter]=${window.TEMPO}\t!`);
+  debugger;
+  const {firstMusicEventsLine, chord} = kernFile
+    ?.match(/^(?<firstMusicEventsLine>((\.|\d+[^\t\n]+)\t)+((?<chord>[A-G][+&]? .)|(\.|\d+[^\t]+)))$/m)
+    .groups;
+  const excMarksLine = firstMusicEventsLine
+    ?.replaceAll(/.+?(\t|$)/g, '!\t');
+  const tempoMarkingLine = chord
+    ? excMarksLine.replace(/!\t!\t$/, `!LO:TX:a:t=[quarter]=${window.TEMPO}\t!`)
+    : excMarksLine.replace(/!\t$/, `!LO:TX:a:t=[quarter]=${window.TEMPO}`);
 
   const tempo_incKern = kernFile?.replace(
     exIntLine,

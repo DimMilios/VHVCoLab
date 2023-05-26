@@ -1,11 +1,16 @@
 var audioContext = audioManager.audioContext;
-var piano_player = new WebAudioFontPlayer();
-var bass_player = new WebAudioFontPlayer();
+// var piano_player = new WebAudioFontPlayer();
+// var bass_player = new WebAudioFontPlayer();
 var drums_player = new WebAudioFontPlayer();
+// var flute_player = new WebAudioFontPlayer();
+var piano_player = prepare_instrument_player_with_index(5);
+var bass_player = prepare_instrument_player_with_index(366);
+var flute_player = prepare_instrument_player_with_index(772);
+var marimba_player = new WebAudioFontPlayer();
+var guitar_player = new WebAudioFontPlayer();
 console.log('load_all_drums 1');
 load_all_drums();
-piano_player.loader.decodeAfterLoading(audioContext, '0000_JCLive_sf2_file');
-bass_player.loader.decodeAfterLoading(audioContext, '0320_Aspirin_sf2_file');
+
 // drums_player.loader.decodeAfterLoading(audioContext, '35_16_JCLive_sf2_file');
 var playstop = false;
 // __SWING_PLAYER__ For running the swing player, you need to assign to the
