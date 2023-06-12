@@ -39,23 +39,11 @@ const colors = [
   '#1be7ff',
 ];
 
-function setUserImageUrl() {
-  const { id } = getURLParams();
-  //TODO: replace baseUrl in base.
-  //baseUrl cannot be accessed before initialization. pws fortwnontai ta js? stin html de deixnei.
-  const base = 'https://musicolab.hmu.gr';
-  const path = id
-    ? `moodle/user/pix.php/${id}/f1.jpg`
-    : 'apprepository/vhvWs/defaultUser.svg';
-  return new URL(path, base).toString();
-}
-
 const oneOf = (array) => array[Math.floor(Math.random() * array.length)];
 let name = oneOf(names);
 let userData = {
   name,
   color: oneOf(colors),
-  image: setUserImageUrl(),
 };
 
 export const messageActionsReset = 100;
@@ -106,7 +94,7 @@ export async function setupCollaboration() {
   }
 
   if (typeof yProvider == 'undefined') {
-    const { file, user, course } = getURLInfo();
+    const { file, user, course, id } = getURLInfo();
 
     let room = file ?? 'test-room';
     let filename;
@@ -122,7 +110,11 @@ export async function setupCollaboration() {
     }
 
     permanentUserData = new Y.PermanentUserData(ydoc);
-    permanentUserData.setUserMapping(ydoc, ydoc.clientID, user);
+    permanentUserData.setUserMapping(
+      ydoc,
+      ydoc.clientID,
+      `user=${user} id=${id}`
+    );
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
       params: { username: user, file: filename, course: course ?? null },
@@ -168,7 +160,7 @@ export async function setupCollaboration() {
     yProvider.awareness.on('change', stateChangeHandler);
     yProvider.awareness.on('update', awaranessUpdateHandler);
 
-    setUserAwarenessData(user, course);
+    setUserAwarenessData( {name: user, course, id} );
   }
 
   window.example = { yProvider, ydoc, type: ydoc.getText('ace') };
@@ -190,7 +182,7 @@ export function getCommentsList() {
   return ydoc.getArray('comments');
 }
 
-function setUserAwarenessData(user, course) {
+function setUserAwarenessData(user) {
   let appUser = Cookies.get('user');
   if (appUser) {
     let user = JSON.parse(appUser);
@@ -206,8 +198,9 @@ function setUserAwarenessData(user, course) {
   }
 
   if (user) {
-    userData.name = user;
-    userData.course = course;
+    userData.name = user.name;
+    userData.course = user.course;
+    userData.id = user.id
   }
   yProvider.awareness.setLocalStateField('user', userData);
 }

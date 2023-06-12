@@ -133,3 +133,23 @@ export const send_mapping = {
     "A":"Suspended seventh",
     "G":"Augmented"    
 } 
+
+export const send_display_mapping = {
+    "A": "[",
+    "B": "]",
+    "C": "<",
+    "D": "=",
+    "E": ">",
+    "F": "?",
+    "G": "@",
+}
+
+export const display_send_mapping = {
+    "[": "A",
+    "]": "B",
+    "<": "C",
+    "=": "D",
+    ">": "E",
+    "?": "F",
+    "@": "G",
+}

@@ -34,11 +34,13 @@ export function play_midi(starttime) {
     .then(function (base64midi) {
       var song = 'data:audio/midi;base64,' + base64midi;
       console.log('Midi song', song);
+      /*
       $('#play-button').hide();
       $('#midiPlayer_play').show();
       $('#midiPlayer_stop').show();
       $('#midiPlayer_pause').show();
       $('#player').show();
+      */
       $('#player').midiPlayer.play(song, starttime);
       global_playerOptions.PLAY = true;
       LASTLINE = -1;
@@ -129,8 +131,9 @@ export const midiUpdate = function (time) {
         vrvWorker.page = elementsattime.page;
         loadPage();
       }
+      elementsattime 
       if (elementsattime.notes.length > 0 && ids != elementsattime.notes) {
-        ids.forEach(function (noteid) {
+        /*ids.forEach(function (noteid) {
           if ($.inArray(noteid, elementsattime.notes) == -1) {
             // $("#" + noteid ).attr("fill", "#000");
             // $("#" + noteid ).attr("stroke", "#000");
@@ -142,6 +145,32 @@ export const midiUpdate = function (time) {
             }
           }
         });
+        */
+
+        if (ids.length) {
+          const currBar = Array.from(
+            document.querySelector( `#${elementsattime.notes[0]}` )
+              .closest('.measure').classList
+            )
+              .find( cl => cl.match(/m-\d+/) );
+          const prevBar = Array.from(
+            document.querySelector(`#${ids[0]}`)
+              ?.closest('.measure').classList
+          )
+            .find( cl => cl.match(/m-\d+/) );
+
+          if (! (prevBar === currBar) ) {
+            document.querySelector(`.${prevBar}`)
+              .classList.remove('midi-player-highlight');
+            document.querySelector(`.${currBar}`)
+              .classList.add('midi-player-highlight');
+          }
+              
+        } else {
+            document.querySelector(`.m-1`)
+              .classList.add('midi-player-highlight');
+        }
+
         ids = elementsattime.notes;
 
         if (ids.includes(noteBounds.getBounds()?.rightMost?.id)) {
@@ -170,7 +199,7 @@ export const midiUpdate = function (time) {
             var line = parseInt(matches[1]);
             // console.log("LASTLINE = ", LASTLINE, "line =", line);
             if (line != LASTLINE && line > LASTLINE) {
-              showIdInEditor(noteid);
+              //showIdInEditor(noteid);
               LASTLINE = line;
             }
           }
@@ -181,19 +210,21 @@ export const midiUpdate = function (time) {
 
           var element = document.querySelector('#' + noteid);
           if (element) {
-            element.classList.add('highlight');
             /*
-							var classes = element.getAttribute("class");
-							var classlist = classes.split(" ");
-							var outclass = "";
-							for (var i=0; i<classlist.length; i++) {
-								if (classlist[i] == "highlight") {
-									continue;
-								}
-								outclass += " " + classlist[i];
-							}
-							outclass += " highlight";
-							element.setAttribute("class", outclass);*/
+            element.classList.add('highlight');
+            
+            var classes = element.getAttribute("class");
+            var classlist = classes.split(" ");
+            var outclass = "";
+            for (var i=0; i<classlist.length; i++) {
+              if (classlist[i] == "highlight") {
+                continue;
+              }
+              outclass += " " + classlist[i];
+            }
+            outclass += " highlight";
+            element.setAttribute("class", outclass);
+            */
             if (!scrolled) {
               let system = element.closest('.system');
               let rect;
@@ -262,6 +293,7 @@ window.midiUpdate = midiUpdate;
 //
 
 export const midiStop = function () {
+  /*
   ids.forEach(function (noteid) {
     // $("#" + noteid ).attr("fill", "#000");
     // $("#" + noteid ).attr("stroke", "#000");
@@ -283,14 +315,21 @@ export const midiStop = function () {
     }
   });
 
+
   document.querySelectorAll('.highlight').forEach(note => note.classList.remove('highlight'));
   $('#player').hide();
   $('#play-button').show();
+  */
+
   global_cursor.CursorNote = null;
   global_playerOptions.PLAY = false;
   LASTLINE = -1;
-  let bpm_show_banner = document.getElementById("bpm_show");
-  bpm_show_banner.removeAttribute('hidden');
+/*let bpm_show_banner = document.getElementById("bpm_show");
+    bpm_show_banner.removeAttribute('hidden');
+*/
+  //not needed in case someone presses stop. needed in case track ends
+  setMidiNotPlayingGUI();
+  playingPlayer = null;
 };
 
 $.fn.addClassSVG = function (className) {

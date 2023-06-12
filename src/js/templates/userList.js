@@ -1,5 +1,4 @@
 import { html, render } from 'lit-html';
-import { classMap } from 'lit-html/directives/class-map.js';
 
 export let userListTemplate = (users) => {
   return html`
@@ -9,19 +8,17 @@ export let userListTemplate = (users) => {
 };
 
 let onlineUserTemplate = (user) => {
-  let classes = { 'online-status': user.online, 'offline-status': !user.online };
-  
   return html`<li
     class="user-connection-status-item"
     >
       <img
-      src=${user.image}
+      src=${user.imageSrc}
       alt="user profile icon"
       width="55"
       height="55"
       style="border-radius: 50%;"
       />
-      <span class=${classMap(classes)}></span>
+      <span class=${user.status}-status></span>
       <span style="color:white;">${user.name}</span>
     </li>`;
 };

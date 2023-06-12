@@ -16,6 +16,7 @@ import { yProvider } from '../yjs-setup';
 import { clearPrevSelections } from '../collaboration/collab-extension';
 import { compareHexHashes, crc32, digestMessage } from '../vhv-scripts/hash';
 import { getAceEditor } from '../vhv-scripts/setup';
+import { editChord, mapChord } from '../vhv-scripts/chords';
 
 const queryParams = {
   actionType: 'null',
@@ -528,6 +529,10 @@ const actionEntry = (action, userColorMapping) => {
         }
       }
       break;
+      case ACTION_TYPES.change_chord: {
+        const replay = createChangeChordReplay(action);
+        replayChangeChord(action, replay);
+      }
     }
   }
 
@@ -539,6 +544,9 @@ const actionEntry = (action, userColorMapping) => {
         replayMap.set(action.id, replay);
       } else if (action.content?.type === 'multi') {
         replay = createMultiReplay(action);
+        replayMap.set(action.id, replay);
+      } else if (action.type === ACTION_TYPES.change_chord) {
+        replay = createChangeChordReplay(action);
         replayMap.set(action.id, replay);
       }
     }
@@ -581,6 +589,27 @@ const actionEntry = (action, userColorMapping) => {
       }
 
       updateMultiSelection(replay.multiSelect, 100);
+    }
+    
+    if (action.type == ACTION_TYPES.change_chord) {
+      const current = getEditorContents(replay.row, replay.col);
+      if ( replay.after == mapChord(current, 'display', false) ) return;
+      
+      const rollbackReplayInfo = {
+        location: {
+          line: action.content.line,
+          column: action.content.field
+        },
+        chord: {
+          current,
+          reharmonize: false,
+          new: mapChord(replay.after, 'send', true)
+              .match(/^(?<root>[A-G])((?<accidental>[+&])? (?<variation>.))?$/)
+              .groups
+        }
+        };
+        
+        editChord(false, rollbackReplayInfo);
     }
   }
 
@@ -689,11 +718,13 @@ const actionEntry = (action, userColorMapping) => {
 };
 
 function determineSubstituteSingle(id, current, substitute) {
-  const { subfield } = id
+  const subfieldMatch = id
     .match(/S(?<subfield>\d+)/)
     ?.groups;
+  
   let insertion;
-  if (subfield) {
+  if (subfieldMatch) {
+    const {subfield} = subfieldMatch;
     const index = parseInt(subfield) - 1
     const curTokens = current.split(' ');
     substitute.includes(' ')
@@ -707,20 +738,25 @@ function determineSubstituteSingle(id, current, substitute) {
   return insertion;
 }
 
+
+function updateReplay(action) {
+  const existingReplay = replayMap.get(action.id);
+  const currEditorValue = getEditorContents(
+    existingReplay.row,
+    existingReplay.col
+  );
+
+  let replay = {
+    ...existingReplay,
+    current: currEditorValue,
+  };
+  replayMap.set(action.id, replay);
+  return replay;
+}
+
 function createSingleReplay(action) {
   if (replayMap.has(action.id)) {
-    const existingReplay = replayMap.get(action.id);
-    const currEditorValue = getEditorContents(
-      existingReplay.row,
-      existingReplay.col
-    );
-
-    let replay = {
-      ...existingReplay,
-      current: currEditorValue,
-    };
-    replayMap.set(action.id, replay);
-    return replay;
+    return updateReplay(action);
   }
 
   const oldestChange = action.content.changes[0];
@@ -829,6 +865,49 @@ function replayMultiSelect(replay) {
   updateMultiSelection(replay.multiSelect, 100);
 }
 
+function createChangeChordReplay(action) {
+  if (replayMap.has(action.id)) {
+    return updateReplay(action);
+  }
+
+  const row = action.content.line;
+  const col = action.content.field;
+
+  const replay = {
+    row,
+    col,
+    before: action.content.prevValue,
+    current: getEditorContents(row, col),
+    after: action.content.newValue,
+    elemId: action.content.chordElementId,
+  };
+
+  replayMap.set(action.id, replay);
+
+  return replay;
+}
+
+function replayChangeChord (action, replay) {
+  if ( replay.before == mapChord(replay.current, 'display', false) )  return;
+  
+  const replayInfo = {
+    location: {
+      line: action.content.line,
+      column: action.content.field
+
+    },
+    chord: {
+      current: replay.current,
+      reharmonize: false,
+      new: mapChord(replay.before, 'send', true)
+          .match(/^(?<root>[A-G])((?<accidental>[+&])? (?<variation>.))?$/)
+          .groups
+    }
+  };
+  
+  editChord(false, replayInfo);
+}
+
 document.addEventListener(
   'actions_fetch',
   (
@@ -853,6 +932,7 @@ document.addEventListener('actions_reset', (e) => {
 
 /** @type {ActionResponse[]} */
 let actions = [];
+
 function determineSubstituteMulti(change, current, substitute) {
   let insertion;
   let subfields = change.subfields?.split(' ')

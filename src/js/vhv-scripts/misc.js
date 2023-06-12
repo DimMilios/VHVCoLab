@@ -1729,7 +1729,7 @@ export function playCurrentMidi(noteElem) {
     play_midi(time);
   });
 }
-
+window.playCurrentMidi = playCurrentMidi;
 //////////////////////////////
 //
 // setCursorNote --

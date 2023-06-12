@@ -312,3 +312,11 @@ export function scoreTransposition(filter) {
       editor.setValue(newdata, -1);
     });
 }
+
+export function setUserImageUrl(id) {
+  const base = 'https://musicolab.hmu.gr';
+  const path = id
+    ? `moodle/user/pix.php/${id}/f1.jpg`
+    : 'apprepository/vhvWs/defaultUser.svg';
+  return new URL(path, base).toString();
+}

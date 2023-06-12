@@ -88,10 +88,6 @@ import { featureIsEnabled } from '../bootstrap.js';
 // window.HIDEMENU = false;
 var PDFLISTINTERVAL = null;
 
-document
-  .getElementById('play-button')
-  ?.addEventListener('click', () => playCurrentMidi(global_cursor.CursorNote));
-
 if (localStorage.FONT) {
   global_verovioOptions.FONT = cleanFont(localStorage.FONT);
 }
@@ -1211,15 +1207,15 @@ document.getElementById(
 document.addEventListener('barChangeEvent', e => {
   //unhighlighting previously highlighted elements
   Array.from(
-    document.querySelectorAll('.highlight')
+    document.querySelectorAll('.midi-player-highlight')
   )
-    .forEach( el => el.classList.remove('highlight') );
+    .forEach( el => el.classList.remove('midi-player-highlight') );
   //highlighting current bar
-  if (e.detail.isPlaying) {
+  if (!e.detail.hasStopped) {
     const barClass = `.m-${e.detail.barNo}`;
     document
       .querySelector(barClass)
-      .classList.add('highlight');
+      .classList.add('midi-player-highlight');
   }
 })
 

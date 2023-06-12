@@ -559,7 +559,7 @@ export function addTempo(kernFile, editor) {
     /\*\*[^\t]*/g,
     `*MM${window.TEMPO}`
   );
-  debugger;
+
   const {firstMusicEventsLine, chord} = kernFile
     ?.match(/^(?<firstMusicEventsLine>((\.|\d+[^\t\n]+)\t)+((?<chord>[A-G][+&]? .)|(\.|\d+[^\t]+)))$/m)
     .groups;

@@ -226,6 +226,10 @@ div#index {
   stroke-width: 50px;
 }
 
+.midi-player-highlight {
+  fill: #ba8f0f;
+}
+
 @font-face {
   font-family: 'Roots_Slashes';
 

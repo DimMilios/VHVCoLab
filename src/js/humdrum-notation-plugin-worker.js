@@ -170,7 +170,7 @@ function initializeWildWebMidi() {
     // color: "#c00",
     // onUnpdate: window.midiUpdate,
     // onStop: window.midiStop,
-    onUnpdate: midiUpdate,
+    onUpdate: midiUpdate,
     onStop: midiStop,
     width: 250,
     // locateFile: function () {
@@ -182,11 +182,13 @@ function initializeWildWebMidi() {
     stop();
   });
 
+  /*
   // window blur event listener -- Stop MIDI playback.  It is very computaionally
   //    expensive, and is not useful if the window is not in focus.
   window.addEventListener('blur', function () {
     window.pause();
   });
+  */
 }
 //////////////////////////////
 //

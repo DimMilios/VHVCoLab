@@ -1,6 +1,6 @@
 import { getAceEditor } from './setup';
 import { yProvider } from '../yjs-setup';
-import { display_mapping, send_mapping } from './chord_mappings.js';
+import { display_mapping, send_mapping, send_display_mapping } from './chord_mappings.js';
 import { ActionPayload, sendAction } from '../api/actions';
 import { global_cursor, global_interface } from './global-variables';
 import { getMusicalParameters } from './utility';
@@ -83,17 +83,33 @@ function decolorizeSelections(selectionComponent) {
   for (let one of selections) one.style.color = 'white';
 }
 
-function mapChord(chordText, mapType) {
+export function mapChord(chordText, mapType, inversely = false) {
   const mapping = (mapType == 'display')
     ? display_mapping
     : send_mapping;
 
-  const encodingsInc = [...Object.keys(mapping)].filter((enc) =>
-    chordText.includes(enc)
-  );
-  encodingsInc.forEach(
-    (enc) => (chordText = chordText.replace(enc, `${mapping[enc]}`))
-  );
+  const encodingsInc = inversely 
+    ? [...Object.values(mapping)].filter((enc) =>
+        chordText.includes(enc)
+      )
+    : [...Object.keys(mapping)].filter((enc) =>
+        chordText.includes(enc)
+      )
+    ;
+  inversely
+    ? encodingsInc.forEach( enc => 
+        chordText = chordText
+          .replace(
+            enc,
+            `${Array.from( Object.keys(mapping) )
+              .find(key => mapping[key] == enc)
+            }`
+          )
+      )
+    : encodingsInc.forEach(
+      (enc) => (chordText = chordText.replace(enc, `${mapping[enc]}`))
+    )
+    ;
 
   return chordText;
 }
@@ -102,14 +118,16 @@ function sendChordEditAction(chordClone) {
   const mapType = chordClone.reharmonize
     ? 'display'
     : 'send';
+
   const newValue = chordClone.new.root +
     mapChord(
       `${chordClone.new.accidental ?? ''}` + ' ' + chordClone.new.variation,
-      mapType
+      mapType, false
     );
   const prevValue = mapChord(chordClone.current, 'display');
+
   const chordElementId = `harm-L${chordLocation.line}F${chordLocation.column}`;
-  const measureNo = getMusicalParameters(
+  const {measureNo} = getMusicalParameters(
     global_cursor.CursorNote
   );
 
@@ -120,7 +138,9 @@ function sendChordEditAction(chordClone) {
         prevValue,
         newValue,
         chordElementId,
-        measureNo
+        measureNo,
+        line: parseInt(chordLocation.line),
+        field: parseInt(chordLocation.column),
       }),
     })
   )
@@ -128,7 +148,7 @@ function sendChordEditAction(chordClone) {
     .catch(error => console.error(`Failed to send change_chord action. Error: ${error}`));
 }
 
-function requestChordEdit(reqURL, editor, chordClone) {
+function requestChordEdit(reqURL, editor, chordClone, clickHandling) {
   //initializing, configuring and sending the request
   
   const xhttp = new XMLHttpRequest();
@@ -142,14 +162,17 @@ function requestChordEdit(reqURL, editor, chordClone) {
     const jsonResponse = xhttp.response;
     console.log(jsonResponse);
 
-    if (chordClone.reharmonize) {
+    //getting the SUGGESTED chord
+    if (clickHandling && chordClone.reharmonize) {
       chordClone.new = jsonResponse.newchord
         .match (/(?<root>\w)(?<accidental>\+|&)? (?<variation>\S)/)
         .groups;
     }
 
-    //submitting change_chord action to server. TODO: suggest
-    sendChordEditAction(chordClone);
+    //submitting change_chord action to server
+    clickHandling
+      ? sendChordEditAction(chordClone)
+      : null;
 
     $('#freeze-interface').modal('hide')
     yProvider?.awareness?.setLocalStateField('chordEdit', {
@@ -174,7 +197,7 @@ function requestChordEdit(reqURL, editor, chordClone) {
   
 }
 
-function editChord() {
+export function editChord(clickHandling = true, replayInfo = null) {
   //current kern retrieval
   const edtr = getAceEditor();
   if (!edtr) {
@@ -185,21 +208,28 @@ function editChord() {
   let reqUrl = new URL(GJTBaseUrl);
 
   //setting the suggestion option true
-  if (this == suggestBtn) {
-    chord.reharmonize = true;
+  if (clickHandling) {
+    this == suggestBtn
+      ? chord.reharmonize = true
+      : null;
   }
 
   //setting the url to be used and performing xhttp request
   const chordEditInfo = {
     kernfile,
-    chordLocation,
-    chord,
+    chordLocation: clickHandling ? chordLocation : replayInfo.location,  
+    chord: clickHandling ? chord : replayInfo.chord,
   };
   setURLParams(reqUrl, chordEditInfo);
-  requestChordEdit( reqUrl, edtr, structuredClone(chord) );
-  freezeInterface('Chord edit');
 
-  if (this == suggestBtn) {
+  const chordClone = clickHandling 
+    ? structuredClone(chord)
+    : replayInfo.chord 
+  requestChordEdit( reqUrl, edtr, chordClone, clickHandling );
+  freezeInterface('Chord edit');
+  if (clickHandling)  sendChordEditAction(chordClone);
+
+  if (clickHandling && this == suggestBtn) {
     yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: null,
       selection: null,
@@ -208,7 +238,7 @@ function editChord() {
     chord.reharmonize = false;
     chordBtns.style.visibility = 'hidden';
 
-  } else if (this == doneBtn) {
+  } else if (clickHandling && this == doneBtn) {
     decolorizeSelections();
     yProvider?.awareness?.setLocalStateField('chordEdit', {
       editorDisplayed: false,
@@ -218,7 +248,9 @@ function editChord() {
     isEditing = false;
   }
 
-  cleanUpSelections();
+  clickHandling
+    ? cleanUpSelections()
+    : null;
 }
 
 chordEditor.addEventListener('click', (event) => {
@@ -255,6 +287,6 @@ editBtn.addEventListener('click', (event) => {
   });
 });
 //suggest click
-suggestBtn.addEventListener('click', editChord);
+suggestBtn.addEventListener('click', () => editChord.bind(suggestBtn, true, null)());
 //done click
-doneBtn.addEventListener('click', editChord);
+doneBtn.addEventListener('click', () => editChord.bind(doneBtn, true, null)());

@@ -1,4 +1,4 @@
-import { yProvider } from '../yjs-setup.js';
+import { permanentUserData, yProvider } from '../yjs-setup.js';
 import { RubberBandSelection } from './RubberBandSelection';
 import { html, render } from 'lit-html';
 import { collabTemplate, multiSelectCoords, uiCoords } from './templates.js';
@@ -22,6 +22,7 @@ import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
 import { getActionById, renderActions } from '../templates/actionHistory.js';
 import { crossReferenceMultiTemplate, crossReferenceSingleTemplate } from '../templates/crossReferencingActions.js';
 import { freezeInterface } from '../vhv-scripts/utility-svg.js';
+import { setUserImageUrl } from './util-collab.js';
 
 //alx
 let prevStates;
@@ -411,28 +412,40 @@ function displayActionPanel (allStates) {
 }
 
 function formatUserList() {
-  const currentStates = yProvider.awareness.getStates();
-
-  const connectedUsers = [...currentStates.entries()].map(
-    (e) => (e = e[1].user)
+  const awStates = yProvider.awareness.getStates();
+  let connectedUsers = [...awStates.entries()].map(
+    (e) => (e = `user=${e[1].user.name} id=${e[1].user.id}`)
   );
-  connectedUsers.forEach((user) => (user.online = true));
 
-  if (!prevStates) {
-    prevStates = [...currentStates];
-    return connectedUsers;
-  }
+  let disconnectedUsers = [...permanentUserData.clients.values()].filter(
+    (entry) => !connectedUsers.includes(entry)
+  );
 
-  const disconnectedUser = prevStates
-    .filter( el =>  !connectedUsers
-        .map( user => user.name )
-        .includes( el[1].user.name )       
-    )
-      .map((e) => (e = e[1].user));
-  disconnectedUser.forEach((user) => (user.online = false));
+  connectedUsers = [...new Set(connectedUsers)]
+    .map((entry) => entry.concat(" status=online"))
+    .map((entry) => {
+      const data = entry.match(
+        /user=(?<name>.+?) id=(?<id>\d+) status=(?<status>\w+)/
+      ).groups;
+      return data;
+    });
+  connectedUsers.forEach(
+    (user) => (user.imageSrc = setUserImageUrl(user.id))
+  );
 
-  prevStates = [...currentStates];
-  return [...connectedUsers, ...disconnectedUser];
+  disconnectedUsers = [...new Set(disconnectedUsers)]
+    .map((entry) => entry.concat(" status=offline"))
+    .map((entry) => {
+      const data = entry.match(
+        /user=(?<name>.+?) id=(?<id>\d+) status=(?<status>\w+)/
+      ).groups;
+      return data;
+    });
+  disconnectedUsers.forEach(
+    (user) => (user.imageSrc = setUserImageUrl(user.id))
+  );
+
+  return [ ...connectedUsers, ...disconnectedUsers ];
 }
 
 function collabLayer(...children) {
