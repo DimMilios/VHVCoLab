@@ -1016,7 +1016,7 @@ export function processInterfaceKeyCommand(event) {
     case NineKey:
       setInterfaceSingleNumber(9);
       break;
-
+    /*  
     case SpaceKey: // start/pause MIDI playback
       if (!global_playerOptions.PLAY) {
         if (global_playerOptions.PAUSE) {
@@ -1035,7 +1035,7 @@ export function processInterfaceKeyCommand(event) {
       }
       event.preventDefault();
       break;
-
+    */
     case CommaKey: // toggle TSV/CSV display of Humdrum data
       // decrease tab size in editor
       // See UKey for relocation of comma-command for
@@ -1205,6 +1205,8 @@ document.getElementById(
 });
 
 document.addEventListener('barChangeEvent', e => {
+  const currBar = e.detail.barNo;
+  global_playerOptions.CURRENTBAR = currBar;
   //unhighlighting previously highlighted elements
   Array.from(
     document.querySelectorAll('.midi-player-highlight')
@@ -1212,7 +1214,7 @@ document.addEventListener('barChangeEvent', e => {
     .forEach( el => el.classList.remove('midi-player-highlight') );
   //highlighting current bar
   if (!e.detail.hasStopped) {
-    const barClass = `.m-${e.detail.barNo}`;
+    const barClass = `.m-${currBar}`;
     document
       .querySelector(barClass)
       .classList.add('midi-player-highlight');

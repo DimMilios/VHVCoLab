@@ -15,7 +15,6 @@ var playingPlayer;
 
 // drums_player.loader.decodeAfterLoading(audioContext, '35_16_JCLive_sf2_file');
 var playstop = false;
-var isPaused = false;
 // __SWING_PLAYER__ For running the swing player, you need to assign to the
 // kern file to be played as a string in the kern_string variable
 var kern_string = null; // in this example, the string value is assigned with the following function:
@@ -29,40 +28,43 @@ function midiPlayStop() {
 }
 
 function midiResume() {
-  isPaused = false;
-
   if (playingPlayer == 'swing') {
     play_array(currentCsv, false, false, false, true);
     metronome.toolSendsPlayStop(play=true);
-  } else if (playingPlayer == 'default'){
-    window.midiPlayerPlay();
+  } else if (playingPlayer == 'default') {
+		const currentBar = window.global_playerOptions.CURRENTBAR;
+		const resumePoint = $(`.m-${currentBar}`).find('.note').first()[0];
+
+    window.playCurrentMidi(document.getElementById(resumePoint.id));
   }
 }
 
 function midiPause () {
-  isPaused = true;
-  
   if (playingPlayer == 'swing'){
     metronome.toolSendsPlayStop(play=false);
   } else if (playingPlayer == 'default') {
-    window.midiPlayerPause();
+		//stop() is defined in midiplayer.js
+		stop();
   }
 }
 
 document.querySelector('#midi-play-pause-button').
   addEventListener('click', function () {
-		const midiPPIcon = document
-			.querySelector('.midi-play-pause-icon');
+		const isPLaying = window.global_playerOptions.PLAY;
+		const isPaused = window.global_playerOptions.PAUSE;
 
-		if (!playstop) {
+		if (!isPLaying) {
 			//if player stopped, play
+			window.global_playerOptions.PLAY = true;
 			midiPlayStop();
-		} else if (playstop && !isPaused) {
+		} else if (isPLaying && !isPaused) {
 			//if player already playing and has not been paused, pause
+			window.global_playerOptions.PAUSE = true;
 			midiPause();
       setMidiNotPlayingGUI();
-		} else if (playstop && isPaused){
+		} else if (isPLaying && isPaused) {
 			//if player already playing and has been paused, resume
+			window.global_playerOptions.PAUSE = false;
 			midiResume();
       setMidiPlayingGUI();
 		}     
@@ -70,7 +72,11 @@ document.querySelector('#midi-play-pause-button').
 
 document.querySelector('#midi-stop-button').
   addEventListener('click', e => {
-		if (!playstop) return;
+		const isPLaying = window.global_playerOptions.PLAY;
+		if (!isPLaying) return;
+
+		window.global_playerOptions.PLAY = false;
+		window.global_playerOptions.PAUSE = false;
 
 		midiPlayStop();
 		setMidiNotPlayingGUI();	
@@ -92,6 +98,8 @@ function setMidiPlayingGUI() {
 }
 
 function setMidiNotPlayingGUI() {
+	const isPaused = window.global_playerOptions.PAUSE;
+	
 	const playPauseButton = document
 		.querySelector('#midi-play-pause-button');
 	const playPauseIcon = document
@@ -100,9 +108,9 @@ function setMidiNotPlayingGUI() {
   //restoring PlayPause Button icon and title
 	playPauseIcon.classList.remove('fa-pause');
 	playPauseIcon.classList.add('fa-play');
-  isPaused
-    ? playPauseButton.title = 'Resume'
-    : playPauseButton.title = 'Play Midi!'
+  	isPaused
+		? playPauseButton.title = 'Resume'
+		: playPauseButton.title = 'Play Midi'
 
   //restoring tempo insert			
 	document
@@ -111,10 +119,13 @@ function setMidiNotPlayingGUI() {
   
   if (!isPaused) {
     //unhighlighting
-    const barChangeEvent = new CustomEvent ('barChangeEvent', {
-      detail: {hasStopped: true}
-    });
-    document.dispatchEvent(barChangeEvent);
-  }
+		const barChangeEvent = new CustomEvent ('barChangeEvent', {
+			detail: {
+				hasStopped: true,
+				barNo: null
+			}
+		});
+		document.dispatchEvent(barChangeEvent);
+	}
 }
 

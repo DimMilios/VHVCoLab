@@ -42,10 +42,8 @@ export function play_midi(starttime) {
       $('#player').show();
       */
       $('#player').midiPlayer.play(song, starttime);
-      global_playerOptions.PLAY = true;
+      //global_playerOptions.PLAY = true;
       LASTLINE = -1;
-      let bpm_show_banner = document.getElementById("bpm_show");
-      bpm_show_banner.setAttribute('hidden',true);
     })
     .catch((err) => console.log('Error when trying to play midi', err));
 }
@@ -152,23 +150,28 @@ export const midiUpdate = function (time) {
             document.querySelector( `#${elementsattime.notes[0]}` )
               .closest('.measure').classList
             )
-              .find( cl => cl.match(/m-\d+/) );
-          const prevBar = Array.from(
-            document.querySelector(`#${ids[0]}`)
-              ?.closest('.measure').classList
-          )
-            .find( cl => cl.match(/m-\d+/) );
+              .find( cl => cl.match(/m-\d+/) )
+              .match(/\d+/)[0];
+          const currBarNo = parseInt(currBar);
 
-          if (! (prevBar === currBar) ) {
-            document.querySelector(`.${prevBar}`)
-              .classList.remove('midi-player-highlight');
-            document.querySelector(`.${currBar}`)
-              .classList.add('midi-player-highlight');
+          const prevBarNo = global_playerOptions.CURRENTBAR;
+
+          if (! (prevBarNo === currBarNo) ) {
+            const barChangeEvent = new CustomEvent ('barChangeEvent', {
+              detail: {
+                hasStopped: false,
+                barNo: `${currBarNo}`}
+            });
+            document.dispatchEvent(barChangeEvent);
           }
               
         } else {
-            document.querySelector(`.m-1`)
-              .classList.add('midi-player-highlight');
+          const barChangeEvent = new CustomEvent ('barChangeEvent', {
+            detail: {
+              hasStopped: false,
+              barNo: 1}
+          });
+          document.dispatchEvent(barChangeEvent);
         }
 
         ids = elementsattime.notes;
@@ -322,14 +325,20 @@ export const midiStop = function () {
   */
 
   global_cursor.CursorNote = null;
-  global_playerOptions.PLAY = false;
   LASTLINE = -1;
 /*let bpm_show_banner = document.getElementById("bpm_show");
     bpm_show_banner.removeAttribute('hidden');
 */
   //not needed in case someone presses stop. needed in case track ends
-  setMidiNotPlayingGUI();
-  playingPlayer = null;
+  const isPLaying = global_playerOptions.PLAY;
+  const isPaused = global_playerOptions.PAUSE;
+  
+  if (isPLaying && !isPaused) {
+    setMidiNotPlayingGUI();
+    playingPlayer = null;
+    global_playerOptions.PLAY = false;
+    global_playerOptions.CURRENTBAR = null;
+  }
 };
 
 $.fn.addClassSVG = function (className) {

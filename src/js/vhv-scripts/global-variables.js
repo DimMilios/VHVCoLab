@@ -255,13 +255,14 @@ export const global_cursor = {
   // This is an ID string rather than an element.
   RestoreCursorNote: '',
 };
-
 window.global_cursor = global_cursor;
 
 export const global_playerOptions = {
   PLAY: false,
   PAUSE: false,
+  CURRENTBAR: null
 };
+window.global_playerOptions = global_playerOptions;
 
 export const global_interface = {
   // State variables for interface:

@@ -17,7 +17,6 @@ const Http = new XMLHttpRequest();
 // }
 
 var currentCsv;
-var currentBar;
 
 function dynamicallyLoadScript(url) {
   var script = document.createElement("script");  // create a script DOM node
@@ -89,32 +88,34 @@ function send_GJT_request(url){
 }
 
 function stop_player(){
-  console.log('playstop 1:', playstop);
+  console.log('stopping swing player');
 
   if (playingPlayer == 'swing') {
+    playstop = false;
     currentCsv = null;
-    currentBar = null;
-    playingPlayer = null;
 
     metronome.toolSendsPlayStop(playstop);
   } else if (playingPlayer == 'default') {
     stop();
   }
+  playingPlayer = null;
 }
 
 function send_kern_request(url){
 
-  playstop = !playstop;
+  const toStart = window.global_playerOptions.PLAY;
 
-  if (playstop){
+  if (toStart) {
     console.log('url:', url);
     Http.open("GET", url);
     Http.onreadystatechange = (e) => {
       setMidiPlayingGUI();
       if (Http.readyState == 4 && Http.status == 200){
+        playstop = !playstop;
+        console.log('playstop 1:', playstop);
+
         var jsonObj = JSON.parse( Http.responseText );
         play_array( jsonObj['csv_array'], has_precount=false, has_chords=false, has_header=false );
-        console.log('playstop 1:', playstop);
         metronome.toolSendsPlayStop(playstop);
 
         currentCsv = jsonObj['csv_array'];
@@ -125,7 +126,7 @@ function send_kern_request(url){
       }
     }
     Http.send();
-  }else{
+  } else {
     stop_player();
   }
 }
@@ -188,9 +189,10 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
   }
   metronome.setTempo(tempo);
 
+  let currentBar = window.global_playerOptions.CURRENTBAR;
   i = hasBeenPaused && currentBar
     ? currentCsv
-        .findIndex(item => item[0].includes(`Bar~${currentBar}`)) + 1
+        .findIndex(item => item[0].includes(`Bar~${currentBar-1}`)) + 1
     : 1;
 
   if (has_precount){
@@ -202,7 +204,7 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
   const barChangeEvent = new CustomEvent ('barChangeEvent', {
     detail: {
       hasStopped: false,
-      barNo: `${(hasBeenPaused && currentBar)? (parseInt(currentBar)+1) : 1}`
+      barNo: `${ (hasBeenPaused && currentBar) ? currentBar : 1 }`
     }
   });
   document.dispatchEvent(barChangeEvent);
@@ -223,11 +225,11 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
           show_chord(a[i]);
           i++;
         }else if(a[i][0].includes("Bar")){
-          currentBar = a[i][0].split("~")[1].split("@")[0];
-          console.log(currentBar);
+          const CSVCurrentBar = a[i][0].split("~")[1].split("@")[0];
+          console.log(CSVCurrentBar);
 
           const barChangeEvent = new CustomEvent ('barChangeEvent', {
-            detail: {hasStopped: false, barNo: `${ parseInt(currentBar)+1 }`}
+            detail: {hasStopped: false, barNo: `${ parseInt(CSVCurrentBar)+1 }`}
           });
           document.dispatchEvent(barChangeEvent);
 
@@ -251,8 +253,10 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
       metronome.toolSendsPlayStop(playstop);
 
       currentCsv = null;
-      currentBar = null;
       playingPlayer = null;
+
+      window.global_playerOptions.PLAY = false;
+      window.global_playerOptions.CURRENTBAR = null;
 
       setMidiNotPlayingGUI();
     }
