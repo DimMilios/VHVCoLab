@@ -230,6 +230,10 @@ div#index {
   fill: red;
 }
 
+.midi-player-highlight .ledgerLines path{
+  stroke: red;
+}
+
 @font-face {
   font-family: 'Roots_Slashes';
 
