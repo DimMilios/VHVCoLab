@@ -227,7 +227,7 @@ div#index {
 }
 
 .midi-player-highlight {
-  fill: #ba8f0f;
+  fill: red;
 }
 
 @font-face {

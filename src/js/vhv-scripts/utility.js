@@ -512,7 +512,7 @@ export function extractEditorPosition(element) {
     return;
   }
 
-  return { id, line, field, subfield };
+  return { id, line, field, subfield }; 
 }
 
 export function calculateAnacrusis (kernFile, timeSignature) {
@@ -524,14 +524,14 @@ export function calculateAnacrusis (kernFile, timeSignature) {
     return;
   }
   
-  const [nominator, denominator] = timeSignature
+  const [, denominator] = timeSignature
     .match( /\d+/g );
   
   window.PICKUPBEATS = pickupSpine
-    .map(token => parseInt(token) )
-    .reduce( (accumulator, current) => accumulator+current,
-      0)
-    / denominator;
+    .map( token => (1/parseInt(token)) * denominator )
+    .reduce(
+      (accumulator, current) => accumulator+current,
+    0);
 
   return;
 }

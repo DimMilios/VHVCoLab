@@ -30,7 +30,7 @@ function midiPlayStop() {
 function midiResume() {
   if (playingPlayer == 'swing') {
     play_array(currentCsv, false, false, false, true);
-    metronome.toolSendsPlayStop(play=true);
+    metronome.toolSendsPlayStop(true);
   } else if (playingPlayer == 'default') {
 		const currentBar = window.global_playerOptions.CURRENTBAR;
 		const resumePoint = $(`.m-${currentBar}`).find('.note').first()[0];
@@ -41,10 +41,10 @@ function midiResume() {
 
 function midiPause () {
   if (playingPlayer == 'swing'){
-    metronome.toolSendsPlayStop(play=false);
+    metronome.toolSendsPlayStop(false);
   } else if (playingPlayer == 'default') {
-		//stop() is defined in midiplayer.js
-		stop();
+	//stop() is defined in midiplayer.js
+	stop();
   }
 }
 
@@ -61,12 +61,12 @@ document.querySelector('#midi-play-pause-button').
 			//if player already playing and has not been paused, pause
 			window.global_playerOptions.PAUSE = true;
 			midiPause();
-      setMidiNotPlayingGUI();
+      		setMidiNotPlayingGUI();
 		} else if (isPLaying && isPaused) {
 			//if player already playing and has been paused, resume
 			window.global_playerOptions.PAUSE = false;
 			midiResume();
-      setMidiPlayingGUI();
+      		setMidiPlayingGUI();
 		}     
 });
 
