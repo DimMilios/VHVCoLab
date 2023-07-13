@@ -16,7 +16,7 @@
     "json-server": "^0.17.0",
     "prettier": "^2.4.1",
     "typescript": "^4.5.5",
-    "vite": "^3.1.3"
+    "vite": "^3.2.7"
   },
   "dependencies": {
     "js-cookie": "^3.0.1",
