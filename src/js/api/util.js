@@ -80,7 +80,7 @@ const isSecure = (protocol = 'https') => {
 // export let baseUrl = 'http://localhost:8080/';
 // export let wsBaseUrl = 'ws://localhost:8080';
 
-let productionOrigin = 'musicolab.hmu.gr:8080/';
+let productionOrigin = 'musicolab.hmu.gr:9000/';
 // let productionOrigin = '147.95.40.74:8080';
 export let baseUrl = import.meta.env.DEV
   ? 'http://localhost:8080/'
