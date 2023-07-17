@@ -2,7 +2,7 @@ import { yProvider } from '../yjs-setup';
 import { featureIsEnabled } from '../bootstrap.js';
 import { getURLParams } from '../api/util';
 
-const JITSI_DOMAIN = 'jitsi-musicolab.hmu.gr:8443';
+const JITSI_DOMAIN = 'musicolab.hmu.gr:8443';
 // const JITSI_DOMAIN = 'meet.jit.si';
 const JITSI_DEFAULT_OPTIONS = {
   roomName: 'MusiCoLab Demo',
