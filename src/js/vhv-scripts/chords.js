@@ -227,7 +227,6 @@ export function editChord(clickHandling = true, replayInfo = null) {
     : replayInfo.chord 
   requestChordEdit( reqUrl, edtr, chordClone, clickHandling );
   freezeInterface('Chord edit');
-  if (clickHandling)  sendChordEditAction(chordClone);
 
   if (clickHandling && this == suggestBtn) {
     yProvider?.awareness?.setLocalStateField('chordEdit', {

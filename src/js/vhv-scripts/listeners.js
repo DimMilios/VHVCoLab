@@ -1170,6 +1170,7 @@ getAceEditor()
     }
     
     kern_string = kernFile;
+    kernHasChanged = true;
 
     const {timeSignature, beats} = getTimeSignature(kernFile);
     if (timeSignature) {
@@ -1195,7 +1196,10 @@ document.getElementById(
 )
   .addEventListener('click', () => {
   const kernFile = getAceEditor().getSession().getValue();
-  const newTempo = document.getElementById('tempo-input').value;
+  const tempoInput = document.getElementById('tempo-input');
+
+  const newTempo = tempoInput.value;
+  tempoInput.value = 'clear';  
 
   const newKern = kernFile
     .replaceAll(/MM\d+/g, `MM${newTempo}`)
@@ -1203,6 +1207,16 @@ document.getElementById(
 
   getAceEditor().getSession().setValue(newKern, 0);
 });
+
+document.getElementById(
+  'tempo-input'
+)
+  .addEventListener('click', function () {this.removeAttribute('placeholder')});
+
+document.getElementById(
+  'tempo-input'
+)
+  .addEventListener('blur', function () {this.placeholder = window.TEMPO});
 
 document.addEventListener('barChangeEvent', e => {
   const currBar = e.detail.barNo;

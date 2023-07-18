@@ -234,6 +234,10 @@ div#index {
   stroke: red;
 }
 
+.button-inactive {
+  pointer-events: none;
+}
+
 @font-face {
   font-family: 'Roots_Slashes';
 
