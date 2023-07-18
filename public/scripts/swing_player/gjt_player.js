@@ -92,7 +92,6 @@ function stop_player(){
 
   if (playingPlayer == 'swing') {
     playstop = false;
-    currentCsv = null;
 
     metronome.toolSendsPlayStop(playstop);
   } else if (playingPlayer == 'default') {
@@ -103,24 +102,32 @@ function stop_player(){
 
 function send_kern_request(url){
 
-  const toStart = window.global_playerOptions.PLAY;
+  const aboutToStart = window.global_playerOptions.PLAY;
 
-  if (toStart) {
+  if (aboutToStart) {
     console.log('url:', url);
+
+    Array.from( document.querySelectorAll('.midi-button') )
+      .forEach( btn => btn.classList.add('button-inactive') );
+
+    if (!kernHasChanged) {
+      setMidiPlayingGUI();
+      playSwing();
+      return;
+    }
+
     Http.open("GET", url);
     Http.onreadystatechange = (e) => {
       setMidiPlayingGUI();
+
       if (Http.readyState == 4 && Http.status == 200){
-        playstop = !playstop;
-        console.log('playstop 1:', playstop);
-
-        var jsonObj = JSON.parse( Http.responseText );
-        play_array( jsonObj['csv_array'], has_precount=false, has_chords=false, has_header=false );
-        metronome.toolSendsPlayStop(playstop);
-
-        currentCsv = jsonObj['csv_array'];
-        playingPlayer = 'swing';
+        //swing player play
+        var csv = JSON.parse( Http.responseText )['csv_array'];
+        playSwing(csv);
+        
+        kernHasChanged = false;
       }else if (Http.readyState == 4 && Http.status == 0){
+        //default player play
         playingPlayer = 'default';
         playCurrentMidi();
       }
@@ -129,6 +136,20 @@ function send_kern_request(url){
   } else {
     stop_player();
   }
+}
+
+function playSwing(csv = currentCsv) {
+  playstop = !playstop;
+  console.log('playstop 1:', playstop);
+
+  Array.from( document.querySelectorAll('.midi-button') )
+    .forEach( btn => btn.classList.remove('button-inactive') );
+
+  currentCsv = csv;
+  playingPlayer = 'swing';
+
+  play_array(csv, has_precount = false, has_chords = false, has_header = false);
+  metronome.toolSendsPlayStop(playstop);
 }
 
 function play_note_for_instrument(a, tempo){
@@ -252,7 +273,6 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
       playstop = false;
       metronome.toolSendsPlayStop(playstop);
 
-      currentCsv = null;
       playingPlayer = null;
 
       window.global_playerOptions.PLAY = false;

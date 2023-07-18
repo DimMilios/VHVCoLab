@@ -237,7 +237,7 @@ function handleCollabTearDown() {
 }
 
 function handleVideoConfSetup(jitsi) {
-  jitsi.setup();
+  //  jitsi.setup(); ALX.NOT NEEDED. setup() runs in jitsiAPI constructor 
 }
 
 function handleVideoConfTearDown(jitsi) {

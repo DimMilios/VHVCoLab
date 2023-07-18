@@ -426,7 +426,7 @@ function formatUserList() {
     .map((entry) => {
       const data = entry.match(
         /user=(?<name>.+?) id=(?<id>\d+) status=(?<status>\w+)/
-      ).groups;
+      )?.groups;
       return data;
     });
   connectedUsers.forEach(

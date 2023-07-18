@@ -351,8 +351,10 @@
                 value='test-room' minlength="5">
             </div>
             <div class="form-group d-flex justify-content-end">
+              <!---
               <button type="button" class="btn btn-danger" id='btnCloseCallJoin'
-                data-dismiss="modal">Close</button>
+              data-dismiss="modal">Close</button>
+              -->
               <button type="submit" class="btn btn-success ml-1">
                 <div class="d-flex align-items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f9f9f9"
@@ -398,8 +400,7 @@
             <button class="btn btn-secondary" id="suggest-btn">Suggest</button>
           </div>
 
-          <button id="start-jitsi-meet-btn" class="px-2 mr-3" data-toggle="modal"
-            data-target="#enter-jitsi-meet-room">
+          <button id="start-jitsi-meet-btn" class="px-2 mr-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
               class="bi bi-telephone-fill" viewBox="0 0 16 16">
               <path fill-rule="evenodd"
@@ -408,10 +409,10 @@
           </button>
 
           <div xmlns="http://www.w3.org/1999/xhtml" class="nav-play-button mr-3 d-flex">
-            <div style="cursor:pointer;" title="Play" id="midi-play-pause-button" class="mr-3">
+            <div style="cursor:pointer;" title="Play" id="midi-play-pause-button" class="mr-3 midi-button">
               <span class="fas fa-play midi-play-pause-icon"></span>
             </div>
-            <div style="cursor:pointer;" title="Stop" id="midi-stop-button">
+            <div style="cursor:pointer;" title="Stop" id="midi-stop-button" class="midi-button">
               <span class="fas fa-stop"></span>
             </div>
           </div>
@@ -422,7 +423,7 @@
             </div>
             <input type="number" class="form-control" id="tempo-input"
               style="text-align:center; width: fit-content;" maxlength="3" min="30" max="300"
-              step="1" pattern="[0-9]{3}">
+              step="1">
             <div class="input-group-append">
               <span class="input-group-text">bpm</span>
             </div>

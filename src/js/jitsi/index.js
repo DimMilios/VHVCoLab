@@ -51,15 +51,18 @@ class JitsiAPI {
   setup() {
     let startJitsi   = document.getElementById('start-jitsi-meet-btn');
     let meetRoomForm = document.getElementById('meet-room-form');
-    let btnCloseCallJoin = document.getElementById('btnCloseCallJoin');
 
-    btnCloseCallJoin.addEventListener('click', (event) => {
-	    startJitsi.style.color='green';
-	    this.destroy();
-	    this.hide();
-    });
-    startJitsi.addEventListener('click', (event) => {
-	    startJitsi.style.color='red';
+    startJitsi.addEventListener('click', (e) => {
+      if (startJitsi.classList.contains('call-started')) {
+        startJitsi.classList.remove('call-started');
+        startJitsi.style.color = '';
+    
+        this.destroy();
+        this.hide();
+      } else {
+        startJitsi.classList.add('call-started');   
+        $('#enter-jitsi-meet-room').modal('show');
+      }
     });
     meetRoomForm.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -73,6 +76,8 @@ class JitsiAPI {
 
       this.show();
       this.initAPI();
+
+      startJitsi.style.color= 'red'
     });
 
       this.jitsiContainer.style.resize="height";

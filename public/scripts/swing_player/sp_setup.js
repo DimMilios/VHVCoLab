@@ -12,6 +12,7 @@ console.log('load_all_drums 1');
 load_all_drums();
 
 var playingPlayer;
+var kernHasChanged;
 
 // drums_player.loader.decodeAfterLoading(audioContext, '35_16_JCLive_sf2_file');
 var playstop = false;
@@ -32,8 +33,8 @@ function midiResume() {
     play_array(currentCsv, false, false, false, true);
     metronome.toolSendsPlayStop(true);
   } else if (playingPlayer == 'default') {
-		const currentBar = window.global_playerOptions.CURRENTBAR;
-		const resumePoint = $(`.m-${currentBar}`).find('.note').first()[0];
+	const currentBar = window.global_playerOptions.CURRENTBAR;
+	const resumePoint = $(`.m-${currentBar}`).find('.note').first()[0];
 
     window.playCurrentMidi(document.getElementById(resumePoint.id));
   }
@@ -55,7 +56,7 @@ document.querySelector('#midi-play-pause-button').
 
 		if (!isPLaying) {
 			//if player stopped, play
-			window.global_playerOptions.PLAY = true;
+			window.global_playerOptions.PLAY = true;			
 			midiPlayStop();
 		} else if (isPLaying && !isPaused) {
 			//if player already playing and has not been paused, pause
