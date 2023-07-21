@@ -554,7 +554,12 @@ export function getTempo(kernFile) {
 export function addTempo(kernFile, editor) {
   window.TEMPO = 200;
   const exIntLine = kernFile
-    ?.match(/^\*\*.*\n/m)[0];
+    ?.match(/^\*\*.*\n/m)?.[0];
+
+  if (!exIntLine) {
+    console.log("Kern file doesn' t have the correct format.");
+    return;
+  }
   const tempoLine = exIntLine?.replaceAll(
     /\*\*[^\t]*/g,
     `*MM${window.TEMPO}`
@@ -577,6 +582,8 @@ export function addTempo(kernFile, editor) {
     tempoMarkingLine + '\n' + firstMusicEventsLine
   );
   
+  //bug if run immediately (induces another call of onChange event)
+  //set for running in two seconds so as first onChange is completed
   tempo_incKern
     ? setTimeout(() => editor.setValue(tempo_incKern), 2000)
     : null;

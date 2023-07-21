@@ -275,6 +275,7 @@ export const global_interface = {
   FreezeRendering: false,
 };
 
+
 //////////////////////////////
 //
 // Key-code variables for cases in listeners.js:
@@ -376,3 +377,5 @@ window.TEMPO = 200;
 window.BEATSPERMEASURE;
 window.MEASURENO;
 window.PICKUPBEATS;
+
+window.wholeKernTransposed = false;

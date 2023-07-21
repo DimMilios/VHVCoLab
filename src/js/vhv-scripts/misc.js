@@ -1959,7 +1959,27 @@ export async function applyFilterToKern(filter, data, callback, label) {
   }
   let options = humdrumToSvgOptions();
   let dataWithFilter = contents + '\n!!!filter: ' + filter + '\n';
-
+  
+  //when transposing, replace all -/# with &/+ for compability reasons
+  if ( filter.startsWith('transpose') ) {
+   dataWithFilter = dataWithFilter
+      .replaceAll(
+        //regExp match
+        /\t(?<root>[A-G]{1,2})(?<accidental>[+&]{0,3}) ?(?<variation>.)?$/gm,
+        //replacement function
+        (...match) => {
+          //retrieving group parameter properties  
+          let {root, accidental, variation} = match.pop();            
+          accidental = accidental
+            .replaceAll(
+              /[+&]/g,
+              match => {return (match === '+') ? '#' : '-'} 
+          );
+          return `\t${root}${accidental} ${variation ?? ''}`;
+        }
+    );
+  }
+  
   try {
     let newdata = await vrvWorker.filterData(
       options,
@@ -1981,6 +2001,27 @@ export async function applyFilterToKern(filter, data, callback, label) {
       }
       newdata += lines[i] + '\n';
     }
+
+    //alx. when score transposed, replace every -/# in chord tokens with &/+ for reharmonization font compatibility
+    if ( filter.startsWith('transpose') ) {
+      newdata = newdata
+        .replaceAll(
+          //regExp match
+          /\t(?<root>[A-G]{1,2})(?<accidental>[#-]{0,3}) ?(?<variation>.)?$/gm,
+          //replacement function
+          (...match) => {
+            //retrieving group parameter properties  
+            let {root, accidental, variation} = match.pop();            
+            accidental = accidental
+              .replaceAll(
+                /[#-]/g,
+                match => {return (match === '#') ? '+' : '&'} 
+            );
+            return `\t${root}${accidental} ${variation ?? ''}`;
+          }
+      );
+    }
+
     editor.setValue(newdata, -1);
     if (callback) {
       callback(newdata);

@@ -291,6 +291,23 @@ export function scoreTransposition(filter) {
   var options = humdrumToSvgOptions();
   data = contents + '\n!!!filter: ' + filter + '\n';
 
+  data = data
+      .replaceAll(
+        //regExp match
+        /\t(?<root>[A-G]{1,2})(?<accidental>[+&]{0,3}) ?(?<variation>.)?$/gm,
+        //replacement function
+        (...match) => {
+          //retrieving group parameter properties
+          let {root, accidental, variation} = match.pop();            
+          accidental = accidental
+            .replaceAll(
+              /[+&]/g,
+              match => {return (match === '+') ? '#' : '-'} 
+          );
+          return `\t${root}${accidental} ${variation ?? ''}`;
+        }
+    );
+
   getVrvWorker()
     ?.filterData(options, data, 'humdrum')
     .then(function (newdata) {
@@ -309,6 +326,24 @@ export function scoreTransposition(filter) {
         }
         newdata += lines[i] + '\n';
       }
+
+      newdata = newdata
+        .replaceAll(
+          //regExp match
+          /\t(?<root>[A-G]{1,2})(?<accidental>[#-]{0,3}) ?(?<variation>.)?$/gm,
+          //replacement function
+          (...match) => {
+            //retrieving group parameter properties
+            let {root, accidental, variation} = match.pop();            
+            accidental = accidental
+              .replaceAll(
+                /[#-]/g,
+                match => {return (match === '#') ? '+' : '&'} 
+            );
+            return `\t${root}${accidental} ${variation ?? ''}`;
+          }
+      );
+
       editor.setValue(newdata, -1);
     });
 }

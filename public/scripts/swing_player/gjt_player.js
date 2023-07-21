@@ -118,15 +118,20 @@ function send_kern_request(url){
 
     Http.open("GET", url);
     Http.onreadystatechange = (e) => {
-      setMidiPlayingGUI();
+
 
       if (Http.readyState == 4 && Http.status == 200){
+        setMidiPlayingGUI();
         //swing player play
         var csv = JSON.parse( Http.responseText )['csv_array'];
         playSwing(csv);
         
         kernHasChanged = false;
       }else if (Http.readyState == 4 && Http.status == 0){
+        setMidiPlayingGUI();
+        //making buttons active again
+        Array.from( document.querySelectorAll('.midi-button') )
+          .forEach( btn => btn.classList.remove('button-inactive') );
         //default player play
         playingPlayer = 'default';
         playCurrentMidi();
