@@ -533,6 +533,7 @@ const actionEntry = (action, userColorMapping) => {
         const replay = createChangeChordReplay(action);
         replayChangeChord(action, replay);
       }
+      break;
     }
   }
 
@@ -935,8 +936,10 @@ let actions = [];
 
 function determineSubstituteMulti(change, current, substitute) {
   let insertion;
-  let subfields = change.subfields?.split(' ')
-    ?.map(s => s = parseInt(s));
+  let subfields = change.subfields
+    ? change.subfields?.split(' ')
+      ?.map(s => s = parseInt(s))
+    : null;
   if (subfields) {
     const curTokens = current.split(' ');
     const substituteTokens = substitute.split(' ');

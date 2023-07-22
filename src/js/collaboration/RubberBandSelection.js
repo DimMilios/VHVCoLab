@@ -86,6 +86,11 @@ export class RubberBandSelection {
     let offsetminY = Math.min(top, bottom);
     let offsetmaxY = Math.max(top, bottom);
 
+    //unhighlighting any previous selection
+    document
+      .querySelectorAll('.highlight')
+      .forEach(el => el.classList.remove('highlight'));
+
     let collabContainer = document.querySelector('#collab-container');
     if (collabContainer) {
       render(

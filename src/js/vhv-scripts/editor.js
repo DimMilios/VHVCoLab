@@ -3090,7 +3090,7 @@ export function setEditorContentsMany(notes) {
         .match(/(?<oldT>.+?),(?<newT>.+)/)
         .groups;
       oldToken
-        ? oldToken += ` ${oldT}`
+        ? null
         : oldToken = oldT;
       newToken
         ? newToken += ` ${newT}`

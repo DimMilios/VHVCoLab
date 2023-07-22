@@ -264,7 +264,7 @@
   position: absolute;
   box-sizing: border-box;
   bottom: 0.4rem;
-  right: 2.8rem;
+  left: 2.8rem;
 
   min-width: 8px;
   padding: 0px;
