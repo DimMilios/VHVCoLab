@@ -44,12 +44,12 @@ class Metronome{
 
         // audio clicks
         this.click = true;
-        this.smallClick1 = new Audio('http://localhost:5001/apprepository/vhvWs/scripts/swing_player/metronome_sounds/metroSmall.wav')
+        this.smallClick1 = new Audio('https://musicolab.hmu.gr/apprepository/vhvWs/scripts/swing_player/metronome_sounds/metroSmall.wav')
         this.smallClick1.crossOrigin="anonymous";
-        this.smallClick2 = new Audio('http://localhost:5001/apprepository/vhvWs/scripts/swing_player/metronome_sounds/metroSmall.wav')
+        this.smallClick2 = new Audio('https://musicolab.hmu.gr/apprepository/vhvWs/scripts/swing_player/metronome_sounds/metroSmall.wav')
         this.smallClick2.crossOrigin="anonymous";
         this.playSmall1 = true;
-        this.bigClick = new Audio('http://localhost:5001/apprepository/vhvWs/scripts/swing_player/metronome_sounds/metroBig.wav')
+        this.bigClick = new Audio('https://musicolab.hmu.gr/apprepository/vhvWs/scripts/swing_player/metronome_sounds/metroBig.wav')
         this.bigClick.crossOrigin="anonymous";
 
         this.smallClick1_source = this.audioManager.audioContext.createMediaElementSource(this.smallClick1);
@@ -59,7 +59,7 @@ class Metronome{
         this.bigClick_source = this.audioManager.audioContext.createMediaElementSource(this.bigClick);
         this.audioManager.receiveAudioFromNode(this.bigClick_source);
         
-        this.timerWorker = new Worker('http://localhost:5001/apprepository/vhvWs/scripts/swing_player/metronome_js/metronomeworker.js');
+        this.timerWorker = new Worker('https://musicolab.hmu.gr/apprepository/vhvWs/scripts/swing_player/metronome_js/metronomeworker.js');
 
         this.timerWorker.onmessage = function(e) {
             if (e.data == "tick") {

@@ -311,13 +311,14 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
   }
   metronome.setTempo(tempo);
 
-  /*
+
   let currentBar = window.global_playerOptions.CURRENTBAR;
+  
   i = hasBeenPaused && currentBar
     ? currentCsv
         .findIndex(item => item[0].includes(`Bar~${currentBar-1}`)) + 1
     : 1;
-  */
+  
 
   if (has_precount){
     while (a[i][0] != 'Precount'){
