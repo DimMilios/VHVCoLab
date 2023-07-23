@@ -9,6 +9,7 @@ class Metronome{
         this.makeSound = false;
         this.toolIsPlaying = false;
         this.startTime = 0.0;              // The start time of the entire sequence.
+        this.pauseTime = 0.0;
         this.current16thNote;        // What note is currently last scheduled?
         this.tempo = 120.0;          // tempo (in beats per minute)
         this.lookahead = 25.0;       // How frequently to call scheduling function 
@@ -334,6 +335,44 @@ class Metronome{
                 }
             }
         }
+        this.toolSendsPlayResume = function() {
+            // that.previousTime = 0.0;
+            if (that.audioManager.audioContext.state != 'running'){
+                that.audioManager.audioContext.resume();
+            }
+            that.toolIsPlaying = true;
+                
+            that.isPlaying = true;
+            
+            that.startTime = that.audioManager.getCurrentTime() - that.pauseTime;
+            // that.bar = 0.0;
+            // that.beat = 0.0;
+            // that.sixteenth = 0.0;
+            // that.tatum = 0.0;
+            // // 
+            // that.current16thNote = 0;
+            that.nextNoteTime = that.audioManager.getCurrentTime();
+            that.currentNoteTime = that.audioManager.getCurrentTime();
+            that.timerWorker.postMessage("start");
+            //console.log("Starting metronome:", that.isPlaying);
+            document.dispatchEvent(that.startedEvent);    
+        }
+        this.toolSendsPause = function() {
+            // that.previousTime = 0.0;
+            if (that.audioManager.audioContext.state != 'running'){
+                that.audioManager.audioContext.resume();
+            }
+            that.toolIsPlaying = false;
+           
+            that.timerWorker.postMessage("stop");
+            console.log("Stopping metronome:", that.isPlaying);
+            document.dispatchEvent(that.stoppedEvent);
+            that.isPlaying = false;
+            that.makeSound = false;
+            that.pauseTime = that.audioManager.getCurrentTime() - that.startTime;  
+        }
+
+
         this.setSoundOnOff = function(b){
             // that.previousTime = 0.0;
             // if (that.audioManager.audioContext.state != 'running'){

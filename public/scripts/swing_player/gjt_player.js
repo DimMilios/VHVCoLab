@@ -71,7 +71,7 @@ function send_GJT_request(url){
 
   Http.onreadystatechange = (e) => {
     var jsonObj = JSON.parse( Http.responseText );
-    console.log
+    
     // var jsonObj = Http.responseText;
 
     // console.log( 'jsonObj:', jsonObj );
@@ -109,7 +109,7 @@ function send_kern_request(url){
 
     Array.from( document.querySelectorAll('.midi-button') )
       .forEach( btn => btn.classList.add('button-inactive') );
-
+    console.log(kernHasChanged)
     if (!kernHasChanged) {
       setMidiPlayingGUI();
       playSwing();
@@ -153,6 +153,11 @@ function playSwing(csv = currentCsv) {
   currentCsv = csv;
   playingPlayer = 'swing';
 
+  // // Remove the beatTimeEvent listener when stopping playback
+  // if (isBeatTimeListenerAdded) {
+  //   document.removeEventListener('beatTimeEvent', eventHandler);
+  //   isBeatTimeListenerAdded = false;
+  // }
   play_array(csv, has_precount = false, has_chords = false, has_header = false);
   metronome.toolSendsPlayStop(playstop);
 }
@@ -160,9 +165,10 @@ function playSwing(csv = currentCsv) {
 function play_note_for_instrument(a, tempo){
   // console.log(' ======================================== ');
   // console.log('instrument: ', a[0]);
-  // console.log('pitch: ', a[1]);
+  console.log("ARRAY IS NOW IN play_note_for_instrument",a);
   // console.log('duration: ', a[3]*(60.0/tempo));
   // console.log('volume: ', a[4]/127.0);
+  
   if (a[0] == 'Piano'){
     piano_player.queueWaveTable(audioContext, audioContext.destination
       , _tone_0000_SBLive_sf2, 0, a[1], a[3]*(60.0/tempo), (0.1*a[4])/127.0);
@@ -196,8 +202,98 @@ function show_chord(a){
   currentChordIdx++;
 }
 
+let isBeatTimeListenerAdded = false;
+let eventHandler;
+
+
+function addBeatTimeEventListener(a, starting_onset, tempo, tick) {
+  // Check if the event listener is already added and remove it if so
+  if (isBeatTimeListenerAdded) {
+    document.removeEventListener('beatTimeEvent', eventHandler);
+  }
+
+  // Define the event handler function with partial application for a, starting_onset, and tempo
+  eventHandler = function (e) {
+    handleBeatTimeEvent(e, a, starting_onset, tempo, tick);
+  };
+
+  // Add the event listener with the defined handler
+  document.addEventListener('beatTimeEvent', eventHandler);
+  isBeatTimeListenerAdded = true;
+}
+
+function handleBeatTimeEvent(e, a, starting_onset, tempo, tick) {
+    
+  // Access the array data from the event object.
+  // const a = e.detail.a;
+  
+  if ( i < a.length ){
+    console.log('e.metroBeatTimeStamp: ', e.metroBeatTimeStamp);
+    while ( t < e.metroBeatTimeStamp - starting_onset ){
+      if (  a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Flute' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro'  ){
+        // console.log('starting_onset: ', starting_onset);
+        // console.log('i: ', i);
+        // console.log('t: ', t);
+        // console.log('PLAYING a[i]: ', a[i]);
+        console.log("ARRAY IS NOW IN beatTimeEvent",a);
+        play_note_for_instrument(a[i], tempo);
+        i++;
+      }else if( a[i][0] == 'Chord' ){
+        show_chord(a[i]);
+        i++;
+      }else if(a[i][0].includes("Bar")){
+        const CSVCurrentBar = a[i][0].split("~")[1].split("@")[0];
+        console.log(CSVCurrentBar);
+
+        const barChangeEvent = new CustomEvent ('barChangeEvent', {
+          detail: {hasStopped: false, barNo: `${ parseInt(CSVCurrentBar)+1 }`}
+        });
+        document.dispatchEvent(barChangeEvent);
+
+        i++;
+      }
+      else{
+        i++;
+      }
+      if ( i >= a.length ){
+        break;
+      }
+      if (  a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Flute' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro'  ){
+        t = a[i][2];
+      }else if( a[i][0] == 'Chord' ){
+        t = a[i][3];
+      }
+    }
+    // i++;
+  }else{
+    playstop = false;
+    metronome.toolSendsPlayStop(playstop);
+
+    playingPlayer = null;
+
+    window.global_playerOptions.PLAY = false;
+    window.global_playerOptions.CURRENTBAR = null;
+
+    setMidiNotPlayingGUI();
+  }
+    // document.getElementById('beatTime').innerHTML = e.metroBeatTimeStamp;
+    // VELENIS: ADD PLAYER HERE
+    // e.metroBeatTimeStamp is called very frequently and it includes the
+    // time that we need to trigger notes
+    // CAUTION: metronome currently does not work for tempo changes.
+    // TODO: we need to fix it
+    // console.log( 'time: ', e.metroBeatTimeStamp - starting_onset );
+
+}
+
+
+
+
+
+
+
 function play_array( a, has_precount=true, has_chords=true, has_header=true, hasBeenPaused = false ){
-  // console.log('array: ', a)
+  console.log('array: ', a)
   if (has_chords){
     get_chords_from_array( a );
   }
@@ -215,11 +311,13 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
   }
   metronome.setTempo(tempo);
 
+  /*
   let currentBar = window.global_playerOptions.CURRENTBAR;
   i = hasBeenPaused && currentBar
     ? currentCsv
         .findIndex(item => item[0].includes(`Bar~${currentBar-1}`)) + 1
     : 1;
+  */
 
   if (has_precount){
     while (a[i][0] != 'Precount'){
@@ -236,62 +334,10 @@ function play_array( a, has_precount=true, has_chords=true, has_header=true, has
   document.dispatchEvent(barChangeEvent);
 
   t = a[i][2];
-  document.addEventListener('beatTimeEvent', function (e){
-    if ( i < a.length ){
-      console.log('e.metroBeatTimeStamp: ', e.metroBeatTimeStamp);
-      while ( t < e.metroBeatTimeStamp - starting_onset ){
-        if (  a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Flute' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro'  ){
-          console.log('starting_onset: ', starting_onset);
-          console.log('i: ', i);
-          console.log('t: ', t);
-          console.log('PLAYING a[i]: ', a[i]);
-          play_note_for_instrument(a[i], tempo);
-          i++;
-        }else if( a[i][0] == 'Chord' ){
-          show_chord(a[i]);
-          i++;
-        }else if(a[i][0].includes("Bar")){
-          const CSVCurrentBar = a[i][0].split("~")[1].split("@")[0];
-          console.log(CSVCurrentBar);
-
-          const barChangeEvent = new CustomEvent ('barChangeEvent', {
-            detail: {hasStopped: false, barNo: `${ parseInt(CSVCurrentBar)+1 }`}
-          });
-          document.dispatchEvent(barChangeEvent);
-
-          i++;
-        }
-        else{
-          i++;
-        }
-        if ( i >= a.length ){
-          break;
-        }
-        if (  a[i][0] == 'Piano' || a[i][0] == 'Bass' || a[i][0] == 'Flute' || a[i][0] == 'Drums' || a[i][0] == 'Precount' || a[i][0] == 'Metro'  ){
-          t = a[i][2];
-        }else if( a[i][0] == 'Chord' ){
-          t = a[i][3];
-        }
-      }
-      // i++;
-    }else{
-      playstop = false;
-      metronome.toolSendsPlayStop(playstop);
-
-      playingPlayer = null;
-
-      window.global_playerOptions.PLAY = false;
-      window.global_playerOptions.CURRENTBAR = null;
-
-      setMidiNotPlayingGUI();
-    }
-      // document.getElementById('beatTime').innerHTML = e.metroBeatTimeStamp;
-      // VELENIS: ADD PLAYER HERE
-      // e.metroBeatTimeStamp is called very frequently and it includes the
-      // time that we need to trigger notes
-      // CAUTION: metronome currently does not work for tempo changes.
-      // TODO: we need to fix it
-      // console.log( 'time: ', e.metroBeatTimeStamp - starting_onset );
-  });
+  console.log("TAF EINAI:",t, i)
+  addBeatTimeEventListener(a, starting_onset, tempo, t);
+  
+  isBeatTimeListenerAdded = true;
 }
+
 

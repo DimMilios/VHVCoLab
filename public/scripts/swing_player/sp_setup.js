@@ -30,8 +30,8 @@ function midiPlayStop() {
 
 function midiResume() {
   if (playingPlayer == 'swing') {
-    play_array(currentCsv, false, false, false, true);
-    metronome.toolSendsPlayStop(true);
+    //play_array(currentCsv, false, false, false, true);
+    metronome.toolSendsPlayResume();
   } else if (playingPlayer == 'default') {
 	const currentBar = window.global_playerOptions.CURRENTBAR;
 	const resumePoint = $(`.m-${currentBar}`).find('.note').first()[0];
@@ -42,7 +42,7 @@ function midiResume() {
 
 function midiPause () {
   if (playingPlayer == 'swing'){
-    metronome.toolSendsPlayStop(false);
+    metronome.toolSendsPause();
   } else if (playingPlayer == 'default') {
 	//stop() is defined in midiplayer.js
 	stop();

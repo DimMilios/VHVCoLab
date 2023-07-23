@@ -57,7 +57,7 @@ class JitsiAPI {
 
     joinCallBtn.addEventListener('click', e => {
       e.preventDefault();
-      const roomName = meetRoomForm.value;
+      const roomName = $('#meet-room')[0].value;
       this.show();
       this.initAPI(false, roomName);
 
@@ -67,7 +67,7 @@ class JitsiAPI {
 
     joinCallVideoOnlyBtn.addEventListener('click', e =>{
       e.preventDefault();
-      const roomName = meetRoomForm.value;
+      const roomName = $('#meet-room')[0].value;
       this.show();
       this.initAPI(true, roomName);
 
@@ -84,6 +84,10 @@ class JitsiAPI {
 
   initAPI(videoOnly,roomName) {
     if (!this.api) {
+      const userName = window.awareness
+        .getLocalState()
+        .user
+        .name;
       const options = !videoOnly
         ? { 
             roomName,
@@ -91,6 +95,7 @@ class JitsiAPI {
             height: "100%",
             parentNode: document.querySelector("#jitsi-meeting-container"),
             configOverwrite: {
+              prejoinPageEnabled: true,
               startWithAudioMuted: false, 
               disableAP: true,
               disableAEC: false,
@@ -107,7 +112,7 @@ class JitsiAPI {
               enableLayerSuspension: true,
               },      
             userInfo: {
-              displayName: Jitsi_User_Name,
+              displayName: userName
             },
           } 
         : {
@@ -120,7 +125,7 @@ class JitsiAPI {
               startWithVideoMuted: false,
             },
             userInfo: {
-              displayName: Jitsi_User_Name,
+              displayName: userName,
             }
           }
         ;
