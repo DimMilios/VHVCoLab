@@ -117,7 +117,7 @@ export async function setupCollaboration() {
     );
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
-      params: { username: user, file: filename, course: course ?? null },
+        params: { username: user, file: filename, course: course ?? null, pathname: window.location.pathname },
     }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
