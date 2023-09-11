@@ -355,3 +355,14 @@ export function setUserImageUrl(id) {
     : 'apprepository/vhvWs/defaultUser.svg';
   return new URL(path, base).toString();
 }
+
+export function notify(text, context) {
+  const notification = document.createElement('div');
+  notification.setAttribute('role', 'alert');
+  notification.className = `alert alert-${context} notification`;
+  notification.innerText = text;
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => notification.remove(), 3000);
+}

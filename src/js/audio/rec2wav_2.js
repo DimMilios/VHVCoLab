@@ -1,11 +1,14 @@
 import { getAceEditor } from '../vhv-scripts/setup.js';
 import { getVrvWorker } from '../humdrum-notation-plugin-worker.js';
+import { getCollabStatus } from '../bootstrap.js';
+import { yProvider } from '../yjs-setup.js';
 
 URL = window.URL || window.webkitURL;
 
 var gumStream; //stream from getUserMedia()
 export var rec; //Recorder.js object needs to be exported
 var input; //MediaStreamAudioSourceNode we'll be recording
+
 
 // shim for AudioContext when it's not avb.
 var AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -14,7 +17,7 @@ var audioContext; //audio context to help us record
 var recordButton = document.getElementById('recordButton');
 var stopButton = document.getElementById('stopButton');
 var pauseButton = document.getElementById('pauseButton');
-var download; // the name of the downloaded file
+export var download; // the name of the downloaded file
 
 //kalohr
 var syncronizeButton = document.getElementById("Synchronize"); 
@@ -27,8 +30,15 @@ export var theblob;
 //kalohr
 
 //add events to those 3 buttons
-recordButton.addEventListener('click', startRecording);
-stopButton.addEventListener('click', stopRecording);
+recordButton.addEventListener('click', () => {
+  startRecording();
+  if (getCollabStatus().enabled) {
+    yProvider.awareness.setLocalStateField('record', {status:'started'});
+  }
+});
+stopButton.addEventListener('click', () => {
+  stopRecording();
+});
 pauseButton.addEventListener('click', pauseRecording);
 
 syncronizeButton.addEventListener('click', doSyncronize); //kalohr
@@ -262,6 +272,7 @@ function createDownloadLink(blob) {
   au.src = url;
 
   window.wavesurfer.load(au); // LOAD RECORDING TO WAVESURFER ###############################################################
+  window.collabRec = false;
 
   //save to disk link
   link.href = url;
@@ -305,6 +316,21 @@ function createDownloadLink(blob) {
 
   //add the li element to the ol
   //recordingsList.appendChild(li);
+
+  //collaborative rec stop event. Put here because Recorder.exportWav posts a message to a worker that runs in a seperate thread
+  //so the blob is generated at an unknown time
+  if (getCollabStatus().enabled) {
+    const reader = new FileReader()
+    reader.readAsDataURL(blob); 
+    reader.onload = function () {
+      yProvider.awareness.setLocalStateField('record', {
+        status:'stopped',
+        recDataURL: reader.result,
+        name: download
+      });
+    }
+  }
+
 }
 
 function download_file(name, audio) {
@@ -320,8 +346,12 @@ function download_file(name, audio) {
 
 function handleFileDownload() {
   return function(event) {
-    console.log('Download click handler', { download, fileUrl });
-    download_file(download, fileUrl);
+    if (!window.collabRec) {
+      console.log('Download click handler', { download, fileUrl });
+      download_file(download, fileUrl);
+    } else {
+      download_file(window.collabRecName, window.collabRecUrl);
+    }
   }
 }
 

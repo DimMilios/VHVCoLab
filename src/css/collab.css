@@ -532,4 +532,40 @@ body:has(#action-history-container.open) {
   height: 8px;
   border-radius: 50%;
 }
+
+/* collaborative recording */
+@keyframes smooth-appear {
+  to {
+    bottom: 20px;
+    opacity: 1;
+  }
+}
+.blink_me {
+
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.notification {
+  z-index: 1000;
+  position: fixed;
+  bottom: -100%;
+  opacity: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  animation: smooth-appear 1s ease forwards;
+}
+
+#recInfo {
+  background-color: rgb(230, 135, 21);
+  border-radius: 50% 20% / 10% 40%;
+  padding: 5%;
+  justify-self: center;
+  animation: blinker 1s linear infinite;
+}
 /* Action History */

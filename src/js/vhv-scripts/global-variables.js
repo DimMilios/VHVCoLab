@@ -379,3 +379,7 @@ window.MEASURENO;
 window.PICKUPBEATS;
 
 window.wholeKernTransposed = false;
+
+window.collabRec = false;
+window.collabRecName;
+window.collabRecUrl;

@@ -1,5 +1,7 @@
 'use strict';
 
+import { getCollabStatus } from "../bootstrap";
+
 //var synchronizeButton = document.getElementById('Synchronize');
 //synchronizeButton.addEventListener('click', startSynchronization);
 
@@ -184,6 +186,10 @@ function setupWaveSurfer() {
           window.BEATSPERMEASURE
         );
         wavesurfer.setCurrentTime(rec_time);
+
+        if (getCollabStatus().enabled) {
+          window.awareness.setLocalStateField('recTime', rec_time);
+        }
       }
     };
     ajax3.open('get', 'https://musicolab.hmu.gr/vhv/wp_s_array.csv');

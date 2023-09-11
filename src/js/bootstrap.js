@@ -103,7 +103,7 @@ export function featureIsEnabled(featureName) {
   return featureToggler.featureIsEnabled(featureName);
 }
 
-function getCollabStatus() {
+export function getCollabStatus() {
   const urlParams = getURLInfo();
 
   // `course` URL search parameter

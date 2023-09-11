@@ -22,8 +22,7 @@ import { sendGroupedChangePitchActionIfChanged } from './sendGroupedActions.js';
 import { getActionById, renderActions } from '../templates/actionHistory.js';
 import { crossReferenceMultiTemplate, crossReferenceSingleTemplate } from '../templates/crossReferencingActions.js';
 import { freezeInterface } from '../vhv-scripts/utility-svg.js';
-import { setUserImageUrl } from './util-collab.js';
-
+import { notify, setUserImageUrl } from './util-collab.js';
 //alx
 let prevStates;
 let DEBUG = false;
@@ -256,7 +255,7 @@ export function stateChangeHandler(clients = defaultClients()) {
   editInProgress
     ? shareChordEdit(editInProgress)
     : null;
-  toggleInterfaceFreeze(awStates);  
+  toggleInterfaceFreeze(awStates);
   
   const panelIsDiplayed = displayActionPanel(awStates);
   clearPrevSelections();
@@ -276,6 +275,10 @@ export function stateChangeHandler(clients = defaultClients()) {
     collabContainer
   );
 
+  actOnRecordStateChange(awStates);
+
+  actOnTimeInRecordingStateChange(awStates);
+
   renderCollabMenuSidebar(); //TODO: isws xreiazetai na kaleitai 1 fora kapou allou. outws i allws to user list ananewnetai me ton update handler
 
   sendGroupedChangePitchActionIfChanged(clients);
@@ -285,6 +288,134 @@ export function awaranessUpdateHandler() {
   const usersToRender = formatUserList();
   renderUserList(usersToRender);
 }
+
+function actOnRecordStateChange(awStates) {
+  const myClientId = yProvider.awareness.clientID;
+  const recordStateUpdates = awStates
+    .filter( ([id, state]) => state.record)
+    .map( ([id, state]) => {
+      return {
+        recorderId: id,
+        status: state.record.status,
+        recorderName: state.user.name,
+        recDataURL: state.record.recDataURL,
+        recordingName: state.record.name
+    }});
+  
+  if (!recordStateUpdates.length)
+    return;
+
+  recordStateUpdates.forEach(state => {
+    const myStateUpdating = (state.recorderId === myClientId);
+
+    switch (state.status) {
+      case 'started': actOnStartRecording(myStateUpdating, state.recorderName);
+        break;
+      case 'stopped': actoOnStopRecording(myStateUpdating, state.recorderName, state.recDataURL, state.recordingName);
+        break; 
+      case 'inProgress': null //in case recordState is resent after rec has started and before its stopped,...
+        break; //...during triggering of awareness state change handler because of another awareness action (e.g. note selection), nothing happens
+    }
+  })
+}
+
+function actOnStartRecording(me, recorderName) {
+  //enter an 'inProgress' status so that 'started' status events don t run multiply
+  //e.g. in cases where rec has started and before it stops, awareness state change handler is triggeres by another awareness action (e.g. note selection)
+  if (me) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('record', {status: 'inProgress'}),
+      100);
+    return;
+  }
+
+  //notifying that a user has started recording
+  const notifText = `${recorderName} has started recording. You cannot record at the same time.`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  //modifying the recording controls' GUI and hiding current recording
+  const recBtnsGUI = document.querySelector('#control_section_buttons');
+  [...recBtnsGUI.children]
+    .forEach( e => e.setAttribute('hidden', true) );
+  const recInfoSpan = document.createElement('span');
+  recInfoSpan.id = 'recInfo';
+  recInfoSpan.innerText = `${recorderName} is recording!`
+  recBtnsGUI.appendChild(recInfoSpan);
+  document.querySelector('#play_wave')
+    .setAttribute('hidden', 'true');
+  
+  //configuring wavesurfer
+  if (!window.wavesurfer) {
+    window.setupWaveSurfer();
+  }
+
+}
+
+function actoOnStopRecording(me, recorderName, recDataURL, recordingName) {
+  if (me) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('record', null),
+      100);
+    return;
+  }
+
+  //notifying that user has stopped the rcording
+  const notifText = `${recorderName} has stopped recording. You can now record at will.`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  //restoring the recording controls' GUI and activating Play/Pause, Rewind and Go To Selection Buttons
+  const recBtnsGUI = document.querySelector('#control_section_buttons');
+  const recInfoSpan = document.getElementById('recInfo');
+  recBtnsGUI.removeChild(recInfoSpan);  
+  [...recBtnsGUI.children]
+    .forEach( e => {
+      if (e.id != 'toggleMute')
+        e.removeAttribute('hidden')
+    });
+  document.querySelector('#PlayPause')
+    .removeAttribute('disabled');
+  document.querySelector('#Stop')
+    .removeAttribute('disabled');
+  document.querySelector('#GotoSelectionButton')
+    .removeAttribute('disabled');
+  document.querySelector('#play_wave')
+    .removeAttribute('hidden');
+  
+  //setting global collabRec (indicates if current recording comes from collaborator or not) parameter...
+  //... as well as global recName and recUrl params (for use when downloading the recording)
+  window.collabRec = true;
+  window.collabRecName = recordingName;
+  window.collabRecUrl = recDataURL;
+
+
+  //clearing previous wavesurfer data and manifesting the (new) recording
+  window.wavesurfer.load(recDataURL);
+
+}
+
+function actOnTimeInRecordingStateChange(awStates) {
+  const myClientId = yProvider.awareness.clientID;
+  const recTimeStateChange = awStates
+    .filter( ([id, state]) => state.recTime)
+    .map( ([id, state]) => {
+      return {
+        synchronizerId: id,
+        time: state.recTime
+    }});
+
+  if (!recTimeStateChange.length)
+  return;
+
+  recTimeStateChange.forEach(state => {
+    const myStateUpdating = (state.synchronizerId === myClientId);
+    if (myStateUpdating)
+      return;
+    window.wavesurfer.setCurrentTime(state.time);
+  }) 
+}
+
 function mapCrossRefs ( [actionId, selectionInfo] ) {
   const action = getActionById(+actionId);      
   if (
