@@ -4,20 +4,20 @@ import { getAceEditor } from './setup';
 const REPOSITORY_TRACKS = {
   courseId: 3,
   public: [
-    { filenameShort: '6_Light_jazz.mp3' },
-    { filenameShort: 'All the things you are.mp3' },
-    { filenameShort: 'Autumn Leaves.mp3' },
-    { filenameShort: 'Cherokee.mp3' },
-    { filenameShort: 'disco0.mp3' },
+    { filenameShort: '6_Light_jazz.krn' },
+    { filenameShort: 'All the things you are.krn' },
+    { filenameShort: 'Autumn Leaves.krn' },
+    { filenameShort: 'Cherokee.krn' },
+    { filenameShort: 'disco0.krn' },
   ],
   private: [
-    { filenameShort: 'private1.mp3' },
-    { filenameShort: 'private2.mp3' },
+    { filenameShort: 'private1.krn' },
+    { filenameShort: 'private2.krn' },
   ],
   course: [
-    { filenameShort: '6_Light_jazz.mp3' },
-    { filenameShort: 'Air_Bach.mp3' },
-    { filenameShort: 'egoDeath.mp3' },
+    { filenameShort: '6_Light_jazz.krn' },
+    { filenameShort: 'Air_Bach.krn' },
+    { filenameShort: 'egoDeath.krn' },
   ],
 };
 
@@ -81,7 +81,7 @@ let abortController;
 
 async function initRepositoryTrackList(courseParam, collabParam) {
   const res = await fetch(
-    `https://musicolab.hmu.gr/apprepository/moodleGetCourseFilesJson.php?courseIdnumber=${courseParam}&collab=${collabParam}`,
+    `https://musicolab.hmu.gr/apprepository/moodleGetCourseFilesJson.php?type=krn&courseIdnumber=${courseParam}&collab=${collabParam}`,
     { headers: { Accept: 'application/json' } }
   );
   const data = await res.json();
