@@ -35,12 +35,9 @@ import {
   global_editorOptions,
   global_verovioOptions,
 } from './vhv-scripts/global-variables.js';
-import {
-  exportKernToPrivateFiles,
-  promptForFile,
-  saveContentAsMIDI,
-} from './vhv-scripts/file-operations.js';
+import { exportKernToPrivateFiles, saveContentAsMIDI } from './vhv-scripts/file-operations.js';
 import { toggleCommentsVisibility } from './bootstrap.js';
+import { showLoadFromRepositoryModal } from './vhv-scripts/file-load-repository.js';
 
 class MenuInterface {
   constructor() {
@@ -159,7 +156,8 @@ class MenuInterface {
   }
 
   loadFromRepository() {
-    promptForFile();
+    // promptForFile();
+    showLoadFromRepositoryModal();
   }
 
   exportToPrivateFiles() {

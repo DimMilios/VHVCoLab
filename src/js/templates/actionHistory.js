@@ -155,6 +155,7 @@ const TYPES = {
     ACTION_TYPES.change_chord,
     ACTION_TYPES.export,
     ACTION_TYPES.transpose,
+    ACTION_TYPES.repository_import,
   ],
   REFERENCEABLE: [
     ACTION_TYPES.change_pitch,
@@ -199,6 +200,26 @@ const content = (action) => {
       return displayAddComment(action);
     case 'export':
       return action.content.file;
+    case 'repository_import':
+      if (!action.content.file || !action.content.type) {
+        return null;
+      }
+      return html`
+        <div>
+          <table class="table table-bordered table-sm m-0 text-center">
+            <tbody>
+              <tr>
+                <th>File</th>
+                <th>File Type</th>
+              </tr>
+              <tr>
+                <td>${action.content.file}</td>
+                <td>${action.content.type}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
     case 'transpose':
       return action.content.text;
     case 'change_chord':

@@ -173,21 +173,6 @@ export async function loadFileFromURLParam() {
   }
 }
 
-export async function promptForFile() {
-  let params = new URLSearchParams(window.location.search);
-  // Initialize with repository URL for kern file if present on the browser URL
-  let defaultUrl = params.has('file') ? atob(params.get('file')) : '';
-
-  let url = window.prompt('Enter the URL of a krn file:', defaultUrl);
-
-  try {
-    let fileContent = await loadFileFromRepository(url);
-    if (fileContent.length > 0) {
-      getAceEditor()?.session.setValue(fileContent);
-    }
-  } catch (err) {}
-}
-
 /**
  *
  * @param {string} url
