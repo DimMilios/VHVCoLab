@@ -3,5 +3,5 @@
   "collaboration": false,
   "videoConference": true,
   "soundEditor": true,
-  "actions": false 
+  "actions": true 
 }
