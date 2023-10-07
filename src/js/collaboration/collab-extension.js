@@ -639,9 +639,11 @@ function formatUserList() {
       )?.groups;
       return data;
     });
-  connectedUsers.forEach(
-    (user) => (user.imageSrc = setUserImageUrl(user.id))
-  );
+  connectedUsers.forEach((user) => {
+    if (user !== null && user !== undefined) {
+      user.imageSrc = setUserImageUrl(user.id);
+    }
+  });
 
   disconnectedUsers = [...new Set(disconnectedUsers)]
     .map((entry) => entry.concat(" status=offline"))

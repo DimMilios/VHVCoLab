@@ -1,7 +1,7 @@
 {
   "score": true,
-  "collaboration": true,
+  "collaboration": false,
   "videoConference": true,
   "soundEditor": true,
-  "actions": true
+  "actions": true 
 }

@@ -15,6 +15,10 @@ body {
   z-index: 1 !important;
 }
 
+#input {
+  height: 100vh;
+}
+
 /* needed to see scroll bar in help menu */
 ::-webkit-scrollbar {
   -webkit-appearance: none;
