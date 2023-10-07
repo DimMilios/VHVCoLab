@@ -25,7 +25,7 @@ var kern_string = null; // in this example, the string value is assigned with th
 // There is also a stop function available: stop_player() - in js/gjt_player.js.
 function midiPlayStop() {
 	console.log('play:')
-	send_kern_request( 'https://maxim.mus.auth.gr:6001/kern_for_player?kernfile=' + encodeURIComponent(kern_string) );
+	send_kern_request( 'https://musicolab.hmu.gr:6001/kern_for_player', kern_string );
 }
 
 function midiResume() {

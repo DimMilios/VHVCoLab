@@ -111,10 +111,18 @@ async function doSyncronize(){
     //alert("the upload has finished !");
     GotoSelectionButton.disabled=false;
     document.getElementById("syncImg").src="LABstill.png";
+
+    if (getCollabStatus().enabled) {
+      yProvider.awareness.setLocalStateField('recordSync', 'completed');
+    }
    }
   }
   ajax.send(fd);
   document.getElementById("syncImg").src="LAB.webp";
+
+  if (getCollabStatus().enabled) {
+    yProvider.awareness.setLocalStateField('recordSync', 'clicked');
+  }
 
 }
 

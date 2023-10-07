@@ -100,7 +100,7 @@ function stop_player(){
   playingPlayer = null;
 }
 
-function send_kern_request(url){
+function send_kern_request(url, kern){
 
   const aboutToStart = window.global_playerOptions.PLAY;
 
@@ -116,7 +116,8 @@ function send_kern_request(url){
       return;
     }
 
-    Http.open("GET", url);
+    Http.open("POST", url);
+    Http.setRequestHeader('Content-Type', 'appilcation/json');
     Http.onreadystatechange = (e) => {
 
 
@@ -137,7 +138,7 @@ function send_kern_request(url){
         playCurrentMidi();
       }
     }
-    Http.send();
+    Http.send(kern);
   } else {
     stop_player();
   }

@@ -110,7 +110,30 @@
 
       $('#show-chord-editor').modal('hide');
     });
+
+    $(function () {
+      $('#introModal').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    });
   </script>
+
+  <!-- Modal -->
+  <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="introModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="introModalLabel"></h5>
+        </div>
+        <div class="modal-body" id="introModalBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id = "introModalNextButton">Next</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Skip</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="feature-toggle" style="display: none;">
     <form id="feature-form" class="px-4 mt-1">

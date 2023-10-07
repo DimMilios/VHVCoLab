@@ -256,7 +256,8 @@ export const global_cursor = {
   RestoreCursorNote: '',
 };
 window.global_cursor = global_cursor;
-
+//global variables needed for midi players functionalities
+window.wholeKernTransposed = false;
 export const global_playerOptions = {
   PLAY: false,
   PAUSE: false,
@@ -377,9 +378,58 @@ window.TEMPO = 200;
 window.BEATSPERMEASURE;
 window.MEASURENO;
 window.PICKUPBEATS;
-
-window.wholeKernTransposed = false;
-
+//collab score alignment global variables
 window.collabRec = false;
 window.collabRecName;
 window.collabRecUrl;
+
+//introduction guide global variables
+export const guideText = {
+  initial: {
+    title: 'Introduction to __',
+    text: 'Welcome to __, an online, score representation application developed to facilitate distant music education. __ is based on Verovio Humdrum Viewer, an open-source, web application. Press "Next" to dive into this brief tutorial or "Skip" to directly use the app. Enjoy!'
+    },
+  importing: {
+    title:'Importing a score file',
+    text:'To import a score file, drag and drop it into the score representation area or press "Import from Respository" in the "File" menu'
+    },
+  scoreEdit: {
+    title:'Score editing',
+    text:"After importing a score file, you can edit the score in many ways. When in collaborative mode, all of your actions will be visible to your collaborators."
+    },
+  noteSel: {
+    title: "Score editing. Note selection/transposition",
+    text: "Perform a single note selection by clicking on the score area. Select multiple notes by rubber banding (available only in collaborative mode). Transpose your selection by a minor second interval by pressing SHIFT and up/down. You can also transpose the whole score by various intervals, pressing the corresponding buttons..."
+    },
+  comments:{
+    title: "Score editing. Comments",
+    text: "In collaborative mode, you can also comment on your selections, note or multiple, pressing on the correspondig buttons."
+  },
+  chordEdit: {
+    title:"Score editing. Chords" ,
+    text:"You can edit a score's chord by clicking on it. A menu of two buttons will show up: 'Edit' allows you to form the new chord yourself and 'Suggest' algorithmically proposes the new chord. If you press Edit and the application is in collaborative mode, the procedure of forming the new chord will be visible to your team."
+    },
+  midi: {
+    title:'MIDI playback section',
+    text:"These buttons allow you to control the playback of the score's MIDI format. You can also adjust playback tempo before pressing 'Play' or even during playback pause. __ is equipped with two MIDI players of different soundfonts, a 'swingy' and a more usual one. Which soundfont will be eventually activated, depends on music characteristics of the score file loaded."
+    },
+  videoCall: {
+    title:'Video Call',
+    text:'Participate in a video call with the rest of the course team by pressing the "Call" button and typing in the name of the room you want to join (if not already prefilled)'
+    },
+  recording: {
+    title:'Recording section',
+    text:"Try recording your playback version of the score. When in collaborative mode, your recording will manifest to your collaborators as well. Pressing 'Synchrozine' will fetch you a recording-score 'pitch matching' analysis. You (or any of your collaborators) can then select a note on the score and press 'Go to Selection' button. This action will get the recording to the time point that has been aligned with the score note selected."
+    },
+  collabMenu: {
+    title: "Collaborative Menu",
+    text: "This is the collaborative menu section, available only in collaborative mode. Take a look at the 'Users online/offline' subsection, press 'Action History' button to view the related section or 'Show/Hide Comments' to perform the corresponding action."
+  },
+  actionHistory:{
+    title: "Action History pane",
+    text: "Finally, in the Action History pane you can view, and in some cases undo/redo various score edit actions that took place during the collaboration session."
+  }
+}
+
+export let currentIntroStep = 'initial';
+window.currentIntroStep =currentIntroStep;

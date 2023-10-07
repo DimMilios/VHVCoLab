@@ -124,6 +124,11 @@ export function getCollabStatus() {
       enabled: urlParams.collab === 'true',
       reason: `collab search parameter specified with value: ${urlParams.collab}`,
     };
+  } else {
+    return {
+      enabled: false,
+      reason: 'collab search parameter not specified at all'
+    }
   }
 
   // Fallback to features.json file config

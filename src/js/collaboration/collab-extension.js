@@ -276,8 +276,8 @@ export function stateChangeHandler(clients = defaultClients()) {
   );
 
   actOnRecordStateChange(awStates);
-
   actOnTimeInRecordingStateChange(awStates);
+  actOnRecordSyncStateChange(awStates);
 
   renderCollabMenuSidebar(); //TODO: isws xreiazetai na kaleitai 1 fora kapou allou. outws i allws to user list ananewnetai me ton update handler
 
@@ -287,6 +287,83 @@ export function stateChangeHandler(clients = defaultClients()) {
 export function awaranessUpdateHandler() {
   const usersToRender = formatUserList();
   renderUserList(usersToRender);
+}
+
+function actOnRecordSyncStateChange(awStates) {
+  const myClientId = yProvider.awareness.clientID;
+  const recordSyncStateUpdates = awStates
+    .filter( ([id, state]) => state.recordSync)
+    .map( ([id, state]) => {
+      return {
+        clickerId: id,
+        clickerName: state.user.name,
+        status: state.recordSync
+    }});
+  
+  if (!recordSyncStateUpdates.length)
+    return;
+
+  recordSyncStateUpdates.forEach(state => {
+    const meClicking = (state.clickerId === myClientId);
+
+    switch (state.status) {
+      case 'clicked': actOnRecSyncClick(meClicking, state.clickerName);
+        break;
+      case 'completed': actOnRecSyncCompleted(meClicking)
+        break; 
+      case 'inProgress': null //in case recordSyncState is resent after rec has started and before its stopped,...
+        break; //...during triggering of awareness state change handler because of another awareness action (e.g. note selection), nothing happens
+    }
+  })
+}
+
+function actOnRecSyncCompleted (me) {
+  if (me) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('recordSync', null),
+      100);
+    return;
+  }
+
+  //notifying that user has stopped the rcording
+  const notifText = `Recording synchronization result ready. 'Go to Selection' button is now enabled.`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  //restoring the recording controls' GUI and activating Go To Selection Button
+  const recBtnsGUI = document.querySelector('#control_section_buttons');
+  const recInfoSpan = document.getElementById('recInfo');
+  recBtnsGUI.removeChild(recInfoSpan);  
+  [...recBtnsGUI.children]
+    .forEach( e => {
+      if (e.id != 'toggleMute')
+        e.removeAttribute('hidden')
+    });
+  document.querySelector('#GotoSelectionButton')
+    .removeAttribute('disabled');
+}
+
+function actOnRecSyncClick (me, clickerName) {
+  if (me) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('recordSync', {status: 'inProgress'}),
+      100);
+    return;
+  }
+
+  //notifying that user has clicked sync recording
+  const notifText = `${clickerName} has clicked 'Recording Synchronize' button. Result pending...`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  //modifying the recording controls' GUI and hiding current recording
+  const recBtnsGUI = document.querySelector('#control_section_buttons');
+  [...recBtnsGUI.children]
+    .forEach( e => e.setAttribute('hidden', true) );
+  const recInfoSpan = document.createElement('span');
+  recInfoSpan.id = 'recInfo';
+  recInfoSpan.innerText = `${clickerName} has requested recording synchronization!`
+  recBtnsGUI.appendChild(recInfoSpan);
 }
 
 function actOnRecordStateChange(awStates) {
@@ -378,8 +455,6 @@ function actoOnStopRecording(me, recorderName, recDataURL, recordingName) {
     .removeAttribute('disabled');
   document.querySelector('#Stop')
     .removeAttribute('disabled');
-  document.querySelector('#GotoSelectionButton')
-    .removeAttribute('disabled');
   document.querySelector('#play_wave')
     .removeAttribute('hidden');
   
@@ -392,7 +467,6 @@ function actoOnStopRecording(me, recorderName, recDataURL, recordingName) {
 
   //clearing previous wavesurfer data and manifesting the (new) recording
   window.wavesurfer.load(recDataURL);
-
 }
 
 function actOnTimeInRecordingStateChange(awStates) {
@@ -406,12 +480,17 @@ function actOnTimeInRecordingStateChange(awStates) {
     }});
 
   if (!recTimeStateChange.length)
-  return;
+    return;
 
   recTimeStateChange.forEach(state => {
     const myStateUpdating = (state.synchronizerId === myClientId);
-    if (myStateUpdating)
+    if (myStateUpdating) {
+      setTimeout(
+        () => yProvider.awareness.setLocalStateField('recTime', null),
+        100
+      );
       return;
+    }
     window.wavesurfer.setCurrentTime(state.time);
   }) 
 }

@@ -13,6 +13,7 @@
 //
 
 import {
+  currentIntroStep,
   editorMode,
   FILEINFO,
   global_cursor,
@@ -114,6 +115,7 @@ import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { sendAction } from '../api/actions.js';
 import { addChangePitchActionToGroup } from '../collaboration/sendGroupedActions.js';
 import { addTempo, calculateAnacrusis, getMusicalParameters, getTempo, getTimeSignature } from './utility.js';
+import { proceedToActionHistoryGuide, proceedToChordEditGuide, proceedToCollabMenuGuide, proceedToCommentsGuide, proceedToImportingGuide, proceedToMidiGuide, proceedToNoteSelGuide, proceedToRecGuide, proceedToScoreEditGuide, proceedToVideoCallGuide } from './tourguide.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -1233,5 +1235,36 @@ document.addEventListener('barChangeEvent', e => {
       .querySelector(barClass)
       .classList.add('midi-player-highlight');
   }
+})
+
+document.getElementById(
+  'introModalNextButton'
+)
+  .addEventListener('click', e => {
+
+    switch (currentIntroStep) {
+      case 'initial': proceedToImportingGuide();
+        break;
+      case 'importing': proceedToScoreEditGuide();
+        break;
+      case 'scoreEdit': proceedToNoteSelGuide();
+        break; 
+      case 'noteSel': proceedToCommentsGuide();
+        break;    
+      case 'comments': proceedToChordEditGuide();
+        break;  
+      case 'chordEdit': proceedToMidiGuide();
+        break;    
+      case 'midi': proceedToVideoCallGuide();
+        break;    
+      case 'videoCall': proceedToRecGuide();
+        break;     
+      case 'recording': proceedToCollabMenuGuide();
+        break;       
+      case 'collabMenu': proceedToActionHistoryGuide();
+        break;     
+      case 'actionHistory':
+        break;     
+    }
 })
 
