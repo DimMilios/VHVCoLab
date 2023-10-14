@@ -81,7 +81,7 @@ let abortController;
 
 async function initRepositoryTrackList(courseParam, collabParam) {
   const res = await fetch(
-    `https://musicolab.hmu.gr/apprepository/moodleGetCourseFilesJson.php?courseIdnumber=${courseParam}&collab=${collabParam}`,
+    `https://musicolab.hmu.gr/apprepository/moodleGetCourseFilesJson.php?type=krn&courseIdnumber=${courseParam}&collab=${collabParam}`,
     { headers: { Accept: 'application/json' } }
   );
   const data = await res.json();
@@ -227,7 +227,7 @@ async function loadAudioTrack(fileName, type) {
       if (courseId === null) {
         throw new Error(`Failed to find "courseId" in sessionStorage`);
       }
-      reqUrl = `https://musicolab.hmu.gr/apprepository/downloadCourseFile.php?fileid=${courseId}&u=${values.id}&f=${fileName}&user=${values.user}`;
+      reqUrl = `https://musicolab.hmu.gr/apprepository/downloadCourseFile.php?course=${values.course}&courseid=${courseId}&u=${values.id}&f=${fileName}&user=${values.user}`;
     }
 
     const res = await fetch(reqUrl, { signal: abortController.signal });
