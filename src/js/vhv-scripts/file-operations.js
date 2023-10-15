@@ -160,7 +160,12 @@ export async function loadFileFromURLParam() {
     }
   } else {
     // Load file from remote repository
-    file = await loadFileFromRepository(atob(params.get('file')));
+    try {
+      file = await loadFileFromRepository(atob(params.get('file')));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
   if (file) {
@@ -184,8 +189,12 @@ async function loadFileFromRepository(url) {
   }
 
   try {
-    let res = await fetch(url);
-    return await res.text();
+    const res = await fetch(url);
+    const text = await res.text();
+    if (res.headers.get('content-type').includes('text/html') && text.includes('your session has expired')) {
+      throw new Error('repository session has expired');
+    }
+    return text;
   } catch (err) {
     console.log(err);
   }

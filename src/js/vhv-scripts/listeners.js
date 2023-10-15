@@ -115,6 +115,7 @@ import { loadFileFromURLParam, openFileFromDisk } from './file-operations.js';
 import { sendAction } from '../api/actions.js';
 import { addChangePitchActionToGroup } from '../collaboration/sendGroupedActions.js';
 import { addTempo, calculateAnacrusis, getMusicalParameters, getTempo, getTimeSignature } from './utility.js';
+import { notify } from '../collaboration/util-collab.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   loadEditorFontSizes();
@@ -235,7 +236,9 @@ if (!featureIsEnabled('collaboration')) {
     if (!Number.isNaN(contentLength) && contentLength < 10) {
       loadFileFromURLParam().then((f) =>
         console.log(`Editor initialized with: ${f}`)
-      );
+      ).catch(() => {
+        notify("Could not load file because your session to the MusiCoLab repository has expired. Please log in first!", "danger");
+      });
     }
   });
 }

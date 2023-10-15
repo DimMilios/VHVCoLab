@@ -17,6 +17,7 @@ import {
   getURLParams,
 } from './api/util.js';
 import { loadFileFromURLParam } from './vhv-scripts/file-operations.js';
+import { notify } from './collaboration/util-collab.js';
 
 const names = [
   'Michael',
@@ -153,7 +154,10 @@ export async function setupCollaboration() {
           console.log(
             `Editor content was nearly empty. Fetched and initialized editor from repository with: ${f}`
           );
-        });
+        })
+          .catch(() => {
+            notify("Could not load file because your session to the MusiCoLab repository has expired. Please log in first!", "danger");
+          });
       }
     });
 
