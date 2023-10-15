@@ -197,6 +197,7 @@ async function loadFileFromRepository(url) {
     return text;
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 
