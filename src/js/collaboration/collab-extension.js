@@ -140,7 +140,13 @@ function shareChordEdit(editInProgress) {
 }
 
 function wrapChordEdit() {
-  if (isEditing) return;
+  if (isEditing) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('chordEdit', null),
+      200
+    );
+    return;
+  }
 
   backBtn.style.visibility = 'visible';
   doneBtn.style.visibility = 'visible';
@@ -279,6 +285,8 @@ export function stateChangeHandler(clients = defaultClients()) {
   actOnTimeInRecordingStateChange(awStates);
   actOnRecordSyncStateChange(awStates);
 
+  actOnReplayActionStateUpdate(awStates);
+
   renderCollabMenuSidebar(); //TODO: isws xreiazetai na kaleitai 1 fora kapou allou. outws i allws to user list ananewnetai me ton update handler
 
   sendGroupedChangePitchActionIfChanged(clients);
@@ -287,6 +295,45 @@ export function stateChangeHandler(clients = defaultClients()) {
 export function awaranessUpdateHandler() {
   const usersToRender = formatUserList();
   renderUserList(usersToRender);
+}
+
+function actOnReplayActionStateUpdate(awStates) {
+  const myClientId = yProvider.awareness.clientID;
+  const replayActionStateUpdates = awStates
+    .filter( ([id, state]) => state.replayAction)
+    .map( ([id, state]) => {
+      return {
+        clickerId: id,
+        clickerName: state.user.name,
+        id: state.replayAction.id,
+        type: state.replayAction.type
+    }});
+  
+  if (!replayActionStateUpdates.length)
+    return;
+
+  replayActionStateUpdates.forEach(state => {
+    const meClicking = (state.clickerId === myClientId);
+
+    //users' notification about action undoing
+    const notifText = `${state.clickerId} has undone '${state.type}' action`
+    const notifContext = 'info'
+    notify(notifText, notifContext);
+
+    //modifying actionPanel UI
+    document
+      .querySelector(`button[data-action-id="${state.id}"]`)
+      .parentElement
+      .classList.add('action-undone');
+    
+    if (meClicking) {
+      setTimeout(
+        () => yProvider?.awareness?.setLocalStateField('replayAction', null),
+        100
+      );
+    }
+
+  })
 }
 
 function actOnRecordSyncStateChange(awStates) {

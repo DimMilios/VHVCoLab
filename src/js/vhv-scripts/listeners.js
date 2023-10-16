@@ -1239,35 +1239,35 @@ document.addEventListener('barChangeEvent', e => {
   }
 })
 
-// import { proceedToActionHistoryGuide, proceedToChordEditGuide, proceedToCollabMenuGuide, proceedToCommentsGuide, proceedToImportingGuide, proceedToMidiGuide, proceedToNoteSelGuide, proceedToRecGuide, proceedToScoreEditGuide, proceedToVideoCallGuide } from './tourguide.js';
-// document.getElementById(
-//   'introModalNextButton'
-// )
-//   .addEventListener('click', e => {
+import { proceedToActionHistoryGuide, proceedToChordEditGuide, proceedToCollabMenuGuide, proceedToCommentsGuide, proceedToImportingGuide, proceedToMidiGuide, proceedToNoteSelGuide, proceedToRecGuide, proceedToScoreEditGuide, proceedToVideoCallGuide } from './tourguide.js';
+ document.getElementById(
+   'introModalNextButton'
+ )
+   .addEventListener('click', e => {
 
-//     switch (currentIntroStep) {
-//       case 'initial': proceedToImportingGuide();
-//         break;
-//       case 'importing': proceedToScoreEditGuide();
-//         break;
-//       case 'scoreEdit': proceedToNoteSelGuide();
-//         break; 
-//       case 'noteSel': proceedToCommentsGuide();
-//         break;    
-//       case 'comments': proceedToChordEditGuide();
-//         break;  
-//       case 'chordEdit': proceedToMidiGuide();
-//         break;    
-//       case 'midi': proceedToVideoCallGuide();
-//         break;    
-//       case 'videoCall': proceedToRecGuide();
-//         break;     
-//       case 'recording': proceedToCollabMenuGuide();
-//         break;       
-//       case 'collabMenu': proceedToActionHistoryGuide();
-//         break;     
-//       case 'actionHistory':
-//         break;     
-//     }
-// })
+    switch (window.currentIntroStep) {
+      case 'initial': proceedToImportingGuide();
+        break;
+      case 'importing': proceedToScoreEditGuide();
+        break;
+      case 'scoreEdit': proceedToNoteSelGuide();
+        break; 
+      case 'noteSel': proceedToCommentsGuide();
+        break;    
+      case 'comments': proceedToChordEditGuide();
+        break;  
+      case 'chordEdit': proceedToMidiGuide();
+        break;    
+      case 'midi': proceedToVideoCallGuide();
+        break;    
+      case 'videoCall': proceedToRecGuide();
+        break;     
+      case 'recording': proceedToCollabMenuGuide();
+        break;       
+      case 'collabMenu': proceedToActionHistoryGuide();
+        break;     
+      case 'actionHistory':
+        break;     
+    }
+})
 

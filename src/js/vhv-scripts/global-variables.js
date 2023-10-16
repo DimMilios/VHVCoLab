@@ -386,8 +386,8 @@ window.collabRecUrl;
 //introduction guide global variables
 export const guideText = {
   initial: {
-    title: 'Introduction to __',
-    text: 'Welcome to __, an online, score representation application developed to facilitate distant music education. __ is based on Verovio Humdrum Viewer, an open-source, web application. Press "Next" to dive into this brief tutorial or "Skip" to directly use the app. Enjoy!'
+    title: 'Introduction to VHVCoLab',
+    text: 'Welcome to VHVCoLab, an online, score representation application developed to facilitate distant music education. VHVCoLab is actually an extended version of Verovio Humdrum Viewer, which is an open-source application available online (https://verovio.humdrum.org/). Press "Next" to dive into this tutorial or "Skip" to directly use the app. Enjoy!'
     },
   importing: {
     title:'Importing a score file',
@@ -403,7 +403,7 @@ export const guideText = {
     },
   comments:{
     title: "Score editing. Comments",
-    text: "In collaborative mode, you can also comment on your selections, note or multiple, pressing on the correspondig buttons."
+    text: "In collaborative mode, you can also comment on your note selections, single or multiple, pressing on the corresponding buttons."
   },
   chordEdit: {
     title:"Score editing. Chords" ,
@@ -430,6 +430,7 @@ export const guideText = {
     text: "Finally, in the Action History pane you can view, and in some cases undo/redo various score edit actions that took place during the collaboration session."
   }
 }
+window.guideText = guideText;
 
 export let currentIntroStep = 'initial';
-window.currentIntroStep =currentIntroStep;
+window.currentIntroStep = currentIntroStep;

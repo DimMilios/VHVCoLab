@@ -1,7 +1,7 @@
 import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
 import { until } from 'lit-html/directives/until.js';
-import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
+import { ActionResponse, ACTION_TYPES, getActions, sendAction, ActionPayload } from '../api/actions';
 import {
   getEditorContents,
   scoreTransposition,
@@ -503,6 +503,7 @@ const actionEntry = (action, userColorMapping) => {
   }
 
   async function handleReplay() {
+    //undoing action functionality
     switch (action.type) {
       case ACTION_TYPES.change_pitch: {
         if (
@@ -556,6 +557,12 @@ const actionEntry = (action, userColorMapping) => {
       }
       break;
     }
+
+    //notifying users action has been undone
+    yProvider?.awareness?.setLocalStateField('replayAction', {id: action.id, type: action.type});
+    
+    //updating server database
+    //milios
   }
 
   function handleRollbackReplay() {

@@ -110,19 +110,21 @@
 
       $('#show-chord-editor').modal('hide');
     });
-
+    /*
     $(function () {
       $('#introModal').modal({
         backdrop: 'static',
         keyboard: false
       });
+
     });
+    */
   </script>
 
-  <!-- Modal -->
+  <!-- Intro Modal -->
   <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="introModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content" id='introModalContent'>
         <div class="modal-header">
           <h5 class="modal-title" id="introModalLabel"></h5>
         </div>
@@ -543,7 +545,7 @@
             </svg>
           </button>
 
-          <div xmlns="http://www.w3.org/1999/xhtml" class="nav-play-button mr-3 d-flex">
+          <div xmlns="http://www.w3.org/1999/xhtml" id= 'midi-section' class="nav-play-button mr-3 d-flex">
             <div style="cursor:pointer;" title="Play" id="midi-play-pause-button" class="mr-3 midi-button">
               <span class="fas fa-play midi-play-pause-icon"></span>
             </div>
