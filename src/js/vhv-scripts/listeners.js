@@ -294,10 +294,10 @@ function transposeMultiSelect(state, amount) {
     }))
     .filter(Boolean)
     .map((note) => ({ ...note, amount }));
-  
-  const transposedNotes = transposeNotes(notes);
+
+  const { transposedNotes, changedNotesNo } = transposeNotes(notes);
   setEditorContentsMany(transposedNotes);
-  return transposedNotes;
+  return { transposedNotes, changedNotesNo };
 }
 
 //////////////////////////////
@@ -311,10 +311,22 @@ function transposeMultiSelect(state, amount) {
  * @param {'single' | 'multi'} changePitchType
  */
 function addChangePitchAction(changePitchAction, changePitchType = 'single') {
+  console.log(changePitchAction);
+
+  if (changePitchType === 'single' && changePitchAction.oldValue === changePitchAction.newValue) {
+    console.log('No change in pitch for note: ', changePitchAction.noteElementId);
+    return;
+  }
+
+  if (changePitchType === 'multi' && changePitchAction.changedNotesNo === 0) {
+    console.log('No change in pitch for notes: ', changePitchAction.transposedNotes?.map((entry) => entry.id).join(','));
+    return;
+  }
+
   const key =
     changePitchType === 'single'
       ? changePitchAction?.noteElementId
-      : changePitchAction?.map((entry) => entry.id).join(',');
+      : changePitchAction?.transposedNotes?.map((entry) => entry.id).join(',');
 
   addChangePitchActionToGroup(key, changePitchAction, changePitchType);
 }

@@ -19,22 +19,23 @@ export const ACTION_TYPES = {
 
 export class ActionPayload {
   /**
-   * @param {{ type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined }} payload
+   * @param {{ type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined, scoreTitle: string | undefined }} payload
    */
-  constructor({ type, content, username, course, filename }) {
+  constructor({ type, content, username, course, filename, scoreTitle }) {
     this.type = type;
     this.content = content;
     this.username = username;
     this.course = course;
     this.filename = filename;
+    this.scoreTitle = scoreTitle;
   }
 }
 
 export class ActionResponse {
   /**
-   * @param {{ id: number, created_at: Date, type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined }} payload
+   * @param {{ id: number, created_at: Date, type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined, score_title: string | undefined }} payload
    */
-  constructor({ id, created_at, type, content, username, course, filename }) {
+  constructor({ id, created_at, type, content, username, course, filename, score_title }) {
     this.id = id;
     this.createdAt = created_at;
     this.type = type;
@@ -42,6 +43,7 @@ export class ActionResponse {
     this.username = username;
     this.course = course;
     this.filename = filename;
+    this.scoreTitle = score_title;
   }
 
   /**
@@ -94,6 +96,7 @@ export async function sendAction(payload) {
     payload.username = username;
     payload.course = course;
     payload.filename = filename;
+    payload.scoreTitle = JSON.parse(sessionStorage.getItem('score-metadata'))?.title;
 
     const res = await fetch(`${baseUrl}api/actions`, {
       method: 'POST',
@@ -141,7 +144,7 @@ export async function getActions(params = {}) {
     const json = await res.json();
     console.log(`Received:`, json);
     return json.map(
-      ({ id, created_at, type, content, username, course, filename }) =>
+      ({ id, created_at, type, content, username, course, filename, score_title }) =>
         new ActionResponse({
           id,
           created_at,
@@ -150,6 +153,7 @@ export async function getActions(params = {}) {
           username,
           course,
           filename,
+          score_title,
         })
     );
   } catch (error) {
