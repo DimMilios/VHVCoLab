@@ -1,7 +1,6 @@
 import { html, render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map.js';
 import { until } from 'lit-html/directives/until.js';
-import { live } from 'lit-html/directives/live.js';
 import { ActionResponse, ACTION_TYPES, getActions } from '../api/actions';
 import {
   getEditorContents,
@@ -19,7 +18,7 @@ import { compareHexHashes, crc32, digestMessage } from '../vhv-scripts/hash';
 import { getAceEditor } from '../vhv-scripts/setup';
 import { editChord, mapChord } from '../vhv-scripts/chords';
 import * as Y from 'yjs';
-import { getURLParams } from '../api/util';
+import { getURLInfo } from '../api/util';
 
 /** @typedef {{ row: number, col: number, before: string, current: string, after: string, elemId: string }} Replay */
 
@@ -466,10 +465,9 @@ function updateMultiSelection(multiSelect, timeout) {
 }
 
 function canUndoRedo(actionScoreTitle, actionData) {
-  const urlParams = getURLParams();
+  const urlParams = getURLInfo();
   const currentScoreTitle = JSON.parse(sessionStorage.getItem('score-metadata'))?.title;
-  return actionData.filename === urlParams.file
-    && actionData.course === urlParams.course
+  return urlParams.file === `filename=${actionData.filename}&course=${actionData.course}`
     && currentScoreTitle === actionData.scoreMeta?.title
     && currentScoreTitle === actionScoreTitle
 }
