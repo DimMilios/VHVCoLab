@@ -29,6 +29,9 @@ export let crossReferenceSingleTemplate = (actionId, userNames, elemRefId, color
 
 export let crossReferenceMultiTemplate = (actionId, userNames, selectedNotes, color) => {
   const coords = multiSelectCoords(selectedNotes);
+  if (coords?.left === undefined || !coords.top === undefined) {
+    return null;
+  }
 
   return html`<div
       class="cross-reference-multi"

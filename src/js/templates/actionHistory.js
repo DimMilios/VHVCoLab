@@ -12,11 +12,15 @@ import {
   getMusicalParameters,
   extractEditorPosition,
 } from '../vhv-scripts/utility';
-import { yProvider } from '../yjs-setup';
+import { yProvider, getActionsMap } from '../yjs-setup';
 import { clearPrevSelections } from '../collaboration/collab-extension';
 import { compareHexHashes, crc32, digestMessage } from '../vhv-scripts/hash';
 import { getAceEditor } from '../vhv-scripts/setup';
 import { editChord, mapChord } from '../vhv-scripts/chords';
+import * as Y from 'yjs';
+import { getURLInfo } from '../api/util';
+
+/** @typedef {{ row: number, col: number, before: string, current: string, after: string, elemId: string }} Replay */
 
 const queryParams = {
   actionType: 'null',
@@ -49,11 +53,11 @@ const actionHeaderFilters = () => {
         >
           <option selected value="null">all</option>
           ${Object.values(ACTION_TYPES).map(
-            (at) =>
-              html`<option value=${at}>
+    (at) =>
+      html`<option value=${at}>
                 <div class="badge badge-primary">${at.replace('_', ' ')}</div>
               </option>`
-          )}
+  )}
         </select>
       </div>
     </form>
@@ -327,8 +331,8 @@ function displaySingleSelectData(dataFunc, headers = SINGLE_ACTION_DATA) {
           <tr>
             <th
               style="width: ${Math.max(
-                ...headers.map((d) => d.header.length)
-              )}rem"
+    ...headers.map((d) => d.header.length)
+  )}rem"
             >
               Single sel.
             </th>
@@ -338,13 +342,13 @@ function displaySingleSelectData(dataFunc, headers = SINGLE_ACTION_DATA) {
 
         <tbody>
           ${headers.map(
-            ({ header, key }) => html`
+    ({ header, key }) => html`
               <tr>
                 <th scope="row">${header}</th>
                 <td>${dataFunc(header, key)}</td>
               </tr>
             `
-          )}
+  )}
         </tbody>
       </table>
     </div>
@@ -375,23 +379,23 @@ function displayMultiSelectData(
           <tr>
             <th style="width: 3rem">Multi sel.</th>
             ${multiSelectValues.map(
-              (_, idx) => html`<th scope="col">#${idx + 1}</th>`
-            )}
+    (_, idx) => html`<th scope="col">#${idx + 1}</th>`
+  )}
           </tr>
         </thead>
 
         <tbody>
           ${headers.map(
-            ({ header, key }) =>
-              html`<tr>
+    ({ header, key }) =>
+      html`<tr>
                 <th scope="row">${header}</th>
                 ${multiSelectValues.map((v, idx) =>
-                  addCommentValueFunc !== undefined
-                    ? addCommentValueFunc(key, idx)
-                    : changePitchValueFunc(key, v)
-                )}
+        addCommentValueFunc !== undefined
+          ? addCommentValueFunc(key, idx)
+          : changePitchValueFunc(key, v)
+      )}
               </tr>`
-          )}
+  )}
         </tbody>
       </table>
     </div>
@@ -417,6 +421,13 @@ const extraInfo = (/** @type {ActionResponse} */ action) => {
 };
 
 const replayMap = new Map();
+
+function isUndoActiveFor(actionId) {
+  const map = getActionsMap();
+  const undoActive = map.has(actionId.toString()) && map.get(actionId.toString()).undoActive;
+  return undoActive;
+}
+
 
 function updateSingleSelection(elemId, timeout) {
   let update = () => {
@@ -453,6 +464,14 @@ function updateMultiSelection(multiSelect, timeout) {
   update();
 }
 
+function canUndoRedo(actionScoreTitle, actionData) {
+  const urlParams = getURLInfo();
+  const currentScoreTitle = JSON.parse(sessionStorage.getItem('score-metadata'))?.title;
+  return urlParams.file === `filename=${actionData.filename}&course=${actionData.course}`
+    && currentScoreTitle === actionData.scoreMeta?.title
+    && currentScoreTitle === actionScoreTitle
+}
+
 /**
  *
  * @param {ActionResponse} action
@@ -468,6 +487,8 @@ const actionEntry = (action, userColorMapping) => {
 
   const createdAt = formatDate(action.createdAt);
   const type = action.type.split('_').join(' ');
+
+  let undoActive = getActionsMap().get(action.id.toString())?.undoActive ?? true;
 
   function handleView() {
     let collapse = $(`#collapse-action-${action.id}`);
@@ -502,8 +523,9 @@ const actionEntry = (action, userColorMapping) => {
     collapse.collapse('toggle');
   }
 
-  async function handleReplay() {
-    //undoing action functionality
+  async function handleReplay(event) {
+    const actionMap = getActionsMap();
+
     switch (action.type) {
       case ACTION_TYPES.change_pitch: {
         if (
@@ -514,48 +536,42 @@ const actionEntry = (action, userColorMapping) => {
           return;
         }
         if (action.content.type === 'single') {
-          let replay = createSingleReplay(action);
-          replaySingleSelect(replay);
+          const actionData = createSingleReplay(action, actionMap, false);
+          if (canUndoRedo(action.scoreTitle, actionData)) {
+            actionMap.set(action.id.toString(), actionData);
+            replaySingleSelect(actionData.replay);
+          } else {
+            displayError(event.target, actionData.scoreMeta.title);
+          }
         } else if (action.content.type === 'multi') {
-          let replay = createMultiReplay(action);
-          replayMultiSelect(replay);
-        }
-      }
-      break;
-      case ACTION_TYPES.transpose: {
-        const words = action.content.text.toLowerCase().split(' ');
-        const elemId = words.join('-') + '__submenu-item';
-        const oppositeId =
-          words[0] === 'up' ? 'down' + elemId.slice(2) : elemId;
-        const menuElem = document.getElementById(oppositeId);
-
-        const filter = menuElem.querySelector('small')?.textContent?.trim();
-        if (!filter?.includes('transpose')) return;
-
-        const editor = getAceEditor();
-        if (!editor) return;
-
-        const currChecksum = crc32(editor.session.getValue());
-        if (currChecksum === action.content.checksum) {
-          const currHash = await digestMessage(editor.session.getValue());
-          if (compareHexHashes(currHash, action.content.hash)) {
-            // SHA-1 hashes match, we can replay this transposition
-            scoreTransposition(filter);
-            replayMap.set(action.id, {
-              reverseFilter: document
-                .getElementById(elemId)
-                .querySelector('small')
-                ?.textContent?.trim(),
-            });
+          const actionData = createMultiReplay(action, actionMap, false);
+          if (canUndoRedo(action.scoreTitle, actionData)) {
+            actionMap.set(action.id.toString(), actionData);
+            replayMultiSelect(actionData.replay);
+          } else {
+            displayError(event.target, actionData.scoreMeta.title);
           }
         }
       }
-      break;
-      case ACTION_TYPES.change_chord: {
-        const replay = createChangeChordReplay(action);
-        replayChangeChord(action, replay);
+        break;
+      case ACTION_TYPES.transpose: {
+        const actionData = await createTransposeReplay(action, actionMap, false);
+        if (actionData?.replay && canUndoRedo(action.scoreTitle, actionData)) {
+          scoreTransposition(actionData.replay.filter);
+          actionMap.set(action.id.toString(), actionData);
+        }
       }
-      break;
+        break;
+      case ACTION_TYPES.change_chord: {
+        const actionData = createChangeChordReplay(action, actionMap, false);
+        if (actionData?.replay && canUndoRedo(action.scoreTitle, actionData)) {
+          actionMap.set(action.id.toString(), actionData);
+          replayChangeChord(action, actionData.replay);
+        } else {
+          displayError(event.target, actionData.scoreMeta.title);
+        }
+      }
+        break;
     }
 
     //notifying users action has been undone
@@ -565,65 +581,86 @@ const actionEntry = (action, userColorMapping) => {
     //milios
   }
 
-  function handleRollbackReplay() {
-    let replay = replayMap.get(action.id);
+  function handleRollbackReplay(event) {
+    const actionMap = getActionsMap();
+    let actionData = actionMap.get(action.id.toString());
+    let replay = actionData?.replay;
+
+    // If no replay is found for this action, create a new one.
+    // This can happen when this action was created in an older session.
     if (replay === undefined || replay === null) {
+      console.log(`Could not find replay for action ${action.id}. Creating a new undo entry.`);
       if (action.content?.type === 'single') {
-        replay = createSingleReplay(action);
-        replayMap.set(action.id, replay);
-      } else if (action.content?.type === 'multi') {
-        replay = createMultiReplay(action);
-        replayMap.set(action.id, replay);
-      } else if (action.type === ACTION_TYPES.change_chord) {
-        replay = createChangeChordReplay(action);
-        replayMap.set(action.id, replay);
+        const actionData = createSingleReplay(action, actionMap, false);
+        if (canUndoRedo(action.scoreTitle, actionData)) {
+          actionMap.set(action.id.toString(), actionData);
+          handleRollbackReplay(event);
+        } else {
+          displayError(event.target, actionData.scoreMeta.title);
+        }
       }
+      if (action.content?.type === 'multi') {
+        const actionData = createMultiReplay(action, actionMap, false);
+        if (canUndoRedo(action.scoreTitle, actionData)) {
+          actionMap.set(action.id.toString(), actionData);
+          handleRollbackReplay(event);
+        } else {
+          displayError(event.target, actionData.scoreMeta.title);
+        }
+      }
+
+      const actionData = createChangeChordReplay(action, actionMap, false);
+      if (actionData?.replay && canUndoRedo(action.scoreTitle, actionData)) {
+        actionMap.set(action.id.toString(), actionData);
+        replayChangeChord(action, actionData.replay);
+      } else {
+        displayError(event.target, actionData.scoreMeta.title);
+      }
+      return;
     }
 
     if (action.type === ACTION_TYPES.transpose && replay?.reverseFilter) {
       scoreTransposition(replay.reverseFilter);
-      replayMap.delete(action.id);
+      actionData.replay = {
+        filter: replay.reverseFilter,
+        reverseFilter: replay.filter,
+      }
+      actionData.undoActive = !actionData.undoActive;
+      actionMap.set(action.id.toString(), actionData);
     }
 
     if (action.content?.type === 'single') {
-      let current = getEditorContents(replay.row, replay.col);
-      if (current === replay.after) {
-        updateSingleSelection(replay.elemId, 100);
-        return;
+      replay.current = getEditorContents(replay.row, replay.col);
+
+      actionData.undoActive = true;
+
+      if (canUndoRedo(action.scoreTitle, actionData)) {
+        actionMap.set(action.id.toString(), actionData);
+        replaySingleSelect(replay, true);
+      } else {
+        displayError(event.target, actionData.scoreMeta.title);
       }
-      const insertion = determineSubstituteSingle(
-        replay.elemId, current, replay.after
-      );
-      setEditorContents(replay.row, replay.col, insertion);
-      updateSingleSelection(replay.elemId, 100);
+
     } else if (action.content?.type === 'multi') {
-      // Compare Humdrum values before action is applied to current values in text editor
-      let shouldApply = false;
-      for (let change of replay.changes) {
-        const curr = getEditorContents(change.line, change.field);
-        if ( !curr.includes(change.newest) ) {
-          shouldApply = true;
-          break;
+      actionData.undoActive = true;
+
+      if (canUndoRedo(action.scoreTitle, actionData)) {
+        // Update current changes for replay
+        for (let i = 0; i < replay.changes.length; i++) {
+          const change = replay.changes[i];
+          change.current = getEditorContents(change.line, change.field);
         }
+        actionMap.set(action.id.toString(), actionData);
+        replayMultiSelect(actionData.replay, true);
+      } else {
+        displayError(event.target, actionData.scoreMeta.title);
       }
-
-      if (shouldApply) {
-        replay.changes.forEach( change => {
-          const curr = getEditorContents(change.line, change.field);
-          const insertion = determineSubstituteMulti(
-            change, curr, change.newest
-          );
-          setEditorContents(change.line, change.field, insertion);
-        });
-      }
-
-      updateMultiSelection(replay.multiSelect, 100);
     }
-    
+
     if (action.type == ACTION_TYPES.change_chord) {
       const current = getEditorContents(replay.row, replay.col);
-      if ( replay.after == mapChord(current, 'display', false) ) return;
-      
+      if (replay.after == mapChord(current, 'display', false)) return;
+
       const rollbackReplayInfo = {
         location: {
           line: action.content.line,
@@ -633,17 +670,17 @@ const actionEntry = (action, userColorMapping) => {
           current,
           reharmonize: false,
           new: mapChord(replay.after, 'send', true)
-              .match(/^(?<root>[A-G])((?<accidental>[+&])? (?<variation>.))?$/)
-              .groups
+            .match(/^(?<root>[A-G])((?<accidental>[+&])? (?<variation>.))?$/)
+            .groups
         }
-        };
-        
-        editChord(false, rollbackReplayInfo);
+      };
+
+      editChord(false, rollbackReplayInfo);
     }
   }
 
   return html`
-    <div class="card border-bottom border-top-0 border-right-0 border-left-0">
+    <div class="action-entry card border-bottom border-top-0 border-right-0 border-left-0">
       <div class="card-header action-entry-header" id=${'heading' + action.id}>
         <h2 class="mb-0 d-flex justify-content-between">
           <button
@@ -656,9 +693,7 @@ const actionEntry = (action, userColorMapping) => {
                 <span ?hidden=${!import.meta.env.DEV}>${action.id}</span>
                 <span
                   class="user-color-index mr-1"
-                  style="background-color: ${userColorMapping[
-                    action.username
-                  ]};"
+                  style="background-color: ${userColorMapping[action.username]};"
                 ></span
                 >${action.username}
               </div>
@@ -667,7 +702,7 @@ const actionEntry = (action, userColorMapping) => {
 
             <div class="badge ${classMap(badgeStyling)}">${type}</div>
           </button>
-          <div class="d-flex align-self-end">
+          <div class=${"d-flex align-self-end action-buttons-" + action.id}>
             <button
               class="btn"
               type="button"
@@ -691,10 +726,11 @@ const actionEntry = (action, userColorMapping) => {
               </svg>
             </button>
             <button
-              class="btn"
+              class="btn undo-btn"
               type="button"
               @click=${handleReplay}
               ?hidden=${!isTypeReplayable(action.type)}
+              ?disabled=${!undoActive}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -715,10 +751,11 @@ const actionEntry = (action, userColorMapping) => {
             </button>
 
             <button
-              class="btn"
+              class="btn redo-btn"
               type="button"
               @click=${handleRollbackReplay}
               ?hidden=${!isTypeReplayable(action.type)}
+              ?disabled=${undoActive}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -750,10 +787,10 @@ function determineSubstituteSingle(id, current, substitute) {
   const subfieldMatch = id
     .match(/S(?<subfield>\d+)/)
     ?.groups;
-  
+
   let insertion;
   if (subfieldMatch) {
-    const {subfield} = subfieldMatch;
+    const { subfield } = subfieldMatch;
     const index = parseInt(subfield) - 1
     const curTokens = current.split(' ');
     substitute.includes(' ')
@@ -768,24 +805,38 @@ function determineSubstituteSingle(id, current, substitute) {
 }
 
 
-function updateReplay(action) {
-  const existingReplay = replayMap.get(action.id);
-  const currEditorValue = getEditorContents(
-    existingReplay.row,
-    existingReplay.col
-  );
+/**
+ * Creates a single replay based on the given action and undoActive flag.
+ *
+ * @param {ActionResponse} action - The action object.
+ * @param {Y.Map<object>} actionMap - The map of action IDs to action data.
+ * @param {boolean} undoActive - Flag indicating if undo is active.
+ * @return {object} 
+ */
+function createSingleReplay(action, actionMap, undoActive) {
+  const { user } = yProvider.awareness.getLocalState();
 
-  let replay = {
-    ...existingReplay,
-    current: currEditorValue,
+  const actionData = {
+    filename: user.filename,
+    course: user.course,
+    undoActive,
+    replay: {},
   };
-  replayMap.set(action.id, replay);
-  return replay;
-}
 
-function createSingleReplay(action) {
-  if (replayMap.has(action.id)) {
-    return updateReplay(action);
+  if (actionMap.has(action.id.toString())) {
+    const existing = actionMap.get(action.id.toString());
+    const currEditorValue = getEditorContents(
+      existing.replay.row,
+      existing.replay.col
+    );
+
+    actionData.undoActive = !existing.undoActive;
+    actionData.replay = {
+      ...existing.replay,
+      current: currEditorValue,
+    };
+    actionData.scoreMeta = existing.scoreMeta;
+    return actionData;
   }
 
   const oldestChange = action.content.changes[0];
@@ -796,7 +847,8 @@ function createSingleReplay(action) {
     oldestChange.col + 1
   );
 
-  let replay = {
+  actionData.scoreMeta = JSON.parse(sessionStorage.getItem('score-metadata'));
+  actionData.replay = {
     row: oldestChange.row + 1,
     col: oldestChange.col + 1,
     before: oldestChange.oldValue,
@@ -804,23 +856,53 @@ function createSingleReplay(action) {
     after: newest.newValue,
     elemId: oldestChange.noteElementId,
   };
-  replayMap.set(action.id, replay);
-  return replay;
+
+  return actionData;
 }
 
-function replaySingleSelect(replay) {
-  if (replay.current === replay.before) {
-    updateSingleSelection(replay.elemId, 100);
+/**
+ * @param {Replay} replay - The replay object containing information about the event.
+ * @param {boolean} [forRedo=false] - Flag indicating if this is a replay after pressing redo.
+ */
+function replaySingleSelect(replay, forRedo = false) {
+  const compareValue = forRedo ? replay.after : replay.before;
+
+  if (replay.current === compareValue) {
+    updateSingleSelection(replay.elemId, 400);
     return;
   }
   const insertion = determineSubstituteSingle(
-    replay.elemId, replay.current, replay.before
+    replay.elemId, replay.current, compareValue
   );
   setEditorContents(replay.row, replay.col, insertion);
-  updateSingleSelection(replay.elemId, 100);
+  updateSingleSelection(replay.elemId, 400);
 }
 
-function createMultiReplay(action) {
+function createMultiReplay(action, actionMap, undoActive) {
+  const { user } = yProvider.awareness.getLocalState();
+
+  const actionData = {
+    filename: user.filename,
+    course: user.course,
+    undoActive,
+    replay: {},
+    scoreMeta: JSON.parse(sessionStorage.getItem('score-metadata')),
+  };
+
+  if (actionMap.has(action.id.toString())) {
+    const existing = actionMap.get(action.id.toString());
+
+    // Update current changes for replay
+    for (let i = 0; i < existing.replay.changes.length; i++) {
+      const change = existing.replay.changes[i];
+      change.current = getEditorContents(change.line, change.field);
+    }
+
+    actionData.undoActive = !existing.undoActive;
+    actionData.replay = existing.replay;
+    return actionData;
+  }
+
   const changes = action.content.changes;
   const multiChanges = {};
   const multiSelectIds = [];
@@ -839,9 +921,9 @@ function createMultiReplay(action) {
     multiChanges[newestChange.id].newest = newestChange;
   }
 
-  const changesSorted = [ ...Object.entries(multiChanges) ].reduce( 
+  const changesSorted = Object.entries(multiChanges).reduce(
     (prev, currEntry) => {
-      const {key, subfield} = currEntry[0]
+      const { key, subfield } = currEntry[0]
         .match(/(?<key>L\d+F\d+)S?(?<subfield>\d*)/)
         .groups;
       if (key in prev) {
@@ -863,19 +945,26 @@ function createMultiReplay(action) {
     {}
   );
 
-  let replay = {
+  actionData.replay = {
     multiSelect: multiSelectIds,
     changes: Object.values(changesSorted),
   };
-  replayMap.set(action.id, replay);
-  return replay;
+  return actionData;
 }
 
-function replayMultiSelect(replay) {
+/**
+ * Replays a multi-select action based on the provided replay object.
+ *
+ * @param {object} replay - The replay object containing the changes to be applied.
+ * @param {boolean} [forRedo=false] - Determines whether the replay is for redo or not (default: false).
+ */
+function replayMultiSelect(replay, forRedo = false) {
+  const changeProperty = forRedo ? 'newest' : 'oldest';
+
   // Compare Humdrum values before action is applied to current values in text editor
   let shouldApply = false;
   for (let ch of replay.changes) {
-    if ( !ch.current.includes(ch.oldest) ) {
+    if (!ch.current.includes(ch[changeProperty])) {
       shouldApply = true;
       break;
     }
@@ -885,18 +974,143 @@ function replayMultiSelect(replay) {
     replay.changes.forEach(
       change => {
         let insertion = determineSubstituteMulti(
-          change, change.current, change.oldest
+          change, change.current, change[changeProperty]
         );
         setEditorContents(change.line, change.field, insertion);
       }
     );
   }
-  updateMultiSelection(replay.multiSelect, 100);
+  updateMultiSelection(replay.multiSelect, 400);
 }
 
-function createChangeChordReplay(action) {
+/**
+ * Creates a transpose replay based on the given action.
+ *
+ * @param {object} action - The action object.
+ * @param {Y.Map<object>} actionMap - The map of action IDs to action data.
+ * @param {{text: string, checksum: number, hash: string}} action.content - Content of transpose action.
+ */
+async function createTransposeReplay(action, actionMap, undoActive) {
+  const { user } = yProvider.awareness.getLocalState();
+
+  const actionData = {
+    filename: user.filename,
+    course: user.course,
+    undoActive,
+    scoreMeta: JSON.parse(sessionStorage.getItem('score-metadata')),
+  };
+
+  if (actionMap.has(action.id.toString())) {
+    const existing = actionMap.get(action.id.toString());
+    actionData.undoActive = !existing.undoActive;
+    actionData.scoreMeta = existing.scoreMeta;
+    actionData.replay = {
+      filter: existing.replay.reverseFilter,
+      reverseFilter: existing.replay.filter,
+    };
+    return actionData;
+  }
+
+  const words = action.content.text.toLowerCase().split(' ');
+  const elemId = words.join('-') + '__submenu-item';
+  const oppositeId = words[0] === 'up' ? 'down' + elemId.slice(2) : elemId;
+  const menuElem = document.getElementById(oppositeId);
+
+  const filter = menuElem.querySelector('small')?.textContent?.trim();
+  if (!filter?.includes('transpose')) return {};
+
+  const editor = getAceEditor();
+  if (!editor) return {};
+
+  // const currChecksum = crc32(editor.session.getValue());
+  // if (currChecksum === action.content.checksum) {
+  //   const currHash = await digestMessage(editor.session.getValue());
+  //   if (compareHexHashes(currHash, action.content.hash)) {
+  //     actionData.replay = {
+  //       reverseFilter: document
+  //         .getElementById(elemId)
+  //         .querySelector('small')
+  //         ?.textContent?.trim(),
+  //       filter,
+  //     }
+  //   }
+  // }
+
+  actionData.replay = {
+    reverseFilter: document
+      .getElementById(elemId)
+      .querySelector('small')
+      ?.textContent?.trim(),
+    filter,
+  }
+  return actionData;
+}
+
+/**
+ * Creates a change chord based on the given action and undoActive flag.
+ *
+ * @param {ActionResponse} action - The action object.
+ * @param {Y.Map<object>} actionMap - The map of action IDs to action data.
+ * @param {boolean} undoActive - Flag indicating if undo is active.
+ * @return {object} 
+ */
+function createChangeChordReplay(action, actionMap, undoActive) {
+  const { user } = yProvider.awareness.getLocalState();
+
+  const actionData = {
+    filename: user.filename,
+    course: user.course,
+    undoActive,
+    replay: {},
+  };
+
+  if (actionMap.has(action.id.toString())) {
+    const existing = actionMap.get(action.id.toString());
+    const currEditorValue = getEditorContents(
+      existing.replay.row,
+      existing.replay.col
+    );
+
+    actionData.undoActive = !existing.undoActive;
+    actionData.replay = {
+      ...existing.replay,
+      current: currEditorValue,
+    };
+    actionData.scoreMeta = existing.scoreMeta;
+    return actionData;
+  }
+
+  actionData.scoreMeta = JSON.parse(sessionStorage.getItem('score-metadata'));
+  actionData.replay = {
+    row: action.content.line,
+    col: action.content.field,
+    before: action.content.prevValue,
+    current: getEditorContents(action.content.line, action.content.field),
+    after: action.content.newValue,
+    elemId: action.content.chordElementId,
+  };
+
+  return actionData;
+}
+
+function updateReplayOld(action) {
+  const existingReplay = replayMap.get(action.id);
+  const currEditorValue = getEditorContents(
+    existingReplay.row,
+    existingReplay.col
+  );
+
+  let replay = {
+    ...existingReplay,
+    current: currEditorValue,
+  };
+  replayMap.set(action.id, replay);
+  return replay;
+}
+
+function createChangeChordReplayOld(action) {
   if (replayMap.has(action.id)) {
-    return updateReplay(action);
+    return updateReplayOld(action);
   }
 
   const row = action.content.line;
@@ -916,9 +1130,9 @@ function createChangeChordReplay(action) {
   return replay;
 }
 
-function replayChangeChord (action, replay) {
-  if ( replay.before == mapChord(replay.current, 'display', false) )  return;
-  
+function replayChangeChord(action, replay) {
+  if (replay.before == mapChord(replay.current, 'display', false)) return;
+
   const replayInfo = {
     location: {
       line: action.content.line,
@@ -929,11 +1143,11 @@ function replayChangeChord (action, replay) {
       current: replay.current,
       reharmonize: false,
       new: mapChord(replay.before, 'send', true)
-          .match(/^(?<root>[A-G])((?<accidental>[+&])? (?<variation>.))?$/)
-          .groups
+        .match(/^(?<root>[A-G])((?<accidental>[+&])? (?<variation>.))?$/)
+        .groups
     }
   };
-  
+
   editChord(false, replayInfo);
 }
 
@@ -990,9 +1204,6 @@ export function getActionById(actionId) {
 const actionHistoryTemplate = (userColorMapping) => {
   const handleLoadMore = () => {
     renderActions();
-    // const scrollContainer = document.getElementById('action-history-container');
-    // const accordion = document.getElementById('action-history-accordion');
-    // scrollContainer.scrollBy(0, accordion.getBoundingClientRect().height);
   };
 
   const actionsTemplate = getActions(queryParams).then((fetchedActions) => {
@@ -1006,8 +1217,8 @@ const actionHistoryTemplate = (userColorMapping) => {
     }
 
     return html`${actions.map(
-        (action) => html`${actionEntry(action, userColorMapping)}`
-      )}
+      (action) => html`${actionEntry(action, userColorMapping)}`
+    )}
       <div ?hidden=${actions.length < queryParams.pageSize}>
         <button @click=${handleLoadMore} class="btn btn-primary w-100">
           <h5>Load more</h5>
@@ -1042,3 +1253,16 @@ export const renderActions = () => {
     render(actionHistoryTemplate(userColorMapping), actionsContainer);
   }
 };
+
+function displayError(actionElem, oldSongTitle) {
+  const header = actionElem?.closest('.action-entry-header');
+  if (header?.querySelector('.alert')) return;
+
+  const alert = document.createElement('div');
+  alert.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show');
+  const error = `Cannot undo/redo this action because it was created for a different song`;
+  alert.innerHTML = `${error}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
+  header?.prepend(alert);
+  setTimeout(() => alert?.remove(), 5000);
+}

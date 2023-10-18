@@ -30,9 +30,9 @@ export function addChangePitchActionToGroup(
     groupedActions.data[key] = actions.concat(changePitchAction);
     groupedActions.currentPos = key;
     groupedActions.type = changePitchType;
-  } else if (changePitchType === 'multi' && Array.isArray(changePitchAction)) {
+  } else if (changePitchType === 'multi' && Array.isArray(changePitchAction.transposedNotes)) {
     const actions = key in groupedActions.data ? groupedActions.data[key] : [];
-    groupedActions.data[key] = actions.concat([changePitchAction]);
+    groupedActions.data[key] = actions.concat([changePitchAction.transposedNotes]);
     groupedActions.currentPos = key;
     groupedActions.type = changePitchType;
   }

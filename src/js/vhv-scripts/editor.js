@@ -1707,7 +1707,8 @@ export function transposeNote(id, line, field, subfield, amount) {
 // id, line, field, subfield, amount
 export function transposeNotes(noteDescriptions) {
   const transposedNotes = [];
-  let chordToken;  
+  let changedNotesNo = 0;
+  let chordToken;
   for (let {
     id,
     line,
@@ -1719,7 +1720,7 @@ export function transposeNotes(noteDescriptions) {
     staff,
     measureNo,
   } of noteDescriptions) {
-    
+
     let token = chordToken
       ? chordToken
       : getEditorContents(line, field);
@@ -1754,21 +1755,23 @@ export function transposeNotes(noteDescriptions) {
     }
 
     // console.log('OLDTOKEN', token, 'NEWTOKEN', newtoken);
-    if (newtoken !== token) {
-      transposedNotes.push({
-        line,
-        field,
-        oldToken,
-        token: newtoken,
-        id,
-        order,
-        voice,
-        staff,
-        measureNo,
-      });
+    transposedNotes.push({
+      line,
+      field,
+      oldToken,
+      token: newtoken,
+      id,
+      order,
+      voice,
+      staff,
+      measureNo,
+      hasChanged: oldToken !== newtoken,
+    });
+    if (oldToken !== newtoken) {
+      changedNotesNo++;
     }
   }
-  return transposedNotes;
+  return { transposedNotes, changedNotesNo };
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -3034,7 +3037,7 @@ function setEditorContents2(line, field, oldT, newT) {
   var range = new Range(line - 1, 0, line - 1, linecontent.length);
 
   var components = linecontent.split(/\t+/);
-  components[field - 1] = components[field-1]
+  components[field - 1] = components[field - 1]
     .replace(oldT, newT);
 
   // count tabs between fields
@@ -3068,7 +3071,7 @@ function setEditorContents2(line, field, oldT, newT) {
 export function setEditorContentsMany(notes) {
   global_interface.FreezeRendering = true;
 
-  const notesSorted = notes.reduce( 
+  const notesSorted = notes.reduce(
     (prev, current) => {
       const key = `${current.line},${current.field}`;
       key in prev
@@ -3079,14 +3082,14 @@ export function setEditorContentsMany(notes) {
     {}
   );
 
-  notes = [ ...Object.entries(notesSorted) ].map( (entry) => {
-    const {line, field} = entry[0]
+  notes = [...Object.entries(notesSorted)].map((entry) => {
+    const { line, field } = entry[0]
       .match(/(?<line>\d+),(?<field>\d+)/)
       .groups;
 
     let oldToken, newToken;
-    entry[1].split('/').forEach( (elem) => {
-      const {oldT, newT} = elem
+    entry[1].split('/').forEach((elem) => {
+      const { oldT, newT } = elem
         .match(/(?<oldT>.+?),(?<newT>.+)/)
         .groups;
       oldToken
@@ -3097,7 +3100,7 @@ export function setEditorContentsMany(notes) {
         : newToken = newT;
     });
 
-    return {line, field, oldToken, newToken};
+    return { line, field, oldToken, newToken };
   });
 
 

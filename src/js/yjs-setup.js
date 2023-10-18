@@ -7,7 +7,6 @@ import {
 } from './collaboration/collab-extension.js';
 import { getAceEditor } from './vhv-scripts/setup.js';
 import AceBinding from './AceBinding.js';
-import Cookies from 'js-cookie';
 
 import {
   baseUrl,
@@ -92,6 +91,37 @@ export async function setupCollaboration() {
         : {};
       commentsObserver(focus);
     });
+
+    const map = ydoc.getMap('actions');
+    map.observe(event => {
+      for (let [key, change] of event.changes.keys) {
+        const btns = document.querySelector(`.action-buttons-${key}`);
+        if (btns) {
+          // Get previous undo/redo state for this action if it exists
+          const undoActive = map.get(key)?.undoActive;
+
+          // Update undo/redo buttons
+          const undoBtn = btns.querySelector(".undo-btn");
+          const redoBtn = btns.querySelector(".redo-btn");
+          if (undoBtn?.disabled === undoActive) {
+            undoBtn.disabled = !undoActive;
+            redoBtn.disabled = undoActive;
+          }
+
+          const actionHeader = btns.closest(".action-entry-header");
+          if (undoBtn?.disabled) {
+            if (!actionHeader?.querySelector(".status-undo")) {
+              const span = document.createElement('span');
+              span.classList.add('status-undo', 'text-danger');
+              span.textContent = "Action is not active";
+              actionHeader.prepend(span);
+            }
+          } else {
+            actionHeader?.querySelector(".status-undo")?.remove();
+          }
+        }
+      }
+    });
   }
 
   if (typeof yProvider == 'undefined') {
@@ -118,7 +148,7 @@ export async function setupCollaboration() {
     );
 
     yProvider = new WebsocketProvider(wsBaseUrl, room, ydoc, {
-        params: { username: user, file: filename, course: course ?? null, pathname: window.location.pathname },
+      params: { username: user, file: filename, course: course ?? null, pathname: window.location.pathname },
     }); // local
     yProvider.on('status', (event) => {
       console.log(event.status); // websocket logs "connected" or "disconnected"
@@ -164,7 +194,7 @@ export async function setupCollaboration() {
     yProvider.awareness.on('change', stateChangeHandler);
     yProvider.awareness.on('update', awaranessUpdateHandler);
 
-    setUserAwarenessData( {name: user, course, id} );
+    yProvider.awareness.setLocalStateField('user', { name: user, course, id, color: userData.color, filename });
   }
 
   window.example = { yProvider, ydoc, type: ydoc.getText('ace') };
@@ -186,25 +216,11 @@ export function getCommentsList() {
   return ydoc.getArray('comments');
 }
 
-function setUserAwarenessData(user) {
-  let appUser = Cookies.get('user');
-  if (appUser) {
-    let user = JSON.parse(appUser);
-    if (!user.name) {
-      user.name = user.email.split('@')[0];
-    }
-
-    yProvider.awareness.setLocalStateField('user', {
-      ...user,
-      color: oneOf(colors),
-    });
-    return;
-  }
-
-  if (user) {
-    userData.name = user.name;
-    userData.course = user.course;
-    userData.id = user.id
-  }
-  yProvider.awareness.setLocalStateField('user', userData);
+/**
+ * Contains metadata such as previous/next value, undo/redo for actions that populate action history panel.
+ * 
+ * @returns {Y.Map<Object>}
+ */
+export function getActionsMap() {
+  return ydoc.getMap('actions');
 }
