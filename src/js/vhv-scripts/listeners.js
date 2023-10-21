@@ -1251,7 +1251,7 @@ document.addEventListener('barChangeEvent', e => {
   }
 })
 
-import { proceedToActionHistoryGuide, proceedToChordEditGuide, proceedToCollabMenuGuide, proceedToCommentsGuide, proceedToImportingGuide, proceedToMidiGuide, proceedToNoteSelGuide, proceedToRecGuide, proceedToScoreEditGuide, proceedToVideoCallGuide } from './tourguide.js';
+import { proceedToActionHistoryGuide, proceedToChordEditGuide, proceedToCollabMenuGuide, proceedToCommentsGuide, proceedToImportingGuide, proceedToMidiGuide, proceedToNoteSelGuide, proceedToRecGuide, proceedToScoreEditGuide, proceedToVideoCallGuide } from './tourGuide.js';
  document.getElementById(
    'introModalNextButton'
  )
