@@ -1,7 +1,8 @@
 import { encoding } from 'lib0';
 import { featureIsEnabled } from '../bootstrap';
-import { messageActionsReset, yProvider } from '../yjs-setup';
+import { getActionsMap, messageActionsReset, yProvider } from '../yjs-setup';
 import { baseUrl, getURLParams } from './util';
+import { notify } from '../collaboration/util-collab';
 
 /** @typedef { 'change_pitch' | 'change_chord' | 'add_comment' | 'undo' | 'transpose' | 'connect' | 'disconnect' | 'export' | 'repository_import'} ActionType */
 
@@ -19,15 +20,16 @@ export const ACTION_TYPES = {
 
 export class ActionPayload {
   /**
-   * @param {{ type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined, scoreTitle: string | undefined }} payload
+   * @param {{ type: ActionType, content: string, username: string | undefined, course: string | undefined, filename: string | undefined, scoreTitle: string | undefined, idsToDelete: number[] | undefined }} payload
    */
-  constructor({ type, content, username, course, filename, scoreTitle }) {
+  constructor({ type, content, username, course, filename, scoreTitle, idsToDelete }) {
     this.type = type;
     this.content = content;
     this.username = username;
     this.course = course;
     this.filename = filename;
     this.scoreTitle = scoreTitle;
+    this.idsToDelete = idsToDelete;
   }
 }
 
@@ -98,6 +100,11 @@ export async function sendAction(payload) {
     payload.filename = filename;
     payload.scoreTitle = JSON.parse(sessionStorage.getItem('score-metadata'))?.title;
 
+    const actionsMap = getActionsMap();
+    payload.idsToDelete = Array.from(actionsMap)
+      .filter(([_, value]) => !value.undoActive && value.scoreMeta?.title === payload.scoreTitle && value.course === payload.course && value.filename === payload.filename)
+      .map(([key, _]) => +key);
+
     const res = await fetch(`${baseUrl}api/actions`, {
       method: 'POST',
       headers: {
@@ -109,12 +116,25 @@ export async function sendAction(payload) {
     const json = await res.json();
     console.log(`Received:`, json);
 
+    // Remove deleted actions on the shared actions map
+    for (let [key, _] of actionsMap) {
+      if (payload.idsToDelete.includes(+key)) {
+        actionsMap.delete(key);
+        console.log('Deleted action', key);
+      }
+    }
+    
+    if (payload.idsToDelete?.length > 0) {
+      notify('Undone actions were removed', 'info');
+    }
+
     // Invalidate pagination
     encoding.writeVarUint(encoder, messageActionsReset);
     if (encoding.length(encoder) >= 1) {
       yProvider.ws.send(encoding.toUint8Array(encoder));
     }
   } catch (error) {
+    console.error(error);
     return Promise.reject(`Failed to send action, error: ${error}`);
   }
 }

@@ -4,6 +4,7 @@ import { until } from 'lit-html/directives/until.js';
 import { ActionResponse, ACTION_TYPES, getActions, sendAction, ActionPayload } from '../api/actions';
 import {
   getEditorContents,
+  notify,
   scoreTransposition,
   setEditorContents,
   timeSince,
@@ -464,6 +465,11 @@ function updateMultiSelection(multiSelect, timeout) {
   update();
 }
 
+function matchesSong(action) {
+  const currentScoreTitle = JSON.parse(sessionStorage.getItem('score-metadata'))?.title;
+  return currentScoreTitle === action.scoreTitle;
+}
+
 function canUndoRedo(actionScoreTitle, actionData) {
   const urlParams = getURLInfo();
   const currentScoreTitle = JSON.parse(sessionStorage.getItem('score-metadata'))?.title;
@@ -493,7 +499,7 @@ const actionEntry = (action, userColorMapping) => {
   function handleView() {
     let collapse = $(`#collapse-action-${action.id}`);
 
-    if (isReferenceable(action.type)) {
+    if (isReferenceable(action.type) && matchesSong(action)) {
       if (collapse[0] && $._data(collapse[0], 'events') === undefined) {
         collapse.on('show.bs.collapse', () => {
           yProvider.awareness.setLocalStateField('referenceAction', {
@@ -520,7 +526,11 @@ const actionEntry = (action, userColorMapping) => {
       }
     }
 
-    collapse.collapse('toggle');
+    if (matchesSong(action)) {
+      collapse.collapse('toggle');
+    } else {
+      notify(`Action refers to a different song`, 'warning');
+    }
   }
 
   async function handleReplay(event) {

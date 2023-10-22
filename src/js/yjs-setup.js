@@ -224,3 +224,9 @@ export function getCommentsList() {
 export function getActionsMap() {
   return ydoc.getMap('actions');
 }
+
+if (import.meta.env.DEV) {
+  window.debugActionMap = () => {
+    console.table(getActionsMap().toJSON()); 
+  }
+}
