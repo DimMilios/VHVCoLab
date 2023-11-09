@@ -18,6 +18,12 @@
           },
           {
             "TEXT": {
+              "DEFAULT": "Export to Course files",
+              "ACTION": "MENU.exportToCourseFiles()"
+            }
+          },
+          {
+            "TEXT": {
               "DEFAULT": "Open",
               "ACTION": "MENU.openScoreFileFromDisk()"
             },

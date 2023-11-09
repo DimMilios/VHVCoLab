@@ -36,11 +36,15 @@ let trackListInitialized = false;
 
 export async function showLoadFromRepositoryModal() {
   $('#repository-files-modal').modal({ show: true, focus: true });
+  await initTracksList();
+}
 
+export async function initTracksList() {
   if (!trackListInitialized) {
     let { course, collab } = getValuesFromSearchParams();
     try {
       await initRepositoryTrackList(course, collab);
+      trackListInitialized = true;
     } catch (err) {
       createAlert('Failed to fetch tracks from MusiCoLab repository');
       console.error(err);

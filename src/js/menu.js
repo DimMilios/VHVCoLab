@@ -35,7 +35,7 @@ import {
   global_editorOptions,
   global_verovioOptions,
 } from './vhv-scripts/global-variables.js';
-import { exportKernToPrivateFiles, saveContentAsMIDI } from './vhv-scripts/file-operations.js';
+import { exportKernToCourseFiles, exportKernToPrivateFiles, saveContentAsMIDI } from './vhv-scripts/file-operations.js';
 import { toggleCommentsVisibility } from './bootstrap.js';
 import { showLoadFromRepositoryModal } from './vhv-scripts/file-load-repository.js';
 
@@ -162,6 +162,10 @@ class MenuInterface {
 
   exportToPrivateFiles() {
     exportKernToPrivateFiles();
+  }
+
+  exportToCourseFiles() {
+    exportKernToCourseFiles();
   }
 
   openScoreFileFromDisk() {

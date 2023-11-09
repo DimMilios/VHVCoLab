@@ -4,6 +4,7 @@ import { featureIsEnabled } from '../bootstrap.js';
 import { yUndoManager } from '../yjs-setup.js';
 import { getURLInfo } from '../api/util.js';
 import { sendAction } from '../api/actions.js';
+import { notify } from '../collaboration/util-collab.js';
 
 const ACCEPTED_FORMATS = '.xml,.musicxml,.mei,.krn';
 
@@ -134,6 +135,93 @@ export function exportKernToPrivateFiles() {
   });
   ajax.addEventListener('error', () => {
     alert('Failed to export score to your private files');
+  });
+
+  ajax.open(
+    'post',
+    'https://musicolab.hmu.gr/apprepository/uploadFileResAjax.php',
+    true
+  );
+  ajax.send(fd);
+}
+
+
+export function exportKernToCourseFiles() {
+  const content = getAceEditor()?.session.getValue();
+  if (content === undefined || content.length === 0) {
+    console.error('Failed to export empty Kern content');
+    return;
+  }
+
+  const { file: filenameFromURL, course } = getURLInfo();
+  if (!course) {
+    notify("Missing course URL parameter. Skipping...", "danger");
+    return;
+  }
+
+  let scoreName = filenameFromURL;
+  const scoreMeta = sessionStorage.getItem('score-metadata');
+  if (scoreMeta === null) {
+    console.warn(
+      'Could not find metadata for this score. Using URL filename as title.'
+    );
+  } else {
+    scoreName = JSON.parse(scoreMeta).title + '.krn';
+    // scoreName = title.split(' ').join('_') + '.krn';
+  }
+
+  const courseId = sessionStorage.getItem('courseId');
+  let ufolder;
+  if (courseId === null) {
+    console.error('Failed to find "courseId" in sessionStorage. Skipping file exporting...');
+    notify("Could not identify course. Skipping...", "danger");
+    return;
+  } else {
+    ufolder = `courses/${courseId}`;
+  }
+
+  let firstTry = true;
+  let nameFromPrompt = '';
+  while (nameFromPrompt !== null && !nameFromPrompt.endsWith('.krn')) {
+    if (firstTry) {
+      nameFromPrompt = window.prompt(
+        'Enter a name for this course file (must have a .krn extension)',
+        scoreName
+      );
+      firstTry = false;
+    } else {
+      nameFromPrompt = window.prompt(
+        'The name you provided was not correct.\nEnter a new name for this course file (must have a .krn extension)',
+        nameFromPrompt + '.krn'
+      );
+    }
+  }
+
+  if (nameFromPrompt === null) {
+    console.warn(
+      'Prompt was cancelled or a valid file name was not provided. Skipping file exporting'
+    );
+    return;
+  }
+
+  let fd = new FormData();
+  let file = new File([content], nameFromPrompt);
+  fd.append('f', file);
+  fd.append('action', 'upload');
+  fd.append('ufolder', ufolder);
+
+  const ajax = new XMLHttpRequest();
+  ajax.addEventListener('load', () => {
+    alert(`File has been exported to course: ${course}!`);
+    sendAction({
+      type: 'export',
+      content: JSON.stringify({ file: scoreName }),
+    }).catch((err) => {
+      console.error('Failed to send export action', err);
+    });
+  });
+  ajax.addEventListener('error', () => {
+    alert(`Failed to export score to course: ${course}`);
   });
 
   ajax.open(
