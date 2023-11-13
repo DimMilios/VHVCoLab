@@ -283,6 +283,7 @@ export function stateChangeHandler(clients = defaultClients()) {
 
   actOnRecordStateChange(awStates);
   actOnTimeInRecordingStateChange(awStates);
+  actOnKernTranscriptionStateChange(awStates);
   actOnRecordSyncStateChange(awStates);
 
   actOnReplayActionStateUpdate(awStates);
@@ -539,6 +540,36 @@ function actOnTimeInRecordingStateChange(awStates) {
       return;
     }
     window.wavesurfer.setCurrentTime(state.time);
+  }) 
+}
+
+function actOnKernTranscriptionStateChange(awStates) {
+  const myClientId = yProvider.awareness.clientID;
+  const kernTranscriptionStateChange = awStates
+    .filter( ([id, state]) => state.kernTranscription == true)
+    .map( ([id, state]) => {
+      return {
+        trID: id,
+        trName: state.user.name
+      }
+    });
+
+  if (!kernTranscriptionStateChange.length)
+    return;
+
+  kernTranscriptionStateChange.forEach(state => {
+    const myStateUpdating = (state.trID === myClientId);
+    if (myStateUpdating) {
+      setTimeout(
+        () => yProvider.awareness.setLocalStateField('kernTranscription', null),
+        100
+      );
+      return;
+    }
+
+    const notifText = `${state.trName} has transcribed kern`
+    const notifContext = 'info'
+    notify(notifText, notifContext);
   }) 
 }
 

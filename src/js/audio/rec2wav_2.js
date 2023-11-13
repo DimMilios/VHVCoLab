@@ -20,7 +20,15 @@ var pauseButton = document.getElementById('pauseButton');
 export var download; // the name of the downloaded file
 
 //kalohr
-var syncronizeButton = document.getElementById("Synchronize"); 
+var syncronizeButton = document.getElementById("Synchronize");
+
+var transcribeButton = document.getElementById("Transcribe"); 
+
+//trancription modal elements
+const transcriptionModal = document.getElementById('transcription-modal');
+const applyTranscriptionBtn = transcriptionModal.querySelector('#apply-transcribe-btn');
+const cancelTranscriptionBtn = transcriptionModal.querySelector('#cancel-transcribe-btn');
+
 console.log("kalohr: adding event listener for the sync button");
 export var fileUrl; // url to the produced audio file
 const constraints = {
@@ -42,6 +50,8 @@ stopButton.addEventListener('click', () => {
 pauseButton.addEventListener('click', pauseRecording);
 
 syncronizeButton.addEventListener('click', doSyncronize); //kalohr
+
+transcribeButton.addEventListener('click', doTranscribe);
 
 document.getElementById('Download').addEventListener('click', handleFileDownload(), false);
 
@@ -126,6 +136,76 @@ async function doSyncronize(){
 
 }
 
+async function doTranscribe() {
+  renderTranscriptionModal()
+    .then(() => {
+      //user entered values
+      const bendir_tempo = document
+        .getElementById('transcriptionTempo')
+        .value;
+      const bendir_numerator = document
+        .getElementById('transcriptionNumerator')
+        .value;
+      const bendir_denominator = document
+        .getElementById('transcriptionDenominator')
+        .value;
+
+      console.log({trTempo:bendir_tempo, trRhythm:`${bendir_numerator}/${bendir_denominator}`})
+      console.log({recorder:rec, recording:theblob});
+
+      //creating the form
+      let fd2 = new FormData();
+      fd2.append('action','convert2krn');
+      fd2.append('tempo', bendir_tempo);
+      fd2.append('numerator', bendir_numerator);
+      fd2.append('denominator', bendir_denominator);
+      fd2.append('theaudio', theblob);
+
+      //HTTP request
+      var ajax = new XMLHttpRequest();
+      ajax.open("POST", "https://musicolab.hmu.gr/apprepository/bendir2krn.php", true);
+
+      ajax.onload = function () {
+        const transcribedKern = ajax.response;
+        console.log({transcribedKern});
+
+        const edtr = getAceEditor();
+        edtr.setValue(transcribedKern);
+
+        if (getCollabStatus().enabled) {
+          yProvider.awareness.setLocalStateField('kernTranscription', true);
+        }
+      }
+
+      ajax.send(fd2);
+    })
+    .catch(() => {
+      console.log('Transcription canceled');
+    });
+}
+
+function renderTranscriptionModal() {
+  return new Promise((resolve, reject) => {
+    $('#transcription-modal').modal('show');
+    // modalPrompt.classList.add('show');
+    // modalPrompt.style.display = 'block';
+
+    applyTranscriptionBtn.addEventListener('click', function () {
+      resolve();
+      $('#transcription-modal').modal('hide');
+      // transcriptionModal.classList.remove('show');
+      // transcriptionModal.style.display = 'none';
+    });
+
+    cancelTranscriptionBtn.addEventListener('click', function () {
+      reject();
+      $('#transcription-modal').modal('hide');
+      // transcriptionModal.classList.remove('show');
+      // transcriptionModal.style.display = 'none';
+    });
+  });
+}
+
 function startRecording() {
   console.log('recordButton clicked');
   let rec_waveform = document.getElementById('rec_wave');
@@ -152,7 +232,7 @@ function startRecording() {
   Stop.disabled = true;
   toggleMute.disabled = true;
   Synchronize.disabled = true;
-  Analyze.disabled = true;
+  Transcribe.disabled = true;
   GotoSelectionButton.disabled = true;
   /*
             We're using the standard promise based getUserMedia() 
@@ -239,7 +319,7 @@ function stopRecording() {
   Stop.disabled = false;
   toggleMute.disabled = false;
   Synchronize.disabled = false;
-  Analyze.disabled = false;
+  Transcribe.disabled = false;
   Download.disabled = false;
   //GotoSelectionButton.disabled = false;
 

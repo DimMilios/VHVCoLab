@@ -102,6 +102,15 @@
       $('#freeze-interface').modal('hide');
     });
 
+    // $(function () {
+    //   $('#transcription-modal').modal({
+    //     backdrop: 'static',
+    //     keyboard: false
+    //   });
+
+    //   $('#transcription-modal').modal('hide');
+    // });
+
     $(function () {
       $('#show-chord-editor').modal({
         backdrop: 'static',
@@ -514,6 +523,51 @@
         </div>
       </div>
     </div>
+
+  <div
+    class="modal fade"
+    tabindex="-1"
+    id="transcription-modal"
+    aria-labelledby="showCordEditorLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog bg-transparent modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Enter desirable rhythm and tempo</h5>
+        </div>
+        <div class="modal-body mb-3 overflow-auto">
+          <label for="tempo">Tempo (0-300):</label>
+          <input type="number" id="transcriptionTempo" min="0" max="300" required><br>
+        
+          <label for="numerator">Rhythm Numerator:</label>
+          <input type="number" id="transcriptionNumerator" min="1" required><br>
+        
+          <label for="denominator">Rhythm Denominator:</label>
+          <input type="number" id="transcriptionDenominator" min="1" required><br>
+        </div>
+        <div class="modal-footer justify-content-between border-0">
+          <div class="ml-auto">
+            <button
+              id="cancel-transcribe-btn"
+              type="button"
+              class="btn btn-outline-danger"
+            >
+              Cancel
+            </button>
+
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="apply-transcribe-btn"
+            >
+              Transcribe
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="score-editor" style="display: none;">
     <div class="topnav col-12 d-flex flex-column" id="topnav">
@@ -2183,7 +2237,7 @@
                       d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
                   </svg--></button>
 
-                <button disabled id="Analyze" class="btn btn-lg" title="Analyze">
+                <button disabled id="Transcribe" class="btn btn-lg" title="Transcribe">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                     class="bi bi-clipboard2-data-fill" viewBox="0 0 16 16">
                     <path
