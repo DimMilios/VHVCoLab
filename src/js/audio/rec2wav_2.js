@@ -166,6 +166,10 @@ async function doTranscribe() {
       ajax.open("POST", "https://musicolab.hmu.gr/apprepository/bendir2krn.php", true);
 
       ajax.onload = function () {
+        // const resp = ajax.response;
+        // const parser = new DOMParser();
+        // const doc = parser.parseFromString(resp, 'text/html');
+        // var transcribedKern = doc.body.textContent.trim();
         const transcribedKern = ajax.response;
         console.log({transcribedKern});
 
