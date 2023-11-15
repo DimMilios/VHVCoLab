@@ -561,11 +561,19 @@ body:has(#action-history-container.open) {
   animation: smooth-appear 1s ease forwards;
 }
 
-#recInfo {
+#recInfo, #transcriptionInfo {
   background-color: rgb(230, 135, 21);
   border-radius: 50% 20% / 10% 40%;
   padding: 5%;
   justify-self: center;
   animation: blinker 1s linear infinite;
+}
+
+#transcriptionInfo {
+  background-color: rgb(230, 135, 21);
+  border-radius: 50% 20% / 10% 40%;
+  padding: 2%;
+  justify-self: center;
+  animation: blinker 1s linear infinite;  
 }
 /* Action History */

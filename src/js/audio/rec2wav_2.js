@@ -139,6 +139,14 @@ async function doSyncronize(){
 async function doTranscribe() {
   renderTranscriptionModal()
     .then(() => {
+      //UI changes
+      const recBtnsGUI = document.querySelector('#control_section_buttons');
+      const transcriptionInfoSpan = document.createElement('span');
+      transcriptionInfoSpan.id = 'transcriptionInfo';
+      transcriptionInfoSpan.innerText = `Loading new score...`
+      recBtnsGUI.appendChild(transcriptionInfoSpan);
+
+      transcribeButton.setAttribute('disabled', true);
       //user entered values
       const bendir_tempo = document
         .getElementById('transcriptionTempo')
@@ -166,22 +174,34 @@ async function doTranscribe() {
       ajax.open("POST", "https://musicolab.hmu.gr/apprepository/bendir2krn.php", true);
 
       ajax.onload = function () {
-        // const resp = ajax.response;
-        // const parser = new DOMParser();
-        // const doc = parser.parseFromString(resp, 'text/html');
-        // var transcribedKern = doc.body.textContent.trim();
+        //UI changes
+        recBtnsGUI.removeChild(transcriptionInfoSpan);  
+        transcribeButton.removeAttribute('disabled');
+
+        //loading kern file into editor
         const transcribedKern = ajax.response;
         console.log({transcribedKern});
 
         const edtr = getAceEditor();
         edtr.setValue(transcribedKern);
-
+        
+        //transmitting 'received transcribed file' collab event
         if (getCollabStatus().enabled) {
-          yProvider.awareness.setLocalStateField('kernTranscription', true);
+          yProvider.awareness.setLocalStateField('transcription', {
+            status: 'received'
+          });
         }
       }
 
       ajax.send(fd2);
+
+      //transmitting relevant collab event
+      if (getCollabStatus().enabled) {
+        yProvider.awareness.setLocalStateField('transcription', {
+          status: 'requested'
+        });
+      }
+
     })
     .catch(() => {
       console.log('Transcription canceled');
@@ -412,11 +432,15 @@ function createDownloadLink(blob) {
   //collaborative rec stop event. Put here because Recorder.exportWav posts a message to a worker that runs in a seperate thread
   //so the blob is generated at an unknown time
   if (getCollabStatus().enabled) {
+    yProvider.awareness.setLocalStateField('record', {
+      status:'stopped'
+    });
+
     const reader = new FileReader()
     reader.readAsDataURL(blob); 
     reader.onload = function () {
       yProvider.awareness.setLocalStateField('record', {
-        status:'stopped',
+        status:'received',
         recDataURL: reader.result,
         name: download
       });

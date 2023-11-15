@@ -283,7 +283,7 @@ export function stateChangeHandler(clients = defaultClients()) {
 
   actOnRecordStateChange(awStates);
   actOnTimeInRecordingStateChange(awStates);
-  actOnKernTranscriptionStateChange(awStates);
+  actOnTranscriptionStateChange(awStates);
   actOnRecordSyncStateChange(awStates);
 
   actOnReplayActionStateUpdate(awStates);
@@ -335,6 +335,82 @@ function actOnReplayActionStateUpdate(awStates) {
     }
 
   })
+}
+
+function actOnTranscriptionStateChange(awStates) {
+  const myClientId = yProvider.awareness.clientID;
+  const transcriptionStateUpdates = awStates
+    .filter( ([id, state]) => state.transcription)
+    .map( ([id, state]) => {
+      return {
+        transcriberId: id,
+        status: state.transcription.status,
+        transcriberName: state.user.name,
+    }});
+  
+  if (!transcriptionStateUpdates.length)
+    return;
+
+  transcriptionStateUpdates.forEach(state => {
+    const myStateUpdating = (state.transcriberId === myClientId);
+
+    switch (state.status) {
+      case 'requested': actOnRequestTranscription(myStateUpdating, state.transcriberName);
+        break;
+      case 'received': actOnReceiveTranscription(myStateUpdating, state.transcriberName);
+        break;
+      case 'inProgress': null //in case transcriptionState is re-sent after transcription has been requested started and before its received,...
+        break; //...during triggering of awareness state change handler because of another awareness action (e.g. note selection), nothing happens
+    }
+  })
+}
+
+function actOnRequestTranscription(me, transcriberName) {
+  //enter an 'inProgress' status so that 'requested' status events don t run multiply
+  //e.g. in cases where transcription has been requested and before it is received, awareness state change handler is triggered by another awareness action (e.g. note selection)
+  if (me) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('transcription', {status: 'inProgress'}),
+      100);
+    return;
+  }
+
+  //notifying that a user has requested transcription
+  const notifText = `${transcriberName} has requested recording transcription to score.`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  //UI changes
+  const recBtnsGUI = document.querySelector('#control_section_buttons');
+  const transcriptionInfoSpan = document.createElement('span');
+  transcriptionInfoSpan.id = 'transcriptionInfo';
+  transcriptionInfoSpan.innerText = `Loading new score...`
+  recBtnsGUI.appendChild(transcriptionInfoSpan);
+
+  const transcribeButton = document.getElementById("Transcribe"); 
+  transcribeButton.setAttribute('disabled', true);
+}
+
+function actOnReceiveTranscription(me, recorderName, recDataURL, recordingName) {
+  if (me) {
+    setTimeout(
+      () => yProvider.awareness.setLocalStateField('transcription', null),
+      100);
+    return;
+  }
+
+  //notifying that user has received transcribed kern
+  const notifText = `New score file has been received!`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  //UI changes
+  const recBtnsGUI = document.querySelector('#control_section_buttons');
+  const transcriptionInfoSpan = document.getElementById('transcriptionInfo');
+  const transcribeButton = document.getElementById("Transcribe"); 
+
+  recBtnsGUI.removeChild(transcriptionInfoSpan);  
+  transcribeButton.removeAttribute('disabled');
 }
 
 function actOnRecordSyncStateChange(awStates) {
@@ -436,9 +512,10 @@ function actOnRecordStateChange(awStates) {
     switch (state.status) {
       case 'started': actOnStartRecording(myStateUpdating, state.recorderName);
         break;
-      case 'stopped': actoOnStopRecording(myStateUpdating, state.recorderName, state.recDataURL, state.recordingName);
+      case 'stopped': actOnStopRecording(myStateUpdating, state.recorderName);
         break; 
-      case 'inProgress': null //in case recordState is resent after rec has started and before its stopped,...
+      case 'received': actOnReceiveRecording(myStateUpdating, state.recorderName, state.recDataURL, state.recordingName);
+      case 'inProgress': null //in case recordState is re-sent after rec has started and before its stopped,...
         break; //...during triggering of awareness state change handler because of another awareness action (e.g. note selection), nothing happens
     }
   })
@@ -477,7 +554,20 @@ function actOnStartRecording(me, recorderName) {
 
 }
 
-function actoOnStopRecording(me, recorderName, recDataURL, recordingName) {
+function actOnStopRecording (me, recorderName) {
+  if (me)
+    return;
+
+  //notifying that user has stopped the recording
+  const notifText = `${recorderName} has stopped recording. Recording file will be received shortly.`
+  const notifContext = 'info'
+  notify(notifText, notifContext);
+
+  const recInfoSpan = document.getElementById('recInfo');
+  recInfoSpan.innerText = `Receiving recording file!`;
+}
+
+function actOnReceiveRecording(me, recorderName, recDataURL, recordingName) {
   if (me) {
     setTimeout(
       () => yProvider.awareness.setLocalStateField('record', null),
@@ -485,8 +575,8 @@ function actoOnStopRecording(me, recorderName, recDataURL, recordingName) {
     return;
   }
 
-  //notifying that user has stopped the rcording
-  const notifText = `${recorderName} has stopped recording. You can now record at will.`
+  //notifying that user has stopped the recording
+  const notifText = `Recording file has been received. You can now record at will!`
   const notifContext = 'info'
   notify(notifText, notifContext);
 
@@ -540,36 +630,6 @@ function actOnTimeInRecordingStateChange(awStates) {
       return;
     }
     window.wavesurfer.setCurrentTime(state.time);
-  }) 
-}
-
-function actOnKernTranscriptionStateChange(awStates) {
-  const myClientId = yProvider.awareness.clientID;
-  const kernTranscriptionStateChange = awStates
-    .filter( ([id, state]) => state.kernTranscription == true)
-    .map( ([id, state]) => {
-      return {
-        trID: id,
-        trName: state.user.name
-      }
-    });
-
-  if (!kernTranscriptionStateChange.length)
-    return;
-
-  kernTranscriptionStateChange.forEach(state => {
-    const myStateUpdating = (state.trID === myClientId);
-    if (myStateUpdating) {
-      setTimeout(
-        () => yProvider.awareness.setLocalStateField('kernTranscription', null),
-        100
-      );
-      return;
-    }
-
-    const notifText = `${state.trName} has transcribed kern`
-    const notifContext = 'info'
-    notify(notifText, notifContext);
   }) 
 }
 
