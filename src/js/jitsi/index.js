@@ -84,10 +84,7 @@ class JitsiAPI {
 
   initAPI(videoOnly,roomName) {
     if (!this.api) {
-      const userName = window.awareness
-        .getLocalState()
-        .user
-        .name;
+      const userName = getURLParams().user;
       const options = !videoOnly
         ? { 
             roomName,
@@ -132,25 +129,28 @@ class JitsiAPI {
 
       this.api = new JitsiMeetExternalAPI(JITSI_DOMAIN, options);
 
-      if (featureIsEnabled('collaboration')) {
-        // Retrieve the name the user entered on Jitsi and assign that name on the Yjs session
-        this.api.addListener('videoConferenceJoined', (localUser) => {
-          console.log(localUser);
-          if (localUser?.displayName.length > 0) {
-            let user = yProvider.awareness.getLocalState().user;
+      //alx.commented out. reason: in many cases, user names are used as an identity in the collaborative system we built.
+      //changing the name creates confusion
+      
+      // if (featureIsEnabled('collaboration')) {
+      //   // Retrieve the name the user entered on Jitsi and assign that name on the Yjs session
+      //   this.api.addListener('videoConferenceJoined', (localUser) => {
+      //     console.log(localUser);
+      //     if (localUser?.displayName.length > 0) {
+      //       let user = yProvider.awareness.getLocalState().user;
 
-            if (user) {
-              yProvider.awareness.setLocalStateField('user', {
-                ...user,
-                name: localUser.displayName,
-              });
-              console.log({
-                awarenessUser: yProvider.awareness.getLocalState(),
-              });
-            }
-          }
-        });
-      }
+      //       if (user) {
+      //         yProvider.awareness.setLocalStateField('user', {
+      //           ...user,
+      //           name: localUser.displayName,
+      //         });
+      //         console.log({
+      //           awarenessUser: yProvider.awareness.getLocalState(),
+      //         });
+      //       }
+      //     }
+      //   });
+      // }
 
       this.api.addEventListener('readyToClose', () => {
         console.log(
@@ -158,9 +158,11 @@ class JitsiAPI {
         );
 
     	let startJitsi = document.getElementById('start-jitsi-meet-btn');
-	    startJitsi.style.color='green';
-        this.destroy();
-        this.hide();
+      startJitsi.classList.remove('call-started');
+      startJitsi.style.color = '';
+
+      this.destroy();
+      this.hide();
       });
     }
   }
