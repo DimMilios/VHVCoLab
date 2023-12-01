@@ -247,17 +247,13 @@ async function loadAudioTrack(fileName, type) {
     getAceEditor()?.session?.setValue(text);
     await sendAction({ type: 'repository_import', content: JSON.stringify({ file: fileName, type: type}) });
   } catch (err) {
-    let errorMsg = err.message;
     if (err.name === 'AbortError') {
-      errorMsg = 'You cancelled the request';
-      console.error(
-        'Fetch aborted by user action (browser stop button, closing tab, etc.'
-      );
+      console.error('Fetch aborted by user action (browser stop button, closing tab, etc.', err);
+      createAlert('You cancelled the request');
     } else {
       console.error(err);
     }
 
-    createAlert(errorMsg);
   } finally {
     loadingBtn.classList.add('hidden');
     loadFileBtn.classList.remove('hidden');
