@@ -250,6 +250,9 @@ async function loadAudioTrack(fileName, type) {
     if (err.name === 'AbortError') {
       console.error('Fetch aborted by user action (browser stop button, closing tab, etc.', err);
       createAlert('You cancelled the request');
+    } else if (err?.message.includes("Failed to fetch audio file")) {
+      console.error(err);
+      createAlert(err.message);
     } else {
       console.error(err);
     }
