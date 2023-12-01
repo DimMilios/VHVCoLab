@@ -225,7 +225,8 @@ export function stateChangeHandler(clients = defaultClients()) {
         clientId,
         clientId === yProvider.awareness.clientID,
         state.multiSelect,
-        state.user.color
+        state.user.color,
+        state.user.name
       )
     )}`;
 
