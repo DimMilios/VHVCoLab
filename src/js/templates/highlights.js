@@ -13,9 +13,14 @@ export let highlightLayerTemplate = (height, ...children) => {
 
 export function highlightTemplate(
   comment,
-  { left, top, width, height },
+  coords = {},
   elementsInFocus = {}
 ) {
+  if (!coords || coords.top === undefined || coords.left === undefined || coords.width === undefined || coords.height === undefined) {
+    return null;
+  }
+
+  const { left, top, width, height } = coords;
   let inFocus = comment.id in elementsInFocus && elementsInFocus[comment.id];
   const clsMap = {
     'highlight-area-focus': inFocus,
